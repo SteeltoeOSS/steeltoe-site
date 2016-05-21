@@ -1,0 +1,54 @@
+= How to Even Work on this Website
+
+Welcome to authoring content for the Steel Toe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework.
+
+== Prerequisites
+
+1. https://gohugo.io/overview/installing/[Install] Hugo.
+2. Clone this repo.
+3. Get invited as a space developer to the following orgs/spaces on PWS:
++
+* Staging: spring.io/steeltoe-staging
+* Production: spring.io/steeltoe-production
+
+== Local Development
+
+After you've cloned the repo, execute the following command to run a local dev server that will refresh as you edit content:
+
+----
+$ hugo server --theme=github-project-landing-page --buildDrafts
+----
+
+You'll have the Steel Toe website running at http://localhost:1313.
+
+== Deployment
+
+If you have some changes that you want to deploy to PWS:
+
+1. Regenerate the site content:
++
+----
+$ hugo --theme=github-project-landing-page
+----
+
+2. Change to the `public` subdirectory:
++
+----
+$ cd public
+----
+
+3. Make sure you're logged in to PWS and that you have targeted the *_STAGING_* space.
+
+4. `cf push` it real good.
+
+5. View your changes at http://steeltoe-stage.cfapps.io.
+
+6. If it looks good, commit that content and push it to GitHub.
+
+7. Target the *_PRODUCTION_* space.
+
+8. `cf push` it real good again.
+
+9. Now your changes are at http://steeltoe.io.
+
+NOTE: TODO item to set up some blue/green deployment workflow goodness. Someone should write a script for that tho.
