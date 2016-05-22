@@ -1,10 +1,11 @@
 = How to Even Work on this Website
 
-Welcome to authoring content for the Steel Toe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework.
+Welcome to authoring content for the Steel Toe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework. Also, we author content using the http://asciidoctor.org/[Asciidoctor] markup format.
 
 == Prerequisites
 
 1. https://gohugo.io/overview/installing/[Install] Hugo.
+2. http://asciidoctor.org/docs/install-toolchain/[Install] Asciidoctor.
 2. Clone this repo.
 3. Get invited as a space developer to the following orgs/spaces on PWS:
 +
@@ -20,6 +21,12 @@ $ hugo server --theme=github-project-landing-page --buildDrafts
 ----
 
 You'll have the Steel Toe website running at http://localhost:1313.
+
+== Working on Front Page Sections
+
+The source code for the sections found on the front page are located in `content/post`. The first section is called `first.adoc`, the second `second.adoc`, and so on. There is nothing magical about the names - they are only named that way as a reminder to humans about the order in which they'll appear on the home page.
+
+The magic that creates the ordering is the `weight` attribute found in the header of each file. Lower values appear closer to the top, higher values appear closer to the bottom. Annotate your content according to how you want it to appear.
 
 == Deployment
 
@@ -39,7 +46,11 @@ $ cd public
 
 3. Make sure you're logged in to PWS and that you have targeted the *_STAGING_* space.
 
-4. `cf push` it real good.
+4. cf push it real good:
++
+----
+$ cf push steeltoe-site -b staticfile_buildpack
+----
 
 5. View your changes at http://steeltoe-stage.cfapps.io.
 
@@ -47,7 +58,11 @@ $ cd public
 
 7. Target the *_PRODUCTION_* space.
 
-8. `cf push` it real good again.
+8. `cf push` it real good again:
++
+----
+$ cf push steeltoe-site -b staticfile_buildpack
+----
 
 9. Now your changes are at http://steeltoe.io.
 
