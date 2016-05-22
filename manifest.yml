@@ -1,0 +1,7 @@
+---
+memory: 64M
+instances: 1
+buildpack: staticfile_buildpack
+applications:
+- name: steeltoe-site
+  host: steeltoe-stage
