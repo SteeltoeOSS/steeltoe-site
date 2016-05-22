@@ -36,8 +36,10 @@ If you have some changes that you want to deploy to PWS:
 
 2. If everything looks good, commit that content and push it to GitHub.
 
-3. A Concourse pipeline will run and deploy your changes to Staging. You can temporarily find this pipeline at http://scs.ci.springapps.io:8080/pipelines/steeltoe-site, which requires Pivotal VPN access, and you must be a member of the SCS team. We'll get it moved soon enough.
+3. A Concourse pipeline will run and blue/green deploy your changes to Staging. You can temporarily find this pipeline at http://scs.ci.springapps.io:8080/pipelines/steeltoe-site, which requires Pivotal VPN access, and you must be a member of the SCS team. We'll get it moved soon enough.
 
 4. In a few moments, view your changes at http://steeltoe-stage.cfapps.io.
 
-NOTE: Production deployments aren't currently set up in Concourse. Stay tuned.
+5. If you're happy with how things look on staging, and you're ready to go to production, you manually trigger the blue/green deployment to production by clicking the plus icon on the `generate-prod-site` job in the Concourse pipeline.
+
+6. In a few moments, your content will be live at http://steeltoe.io.
