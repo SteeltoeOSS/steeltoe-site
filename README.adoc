@@ -32,38 +32,12 @@ The magic that creates the ordering is the `weight` attribute found in the heade
 
 If you have some changes that you want to deploy to PWS:
 
-1. Regenerate the site content:
-+
-----
-$ hugo --theme=github-project-landing-page
-----
+1. Make sure you're happy with your changes using the *_Local Development_* instructions.
 
-2. Change to the `public` subdirectory:
-+
-----
-$ cd public
-----
+2. If everything looks good, commit that content and push it to GitHub.
 
-3. Make sure you're logged in to PWS and that you have targeted the *_STAGING_* space.
+3. A Concourse pipeline will run and deploy your changes to Staging. You can temporarily find this pipeline at http://scs.ci.springapps.io:8080/pipelines/steeltoe-site, which requires Pivotal VPN access, and you must be a member of the SCS team. We'll get it moved soon enough.
 
-4. cf push it real good:
-+
-----
-$ cf push steeltoe-site -b staticfile_buildpack
-----
+4. In a few moments, view your changes at http://steeltoe-stage.cfapps.io.
 
-5. View your changes at http://steeltoe-stage.cfapps.io.
-
-6. If it looks good, commit that content and push it to GitHub.
-
-7. Target the *_PRODUCTION_* space.
-
-8. `cf push` it real good again:
-+
-----
-$ cf push steeltoe-site -b staticfile_buildpack
-----
-
-9. Now your changes are at http://steeltoe.io.
-
-NOTE: TODO item to set up some blue/green deployment workflow goodness. Someone should write a script for that tho.
+NOTE: Production deployments aren't currently set up in Concourse. Stay tuned.
