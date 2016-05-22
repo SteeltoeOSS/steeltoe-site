@@ -1,0 +1,12 @@
++++
+draft = false
+title = "What is Spring Cloud?"
+weight = 3
++++
+
+image:img/icon-spring-cloud.svg[Spring Cloud,200,role="right"]
+The delta between cloning a given Netflix OSS GitHub repository and a running production system is actually quite large, and the learning curve can be steep. The https://spring.io/[Spring] team at Pivotal has a long and proud history of making enterprise Java development simple by reducing or eliminating most of the boilerplate configuration and code necessary to deliver a valuable application.
+
+Modern Spring begins with http://projects.spring.io/spring-boot/[Spring Boot], which takes an opinionated view of building production-ready Spring applications. Spring Boot favors convention over configuration and is designed to get you up and running as quickly as possible. Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run". We take an opinionated view of the Spring platform and third-party libraries so you can get started with minimum fuss.
+
+http://projects.spring.io/spring-cloud/[Spring Cloud] applies the power of Spring Boot to the composition of distributed systems by taking an opinionated view of toolkits like Netflix OSS, so that you can leverage these powerful services and libraries without abandoning the familiarity of Boot and the Spring programming model. Using Spring Cloud developers can quickly stand up services and applications that implement the boiler plate patterns involved in coordinating distributed systems. They will work well in any distributed environment, including the developer's own laptop, bare metal data centers, and managed platforms such as https://www.cloudfoundry.org/[Cloud Foundry].

@@ -1,0 +1,12 @@
++++
+draft = false
+title = "What's in a name?"
+weight = 4
++++
+
+image:img/boots.jpg[Steel Toe OSS,200,role="left"]
+The original inspiration for the Steel Toe project came from our Pivotal customers. They loved the power displayed by Spring Boot and Spring Cloud, but many did not want to abandon their significant investment in the .NET ecosystem. In late 2015, a group of interested individuals from multiple companies gathered in Seattle, WA, to incept a toolchain that would bring the Spring Boot/Cloud experience to .NET developers.
+
+Technologies born outside of the .NET ecosystem that gain .NET implementation are often prefixed with the word "`iron.`" Examples include IronPython, IronScheme, and IronFoundry. There are multiple stories that attempt to explain the origin of this scheme, but one of the simpler ones points out a useful acronym: **I**mplementation **R**unning **O**n .**N**ET.
+
+The original working name for this effort was to be IronBoot, but a clever individual in the room suggested, "`Hey, why not Steel Toe?`" It stuck.
