@@ -206,3 +206,15 @@ p.copyright {
 .github-btn {
     margin-top: 10px;
 }
+
+.image {
+  margin: 20px 20px 20px 20px;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
