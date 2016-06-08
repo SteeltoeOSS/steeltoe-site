@@ -41,11 +41,13 @@ h6 {
 
 .intro-message > h3 {
     font-family: -apple-system-headline, 'HelveticaNeue-Light', 'Helvetica Neue', Helvetica, sans-serif;
+    line-height: normal;
 }
 
 .intro-message > h1 {
     font-family: -apple-system-subheadline, 'HelveticaNeue-UltraLight', 'Helvetica Neue', Helvetica, sans-serif;
     font-size: 5em;
+    line-height: normal;
 }
 
 .intro-divider {
@@ -98,6 +100,7 @@ h6 {
 
 .section-heading {
     margin-bottom: 30px;
+    line-height: normal;
 }
 
 .section-heading-spacer {
