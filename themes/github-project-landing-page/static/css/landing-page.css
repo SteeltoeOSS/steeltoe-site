@@ -19,6 +19,7 @@ h4,
 h5,
 h6 {
     font-family: -apple-system-headline, 'Helvetica Neue', Helvetica, sans-serif;
+    line-height: 2.5em;
 }
 
 .lead {
@@ -217,4 +218,8 @@ p.copyright {
 
 .right {
   float: right;
+}
+
+p {
+  line-height: 1.6em;
 }
