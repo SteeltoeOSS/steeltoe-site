@@ -8,3 +8,11 @@ title = "Steel Toe Documentation"
 
 This page will eventually contain useful documentation!
 
+== Quick Start
+
+* link:/docs/getting-started/[Getting Started with Steel Toe and Spring Cloud OSS]
+
+== Guides
+
+== Reference
+
