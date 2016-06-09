@@ -10,7 +10,7 @@ This page shows how to quickly set up the Steel Toe Configuration extension in a
 
 We will need a running Config Server from which our application can request configuration. To run the Config Server, we'll also need Apache Maven (a build tool) and the Java Development Kit (JDK). http://www.oracle.com/technetwork/java/javase/downloads/index.html[Download] the JDK from the Oracle website and follow the instructions to http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html[install] it. Then https://maven.apache.org/download.cgi[download] and https://maven.apache.org/install.html[install] Maven.
 
-Now for the Config Server! Clone the https://github.com/spring-cloud/spring-cloud-config[spring-cloud-config] repository on GitHub and `cd` into its `spring-cloud-config-server` directory. Then start up the Config Server with the `\.mvnw spring-boot:run` command:
+Now for the Config Server! Clone the https://github.com/spring-cloud/spring-cloud-config[spring-cloud-config] repository on GitHub and `cd` into its `spring-cloud-config-server` directory. Then start up the Config Server with the `.\mvnw spring-boot:run` command:
 
 ```
 spring-cloud-config-server>mvn spring-boot:run
