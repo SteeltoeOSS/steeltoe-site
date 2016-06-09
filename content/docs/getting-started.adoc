@@ -13,7 +13,7 @@ We will need a running Config Server from which our application can request conf
 Now for the Config Server! Clone the https://github.com/spring-cloud/spring-cloud-config[spring-cloud-config] repository on GitHub and `cd` into its `spring-cloud-config-server` directory. Then start up the Config Server with the `.\mvnw spring-boot:run` command:
 
 ```
-spring-cloud-config-server>mvn spring-boot:run
+spring-cloud-config-server>.\mvnw spring-boot:run
 
 (...Startup output...)
 
