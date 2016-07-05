@@ -21,7 +21,7 @@ Now for the Config Server! Visit the https://github.com/SteelToeOSS/configserver
 When the clone operation has finished, `cd` into the Config Server's directory and start up the Config Server with the `.\mvnw spring-boot:run` command:
 
 ```
-configserver>mvn spring-boot:run>.\mvnw spring-boot:run
+configserver>.\mvnw spring-boot:run
 
 (...Startup output...)
 
