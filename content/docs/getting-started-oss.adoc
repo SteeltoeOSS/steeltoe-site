@@ -8,7 +8,7 @@ This page shows how to quickly set up the Steel Toe Configuration extension in a
 
 === Step 0: Run a Config Server
 
-We will need a running Config Server from which our application can request configuration. To run the Config Server, we'll also need Apache Maven (a build tool) and the Java Development Kit (JDK). http://www.oracle.com/technetwork/java/javase/downloads/index.html[Download] the JDK from the Oracle website and follow the instructions to http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html[install] it. Then https://maven.apache.org/download.cgi[download] and https://maven.apache.org/install.html[install] Maven.
+We will need a running Config Server from which our application can request configuration. To run the Config Server, we'll also the Java Development Kit (JDK). http://www.oracle.com/technetwork/java/javase/downloads/index.html[Download] the JDK from the Oracle website and follow the instructions to http://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html[install] it.
 
 You will need https://git-scm.com[Git] in order to obtain the code for the Config Server that we'll be using. If you haven't already installed Git, follow the https://git-scm.com/book/en/v2/Getting-Started-Installing-Git[instructions] to do so. You may wish to look at https://git-for-windows.github.io[Git for Windows].
 
@@ -18,7 +18,7 @@ Now for the Config Server! Visit the https://github.com/SteelToeOSS/configserver
 >git clone git@github.com:SteelToeOSS/configserver.git
 ```
 
-When the clone operation has finished, `cd` into the Config Server's directory and start up the Config Server with the `.\mvnw spring-boot:run` command:
+When the clone operation has finished, `cd` into the Config Server's directory. The Config Server is built using https://maven.apache.org[Apache Maven], and the project that we've just downloaded includes a Maven "wrapper" file (`mvnw.cmd`) that can be used in place of an actual Maven installation to run build commands. Start up the Config Server with the `.\mvnw spring-boot:run` command:
 
 ```
 configserver>.\mvnw spring-boot:run
