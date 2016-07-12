@@ -31,7 +31,7 @@ configserver> mvnw spring-boot:run
 
 === Step 1: Add the Steel Toe Configuration dependency
 
-https://docs.asp.net/en/latest/client-side/yeoman.html[Generate] a new ASP.NET Core basic web application using Yeoman. For our example purposes, call the application &#8220;Foo&#8221;. Create a `nuget.config` file, and within it, list the Steel Toe feeds:
+https://docs.asp.net/en/latest/client-side/yeoman.html[Generate] a new ASP.NET Core application using Yeoman. When the generator asks what type of application you want to create, select the "Web Application Basic [without Membership and Authorization]" option. For our example purposes, call the application &#8220;Foo&#8221;. Then create a `nuget.config` file, and within it, list the Steel Toe feeds:
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
