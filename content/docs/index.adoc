@@ -11,15 +11,4 @@ This page will eventually contain useful documentation!
 == Quick Start
 
 * link:/docs/getting-started-oss/[Getting Started with Steel Toe and Spring Cloud OSS]
-* link:/docs/#[Getting Started with Steel Toe and Spring Cloud Services for Pivotal Cloud Foundry&reg;]
-
-== Guides
-
-* link:/docs/#[Using Encryption and Decryption with Spring Cloud Config Config Server]
-* link:/docs/#[Registering and Calling Applications Using Spring Cloud Netflix Eureka]
-
-== Reference
-
-* link:/docs/#[Spring Cloud Config Client Reference]
-* link:/docs/#[Spring Cloud Netflix Eureka Reference]
 
