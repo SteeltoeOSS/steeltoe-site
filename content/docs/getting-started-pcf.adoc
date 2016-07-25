@@ -4,49 +4,50 @@ title = "Getting Started with Steel Toe and Spring Cloud Services for Pivotal Cl
 
 +++
 
-This page shows how to quickly set up the Steel Toe Configuration extension in an ASP.NET Core application for accessing configuration values served by a https://network.pivotal.io/products/p-spring-cloud-services[Spring Cloud Services] Config Server service instance on https://network.pivotal.io/products/pivotal-cf[Pivotal Cloud Foundry]&reg;.
+This page shows how to quickly set up the Steel Toe Configuration extension in an ASP.NET Core application for accessing configuration values served by a https://network.pivotal.io/products/p-spring-cloud-services[Spring Cloud Services] Config Server service instance on https://network.pivotal.io/products/pivotal-cf[Pivotal Cloud Foundry&reg;] (PCF). We'll use http://pivotal.io/pcf-dev[PCF Dev] for this purpose; if you don't yet have PCF Dev installed, follow the http://pivotal.io/platform/pcf-tutorials/getting-started-with-pivotal-cloud-foundry-dev/introduction[tutorial at pivotal.io] before proceeding with these instructions.
 
-To follow these instructions, you will need access to a Pivotal Cloud Foundry environment. We will be using https://run.pivotal.io[Pivotal Web Services] (PWS); if you don't have an account there, go ahead and create one before proceeding. You will also need to have the https://github.com/cloudfoundry/cli[cf Command Line Interface tool] installed.
+=== Step 0: Create a Config Server Service Instance
 
-=== Step 0: Create a Config Server service instance
-
-Using the cf CLI, log into PWS and target your preferred org and space.
+We will need a Config Server service instance from which our application can request configuration. Run `cf marketplace` to view the available services:
 
 ```
-> cf target -o myorg -s development
+> cf marketplace
+Getting services from marketplace in org pcfdev-org / space pcfdev-space as user...
+OK
 
-API endpoint:   https://api.run.pivotal.io (API version: 2.57.0)
-User:           user
-Org:            myorg
-Space:          development
-
+service                       plans        description
+p-circuit-breaker-dashboard   standard     Circuit Breaker Dashboard for Spring Cloud Applications
+p-config-server               standard     Config Server for Spring Cloud Applications
+...
 ```
 
-Create a Config Server service instance, using the `-c` flag to provide parameters that configure the instance. The only parameter we'll need is a Git repository URI; as shown below, give the URI `https://github.com/SteelToeOSS/config-repo`:
+Using the `cf create-service` command, create a new Config Server service instance. Use the `-c` flag to provide configuration parameters for the instance--the only parameter we'll need in this case is the URI of a Git repository from which the Config Server can retrieve configuration, so use the following command:
 
 ```
-> cf create-service p-config-server standard config-server -c "{\"git\": {\"uri\": \"https://github.com/SteelToeOSS/config-repo\" } }"
-Creating service instance config-server in org myorg / space development as user...
+$ cf create-service p-config-server standard config-server -c '{"git": {"uri": "https://github.com/spring-cloud-samples/cook-config" } }'
+Creating service instance config-server in org pcfdev-org / space pcfdev-space as admin...
 OK
 
 Create in progress. Use 'cf services' or 'cf service config-server' to check operation status.
 ```
 
-When the service instance has been created, the command `cf service config-server` will return `Status: create succeeded`:
+As the command output says, we can use the command `cf service config-server` to check on the instance's status. When it's been created, we will get the output `Status: create succeeded`.
 
 ```
-> cf service config-server
+$ cf service config-server
 
 Service instance: config-server
-
-...
+Service: p-config-server
+Bound apps:
+Tags:
+Plan: standard
+Description: Config Server for Spring Cloud Applications
+Documentation url: http://docs.pivotal.io/spring-cloud-services/
+Dashboard: https://spring-cloud-broker.local2.pcfdev.io/dashboard/p-config-server/37f28420-3074-49f9-bfc8-500a977c3ccb
 
 Last Operation
 Status: create succeeded
-Message:
-Started: 2016-07-13T16:36:13Z
-Updated: 2016-07-13T16:37:19Z
-
+...
 ```
 
 === Step 1: Add the Steel Toe Configuration dependency
@@ -90,7 +91,7 @@ applications:
     - config-server
 ```
 
-This sets up our application to use the Config Server service instance we've created and to use the https://github.com/cloudfoundry-community/asp.net5-buildpack.git[cloudfoundry-community/dotnet-core-buildpack]. (It also uses `random-route` to give our application a unique route and avoid conflicts with any similarly-named applications' routes.)
+This sets up our application to use the Config Server service instance we've created. It also tells PCF Dev to stage this application using the https://github.com/cloudfoundry-community/asp.net5-buildpack.git[cloudfoundry-community/dotnet-core-buildpack].
 
 === Step 2: Configure the Config Server settings
 
@@ -142,7 +143,7 @@ namespace Foo
         }
 ```
 
-Don't forget the `using` statements at the top. In fact, take special note of the first `using` statement. Steel Toe's Cloud Foundry configuration provider parses the special `VCAP_APPLICATION` and `VCAP_SERVICES` environment variables provided to Cloud Foundry applications. When we push this application to PWS, `VCAP_APPLICATION` will be set to contain application information (such as our application's space name, space ID, URIs, host, and port), and `VCAP_SERVICES` will be set to contain information for the services that are bound to the application (including a service instance's name, plan, tags, and connection information).
+Don't forget the `using` statements at the top. In fact, take special note of the first `using` statement. Steel Toe's Cloud Foundry configuration provider parses the special `VCAP_APPLICATION` and `VCAP_SERVICES` environment variables provided to Cloud Foundry applications. When we push this application to PCF Dev, `VCAP_APPLICATION` will be set to contain application information (such as our application's space name, space ID, URIs, host, and port), and `VCAP_SERVICES` will be set to contain information for the services that are bound to the application (including a service instance's name, plan, tags, and connection information).
 
 The connection information for our Config Server service instance, once it's made available to our application via the environment variables, will override what we specified in our `appsettings.json`. That setting is still useful to have for running an application locally against a local Config Server, but since we've placed the environment variables configuration provider higher in priority than `appsettings.json` (it's added _after_ `appsettings.json`), the information from the environment will override our hard-coded setting.
 
@@ -216,7 +217,7 @@ Create the `ConfigServer.cshtml` view in `Views/Home/`. It should look like this
 
 === Step 5: Voila!
 
-That's it! Run `dotnet restore` to install all of our dependencies, then publish the application and push it to PWS:
+That's it! Run `dotnet restore` to install all of our dependencies, then publish the application and push it to PCF Dev:
 
 ```
 Foo> dotnet restore
