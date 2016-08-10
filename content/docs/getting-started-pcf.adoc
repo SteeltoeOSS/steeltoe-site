@@ -84,9 +84,10 @@ Create a Cloud Foundry manifest for our application. It should be a file called 
 applications:
 - name: foo
   memory: 512M
+  disk_quota: 1G
   random-route: true
-  path: publish
-  buildpack: https://github.com/cloudfoundry-community/asp.net5-buildpack.git
+  path: .
+  buildpack: https://github.com/cloudfoundry-community/dotnet-core-buildpack.git
   services:
     - config-server
 ```
@@ -217,7 +218,7 @@ Create the `ConfigServer.cshtml` view in `Views/Home/`. It should look like this
 
 === Step 5: Voila!
 
-That's it! Run `dotnet restore` to install all of our dependencies, then publish the application and push it to PCF Dev:
+That's it! Run `dotnet restore` to install all of our dependencies, then push the application to PCF Dev:
 
 ```
 Foo> dotnet restore
@@ -226,10 +227,6 @@ Feeds used:
     https://www.myget.org/F/steeltoemaster/api/v3/index.json
     https://www.myget.org/F/steeltoedev/api/v3/index.json
     https://api.nuget.org/v3/index.json
-> dotnet publish --output publish --configuration Release --framework netcoreapp1.0 --runtime ubuntu.14.04-x64
-Publishing Foo for .NETCoreApp,Version=v1.0
-...
-Published 1/1 projects successfully
 > cf push
 ...
 
