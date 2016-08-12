@@ -1,9 +1,0 @@
-+++
-draft = false
-title = "Do you want to build .NET Microservices?"
-weight = 1
-+++
-
-http://martinfowler.com/articles/microservices.html[Microservices] represent the latest evolution in modern service-oriented architectures, bringing with them the promise of continuous delivery of independent business capabilities. Microservices are "`simple, and do one thing well`" (Sam Newman), and invert the traditional ESB-centric SOA by employing "`smart endpoints with dumb pipes`" (Martin Fowler). But microservices bring with them the challenges of deploying and operating large-scale distributed systems, challenges we haven't often faced when building enterprise systems.
-
-Steel Toe provides idiomatic tools for https://www.microsoft.com/net/core[ASP.NET Core] developers to quickly build some of the common patterns in distributed systems (e.g. configuration management, service discovery, circuit breakers, intelligent routing, control bus) by leveraging the power of Netflix OSS via Spring Cloud.
