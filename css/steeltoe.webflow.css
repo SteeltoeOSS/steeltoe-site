@@ -233,6 +233,13 @@ p {
   font-weight: 500;
 }
 
+.sponsor {
+  display: inline-block;
+  color: #2e2e2e;
+  font-size:14px;
+  white-space:nowrap;
+}
+
 .logo {
   margin-top: -15px;
   margin-right: 13px;
