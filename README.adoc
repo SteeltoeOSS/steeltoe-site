@@ -1,45 +1,10 @@
 = How to Even Work on this Website
 
-Welcome to authoring content for the Steeltoe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework. Also, we author content using the http://asciidoctor.org/[Asciidoctor] markup format.
+Welcome to authoring content for the Steeltoe website!
 
 == Prerequisites
 
-1. https://gohugo.io/overview/installing/[Install] Hugo.
-2. http://asciidoctor.org/docs/install-toolchain/[Install] Asciidoctor.
 2. Clone this repo.
 3. Get invited as a space developer to the following orgs/spaces on PWS:
-+
-* Staging: spring.io/steeltoe-staging
-* Production: spring.io/steeltoe-production
 
-== Local Development
-
-After you've cloned the repo, execute the following command to run a local dev server that will refresh as you edit content:
-
-----
-$ hugo server --theme=github-project-landing-page --buildDrafts
-----
-
-You'll have the Steeltoe website running at http://localhost:1313.
-
-== Working on Front Page Sections
-
-The source code for the sections found on the front page are located in `content/post`. The first section is called `first.adoc`, the second `second.adoc`, and so on. There is nothing magical about the names - they are only named that way as a reminder to humans about the order in which they'll appear on the home page.
-
-The magic that creates the ordering is the `weight` attribute found in the header of each file. Lower values appear closer to the top, higher values appear closer to the bottom. Annotate your content according to how you want it to appear.
-
-== Deployment
-
-If you have some changes that you want to deploy to PWS:
-
-1. Make sure you're happy with your changes using the *_Local Development_* instructions.
-
-2. If everything looks good, commit that content and push it to GitHub.
-
-3. A Concourse pipeline will run and blue/green deploy your changes to Staging. The pipeline is located at https://ci.steeltoe.io/pipelines/steeltoe-site. You'll login with your GitHub credentials, and you must be a member of the `steel-toe-contributors` team in the `SteelToeOSS` GitHub org.
-
-4. In a few moments, view your changes at http://steeltoe-stage.cfapps.io.
-
-5. If you're happy with how things look on staging, and you're ready to go to production, you manually trigger the blue/green deployment to production by clicking the plus icon on the `generate-prod-site` job in the Concourse pipeline.
-
-6. In a few moments, your content will be live at http://steeltoe.io.
+* Production: steeltoe.io/steeltoe.io
