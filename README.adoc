@@ -1,6 +1,6 @@
 = How to Even Work on this Website
 
-Welcome to authoring content for the Steel Toe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework. Also, we author content using the http://asciidoctor.org/[Asciidoctor] markup format.
+Welcome to authoring content for the Steeltoe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework. Also, we author content using the http://asciidoctor.org/[Asciidoctor] markup format.
 
 == Prerequisites
 
@@ -20,7 +20,7 @@ After you've cloned the repo, execute the following command to run a local dev s
 $ hugo server --theme=github-project-landing-page --buildDrafts
 ----
 
-You'll have the Steel Toe website running at http://localhost:1313.
+You'll have the Steeltoe website running at http://localhost:1313.
 
 == Working on Front Page Sections
 

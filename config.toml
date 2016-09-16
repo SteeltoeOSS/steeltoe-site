@@ -1,6 +1,6 @@
 baseurl = "http://steeltoe-stage.cfapps.io"
 languageCode = "en-us"
-title = "Steel Toe"
+title = "Steeltoe"
 
 [params]
     description = "Cloud Native .NET Applications - Harnessing the Power of Spring Cloud and Cloud Foundry"
