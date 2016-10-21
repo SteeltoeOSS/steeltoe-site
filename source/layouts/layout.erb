@@ -9,7 +9,10 @@
     <title><%= current_page.data.title || "Steeltoe" %></title>
 
     <%= stylesheet_link_tag :site %>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/vs.min.css">
     <%= javascript_include_tag :all %>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
   </head>
 
   <body class="<%= page_classes %>">

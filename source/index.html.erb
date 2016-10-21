@@ -69,20 +69,22 @@ title: Steeltoe
             </ul>
           </div>
           <pre>
-  using Microsoft.Extensions.Configuration;
-  using Steeltoe.Extensions.Configuration.ConfigServer;
+          <code class="c#">
+    using Microsoft.Extensions.Configuration;
+    using Steeltoe.Extensions.Configuration.ConfigServer;
 
-  namespace Foo.Controllers
-  {
-      public class HomeController : Controller
-      {
+    namespace Foo.Controllers
+    {
+        public class HomeController : Controller
+        {
 
-          private IConfigurationRoot Config { get; set; }
+            private IConfigurationRoot Config { get; set; }
 
-          public HomeController(IConfigurationRoot config)
-          {
-              Config = config;
-          }
+            public HomeController(IConfigurationRoot config)
+            {
+                Config = config;
+            }
+          </code>
           </pre>
         </div>
       </div>

@@ -55,6 +55,12 @@ $steel-body: #90A1B8;
 
 .terminal pre {
   -webkit-font-smoothing: auto;
+  font-size: .85em;
+}
+
+.terminal code {
+  font-size: 1em;
+  padding: 0;
 }
 
 html {
