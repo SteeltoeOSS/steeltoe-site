@@ -1,6 +1,4 @@
-// This is where it all goes :)
 $(document).ready(function() {
-  $('pre code').each(function(i, block) {
-    hljs.highlightBlock(block);
-  });
+  var codeSnippet1 = $('#codeSnippet1');
+  hljs.highlightBlock(codeSnippet1[0]);
 });

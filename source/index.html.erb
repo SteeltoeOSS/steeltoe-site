@@ -55,7 +55,7 @@ title: Steeltoe
     <section class="clearfix py1 sm-py4">
       <div class="sm-col-7 mx-auto">
         <div class="terminal">
-          <div class="terminal-top-bar p1 bg-blue">
+          <div class="terminal-top-bar p1 bg-ms-blue">
             <ul class="list-reset m0 flex items-center justify-end">
               <li class="inline-block mr1">
                 <img src="images/icons/icon-minimize.svg" alt="">
@@ -68,24 +68,20 @@ title: Steeltoe
               </li>
             </ul>
           </div>
-          <pre>
-          <code class="c#">
-    using Microsoft.Extensions.Configuration;
-    using Steeltoe.Extensions.Configuration.ConfigServer;
+      <pre class="pb2 m0"><code class="c# m0" id="codeSnippet1">  using Microsoft.Extensions.Configuration;
+  using Steeltoe.Extensions.Configuration.ConfigServer;
 
-    namespace Foo.Controllers
-    {
-        public class HomeController : Controller
-        {
+      namespace Foo.Controllers
+      {
+          public class HomeController : Controller
+          {
 
-            private IConfigurationRoot Config { get; set; }
+              private IConfigurationRoot Config { get; set; }
 
-            public HomeController(IConfigurationRoot config)
-            {
-                Config = config;
-            }
-          </code>
-          </pre>
+              public HomeController(IConfigurationRoot config)
+              {
+                  Config = config;
+              }</code></pre>
         </div>
       </div>
     </section>
