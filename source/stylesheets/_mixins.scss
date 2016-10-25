@@ -1,121 +1,132 @@
-//-------------------------------------------------------------------------------------
-// Angled Edges v1.1.2 (https://github.com/josephfusco/angled-edges)
-// Copyright 2016 Joseph Fusco
-// Licensed under MIT (https://github.com/josephfusco/angled-edges/blob/master/LICENSE)
-//-------------------------------------------------------------------------------------
+////
+/// @group layout
+////
 
-/// Replace `$search` with `$replace` in `$string`
-///
-/// @author Hugo Giraudel
-/// @link   http://www.sassmeister.com/gist/1b4f2da5527830088e4d
-///
-/// @param  {String}  $string - Initial string
-/// @param  {String}  $search - Substring to replace
-/// @param  {String}  $replace ('') - New value
-/// @return {String}  Updated string
-///
-@function ae-str-replace($string, $search, $replace: '') {
-  $index: str-index($string, $search);
+/// An approximation of π.
+/// @access private
+/// @return {Float}
+/// @link https://github.com/at-import/Sassy-math/blob/master/sass/math.scss#L8 SassyMath
+@function pi() {
+  @return 3.1415926535897932384626433832795028841971693993751;
+}
 
-  @if $index {
-    @return str-slice($string, 1, $index - 1) + $replace + ae-str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+/// Factorial function.
+/// @access private
+/// @param {Number} $number
+/// @return {Number}
+/// @link https://unindented.org/articles/trigonometry-in-sass/ Trigonometry in Sass
+@function fact($number) {
+  $value: 1;
+
+  @if $number > 0 {
+    @for $i from 1 through $number {
+      $value: $value * $i;
+    }
   }
 
-  @return $string;
+  @return $value;
 }
 
-/// Encode SVG to use as background
-///
-/// @param  {String}  $string
-/// @return {String}  Encoded svg data
-///
-@function ae-svg-encode($string){
-  $result: ae-str-replace($string, '<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-  $result: ae-str-replace($result, '%', '%25');
-  $result: ae-str-replace($result, '"', '\'');
-  $result: ae-str-replace($result, '<', '%3C');
-  $result: ae-str-replace($result, '>', '%3E');
+/// Power function.
+/// @access private
+/// @param {Number} $number
+/// @param {Number} $exp
+/// @link https://unindented.org/articles/trigonometry-in-sass/ Trigonometry in Sass
+@function pow($number, $exp) {
+  $value: 1;
 
-  @return 'data:image/svg+xml,' + $result;
+  @if $exp > 0 {
+    @for $i from 1 through $exp {
+      $value: $value * $number;
+    }
+  } @else if $exp < 0 {
+    @for $i from 1 through -$exp {
+      $value: $value / $number;
+    }
+  }
+
+  @return $value;
 }
 
-/// Outputs pseudo content for main mixin
-///
-/// @author Joseph Fusco
-///
-/// @param  {String}  $location
-/// @param  {Number}  $height
-/// @output psuedo content
-///
-@mixin ae-pseudo($wedge, $height) {
-  background-image: url($wedge);
-  background-position: center center;
-  background-repeat: no-repeat;
-  content: '';
-  height: $height * 1px;
-  left: 0;
-  position: absolute;
-  right: 0;
-  width: 100%;
-  z-index: 1;
+/// Sine function.
+/// @access private
+/// @param {Angle} $angle - Angle expressed in degrees
+/// @return {Number}
+/// @link https://unindented.org/articles/trigonometry-in-sass/ Trigonometry in Sass
+@function sin($angle) {
+  $sin: 0;
+  $rad: $angle * pi() * 1rad / 180deg;
+  $angle: $rad / ($rad * 0 + 1);
+
+  @for $i from 0 through 10 {
+    $sin: $sin + pow(-1, $i) * pow($angle, (2 * $i + 1)) / fact(2 * $i + 1);
+  }
+
+  @return $sin;
 }
 
-/// Attatches an svg wedge shape to an element
-///
-/// @author Joseph Fusco
-///
-/// @param  {String}  $location   - 'inside top', 'outside top', 'inside bottom', 'outside bottom'
-/// @param  {String}  $hypotenuse - 'upper left', 'upper right', 'lower left', 'lower right'
-/// @param  {Color}   $fill
-/// @param  {Number}  $width
-/// @param  {Number}  $height
-/// @output '::before' and/or '::after' with svg background image
-///
-@mixin angled-edge($location, $hypotenuse, $fill, $width: 2800, $height: 100) {
+/// Square root function.
+/// @access private
+/// @param {Number} $number
+/// @return {Number}
+/// @link https://github.com/at-import/Sassy-math/blob/master/sass/math.scss#L259-L266 SassyMath
+@function sqrt($number) {
+  $guess: 4; // Guaranteed to be random: http://xkcd.com/221/
+  $root: $guess;
+
+  @for $i from 1 through 50 {
+    $root: $root - (pow($root, 2) - $number) / (2 * $root);
+  }
+
+  @return $root;
+}
+
+/// Computes the height of the tilted pseudo-element based on the given angle
+/// using Pythagoras Theorem.
+// sin(..), pow(..) and sqrt(..)  functions come from this pen:
+// http://codepen.io/HugoGiraudel/pen/rLpPGo
+/// @access public
+/// @author Hugo Giraudel
+/// @param {Angle} $angle - the tilt angle
+@function get-tilted-height($angle) {
+  $a: (100% / 1%);
+  $A: (90deg - $angle);
+  $c: ($a / sin($A));
+  $b: sqrt(pow($c, 2) - pow($a, 2));
+
+  @return (abs($b) * 1%);
+}
+
+/// Apply a tilted effect by generating a pseudo-element with a diagonal
+/// splitted background.
+/// @access public
+/// @author Hugo Giraudel
+/// @param {Angle} $angle - the tilt angle
+/// @param {Color} $color - the color to be used as background + gradient
+/// @param {String} $position ['top'] - either `top` or `bottom`
+/// @param {String} $pseudo ['before'] - either `before` or `after`
+@mixin tilted($angle, $color, $position: 'top', $pseudo: 'before') {
+  $height: get-tilted-height($angle);
 
   position: relative;
+  background-color: $color;
+  
+  &::#{$pseudo} {
+    background-color: inherit;
+    content: '';
+    left: 0;
+    padding-top: $height;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    z-index: -1;
 
-  // polygon points for right triangle
-  $points: (
-    'upper left': '0,#{$height} #{$width},#{$height} #{$width},0',
-    'upper right': '0,#{$height} #{$width},#{$height} 0,0',
-    'lower left': '0,0 #{$width},#{$height} #{$width},0',
-    'lower right': '0,0 #{$width},0 0,#{$height}'
-  );
-
-  // ensure $fill color is using rgb()
-  $fill-rgb: 'rgb(' + round(red($fill)) + ',' + round(green($fill)) + ',' + round(blue($fill)) + ')';
-
-  // capture alpha component of $fill to use with fill-opacity
-  $fill-alpha: alpha($fill);
-
-  $wedge: ae-svg-encode('<svg height="#{$height}" width="#{$width}" fill="#{$fill-rgb}" fill-opacity="#{$fill-alpha}"><polygon points="#{map-get($points, $hypotenuse)}"></polygon></svg>');
-
-  @if ($location == 'inside top') {
-    &::before {
-      @include ae-pseudo($wedge, $height);
+    @if ($position == 'top') {
+      transform: translateY(-50%) skewY($angle);
       top: 0;
-    }
-  } @else if ($location == 'outside top') {
-    &::before {
-      @include ae-pseudo($wedge, $height);
-      top: -$height * 1px;
-    }
-  } @else if ($location == 'inside bottom') {
-    &::after {
-      @include ae-pseudo($wedge, $height);
+    } @else {
+      transform: translateY(50%) skewY($angle);
       bottom: 0;
     }
-  } @else if ($location == 'outside bottom') {
-    &::after {
-      @include ae-pseudo($wedge, $height);
-      bottom: -$height * 1px;
-    }
-  } @else {
-    @error 'Invalid argument for $location - must use: `inside top`, `outside top`, `inside bottom`, `outside bottom`';
-  }
-
-  @if (map-has-key($points, $hypotenuse) == false) {
-    @error 'Invalid argument for $hypotenuse - must use: `upper left`, `upper right`, `lower left`, `lower right`';
   }
 }

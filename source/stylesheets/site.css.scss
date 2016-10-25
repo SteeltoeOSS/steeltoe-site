@@ -36,10 +36,10 @@ $ms-blue: #0074D9;
 }
 
 .edge-bottom-left {
-  $location: 'outside bottom';
-  $hypotenuse: 'lower right';
-  $fill: $steel-bg;
-  @include angled-edge($location, $hypotenuse, $fill, $width: 2000, $height: 50); 
+  @media(min-width: 30em) {
+    @include tilted(-2deg, $color: $steel-bg, $position: 'bottom');
+    padding-top: 50px;
+  }
 }
 
 .icon {
