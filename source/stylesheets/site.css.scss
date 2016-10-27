@@ -5,11 +5,36 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,700');
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
-
 $font-family-fallback: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
-$steel-body: #90A1B8;
+$steel-body: darken(#90A1B8, 5%);
 $steel-bg: #318BB0;
+$steel-heading: #364962;
+$accent-blue: #27AAE1;
 $ms-blue: #0074D9;
+$top-blue: #082C38;
+
+html {
+  font-size: 19px;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Karla', $font-family-fallback;
+}
+
+h1, h2, h3,
+h4, h5, h6 {
+  font-family: 'Poppins', $font-family-fallback;
+}
+
+.top-blue {
+  color: $top-blue;
+}
+
+.bg-faint-blue {
+  background: #f3f4f9;
+}
 
 .bg-ms-blue {
   background: $ms-blue;
@@ -24,7 +49,7 @@ $ms-blue: #0074D9;
 }
 
 .steel-heading {
-  color: #364962;
+  color: $steel-heading;
 }
 
 .steel-body {
@@ -105,26 +130,11 @@ code {
 }
 
 .terminal pre {
+  display: block;
   -webkit-font-smoothing: auto;
-  font-size: .85em;
 }
 
 .terminal code {
+  display: block;
   font-size: 1em;
 }
-
-html {
-  font-size: 18px;
-}
-
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-family: 'Karla', $font-family-fallback;
-}
-
-h1, h2, h3,
-h4, h5, h6 {
-  font-family: 'Poppins', $font-family-fallback;
-}
-
