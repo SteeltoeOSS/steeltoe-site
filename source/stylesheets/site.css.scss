@@ -8,7 +8,7 @@
 
 $font-family-fallback: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
 $steel-body: #90A1B8;
-$steel-bg: #364962;
+$steel-bg: #318BB0;
 $ms-blue: #0074D9;
 
 .bg-ms-blue {
@@ -35,16 +35,46 @@ $ms-blue: #0074D9;
   border-color: $steel-body;
 }
 
-.edge-bottom-left {
-  @media(min-width: 30em) {
-    @include tilted(-2deg, $color: $steel-bg, $position: 'bottom');
-    padding-top: 50px;
+.navigation a {
+  transition: color .2s ease-out;
+
+  &:hover {
+    color: darken($steel-body, 30%);
+  }
+}
+
+.text-shadow {
+  text-shadow: 0 2px 3px rgba(0, 0, 0, .1);
+}
+
+.hero {
+  position: relative;
+  z-index: 0;
+
+  &:after {
+    background-image: url("data:image/svg+xml,%3Csvg width='52' height='90' viewBox='-26 -45 52 90' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23fafafa' d='m26 15v30L0 30V-30l-26-15v30z'/%3E%3Cpath fill='%23222' d='m-26 15v30L0 30V-30l26-15v30z'/%3E%3C/svg%3E");
+    background-position: center center;
+    background-repeat: repeat;
+    background-size: 300px;
+    bottom: 0;
+    content: '';
+    left: 0;
+    opacity: .035;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: -1;
   }
 }
 
 .icon {
   height: 25px;
   width: 25px;
+}
+
+.logo img {
+  max-width: 250px;
 }
 
 .terminal {
