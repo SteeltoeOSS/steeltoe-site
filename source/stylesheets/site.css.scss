@@ -5,14 +5,12 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,700');
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+
 $font-family-fallback: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
 $steel-body: darken(#90A1B8, 5%);
-$steel-bg: #318BB0;
 $steel-heading: #364962;
-$accent-blue: #27AAE1;
 $ms-blue: #0074D9;
 $faint-blue: #f3f4f9;
-$top-blue: #082C38;
 
 html {
   font-size: 19px;
@@ -29,10 +27,6 @@ h4, h5, h6 {
   font-family: 'Poppins', $font-family-fallback;
 }
 
-.top-blue {
-  color: $top-blue;
-}
-
 .bg-faint-blue {
   background: $faint-blue;
 }
@@ -45,20 +39,12 @@ h4, h5, h6 {
   color: $ms-blue;
 }
 
-.bg-steel {
-  background: $steel-bg;
-}
-
 .steel-heading {
   color: $steel-heading;
 }
 
 .steel-body {
   color: $steel-body;
-}
-
-.steel-border {
-  border-color: $steel-body;
 }
 
 a {
