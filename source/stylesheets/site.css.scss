@@ -69,28 +69,24 @@ h4, h5, h6 {
 }
 
 .text-shadow {
-  text-shadow: 0 2px 3px rgba(0, 0, 0, .1);
+  text-shadow: 0 2px 3px rgba(0, 0, 0, .2);
 }
 
 .hero {
   position: relative;
   z-index: 0;
+}
 
-  &:after {
-    background-image: url("data:image/svg+xml,%3Csvg width='52' height='90' viewBox='-26 -45 52 90' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23fafafa' d='m26 15v30L0 30V-30l-26-15v30z'/%3E%3Cpath fill='%23222' d='m-26 15v30L0 30V-30l26-15v30z'/%3E%3C/svg%3E");
-    background-position: center center;
-    background-repeat: repeat;
-    background-size: 300px;
-    bottom: 0;
-    content: '';
-    left: 0;
-    opacity: .035;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 100%;
-    z-index: -1;
-  }
+#particles {
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  opacity: .65;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: -1;
 }
 
 .icon {
