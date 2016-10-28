@@ -14,6 +14,7 @@
     <%= javascript_include_tag :all %>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
     <script src="https://rawgit.com/VincentGarreau/particles.js/master/particles.min.js"></script>
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
   </head>
 
   <body class="<%= page_classes %>">
@@ -24,11 +25,20 @@
         </div>
         <div class="navigation">
           <a class="text-decoration-none steel-body mr1 sm-mr3" target="_blank" href="https://github.com/steeltoeoss">GitHub</a>
+          <a class="text-decoration-none steel-body mr1 sm-mr3" target="_blank" href="https://www.nuget.org/profiles/steeltoe">NuGet</a>
           <a class="text-decoration-none steel-body mr1 sm-mr3" target="_blank" href="https://github.com/SteeltoeOSS/Tutorials">Docs</a>
           <a class="text-decoration-none steel-body mr1 sm-mr3" target="_blank" href="http://slack.steeltoe.io/">Slack</a>
         </div>
       </nav>
     </div>
     <%= yield %>
+    <footer class="center">
+      <div class="max-width-4 mx-auto">
+        <div class="px2 py3">
+          <img class="logo-small" src="images/logo.svg" alt="">
+          <p class="mb0">Sponsored by <a class="text-decoration-none" href="http://pivotal.io">Pivotal</a></p>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

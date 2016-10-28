@@ -61,8 +61,31 @@ title: Steeltoe
                 </li>
               </ul>
             </div>
-            <pre class="pb2 m0"><code class="c# m0 codeSnippet"> function factorial(n) { console.log('foobar') }
-                 </code></pre>
+            <pre class="pb2 m0"><code class="c# m0 codeSnippet">  public void DoFizzBuzz()
+    {
+        var combinations = new List<Tuple<int, string>>
+        { 
+            new Tuple<int, string> (3, "Fizz"), 
+            new Tuple<int, string> (5, "Buzz"), 
+        };
+
+        Func<int, int, bool> isMatch = (i, comb) => i % comb == 0;
+        for (int i = 1; i <= 100; i++)
+        {
+            Console.Write(i);
+
+            var matchingCombs = combinations.Where(c => isMatch(i, c.Item1)).ToList();
+            if (matchingCombs.Any())
+            {
+                Console.Write(string.Join("", matchingCombs.Select(c => c.Item2)));
+            }
+            else
+            {
+                Console.Write(i);
+            }
+            Console.Write(Environment.NewLine);
+        }
+    }</code></pre>
           </div>
         </div>
       </div>
@@ -112,55 +135,61 @@ title: Steeltoe
       </div>
     </div>
   </div>
-
-
-   <!--  <section class="clearfix py1 sm-py4">
-      <div class="col sm-col-6">
-        <h2 class="regular my0 steel-body muted">02</h2>
-        <h1 class="mt0 mb1 steel-heading">Config Server</h1>
-        <p class="mt0 steel-body">The Steeltoe bindings to Spring Cloud Config Server provide a way to push configuration to a set of microservices at run time instead of deploy time. Store your credentials securely, using industry best practices.</p>
-      </div>
-    </section>
-    <hr class="steel-border muted">
-    <section class="clearfix py1 sm-py4">
-      <div class="col sm-col-6">
-        <h2 class="regular my0 steel-body muted">03</h2>
-        <h1 class="mt0 mb1 steel-heading">Cloud Connectors</h1>
-        <p class="mt0 steel-body">Steeltoe offers Cloud Connectors as a way of easily connecting to your services without having to wire up the connections yourself, specifically by hydrating your VAR VCAP environment variable and turning it into a connection object. One fewer thing to maintain.</p>
-      </div>
-    </section>
-    <hr class="steel-border muted">
-    <section class="clearfix py1 sm-py4">
-      <div class="sm-col-7 mx-auto">
-        <div class="terminal">
-          <div class="terminal-top-bar p1 bg-ms-blue">
-            <ul class="list-reset m0 flex items-center justify-end">
-              <li class="inline-block mr1">
-                <img src="images/icons/icon-minimize.svg" alt="">
-              </li>
-              <li class="inline-block mr1">
-                <img src="images/icons/icon-maximize.svg" alt="">
-              </li>
-              <li class="inline-block mr1">
-                <img src="images/icons/icon-close.svg" alt="">
-              </li>
-            </ul>
+  <div class="max-width-4 mx-auto">
+    <div class="px2 py2 sm-py4">
+      <section class="clearfix py1 sm-py4">
+        <div class="col sm-col-6">
+          <h2 class="regular my0 steel-body muted">03</h2>
+          <h1 class="mt0 mb1 steel-heading">Cloud Connectors</h1>
+          <p class="mt0 steel-body">Steeltoe offers Cloud Connectors as a way of easily connecting to your services without having to wire up the connections yourself, specifically by hydrating your <code class="code-bash">/var/vcap</code> environment variable and turning it into a connection object. One fewer thing to maintain.</p>
+        </div>
+        <div class="col sm-col-6 sm-pl4">
+          <img src="http://placehold.it/1000x500" alt="">
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="bg-faint-blue">
+    <div class="max-width-4 mx-auto">
+      <div class="px2 py4">
+        <div class="clearfix col-12">
+          <div class="terminal">
+            <div class="terminal-top-bar p1 bg-ms-blue">
+              <ul class="list-reset m0 flex items-center justify-end">
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-minimize.svg" alt="">
+                </li>
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-maximize.svg" alt="">
+                </li>
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-close.svg" alt="">
+                </li>
+              </ul>
+            </div>
+            <pre class="pb2 m0"><code class="c# m0 codeSnippet"> var builder = new ConfigurationBuilder()
+                 .SetBasePath(env.ContentRootPath)
+                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                 .AddEnvironmentVariables()
+                 .AddConfigServer(env);
+             Configuration = builder.Build();</code></pre>
           </div>
-      <pre class="pb2 m0"><code class="c# m0 codeSnippet">  using Microsoft.Extensions.Configuration;
-  using Steeltoe.Extensions.Configuration.ConfigServer;
-
-      namespace Foo.Controllers
-      {
-          public class HomeController : Controller
-          {
-
-              private IConfigurationRoot Config { get; set; }
-
-              public HomeController(IConfigurationRoot config)
-              {
-                  Config = config;
-              }</code></pre>
         </div>
       </div>
-    </section> -->
+    </div>
+  </div>
+  <div class="max-width-4 mx-auto">
+    <div class="px2 py2 sm-py4">
+      <section class="clearfix py1 sm-py4 sm-mxn1">
+        <h1 class="mt0 mb3 steel-heading">What They're Saying</h1>
+        <div class="col sm-col-6 sm-px1">
+          <blockquote class="twitter-tweet" data-cards="hidden" data-lang="en"><p lang="en" dir="ltr">New RC1 release of <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a> <a href="https://t.co/q2ylxpWb0g">https://t.co/q2ylxpWb0g</a> - very cool for .NET Microservices working in a heterogeneous system</p>&mdash; Martin Woodward (@martinwoodward) <a href="https://twitter.com/martinwoodward/status/788043646490771456">October 17, 2016</a></blockquote>
+        </div>
+        <div class="col sm-col-6 sm-px1">
+          <blockquote class="twitter-tweet" data-cards="hidden" data-lang="en"><p lang="en" dir="ltr">Pretty cool to see <a href="https://twitter.com/pivotalcf">@pivotalcf</a> activating <a href="https://twitter.com/NetflixOSS">@NetflixOSS</a> for .NET --check out the new Eureka client support: <a href="https://t.co/qtLv69fO4j">https://t.co/qtLv69fO4j</a></p>&mdash; James Watters (@wattersjames) <a href="https://twitter.com/wattersjames/status/748980891213520896">July 1, 2016</a></blockquote>
+        </div>
+      </section>
+    </div>
+  </div>
 </main>

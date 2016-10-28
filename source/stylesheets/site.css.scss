@@ -11,6 +11,7 @@ $steel-bg: #318BB0;
 $steel-heading: #364962;
 $accent-blue: #27AAE1;
 $ms-blue: #0074D9;
+$faint-blue: #f3f4f9;
 $top-blue: #082C38;
 
 html {
@@ -33,7 +34,7 @@ h4, h5, h6 {
 }
 
 .bg-faint-blue {
-  background: #f3f4f9;
+  background: $faint-blue;
 }
 
 .bg-ms-blue {
@@ -58,6 +59,10 @@ h4, h5, h6 {
 
 .steel-border {
   border-color: $steel-body;
+}
+
+a {
+  color: $ms-blue;
 }
 
 .navigation a {
@@ -98,6 +103,10 @@ h4, h5, h6 {
   max-width: 250px;
 }
 
+.logo-small {
+  max-width: 50px;
+}
+
 .terminal {
   background: #fff;
   box-shadow: 0 0 0 3px $ms-blue;
@@ -125,6 +134,11 @@ code {
   overflow: hidden;
 }
 
+.code-bash {
+  color: $ms-blue;
+  background-image: linear-gradient(transparent,transparent 87.5%,rgba(0,119,204,.125) 0);
+}
+
 .terminal pre {
   display: block;
   -webkit-font-smoothing: auto;
@@ -133,4 +147,12 @@ code {
 .terminal code {
   display: block;
   font-size: 1em;
+}
+
+.twitter-tweet {
+  width: 100% !important;
+}
+
+footer {
+  border-top: 1px solid $faint-blue;
 }
