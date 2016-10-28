@@ -1,8 +1,6 @@
 $(document).ready(function() {
-  var bsod = $('#bsod');
-  var bsodTerminal = $("#bsodTerminal");
-  var bsodCodeSnippet = $('#bsodTerminal .code-snippet')
-  var bsodToggle = $('#bsodToggle');
+  var eeToggle = $('.eeToggle');
+
   var codeSnippets = $('.code-snippet code');
 
   codeSnippets.each(function(index, cs) {
@@ -11,12 +9,15 @@ $(document).ready(function() {
 
   particlesJS.load('particles', 'particle-config.json');
 
-  function toggleBsod() {
-    bsod.toggleClass('hide');
-    bsodCodeSnippet.toggleClass('hide');
+  function toggleEasterEgg() {
+    var parentTerminal = $(this).closest('.terminal');
+    var snippet = parentTerminal.find('.code-snippet');
+    var ee = parentTerminal.find('.ee');
+    
+    ee.toggleClass('hide');
+    snippet.toggleClass('hide');
   }
 
-  bsod.on('click', toggleBsod);
-  bsodToggle.on('click', toggleBsod);
+  eeToggle.on('click', toggleEasterEgg);
 
 });
