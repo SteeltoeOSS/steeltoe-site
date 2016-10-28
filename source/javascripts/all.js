@@ -1,13 +1,22 @@
 $(document).ready(function() {
-  var codeSnippets = $('.codeSnippet');
+  var bsod = $('#bsod');
+  var bsodTerminal = $("#bsodTerminal");
+  var bsodCodeSnippet = $('#bsodTerminal .code-snippet')
+  var bsodToggle = $('#bsodToggle');
+  var codeSnippets = $('.code-snippet code');
 
   codeSnippets.each(function(index, cs) {
     hljs.highlightBlock(cs);
   });
 
-  /* particlesJS.load(@dom-id, @path-json, @callback (optional)); */
-  particlesJS.load('particles', 'particle-config.json', function() {
-    console.log('callback - particles.js config loaded');
-  });
+  particlesJS.load('particles', 'particle-config.json');
+
+  function toggleBsod() {
+    bsod.toggleClass('hide');
+    bsodCodeSnippet.toggleClass('hide');
+  }
+
+  bsod.on('click', toggleBsod);
+  bsodToggle.on('click', toggleBsod);
 
 });

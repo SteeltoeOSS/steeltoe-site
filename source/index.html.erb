@@ -47,7 +47,7 @@ title: Steeltoe
     <div class="max-width-4 mx-auto">
       <div class="px2 py4">
         <div class="clearfix col-12">
-          <div class="terminal">
+          <div class="terminal" id="bsodTerminal">
             <div class="terminal-top-bar p1 bg-ms-blue">
               <ul class="list-reset m0 flex items-center justify-end">
                 <li class="inline-block mr1">
@@ -56,12 +56,24 @@ title: Steeltoe
                 <li class="inline-block mr1">
                   <img src="images/icons/icon-maximize.svg" alt="">
                 </li>
-                <li class="inline-block mr1">
+                <li class="inline-block mr1 pointer" id="bsodToggle">
                   <img src="images/icons/icon-close.svg" alt="">
                 </li>
               </ul>
             </div>
-            <pre class="pb2 m0"><code class="c# m0 codeSnippet">  public void DoFizzBuzz()
+            <div class="terminal-body">
+              <div class="bsod p4 center white hide" id="bsod">
+                <h1 class="h4 bsod-title inline-block black m0 px1">Oh No!</h1>
+                <p>A fatal exception C8 has occurred at E4D4:C1D5D6C9 in C4C 9E2(D4) +<br />
+              D9D6C3D2E2. The current application will be terminated.</p>
+                <ul class="list-reset">
+                  <li>Press any key if this wasn't what you expected.</li>
+                  <li>Press CTRL+ALT+DELETE again to close your window. You will lose any unsaved information in all tabs.</li>
+                </ul>
+                <p class="center">Touch anywhere on the screen to continue <span class="bsod-cursor">_</span></p>
+              </div>
+              <div class="code-snippet">
+                        <pre class="pb2 m0"><code class="c# m0">  public void DoFizzBuzz()
     {
         var combinations = new List<Tuple<int, string>>
         { 
@@ -86,6 +98,8 @@ title: Steeltoe
             Console.Write(Environment.NewLine);
         }
     }</code></pre>
+              </div>
+            </div>
           </div>
         </div>
       </div>

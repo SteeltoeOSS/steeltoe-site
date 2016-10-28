@@ -113,6 +113,34 @@ a {
   }
 }
 
+.terminal-body {
+  background: white;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.bsod {
+  background: #0000aa;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.bsod-title {
+  background-color: #aaaaaa;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.bsod-cursor {
+  animation: blink steps(1, end) 1s infinite normal forwards;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  33% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 pre,
 code {
   font-family: 'Roboto Mono', monospace;
