@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 20.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 926.6 594.2" style="enable-background:new 0 0 926.6 594.2;" xml:space="preserve">
+<style type="text/css">
+	
+		.st0{clip-path:url(#SVGID_2_);fill:none;stroke:#DBE8F6;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{clip-path:url(#SVGID_2_);fill-rule:evenodd;clip-rule:evenodd;fill:#DBE8F6;}
+	
+		.st2{opacity:0.5;clip-path:url(#SVGID_2_);fill:none;stroke:#DBE8F6;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	
+		.st3{opacity:0.2;clip-path:url(#SVGID_2_);fill:none;stroke:#DBE8F6;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st4{clip-path:url(#SVGID_2_);}
+	.st5{fill:#DBE8F6;}
+	.st6{font-family:'RobotoMono-Regular';}
+	.st7{font-size:30px;}
+	.st8{clip-path:url(#SVGID_2_);fill:#2E66A5;}
+	.st9{clip-path:url(#SVGID_2_);fill:#2B5D98;}
+	.st10{clip-path:url(#SVGID_2_);fill:#1B4676;}
+</style>
+<g>
+	<defs>
+		<rect id="SVGID_1_" y="-0.2" width="926.6" height="594.2"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<polyline class="st0" points="100.1,429.7 377.2,269.7 598.9,397.7 488.1,461.7 432.7,429.7 266.4,525.7 100.1,429.7 	"/>
+	<polyline class="st0" points="598.9,397.7 709.8,461.7 488.1,589.7 432.7,557.7 	"/>
+	<polyline class="st0" points="709.8,461.7 820.6,525.7 709.8,589.7 598.9,525.7 	"/>
+	<line class="st0" x1="654.4" y1="557.7" x2="598.9" y2="589.7"/>
+	<polyline class="st0" points="488.1,333.7 598.9,269.7 765.2,365.7 654.4,429.7 	"/>
+	<line class="st0" x1="432.7" y1="301.7" x2="598.9" y2="205.7"/>
+	<line class="st0" x1="377.2" y1="269.7" x2="266.4" y2="205.7"/>
+	<line class="st0" x1="321.8" y1="237.7" x2="266.4" y2="269.7"/>
+	<path class="st1" d="M72,157.7c24.8,0,44.9,20.1,44.9,44.9c0,24.8-20.1,44.9-44.9,44.9s-44.9-20.1-44.9-44.9
+		C27.1,177.8,47.2,157.7,72,157.7z"/>
+	<path class="st2" d="M72,145.9c31.3,0,56.7,25.4,56.7,56.7c0,31.3-25.4,56.7-56.7,56.7c-31.3,0-56.7-25.4-56.7-56.7
+		C15.3,171.3,40.7,145.9,72,145.9z"/>
+	<path class="st3" d="M72,135c37.3,0,67.6,30.3,67.6,67.6s-30.3,67.6-67.6,67.6c-37.3,0-67.6-30.3-67.6-67.6S34.7,135,72,135z"/>
+	<g class="st4">
+		<text transform="matrix(1 0 0 1 0 332.188)" class="st5 st6 st7">10.0.0.1</text>
+	</g>
+	<path class="st1" d="M441.4,24.7c24.8,0,44.9,20.1,44.9,44.9s-20.1,44.9-44.9,44.9s-44.9-20.1-44.9-44.9S416.6,24.7,441.4,24.7z"/>
+	<path class="st2" d="M441.4,12.8c31.3,0,56.7,25.4,56.7,56.7c0,31.3-25.4,56.7-56.7,56.7s-56.7-25.4-56.7-56.7
+		C384.7,38.3,410.1,12.8,441.4,12.8z"/>
+	<path class="st3" d="M441.4,2C478.7,2,509,32.3,509,69.6s-30.3,67.6-67.6,67.6s-67.6-30.3-67.6-67.6S404.1,2,441.4,2z"/>
+	<g class="st4">
+		<text transform="matrix(1 0 0 1 369.393 199.142)" class="st5 st6 st7">10.0.0.2</text>
+	</g>
+	<path class="st1" d="M854.6,263.2c24.8,0,44.9,20.1,44.9,44.9c0,24.8-20.1,44.9-44.9,44.9c-24.8,0-44.9-20.1-44.9-44.9
+		C809.7,283.4,829.8,263.2,854.6,263.2z"/>
+	<path class="st2" d="M854.6,251.4c31.3,0,56.7,25.4,56.7,56.7c0,31.3-25.4,56.7-56.7,56.7c-31.3,0-56.7-25.4-56.7-56.7
+		C797.9,276.8,823.3,251.4,854.6,251.4z"/>
+	<path class="st3" d="M854.6,240.5c37.3,0,67.6,30.3,67.6,67.6s-30.3,67.6-67.6,67.6S787,345.4,787,308.1S817.3,240.5,854.6,240.5z"
+		/>
+	<g class="st4">
+		<text transform="matrix(1 0 0 1 782.595 437.704)" class="st5 st6 st7">10.0.0.3</text>
+	</g>
+	<polygon class="st8" points="319.1,388 250.5,427.8 181.5,388 250.1,348.1 	"/>
+	<polygon class="st9" points="319.1,388 318.9,445 250.4,484.9 250.5,427.8 	"/>
+	<polygon class="st10" points="250.5,427.8 250.4,484.9 181.3,445 181.5,388 	"/>
+	<line class="st0" x1="371.4" y1="296.2" x2="424.9" y2="327.1"/>
+	<line class="st0" x1="655.3" y1="405.8" x2="726.3" y2="364.8"/>
+	<line class="st0" x1="632.9" y1="525.7" x2="703.5" y2="566.4"/>
+</g>
+</svg>
