@@ -72,29 +72,27 @@ title: Steeltoe
                 </ul>
               </div>
               <div class="code-snippet">
-                        <pre class="pb2 m0"><code class="c# m0">  public void DoFizzBuzz()
+                        <pre class="pb2 m0"><code class="c# m0">  public class FortuneService : IFortuneService
     {
-        var combinations = new List<Tuple<int, string>>
-        { 
-            new Tuple<int, string> (3, "Fizz"), 
-            new Tuple<int, string> (5, "Buzz"), 
-        };
+        DiscoveryHttpClientHandler _handler;
 
-        Func<int, int, bool> isMatch = (i, comb) => i % comb == 0;
-        for (int i = 1; i <= 100; i++)
+        private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+
+        public FortuneService(IDiscoveryClient client)
         {
-            Console.Write(i);
+            _handler = new DiscoveryHttpClientHandler(client);
+        }
 
-            var matchingCombs = combinations.Where(c => isMatch(i, c.Item1)).ToList();
-            if (matchingCombs.Any())
-            {
-                Console.Write(string.Join("", matchingCombs.Select(c => c.Item2)));
-            }
-            else
-            {
-                Console.Write(i);
-            }
-            Console.Write(Environment.NewLine);
+        public async Task<string> RandomFortuneAsync()
+        {
+            var client = GetClient();
+            return await client.GetStringAsync(RANDOM_FORTUNE_URL);
+        }
+
+        private HttpClient GetClient()
+        {
+            var client = new HttpClient(_handler, false);
+            return client;
         }
     }</code></pre>
               </div>
@@ -107,13 +105,13 @@ title: Steeltoe
   <div class="max-width-4 mx-auto">
     <div class="px2 py2 sm-py4">
       <section class="clearfix py1 sm-py4">
-        <div class="col sm-col-6 sm-col-right">
+        <div class="col col-12 sm-col-6 sm-col-right">
           <h2 class="regular my0 steel-body muted">02</h2>
           <h1 class="mt0 mb1 steel-heading">Config Server</h1>
           <p class="mt0 steel-body">The Steeltoe bindings to Spring Cloud Config Server provide a way to push configuration to a set of microservices at run time instead of deploy time. Store your credentials securely, using industry best practices.</p>
         </div>
-        <div class="col sm-col-6 sm-pr4">
-          <img src="http://placehold.it/1000x500" alt="">
+        <div class="col col-12 sm-col-6 sm-pr4">
+          <img src="images/external-configuration.svg" alt="">
         </div>
       </section>
     </div>
@@ -158,13 +156,13 @@ title: Steeltoe
   <div class="max-width-4 mx-auto">
     <div class="px2 py2 sm-py4">
       <section class="clearfix py1 sm-py4">
-        <div class="col sm-col-6">
+        <div class="col col-12 sm-col-6">
           <h2 class="regular my0 steel-body muted">03</h2>
           <h1 class="mt0 mb1 steel-heading">Cloud Connectors</h1>
           <p class="mt0 steel-body">Steeltoe offers Cloud Connectors as a way of easily connecting to your services without having to wire up the connections yourself, specifically by hydrating your <code class="code-bash">/var/vcap</code> environment variable and turning it into a connection object. One fewer thing to maintain.</p>
         </div>
-        <div class="col sm-col-6 sm-pl4">
-          <img src="http://placehold.it/1000x500" alt="">
+        <div class="col col-12 sm-col-6 sm-pl4">
+          <img src="images/cloud-connector.svg" alt="">
         </div>
       </section>
     </div>
@@ -192,13 +190,28 @@ title: Steeltoe
                 <iframe src='https://gfycat.com/ifr/PoliticalBoringDuckling' frameborder='0' scrolling='no' width='640' height='419' allowfullscreen></iframe>
               </div>
               <div class="code-snippet">
-                <pre class="pb2 m0"><code class="c# m0"> var builder = new ConfigurationBuilder()
-                 .SetBasePath(env.ContentRootPath)
-                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                 .AddEnvironmentVariables()
-                 .AddConfigServer(env);
-             Configuration = builder.Build();</code></pre>
+                <pre class="pb2 m0"><code class="c# m0"> services.AddMySqlConnection(Configuration);
+ ...
+ public IActionResult MySqlData(
+        [FromServices] MySqlConnection dbConnection)
+    {
+        dbConnection.Open();
+
+        MySqlCommand cmd = new MySqlCommand("SELECT * FROM TestData;", dbConnection);
+        MySqlDataReader rdr = cmd.ExecuteReader();
+
+        while (rdr.Read())
+        {
+            ViewData["Key" + rdr[0]] = rdr[1];
+        }
+
+        rdr.Close();
+        dbConnection.Close();
+
+        return View();
+    }
+}
+                </code></pre>
               </div>
             </div>
           </div>
