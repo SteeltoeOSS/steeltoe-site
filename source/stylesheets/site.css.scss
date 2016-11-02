@@ -279,3 +279,15 @@ footer {
     stroke-dashoffset: 0px;
   }
 }
+
+#cloud-connector #connectorPath {
+  stroke-dasharray: 10;
+  animation: dottedPath 2s infinite linear;
+}
+
+
+@keyframes dottedPath {
+  to {
+    stroke-dashoffset: 100;
+  }
+}
