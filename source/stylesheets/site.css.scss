@@ -218,3 +218,53 @@ footer {
     transform: scale3d(1, 1, 1);
   }
 }
+
+#service-discovery g circle:nth-of-type(2),
+#service-discovery g circle:nth-of-type(3) {
+  animation: pulsate 1.5s infinite linear;
+  transform-origin: center center;
+}
+
+#service-discovery g circle:nth-of-type(3) {
+  animation-delay: 2s;
+}
+
+
+@keyframes pulsate {
+  0% {
+    opacity: 0;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }  
+}
+
+#external-configuration #serverPath,
+#external-configuration #databasePath,
+#external-configuration #debugPath {
+  stroke-dasharray: 221px;
+  animation-name: drawPath;
+  animation-direction: alternate-reverse;
+  animation-duration: 2s;
+  animation-fill-mode: backwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+
+@keyframes drawPath {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 221px;
+ 
+  }
+  100% {
+    opacity: 1;
+    stroke-dashoffset: 0px;
+  }
+}

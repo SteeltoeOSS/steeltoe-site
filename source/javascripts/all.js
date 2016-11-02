@@ -1,10 +1,14 @@
 $(document).ready(function() {
   var eeToggle = $('.eeToggle');
-
   var codeSnippets = $('.code-snippet code');
+  var svgs = $('.svg-illustration');
 
   codeSnippets.each(function(index, cs) {
     hljs.highlightBlock(cs);
+  });
+
+  SVGInjector(svgs, {}, function() {
+    animateSVGs();
   });
 
   particlesJS.load('particles', 'particle-config.json');
@@ -16,6 +20,9 @@ $(document).ready(function() {
     
     ee.toggleClass('hide');
     snippet.toggleClass('hide');
+  }
+
+  function animateSVGs() {
   }
 
   eeToggle.on('click', toggleEasterEgg);
