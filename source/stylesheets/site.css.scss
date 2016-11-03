@@ -2,11 +2,9 @@
 @import 'ace';
 @import 'animation';
 @import 'mixins';
-@import url('https://fonts.googleapis.com/css?family=Karla');
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,700');
-@import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+@import 'visualstudiosyntax';
+@import url('https://fonts.googleapis.com/css?family=Karla|Poppins:400,700|Roboto+Mono');
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/vs.min.css');
 
 $font-family-fallback: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
 $steel-body: darken(#90A1B8, 5%);
