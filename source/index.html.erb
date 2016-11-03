@@ -56,13 +56,13 @@ title: Steeltoe
                 <li class="inline-block mr1">
                   <img src="images/icons/icon-maximize.svg" alt="">
                 </li>
-                <li class="inline-block mr1 pointer eeToggle">
+                <li class="inline-block mr1 pointer eeToggle" data-ee="bsod">
                   <img src="images/icons/icon-close.svg" alt="">
                 </li>
               </ul>
             </div>
             <div class="terminal-body">
-              <div class="bsod p4 center white hide ee">
+              <div id="bsod" class="bsod p4 center white hide ee">
                 <h1 class="h4 bsod-title inline-block black m0 px1">Oh No!</h1>
                 <p>A fatal exception C8 has occurred at E4D4:C1D5D6C9 in C4C 9E2(D4) +<br />
               D9D6C3D2E2. The current application will be terminated.</p>
@@ -71,7 +71,7 @@ title: Steeltoe
                   <li>Click X again if this wasn't what you expected <span class="bsod-cursor">_</span></li>
                 </ul>
               </div>
-              <div class="code-snippet">
+              <div class="code-snippet" id="bsod-terminal">
                         <pre class="pb2 m0"><code class="c# m0">  public class FortuneService : IFortuneService
     {
         DiscoveryHttpClientHandler _handler;
@@ -129,16 +129,16 @@ title: Steeltoe
                 <li class="inline-block mr1">
                   <img src="images/icons/icon-maximize.svg" alt="">
                 </li>
-                <li class="inline-block mr1 pointer eeToggle">
+                <li class="inline-block mr1 pointer eeToggle" data-ee="launch">
                   <img src="images/icons/icon-close.svg" alt="">
                 </li>
               </ul>
             </div>
             <div class="terminal-body">
-              <div class="launch-video hide ee">
+              <div id="launch" class="launch-video hide ee">
                 <iframe width="100%" height="500" src="https://www.youtube.com/embed/lAkuJXGldrM?autoplay=0" frameborder="0" allowfullscreen></iframe>
               </div>
-               <div class="code-snippet">
+               <div class="code-snippet" id="launch-terminal">
                  <pre class="pb2 m0"><code class="c# m0"> var builder = new ConfigurationBuilder()
                   .SetBasePath(env.ContentRootPath)
                   .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -180,16 +180,16 @@ title: Steeltoe
                 <li class="inline-block mr1">
                   <img src="images/icons/icon-maximize.svg" alt="">
                 </li>
-                <li class="inline-block mr1 pointer eeToggle">
+                <li class="inline-block mr1 pointer eeToggle" data-ee="pipes">
                   <img src="images/icons/icon-close.svg" class="animated tada" alt="">
                 </li>
               </ul>
             </div>
             <div class="terminal-body">
-              <div class="screensaver bg-black ee hide">
+              <div id="pipes" class="screensaver bg-black ee hide">
                 <iframe src='https://gfycat.com/ifr/PoliticalBoringDuckling' frameborder='0' scrolling='no' width='640' height='419' allowfullscreen></iframe>
               </div>
-              <div class="code-snippet">
+              <div class="code-snippet" id="pipes-terminal">
                 <pre class="pb2 m0"><code class="c# m0"> services.AddMySqlConnection(Configuration);
  ...
  public IActionResult MySqlData(

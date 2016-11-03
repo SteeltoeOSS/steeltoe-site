@@ -1,30 +1,40 @@
-$(document).ready(function() {
-  var eeToggle = $('.eeToggle');
-  var codeSnippets = $('.code-snippet code');
-  var svgs = $('.svg-illustration');
+//= require highlight.min
+//= require particles.min
+//= require svg-injector.min
 
-  codeSnippets.each(function(index, cs) {
-    hljs.highlightBlock(cs);
-  });
+document.addEventListener("DOMContentLoaded", function() {
+  var eeToggle = document.querySelectorAll('.eeToggle');
+  var codeSnippets = document.querySelectorAll('.code-snippet code');
+  var SVGillustrations = document.querySelectorAll('img.svg-illustration');
 
-  SVGInjector(svgs, {}, function() {
-    animateSVGs();
-  });
-
-  particlesJS.load('particles', 'particle-config.json');
-
-  function toggleEasterEgg() {
-    var parentTerminal = $(this).closest('.terminal');
-    var snippet = parentTerminal.find('.code-snippet');
-    var ee = parentTerminal.find('.ee');
-    
-    ee.toggleClass('hide');
-    snippet.toggleClass('hide');
+  function injectSVgs() {
+    SVGInjector(SVGillustrations);
   }
 
-  function animateSVGs() {
+  function highlightCodeSnippets() {
+    codeSnippets.forEach(function(cs, index) {
+      hljs.highlightBlock(cs);
+    })
   }
 
-  eeToggle.on('click', toggleEasterEgg);
+  function drawParticles() {
+    particlesJS.load('particles', 'particle-config.json');
+  }
+
+  function toggleEasterEgg(event) {
+    var eeTarget = this.dataset.ee;
+    var eeBody = document.querySelector('#' + eeTarget);
+    var eeTerminal = document.querySelector('#' + eeTarget + '-terminal');
+    eeBody.classList.toggle('hide');
+    eeTerminal.classList.toggle('hide');
+  }
+
+  eeToggle.forEach(function(ee) { 
+    ee.addEventListener('click', toggleEasterEgg);
+  })
+
+  drawParticles();
+  injectSVgs();
+  highlightCodeSnippets();
 
 });
