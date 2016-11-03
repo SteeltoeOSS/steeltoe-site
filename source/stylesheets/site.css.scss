@@ -4,7 +4,8 @@
 @import 'mixins';
 @import 'visualstudiosyntax';
 @import url('https://fonts.googleapis.com/css?family=Karla|Poppins:400,700|Roboto+Mono');
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
+@import "font-awesome-sprockets";
+@import "font-awesome";
 
 $font-family-fallback: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
 $steel-body: darken(#90A1B8, 5%);
