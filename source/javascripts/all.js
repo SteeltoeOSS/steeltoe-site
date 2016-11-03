@@ -3,7 +3,6 @@
 //= require svg-injector.min
 
 document.addEventListener("DOMContentLoaded", function() {
-  var eeToggle = document.querySelectorAll('.eeToggle');
   var codeSnippets = document.querySelectorAll('.code-snippet code');
   var SVGillustrations = document.querySelectorAll('img.svg-illustration');
 
@@ -20,18 +19,6 @@ document.addEventListener("DOMContentLoaded", function() {
   function drawParticles() {
     particlesJS.load('particles', 'particle-config.json');
   }
-
-  function toggleEasterEgg(event) {
-    var eeTarget = this.dataset.ee;
-    var eeBody = document.querySelector('#' + eeTarget);
-    var eeTerminal = document.querySelector('#' + eeTarget + '-terminal');
-    eeBody.classList.toggle('hide');
-    eeTerminal.classList.toggle('hide');
-  }
-
-  eeToggle.forEach(function(ee) { 
-    ee.addEventListener('click', toggleEasterEgg);
-  })
 
   drawParticles();
   injectSVgs();

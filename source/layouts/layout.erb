@@ -5,8 +5,14 @@
     <meta charset="utf-8">
     <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
 
+    <meta property="og:title" content="Steeltoe OSS" />
+    <meta property="og:url" content="http://www.steeltoe.io" />
+    <meta property="og:image" content="images/favicon.png" />
+    <meta property="og:description" content="Cloud Native .NET Applications - Friend of Spring Boot, Spring Cloud, and Cloud Foundry." />
+
     <!-- Use title if it's in the page YAML frontmatter -->
     <title><%= current_page.data.title || "Steeltoe" %></title>
+    <link rel="icon" href="images/favicon.png">
     <%= stylesheet_link_tag :site %>
     <%= javascript_include_tag :all %>
     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
