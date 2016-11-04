@@ -57,6 +57,19 @@ p {
   }
 }
 
+.btn-cta {
+  backface-visibility: hidden;
+  transform: translate3d(0,0,0);
+  transition: box-shadow .2s ease-out,
+              transform .2s ease-out;
+
+  &:hover {
+    box-shadow: 0 7px 14px rgba($steel-heading, .1),
+                0 3px 6px rgba(0,0,0, .08);
+    transform: translateY(-2px);
+  }
+}
+
 .navigation a {
   transition: color .2s ease-out;
 
@@ -125,10 +138,6 @@ p {
 
 .terminal-body {
   background: white;
-}
-
-.pointer {
-  cursor: pointer;
 }
 
 .bsod {
