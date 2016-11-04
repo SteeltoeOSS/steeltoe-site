@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function highlightCodeSnippets() {
-    codeSnippets.forEach(function(cs, index) {
-      hljs.highlightBlock(cs);
-    })
+    for(var i = 0; i < codeSnippets.length; i++) {
+      hljs.highlightBlock(codeSnippets[i]);
+    }
   }
 
   function drawParticles() {
