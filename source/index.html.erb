@@ -7,8 +7,9 @@ title: Steeltoe
   <div class="max-width-4 mx-auto">
     <div class="px2 py4">
       <div class="clearfix">
-        <div class="col sm-col-10 md-col-8">
-          <h1 class="h2 sm-h1 white mt0 text-shadow regular">Don't reinvent the distributed wheel. <br/> Steeltoe is a .NET toolkit for common microservice patterns.</h1>
+        <div class="col sm-col-10 md-col-9">
+          <h1 class="h2 sm-h1 white mt0 mb1 text-shadow regular">Painless microservice patterns for .NET</h1>
+          <h2 class="h3 white mt0 mb2 sm-mb1 text-shadow regular">For all their benefits, microservice architectures expose many distributed computing problems that traditional monoliths avoided. Leveraging industry standard patterns (from the likes of <a class="white" href="https://netflix.github.io/" target="_blank">Netflix</a> and <a class="white" href="http://projects.spring.io/spring-cloud/" target="_blank">Spring Cloud</a>) Steeltoe brings the power of resilient, scalable microservices to .NET developers, without all the headache.</h2>
         </div>
       </div>
       <div class="clearfix sm-mt2">
@@ -35,7 +36,7 @@ title: Steeltoe
         <div class="col col-12 sm-col-6">
           <h2 class="regular my0 steel-body muted">01</h2>
           <h1 class="mt0 mb1 steel-heading">Service Discovery</h1>
-          <p class="mt0 steel-body">Steeltoe leverages Eureka for service discovery. Eureka sacrifices consistency guarantees to remain available in the event of a partition, allowing microservices to continue to register themselves and resolve other services in a given partition.</p>
+          <p class="mt0 steel-body">How do you make the the interactions between your microservices reliable and failure tolerant?  For starters, you need a service registry—basically a phone book for your microservices—so service consumers know exactly where to find healthy service instances. Steeltoe includes a .NET client for Netflix Eureka so your microservices can register themselves and discover other registered services.</p>
         </div>
         <div class="col col-12 sm-col-6 sm-pl4">
           <img class="svg-illustration" id="service-discovery" src="images/service-discovery.svg" alt="">
@@ -99,7 +100,9 @@ title: Steeltoe
         <div class="col col-12 sm-col-6 sm-col-right sm-pl2">
           <h2 class="regular my0 steel-body muted">02</h2>
           <h1 class="mt0 mb1 steel-heading">Config Server</h1>
-          <p class="mt0 steel-body">The Steeltoe bindings to Spring Cloud Config Server provide a way to push configuration to a set of microservices at run time instead of deploy time. Store your credentials securely, using industry best practices.</p>
+          <p class="mt0 steel-body">
+            <em>“Strict separation of config from code”</em> has become a cloud <a class="steel-body" href="https://12factor.net/config" target="_blank">mandate</a>, but that begs the question, where do you put it? And once you’ve externalized your config from your app, how do you track who changed what, when? Steeltoe leverages Spring Cloud Config Server so you can store your app’s config in a centralized, version-controlled <code>git</code> repo and then load it at runtime. 
+          </p>
         </div>
         <div class="col col-12 sm-col-6 sm-pr1">
           <img class="svg-illustration" id="external-configuration" src="images/external-configuration.svg" alt="">
@@ -147,7 +150,7 @@ title: Steeltoe
         <div class="col col-12 sm-col-6">
           <h2 class="regular my0 steel-body muted">03</h2>
           <h1 class="mt0 mb1 steel-heading">Cloud Connectors</h1>
-          <p class="mt0 steel-body">Steeltoe offers Cloud Connectors as a way of easily connecting to your services without having to wire up the connections yourself, specifically by hydrating your <code class="code-bash">/var/vcap</code> environment variable and turning it into a connection object. One fewer thing to maintain.</p>
+          <p class="mt0 steel-body">Steeltoe automatically wires up common backing services like Redis, RabbitMQ, MySQL and Postgres because no microservice is an island. And because it was built by Pivotal, Steeltoe integrates elegantly with Cloud Foundry.</p>
         </div>
         <div class="col col-12 sm-col-6 sm-pl4">
           <img class="svg-illustration" id="cloud-connector" src="images/cloud-connector.svg" alt="">
