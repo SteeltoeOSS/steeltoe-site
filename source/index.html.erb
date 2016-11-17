@@ -1,0 +1,236 @@
+---
+title: Steeltoe
+---
+
+<section class="bg-ms-blue hero">
+  <div id="particles"></div>
+  <div class="max-width-4 mx-auto">
+    <div class="px2 py4">
+      <div class="clearfix">
+        <div class="col sm-col-10 md-col-9">
+          <h1 class="h2 sm-h1 white mt0 mb1 text-shadow regular">Painless microservice patterns for .NET</h1>
+          <h2 class="h3 white mt0 mb2 sm-mb1 text-shadow regular">For all their benefits, microservice architectures expose many distributed computing problems that traditional monoliths avoided. Steeltoe brings the power of resilient, scalable microservices to .NET developers, without all the headache.</h2>
+        </div>
+      </div>
+      <div class="clearfix sm-mt2">
+        <div class="col col-12">
+          <a target="_blank" href="https://github.com/SteeltoeOSS/Samples/blob/master/MusicStore/README.md" class="btn btn-cta center sm-left block sm-inline-block bg-white ms-blue sm-mr1 not-rounded regular">
+            <i class="fa fa-github mr1"></i>
+            View Sample App on GitHub
+          </a>
+          <a target="_blank" href="http://slack.steeltoe.io/" class="btn btn-cta btn-outline center sm-left block sm-inline-block border-white white mt1 sm-mt0 not-rounded regular">
+            <i class="fa fa-slack mr1"></i>
+            Join us on Slack
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<main class="mt2">
+  <div class="max-width-4 mx-auto">
+    <div class="px2 py2 sm-py4">
+      <section class="clearfix py1 sm-py4">
+        <div class="col col-12 sm-col-6">
+          <h2 class="regular my0 steel-body muted">01</h2>
+          <h1 class="mt0 mb1 steel-heading">Service Discovery</h1>
+          <p class="mt0 steel-body">How do you make the the interactions between your microservices reliable and failure tolerant?  For starters, you need a service registry—basically a phone book for your microservices—so service consumers know exactly where to find healthy service instances. Steeltoe includes a .NET client for Netflix Eureka so your microservices can register themselves and discover other registered services.</p>
+        </div>
+        <div class="col col-12 sm-col-6 sm-pl4">
+          <img class="svg-illustration" id="service-discovery" src="images/service-discovery.svg" alt="">
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="bg-faint-blue">
+    <div class="max-width-4 mx-auto">
+      <div class="px2 py4">
+        <div class="clearfix col-12">
+          <div class="terminal">
+            <div class="terminal-top-bar p1 bg-ms-blue">
+              <ul class="list-reset m0 flex items-center justify-end">
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-minimize.svg" alt="">
+                </li>
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-maximize.svg" alt="">
+                </li>
+                <li class="inline-block mr1" data-ee="bsod">
+                  <img src="images/icons/icon-close.svg" alt="">
+                </li>
+              </ul>
+            </div>
+            <div class="terminal-body">
+              <div class="code-snippet" id="bsod-terminal">
+                        <pre class="pb2 m0"><code class="c# m0">  public class FortuneService : IFortuneService
+    {
+        DiscoveryHttpClientHandler _handler;
+
+        private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+
+        public FortuneService(IDiscoveryClient client)
+        {
+            _handler = new DiscoveryHttpClientHandler(client);
+        }
+
+        public async Task<string> RandomFortuneAsync()
+        {
+            var client = GetClient();
+            return await client.GetStringAsync(RANDOM_FORTUNE_URL);
+        }
+
+        private HttpClient GetClient()
+        {
+            var client = new HttpClient(_handler, false);
+            return client;
+        }
+    }</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="max-width-4 mx-auto">
+    <div class="px2 py2 sm-py4">
+      <section class="clearfix py1 sm-py4">
+        <div class="col col-12 sm-col-6 sm-col-right sm-pl2">
+          <h2 class="regular my0 steel-body muted">02</h2>
+          <h1 class="mt0 mb1 steel-heading">Config Server</h1>
+          <p class="mt0 steel-body">
+            <em>“Strict separation of config from code”</em> has become a cloud <a class="steel-body" href="https://12factor.net/config" target="_blank">mandate</a>, but that begs the question, where do you put it? And once you’ve externalized your config from your app, how do you track who changed what, when? Steeltoe leverages Spring Cloud Config Server so you can store your app’s config in a centralized, version-controlled <code>git</code> repo and then load it at runtime. 
+          </p>
+        </div>
+        <div class="col col-12 sm-col-6 sm-pr1">
+          <img class="svg-illustration" id="external-configuration" src="images/external-configuration.svg" alt="">
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="bg-faint-blue">
+    <div class="max-width-4 mx-auto">
+      <div class="px2 py4">
+        <div class="clearfix col-12">
+          <div class="terminal">
+            <div class="terminal-top-bar p1 bg-ms-blue">
+              <ul class="list-reset m0 flex items-center justify-end">
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-minimize.svg" alt="">
+                </li>
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-maximize.svg" alt="">
+                </li>
+                <li class="inline-block mr1" data-ee="launch">
+                  <img src="images/icons/icon-close.svg" alt="">
+                </li>
+              </ul>
+            </div>
+            <div class="terminal-body">
+               <div class="code-snippet" id="launch-terminal">
+                 <pre class="pb2 m0"><code class="c# m0"> var builder = new ConfigurationBuilder()
+                  .SetBasePath(env.ContentRootPath)
+                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                  .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                  .AddEnvironmentVariables()
+                  .AddConfigServer(env);
+              Configuration = builder.Build();</code></pre>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="max-width-4 mx-auto">
+    <div class="px2 py2 sm-py4">
+      <section class="clearfix py1 sm-py4">
+        <div class="col col-12 sm-col-6">
+          <h2 class="regular my0 steel-body muted">03</h2>
+          <h1 class="mt0 mb1 steel-heading">Cloud Connectors</h1>
+          <p class="mt0 steel-body">Steeltoe automatically wires up common backing services like Redis, RabbitMQ, MySQL and Postgres because no microservice is an island. And because it was built by Pivotal, Steeltoe integrates elegantly with Cloud Foundry.</p>
+        </div>
+        <div class="col col-12 sm-col-6 sm-pl4">
+          <img class="svg-illustration" id="cloud-connector" src="images/cloud-connector.svg" alt="">
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="bg-faint-blue">
+    <div class="max-width-4 mx-auto">
+      <div class="px2 py4">
+        <div class="clearfix col-12">
+          <div class="terminal">
+            <div class="terminal-top-bar p1 bg-ms-blue">
+              <ul class="list-reset m0 flex items-center justify-end">
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-minimize.svg" alt="">
+                </li>
+                <li class="inline-block mr1">
+                  <img src="images/icons/icon-maximize.svg" alt="">
+                </li>
+                <li class="inline-block mr1" data-ee="pipes">
+                  <img src="images/icons/icon-close.svg">
+                </li>
+              </ul>
+            </div>
+            <div class="terminal-body">
+              <div class="code-snippet" id="pipes-terminal">
+                <pre class="pb2 m0"><code class="c# m0"> services.AddMySqlConnection(Configuration);
+ ...
+ public IActionResult MySqlData(
+        [FromServices] MySqlConnection dbConnection)
+    {
+        dbConnection.Open();
+
+        MySqlCommand cmd = new MySqlCommand("SELECT * FROM TestData;", dbConnection);
+        MySqlDataReader rdr = cmd.ExecuteReader();
+
+        while (rdr.Read())
+        {
+            ViewData["Key" + rdr[0]] = rdr[1];
+        }
+
+        rdr.Close();
+        dbConnection.Close();
+
+        return View();
+    }
+}
+                </code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="max-width-4 mx-auto">
+    <div class="px2 py2 sm-py4">
+      <section class="py1 sm-py4 sm-mxn1">
+        <h2 class="regular my0 steel-body muted">
+          <i class="fa fa-quote-left"></i>
+        </h2>
+        <h1 class="mt0 mb3 steel-heading">What They're Saying</h1>
+        <div class="clearfix">
+          <div class="col col-12 sm-col-6 sm-px1">
+            <blockquote class="twitter-tweet" data-cards="hidden" data-lang="en"><p lang="en" dir="ltr">New RC1 release of <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a> <a href="https://t.co/q2ylxpWb0g">https://t.co/q2ylxpWb0g</a> - very cool for .NET Microservices working in a heterogeneous system</p>&mdash; Martin Woodward (@martinwoodward) <a href="https://twitter.com/martinwoodward/status/788043646490771456">October 17, 2016</a></blockquote>
+          </div>
+          <div class="col col-12 sm-col-6 sm-px1">
+            <blockquote class="twitter-tweet" data-cards="hidden" data-lang="en"><p lang="en" dir="ltr">Pretty cool to see <a href="https://twitter.com/pivotalcf">@pivotalcf</a> activating <a href="https://twitter.com/NetflixOSS">@NetflixOSS</a> for .NET --check out the new Eureka client support: <a href="https://t.co/qtLv69fO4j">https://t.co/qtLv69fO4j</a></p>&mdash; James Watters (@wattersjames) <a href="https://twitter.com/wattersjames/status/748980891213520896">July 1, 2016</a></blockquote>
+          </div>
+        </div>
+        <div class="clearfix">
+          <div class="col col-12 sm-col-6 sm-px1">
+            <blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">Interesting update on steeltoe.io Cloud Native .NET Applications with <a href="https://twitter.com/moredeploys">@moredeploys</a> <a href="https://twitter.com/ritam">@ritam</a> &amp; friends at <a href="https://twitter.com/pivotal">@pivotal</a>. Will be watching closely</p>&mdash; Fintan Ryan (@fintanr) <a href="https://twitter.com/fintanr/status/785520930114117632">October 10, 2016</a></blockquote>
+          </div>
+          <div class="col col-12 sm-col-6 sm-px1">
+            <blockquote class="twitter-tweet" data-cards="hidden" data-lang="en"><p lang="en" dir="ltr">spring cloud + iron foundry became steel toe (iron meets boot) <a href="https://t.co/s3LPkoWOKL">https://t.co/s3LPkoWOKL</a></p>&mdash; Intolerant Browser (@monkchips) <a href="https://twitter.com/monkchips/status/785512423356788736">October 10, 2016</a></blockquote>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

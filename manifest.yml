@@ -1,8 +1,6 @@
 ---
-memory: 64M
-instances: 1
-buildpack: staticfile_buildpack
 applications:
-- name: steeltoe.io
-  no-hostname: true
-  domain: steeltoe.io
+- name: steeltoe-landing
+  memory: 256M
+  path: ./build/
+  buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git

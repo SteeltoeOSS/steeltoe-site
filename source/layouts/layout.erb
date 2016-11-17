@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+
+    <meta property="og:title" content="Steeltoe OSS" />
+    <meta property="og:url" content="http://www.steeltoe.io" />
+    <meta property="og:image" content="http://steeltoe.io/images/favicon.png" />
+    <meta property="og:description" content="Cloud Native .NET Applications - Friend of Spring Boot, Spring Cloud, and Cloud Foundry." />
+
+    <!-- Use title if it's in the page YAML frontmatter -->
+    <title><%= current_page.data.title || "Steeltoe" %></title>
+    <link rel="icon" href="images/favicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla:400,400i|Poppins:400,700|Roboto+Mono">
+    <%= stylesheet_link_tag :site %>
+  </head>
+
+  <body class="<%= page_classes %>">
+    <div class="max-width-4 mx-auto">
+      <nav class="px2 py2 center sm-left-align sm-flex items-center">
+        <div class="logo mx-auto mb1 sm-mx0 sm-mb0 flex-auto">
+          <img src="images/logo-inline.svg" alt="Steeltoe Logo">
+        </div>
+        <div class="navigation">
+          <a class="text-decoration-none steel-body mr1 sm-mr3" target="_blank" href="https://github.com/steeltoeoss">GitHub</a>
+          <a class="text-decoration-none steel-body mr1 sm-mr3" target="_blank" href="https://www.nuget.org/profiles/steeltoe">NuGet</a>
+          <a class="text-decoration-none steel-body mr1 sm-mr3" target="_blank" href="https://github.com/SteeltoeOSS/Tutorials">Docs</a>
+          <a class="text-decoration-none steel-body mr0" target="_blank" href="http://slack.steeltoe.io/">Slack</a>
+        </div>
+      </nav>
+    </div>
+    <%= yield %>
+    <footer>
+      <div class="max-width-4 mx-auto">
+        <div class="px2 py3">
+          <img class="logo-small" src="images/logo.svg" alt="">
+          <p class="mb0 h5">© 2016 <a class="text-decoration-none" href="http://www.pivotal.io/" target="_blank">Pivotal Software</a>, Inc. All Rights Reserved. <a class="text-decoration-none" href="http://www.pivotal.io/terms-of-use" target="_blank">Terms of Use</a>, <a class="text-decoration-none" href="http://www.pivotal.io/privacy-policy" target="_blank">Privacy</a> and <a class="text-decoration-none" href="SteelToeTrademarkGuidelines.pdf" target="_blank">Trademark Guidelines</a></p>
+          <ul class="list-reset mt1 p0">
+            <li class="inline-block mr1">
+              <a class="text-decoration-none" target="_blank" href="https://twitter.com/steeltoeoss">
+                <i class="fa fa-twitter"></i>
+              </a>
+            </li>
+            <li class="inline-block">
+              <a target="_blank" href="mailto:info@steeltoe.io">
+                <i class="fa fa-envelope"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <%= javascript_include_tag :all %>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-86805290-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </body>
+</html>
