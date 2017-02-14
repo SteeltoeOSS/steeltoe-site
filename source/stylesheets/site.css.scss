@@ -145,7 +145,6 @@ p {
 pre,
 code {
   font-family: 'Roboto Mono', monospace;
-  background: white;
   overflow: hidden;
 }
 
@@ -172,6 +171,17 @@ footer {
   border-top: 1px solid $faint-blue;
 }
 
-body.docs .top-nav {
-  border-bottom: 1px solid $faint-blue;
+body.docs {
+  .top-nav {
+    border-bottom: 1px solid $faint-blue;
+  }
+
+  pre {
+    background: #f7f7f7;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    border-radius: 3px;
+  }
 }

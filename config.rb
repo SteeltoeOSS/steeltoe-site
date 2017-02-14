@@ -10,7 +10,8 @@ page '/*.json', layout: false
 page '/*.txt', layout: false
 
 activate :sprockets
-set :markdown_engine, :kramdown
+set :markdown_engine, :redcarpet
+set :markdown, :fenced_code_blocks => true, :smartypants => true
 
 # With alternative layout
 # page "/path/to/file.html", layout: :otherlayout
