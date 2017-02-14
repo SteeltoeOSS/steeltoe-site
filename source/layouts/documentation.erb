@@ -3,9 +3,12 @@
   <%= partial 'shared/head' %>
   <body class="<%= page_classes %>">
     <%= partial 'shared/nav' %>
-    <%= yield %>
+    <div class="max-width-4 mx-auto">
+      <div class="p2">
+        <%= yield %>
+      </div>
+    </div>
     <%= partial 'shared/footer' %>
-    <%= javascript_include_tag :all %>
     <%= partial 'shared/ga' %>
   </body>
 </html>

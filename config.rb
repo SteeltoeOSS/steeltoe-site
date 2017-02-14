@@ -10,6 +10,7 @@ page '/*.json', layout: false
 page '/*.txt', layout: false
 
 activate :sprockets
+set :markdown_engine, :kramdown
 
 # With alternative layout
 # page "/path/to/file.html", layout: :otherlayout
