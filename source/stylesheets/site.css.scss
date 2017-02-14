@@ -76,6 +76,10 @@ p {
   &:hover {
     color: darken($steel-body, 30%);
   }
+
+  &.active {
+    color: darken($steel-body, 45%);
+  }
 }
 
 .text-shadow {
