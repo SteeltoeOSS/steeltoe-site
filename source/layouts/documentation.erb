@@ -14,6 +14,9 @@
             <%= partial 'shared/docs-toc' %>
           </div>
           <div class="col col-12 sm-col-9">
+            <% if !current_article.nil? %>
+              <h2 class="regular"><%= current_article.metadata[:page][:title] %></h2>
+            <% end %>
             <%= yield %>
           </div>
         </div>
