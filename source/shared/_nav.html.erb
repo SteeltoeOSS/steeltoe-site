@@ -2,14 +2,14 @@
   <div class="max-width-4 mx-auto">
     <div class="px2 py2 center sm-left-align sm-flex items-center">
       <div class="logo mx-auto mb1 sm-mx0 sm-mb0 flex-auto">
-        <a href="/">
-          <img src="images/logo-inline.svg" alt="Steeltoe Logo">
-        </a>
+        <% link_to '/' do %>
+          <%= image_tag 'logo-inline.svg', alt: "Steeltoe Logo" %>
+        <% end %>
       </div>
       <div class="navigation">
         <%= link_to 'GitHub', 'https://github.com/steeltoeoss', class: 'text-decoration-none steel-body mr1 sm-mr3', target: '_blank' %>
         <%= link_to 'NuGet', 'https://www.nuget.org/profiles/steeltoe', class: 'text-decoration-none steel-body mr1 sm-mr3', target: '_blank' %>
-        <%= link_to 'Docs', 'getting-started-local.html', class: "#{nav_active('getting-started-local.html')} text-decoration-none steel-body mr1 sm-mr3" %>
+        <%= link_to 'Docs', '/docs', class: "#{nav_active('/docs/')} text-decoration-none steel-body mr1 sm-mr3" %>
         <%= link_to 'Slack', 'http://slack.steeltoe.io/', class: 'text-decoration-none steel-body mr0', target: '_blank' %>
       </div>
     </div>

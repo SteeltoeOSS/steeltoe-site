@@ -27,6 +27,14 @@ configure :development do
   activate :livereload
 end
 
+activate :directory_indexes
+
+activate :blog do |blog|
+  blog.prefix = "docs"
+  blog.permalink = "{title}.html"
+  blog.layout = "documentation"
+end
+
 ###
 # Helpers
 ###
@@ -34,7 +42,7 @@ end
 # Methods defined in the helpers block are available in templates
 helpers do
   def nav_active(path)
-    current_page.path == path ? "active" : ""
+    current_page.url == path ? "active" : ""
   end
 end
 

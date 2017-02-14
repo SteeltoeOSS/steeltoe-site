@@ -1,5 +1,7 @@
 ---
-layout: documentation
+title: Getting Started (Local)
+date: 2017-02-14 21:37 UTC
+tags:
 ---
 
 This page shows how to quickly set up the Steeltoe Configuration extension in an ASP.NET Core application for accessing configuration values served by a [Spring Cloud Config](http://cloud.spring.io/spring-cloud-config/) Config Server.

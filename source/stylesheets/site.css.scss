@@ -193,3 +193,11 @@ body.docs {
     border-radius: 3px;
   }
 }
+
+.docs-nav-link {
+  opacity: .5;
+
+  &.active {
+    opacity: 1;
+  }
+}

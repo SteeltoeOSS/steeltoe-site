@@ -14,3 +14,5 @@ gem 'middleman-livereload'
 gem "middleman-sprockets"
 gem 'font-awesome-sass', '~> 4.7.0'
 gem 'redcarpet'
+gem "middleman-blog", "~> 4.0"
+gem 'nokogiri'
