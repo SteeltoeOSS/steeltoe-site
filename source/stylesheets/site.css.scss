@@ -13,7 +13,7 @@ $ms-blue: #0074D9;
 $faint-blue: #f3f4f9;
 
 html {
-  font-size: 19px;
+  font-size: 17px;
 }
 
 body {
@@ -45,6 +45,10 @@ h4, h5, h6 {
 
 .steel-body {
   color: $steel-body;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 a {

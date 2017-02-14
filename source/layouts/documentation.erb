@@ -5,7 +5,18 @@
     <%= partial 'shared/nav' %>
     <div class="max-width-4 mx-auto">
       <div class="p2">
-        <%= yield %>
+        <h2 class="regular my0 steel-body muted">
+          <i class="fa fa-file-text"></i>
+        </h2>
+        <h1 class="mt0 mb2 steel-heading">Documentation</h1>
+        <div class="clearfix">
+          <div class="col col-12 sm-col-3 sm-pr2">
+            <%= partial 'shared/docs-toc' %>
+          </div>
+          <div class="col col-12 sm-col-9">
+            <%= yield %>
+          </div>
+        </div>
       </div>
     </div>
     <%= partial 'shared/footer' %>
