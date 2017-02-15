@@ -184,6 +184,11 @@ body.docs {
     border-bottom: 1px solid $faint-blue;
   }
 
+  code {
+    background: #f7f7f7;
+    font-size: 85%;
+  }
+
   pre {
     background: #f7f7f7;
     padding: 16px;
