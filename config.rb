@@ -44,6 +44,10 @@ helpers do
   def nav_active(path)
     current_page.url == path ? "active" : ""
   end
+
+  def docs_nav_active(path)
+    (current_page.url.include? path) ? "active" : ""
+  end
 end
 
 # Build-specific configuration
