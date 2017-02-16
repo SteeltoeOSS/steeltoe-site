@@ -10,6 +10,8 @@ page '/*.json', layout: false
 page '/*.txt', layout: false
 
 activate :sprockets
+set :markdown_engine, :redcarpet
+set :markdown, :fenced_code_blocks => true, :smartypants => true
 
 # With alternative layout
 # page "/path/to/file.html", layout: :otherlayout
@@ -25,16 +27,28 @@ configure :development do
   activate :livereload
 end
 
+activate :directory_indexes
+
+activate :blog do |blog|
+  blog.prefix = "docs"
+  blog.permalink = "{title}.html"
+  blog.layout = "documentation"
+end
+
 ###
 # Helpers
 ###
 
 # Methods defined in the helpers block are available in templates
-# helpers do
-#   def some_helper
-#     "Helping"
-#   end
-# end
+helpers do
+  def nav_active(path)
+    current_page.url == path ? "active" : ""
+  end
+
+  def docs_nav_active(path)
+    (current_page.url.include? path) ? "active" : ""
+  end
+end
 
 # Build-specific configuration
 configure :build do

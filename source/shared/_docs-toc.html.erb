@@ -1,0 +1,4 @@
+<h5 class="regular uppercase">Reference</h5>
+<% blog.articles.each do |article| %>
+  <%= link_to article.title, article.url, class: "#{nav_active(article.url)} docs-nav-link text-decoration-none color-inherit block border-bottom border-silver py1" %>
+<% end %>

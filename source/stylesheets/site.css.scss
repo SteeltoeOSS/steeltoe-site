@@ -13,7 +13,7 @@ $ms-blue: #0074D9;
 $faint-blue: #f3f4f9;
 
 html {
-  font-size: 19px;
+  font-size: 17px;
 }
 
 body {
@@ -47,6 +47,10 @@ h4, h5, h6 {
   color: $steel-body;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 a {
   color: $ms-blue;
 }
@@ -75,6 +79,10 @@ p {
 
   &:hover {
     color: darken($steel-body, 30%);
+  }
+
+  &.active {
+    color: darken($steel-body, 45%);
   }
 }
 
@@ -145,7 +153,6 @@ p {
 pre,
 code {
   font-family: 'Roboto Mono', monospace;
-  background: white;
   overflow: hidden;
 }
 
@@ -170,4 +177,32 @@ code {
 
 footer {
   border-top: 1px solid $faint-blue;
+}
+
+body.docs {
+  .top-nav {
+    border-bottom: 1px solid $faint-blue;
+  }
+
+  code {
+    background: #f7f7f7;
+    font-size: 85%;
+  }
+
+  pre {
+    background: #f7f7f7;
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    border-radius: 3px;
+  }
+}
+
+.docs-nav-link {
+  opacity: .5;
+
+  &.active {
+    opacity: 1;
+  }
 }
