@@ -201,8 +201,17 @@ body.docs {
 
 .docs-nav-link {
   opacity: .5;
+  transition: opacity .2s ease-out;
+  
+  &:hover {
+    opacity: .75;
+  }
 
   &.active {
     opacity: 1;
+    background: -moz-linear-gradient(left, rgba(221,221,221,.185) 0%, rgba(255,255,255,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(221,221,221,.185) 0%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(221,221,221,.185) 0%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
   }
 }
