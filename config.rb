@@ -57,6 +57,10 @@ helpers do
 
   def docs_nav_active(path)
     (current_page.url.include? path) ? "active" : ""
+  def docs_nav_active()
+    is_docs = current_page.url.include? "docs"
+    is_lib = current_page.url.include? "library"
+    (is_docs || is_lib) ? "active" : ""
   end
 end
 
