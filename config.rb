@@ -27,13 +27,23 @@ configure :development do
   activate :livereload
 end
 
-activate :directory_indexes
-
 activate :blog do |blog|
+  blog.name = "docs"
   blog.prefix = "docs"
+  blog.sources = "{title}.html"
   blog.permalink = "{title}.html"
   blog.layout = "documentation"
 end
+
+activate :blog do |blog|
+  blog.name = "library"
+  blog.prefix = "library"
+  blog.sources = "{title}.html"
+  blog.permalink = "{title}.html"
+  blog.layout = "documentation"
+end
+
+activate :directory_indexes
 
 ###
 # Helpers
@@ -41,20 +51,26 @@ end
 
 # Methods defined in the helpers block are available in templates
 helpers do
+  def sorted_docs(doc_prefix)
+    blog(doc_prefix).articles.sort {|a,b| a.data.order <=> b.data.order }
+  end
+
   def nav_active(path)
     current_page.url == path ? "active" : ""
   end
 
-  def docs_nav_active(path)
-    (current_page.url.include? path) ? "active" : ""
+  def docs_nav_active()
+    is_docs = current_page.url.include? "docs"
+    is_lib = current_page.url.include? "library"
+    (is_docs || is_lib) ? "active" : ""
   end
 end
 
 # Build-specific configuration
 configure :build do
   # Minify CSS on build
-  # activate :minify_css
+  activate :minify_css
 
   # Minify Javascript on build
-  # activate :minify_javascript
+  activate :minify_javascript
 end
