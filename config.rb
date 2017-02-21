@@ -51,12 +51,14 @@ activate :directory_indexes
 
 # Methods defined in the helpers block are available in templates
 helpers do
+  def sorted_docs(doc_prefix)
+    blog(doc_prefix).articles.sort {|a,b| a.data.order <=> b.data.order }
+  end
+
   def nav_active(path)
     current_page.url == path ? "active" : ""
   end
 
-  def docs_nav_active(path)
-    (current_page.url.include? path) ? "active" : ""
   def docs_nav_active()
     is_docs = current_page.url.include? "docs"
     is_lib = current_page.url.include? "library"
