@@ -27,13 +27,23 @@ configure :development do
   activate :livereload
 end
 
-activate :directory_indexes
-
 activate :blog do |blog|
+  blog.name = "docs"
   blog.prefix = "docs"
+  blog.sources = "{title}.html"
   blog.permalink = "{title}.html"
   blog.layout = "documentation"
 end
+
+activate :blog do |blog|
+  blog.name = "library"
+  blog.prefix = "library"
+  blog.sources = "{title}.html"
+  blog.permalink = "{title}.html"
+  blog.layout = "documentation"
+end
+
+activate :directory_indexes
 
 ###
 # Helpers
@@ -53,8 +63,8 @@ end
 # Build-specific configuration
 configure :build do
   # Minify CSS on build
-  # activate :minify_css
+  activate :minify_css
 
   # Minify Javascript on build
-  # activate :minify_javascript
+  activate :minify_javascript
 end
