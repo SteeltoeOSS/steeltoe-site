@@ -1,0 +1,7 @@
+---
+applications:
+- name: steeltoe-landing
+  memory: 256M
+  buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git
+  routes:
+  - steeltoe.io
