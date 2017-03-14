@@ -215,3 +215,22 @@ body.docs {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
   }
 }
+
+.toc-link {
+  ul {
+    @extend .list-reset;
+  }
+
+  ul li {
+    @extend .mb1;
+  }
+
+  ul a {
+    display: block;
+    @extend .text-decoration-none;
+    @extend .color-inherit;
+    @extend .h5;
+    @extend .m0;
+    @extend .pl2;
+  }
+}
