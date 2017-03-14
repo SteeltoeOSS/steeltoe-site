@@ -216,13 +216,28 @@ body.docs {
   }
 }
 
+$sel: '.toc-link ul';
+@for $i from 0 through 10 {
+  $sel: if($i == 0, "ul", selector-nest($sel, "ul")) !global;
+
+  #{$sel} li a {
+      padding-left: 10px * ($i + 1);
+  }
+}
+
 .toc-link {
   ul {
     @extend .list-reset;
+    @extend .my1;
   }
 
   ul li {
     @extend .mb1;
+  }
+
+  ul li.active-toc-link > a {
+    box-shadow: inset 2px 0 0 $ms-blue;
+    opacity: 1;
   }
 
   ul a {
@@ -231,6 +246,11 @@ body.docs {
     @extend .color-inherit;
     @extend .h5;
     @extend .m0;
-    @extend .pl2;
+    opacity: .65;
+    transition: all .2s ease-out;
+
+    &:hover {
+      opacity: .95;
+    }
   }
 }

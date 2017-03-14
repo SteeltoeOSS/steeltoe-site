@@ -9,11 +9,13 @@
           <i class="fa fa-file-text"></i>
         </h2>
         <h1 class="mt0 mb3 steel-heading">Documentation</h1>
-        <div class="clearfix">
-          <div class="col col-12 sm-col-3 sm-pr3">
-            <%= partial 'shared/docs-toc' %>
+        <div class="sm-flex">
+          <div class="col-12 sm-col-3 sm-pr3">
+            <div id="toc">
+              <%= partial 'shared/docs-toc' %>
+            </div>
           </div>
-          <div class="col col-12 sm-col-9">
+          <div class="col-12 sm-col-9">
             <% if !current_article.nil? %>
               <h2 class="regular"><%= current_article.metadata[:page][:title] %></h2>
             <% end %>
@@ -23,6 +25,7 @@
       </div>
     </div>
     <%= partial 'shared/footer' %>
+    <%= javascript_include_tag :docs %>
     <%= partial 'shared/ga' %>
   </body>
 </html>

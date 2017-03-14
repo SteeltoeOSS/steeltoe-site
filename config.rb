@@ -80,11 +80,10 @@ helpers do
       # ignore YAML frontmatter
       file = file.gsub(/^(---\s*\n.*?\n?)^(---\s*$\n?)/m, '')
       file = file.gsub(' & ', ' &amp; ')
-      # Switch to ordered lists
-      toc = renderer.render(file)
-      toc
+      renderer.render(file)
     end
   end
+
 end
 
 # Build-specific configuration

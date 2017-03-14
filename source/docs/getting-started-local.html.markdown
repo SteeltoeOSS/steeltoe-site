@@ -58,6 +58,21 @@ In the `dependencies` block of our `project.json` file, add the `Steeltoe.Extens
 
 ### Step 2: Configure the Config Server settings
 
+#### A Nested Item
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+
+##### A Even More Nested Item
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque vero maxime dignissimos temporibus fugit nobis at dolore quaerat, hic quibusdam architecto, optio, fuga aperiam sint vel sequi. Perferendis, praesentium, voluptates.
+
 Next, open `appsettings.json`. We need to specify a couple of settings for Steel Toe Configuration to locate the Config Server and then to request our application's specific configuration from it:
 
 ```
