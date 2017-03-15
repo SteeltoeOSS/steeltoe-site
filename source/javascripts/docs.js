@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 
 		gumshoe.init({
-  		selector: TOClinkSelector, // Default link selector (must use a valid CSS selector)
-  		container: window, // The element to spy on scrolling in (must be a valid DOM Node)
-  		offset: 35, // Distance in pixels to offset calculations
-  		activeClass: 'active-toc-link', // Class to apply to active navigation link and its parent list item
-  		scrollDelay: false, // Wait until scrolling has stopped before updating the navigation
+  		selector: TOClinkSelector,
+  		container: window,
+  		offset: 35,
+  		activeClass: 'active-toc-link',
+  		scrollDelay: false,
 		});
 	}
 
@@ -46,5 +46,4 @@ document.addEventListener("DOMContentLoaded", function() {
 			stickyTOC = new Sticky('#toc');
 		}
 	}
-
 });
