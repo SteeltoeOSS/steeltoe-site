@@ -1,9 +1,10 @@
-//= require vendor/sticky
+//= require vendor/jquery-3.1.1.slim.min
+//= require vendor/sticky-kit.min
 //= require vendor/smooth-scroll
 //= require vendor/gumshoe
 
 document.addEventListener("DOMContentLoaded", function() {
-	var stickyTOC = null,
+	var stickyTOC = $('#toc'),
 			SM_BREAKPOINT = 640,
 			TOClinkSelector = '.toc-link ul li a'
 	
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	function init() {
 		var windowWidth = window.innerWidth;
-		if (windowWidth > SM_BREAKPOINT) stickyTOC = new Sticky('#toc');
+		if (windowWidth > SM_BREAKPOINT) stickyTOC.stick_in_parent();
 		window.onresize = handleStickyNav;
 
 		smoothScroll.init({
@@ -31,19 +32,18 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function destroyStickyNav() {
-		stickyTOC.destroy();
-		stickyTOC = null;
+		stickyTOC.trigger("sticky_kit:detach");
 	}
 
 	function handleStickyNav() {
 		var windowWidth = window.innerWidth,
-				stickyTOCExists = !!stickyTOC,
+				stickyTOCExists = stickyTOC.hasClass('is_stuck');
 				stickyTOCDoesntExist = !stickyTOCExists;
 
 		if(windowWidth < SM_BREAKPOINT && stickyTOCExists) {
 			destroyStickyNav();
 		} else if(windowWidth > SM_BREAKPOINT && stickyTOCDoesntExist) {
-			stickyTOC = new Sticky('#toc');
+			stickyTOC.stick_in_parent();
 		}
 	}
 });
