@@ -10,11 +10,11 @@ Steeltoe builds on Spring Cloud by providing several packages that enable .NET d
 
 Steeltoe provides services that can be categorized into two broad categories.
 
-Services that simplifiy using .NET and ASP.NET on Cloud Foundry:
+Services that simplify using .NET and ASP.NET on Cloud Foundry:
 
 * Connectors (e.g. MySql, Redis, Postgres, RabbitMQ, OAuth, etc)
 * Configuration providers
-* Security providers (OAuth SSO, JWT, Redis Keyring Storage, etc.)
+* Security providers (OAuth SSO, JWT, Redis Key Ring Storage, etc.)
 
 Services that enable .NET and ASP.NET developers to leverage Spring Cloud:
 
@@ -26,7 +26,7 @@ If you plan on developing applications using Steeltoe, you will need to download
 
 Additionally, while not required, it is recommended to install one of the development tools [Visual Studio](https://www.visualstudio.com/) or [Visual Studio Code](https://code.visualstudio.com/) provided by Microsoft.
 
-If you are new to [.NET Core](https://docs.microsoft.com/en-us/dotnet/articles/core/) or [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/), we recomend you first spend time working through some of the Microsoft [tutorials](https://docs.microsoft.com/en-us/aspnet/core/getting-started).
+If you are new to [.NET Core](https://docs.microsoft.com/en-us/dotnet/articles/core/) or [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/), we recommend you first spend time working through some of the Microsoft [tutorials](https://docs.microsoft.com/en-us/aspnet/core/getting-started).
 
 Note: The Steeltoe packages can also be used in .NET Framework and ASP.NET 4 based applications. You are not required to target .NET/ASP.NET Core when using Steeltoe.
 

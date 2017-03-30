@@ -23,7 +23,7 @@ The Steeltoe Eureka client supports the following .NET application types:
  
  * [AspDotNet4/Fortune-Teller-Service4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-Service4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container 
  * [AspDotNet4/Fortune-Teller-UI4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-UI4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container 
- * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-servies based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
+ * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
  * [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, and secured with OAuth2 Security Services and using Spring Cloud Services.
  
  The source code for this client can be found [here](https://github.com/SteeltoeOSS/Discovery).
@@ -115,7 +115,7 @@ In this step, we use the Cloud Foundry CLI to create a service instance of the S
 # Target and org and space in Cloud Foundry
 > cf target -o myorg -s development
 >
-# Create a Eureak Server instance on Cloud Foundry
+# Create a Eureka Server instance on Cloud Foundry
 > cf create-service p-service-registry standard myDiscoveryService
 >
 # Wait for the service to become ready
@@ -136,7 +136,7 @@ Note below we show how to publish for all of the target run times and frameworks
 > # Publish for Windows, .NET Core 
 > dotnet publish -o publish  -f netcoreapp1.1 -r win10-x64 
 >
-> # #ublish for Windows, .NET Framework
+> # Publish for Windows, .NET Framework
 > dotnet publish -o publish  -f net462 -r win10-x64  
 ```
 
@@ -489,7 +489,7 @@ Note: You will need to add a `#using Pivotal.Discovery.Client;` if you are using
 ```
 #using Pivotal.Discovery.Client;  
 // or
-#using Steelteo.Discovery.Client;
+#using Steeltoe.Discovery.Client;
 
 public class Startup {
     .....
@@ -541,7 +541,7 @@ Of course you don't have to use the handler, instead you can make lookup request
 ```
 #using Pivotal.Discovery.Client;  
 // or
-#using Steelteo.Discovery.Client;
+#using Steeltoe.Discovery.Client;
 
 ....
 public class FortuneService : IFortuneService

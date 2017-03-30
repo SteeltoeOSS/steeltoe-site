@@ -19,8 +19,8 @@ This connector simplifies using [Connector/NET](https://dev.mysql.com/doc/connec
 In addition to the Quick Start below, there are several other Steeltoe sample applications that you can refer to in order to help you understand how to make use of this connector:
 
 * [AspDotNet4/MySql4](https://github.com/SteeltoeOSS/Samples/tree/master/Connectors/src/AspDotNet4/MySql4) - same as the Quick Start below, but built for ASP.NET 4.x.
-* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-servies based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micros-ervices based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, secured with OAuth2 Security Services and using Spring Cloud Services. 
+* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micros-services based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, secured with OAuth2 Security Services and using Spring Cloud Services. 
                                                                                     
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -193,7 +193,7 @@ As shown above, all of these settings should be prefixed with `mysql:client:`
 
 |Key|Description|
 |------|------|
-|**server**|Hostname or IP Addres of server, defaults = localhost|
+|**server**|Hostname or IP Address of server, defaults = localhost|
 |**port**|Port number of server, defaults = 3306|
 |**username**|Username for authentication, defaults = empty|
 |**password**|Password for authentication, default = empty|
@@ -500,7 +500,7 @@ Note below we show how to publish for all of the target run times and frameworks
 > # Publish for Windows, .NET Core 
 > dotnet publish -o publish  -f netcoreapp1.1 -r win10-x64
 >  
-> # #ublish for Windows, .NET Framework
+> # Publish for Windows, .NET Framework
 > dotnet publish -o publish  -f net462 -r win10-x64  
 ```
 
@@ -608,7 +608,7 @@ As shown above, all of these settings should be prefixed with `postgres:client:`
 
 |Key|Description|
 |------|------|
-|**server**|Hostname or IP Addres of server, defaults = localhost|
+|**server**|Hostname or IP Address of server, defaults = localhost|
 |**port**|Port number of server, defaults = 5432|
 |**username**|Username for authentication, defaults = empty|
 |**password**|Password for authentication, default = empty|
@@ -880,7 +880,7 @@ Note below we show how to publish for all of the target run times and frameworks
 > # Publish for Windows, .NET Core 
 > dotnet publish -o publish  -f netcoreapp1.1 -r win10-x64
 >  
-> # #ublish for Windows, .NET Framework
+> # Publish for Windows, .NET Framework
 > dotnet publish -o publish  -f net462 -r win10-x64  
 ```
 
@@ -992,7 +992,7 @@ As shown above, all of these settings should be prefixed with `rabbit:client:`.
 
 |Key|Description|
 |------|------|
-|**server**|Hostname or IP Addres of server, defaults = 127.0.0.1|
+|**server**|Hostname or IP Address of server, defaults = 127.0.0.1|
 |**port**|Port number of server, defaults = 5672|
 |**username**|Username for authentication, defaults = empty|
 |**password**|Password for authentication, default = empty|
@@ -1138,11 +1138,11 @@ using RabbitMQ.Client;
 
 ### 4.0 Redis
 
- This connector simplifies using a Microsoft [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or a StackExchange [IConnectionMultiplexor](https://github.com/StackExchange/StackExchange.Redis) in an application running on CloudFoundry.
+ This connector simplifies using a Microsoft [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or a StackExchange [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis) in an application running on CloudFoundry.
 
  In addition to the Quick Start below, there are other Steeltoe sample applications that you can use to help you understand how to make use of this connector:
 * [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore) - sample app illustrating how to make use of the Steeltoe DataProtection Key Storage Provider for Redis.
-* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a microservies based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
+* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -1189,7 +1189,7 @@ Note below we show how to publish for all of the target run times and frameworks
 > # Publish for Windows, .NET Core 
 > dotnet publish -o publish  -f netcoreapp1.1 -r win10-x64
 >  
-> # #ublish for Windows, .NET Framework
+> # Publish for Windows, .NET Framework
 > dotnet publish -o publish  -f net462 -r win10-x64  
 ```
 
@@ -1231,7 +1231,7 @@ At this point the app is up and running. Upon startup the app inserts a key/valu
 
 To display those values click on the Cache Data link in the menu and you should see the key/values displayed using the Microsoft RedisCache.
 
-You can click on the ConnectionMultiplexer Data link to view data using the StackExchange CollectionMultiplexor.
+You can click on the ConnectionMultiplexer Data link to view data using the StackExchange CollectionMultiplexer.
 
 ##### 4.1.7 Understand Sample
 
@@ -1252,14 +1252,14 @@ You should have a good understanding of how the new .NET [Configuration service]
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
 
-You probably will want some understanding of how to use the [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or [ConnectionMultiplexor](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Basics.md) before starting to use this connector. 
+You probably will want some understanding of how to use the [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or [ConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Basics.md) before starting to use this connector. 
 
 In order to use this connector you need to do the following:
 
 * Create and bind a Redis Service instance to your application.
 * Optionally, configure any Redis client settings (e.g. appsettings.json)
 * Add Steeltoe CloudFoundry config provider to your ConfigurationBuilder.
-* Add DistributedRedisCache and/or ConnectionMultiplexor to your ServiceCollection.
+* Add DistributedRedisCache and/or ConnectionMultiplexer to your ServiceCollection.
 
 ##### 4.2.1 Add NuGet Reference
 
@@ -1302,7 +1302,7 @@ As shown above, all of these settings should be prefixed with `redis:client:`.
 
 |Key|Description|
 |------|------|
-|**host**|Hostname or IP Addres of server, defaults = localhost|
+|**host**|Hostname or IP Address of server, defaults = localhost|
 |**port**|Port number of server, defaults = 6379|
 |**endPoints**|Comma separated list of host:port pairs, defaults empty|
 |**clientName**|Identification for the connection within redis, defaults = empty|
@@ -1470,7 +1470,7 @@ public class Startup {
     public void ConfigureServices(IServiceCollection services)
     {
 
-        // Add StackExchange IConnectionMultiplexor configurated from CloudFoundry
+        // Add StackExchange IConnectionMultiplexer configured from CloudFoundry
         services.AddRedisConnectionMultiplexer(Configuration);
 
         // Add framework services
@@ -1501,11 +1501,11 @@ Once you have configured and added the `ConnectionMultiplexer` to the service co
     {
         IDatabase db = _conn.GetDatabase();
 
-        string key1 = db.StringGet("ConnectionMultiplexorKey1");
-        string key2 = db.StringGet("ConnectionMultiplexorKey2");
+        string key1 = db.StringGet("ConnectionMultiplexerKey1");
+        string key2 = db.StringGet("ConnectionMultiplexerKey2");
 
-        ViewData["ConnectionMultiplexorKey1"] = key1;
-        ViewData["ConnectionMultiplexorKey2"] = key2;
+        ViewData["ConnectionMultiplexerKey1"] = key1;
+        ViewData["ConnectionMultiplexerKey2"] = key2;
 
         return View();
     }
@@ -1516,7 +1516,7 @@ Once you have configured and added the `ConnectionMultiplexer` to the service co
 
 This connector simplifies using CloudFoundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)).
 
-It exposes the CloudFoundry OAuth service configuration data as injectable `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [CloudFoundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
+It exposes the CloudFoundry OAuth service configuration data as inject-able `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [CloudFoundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
 
 #### 5.1 Quick Start
 

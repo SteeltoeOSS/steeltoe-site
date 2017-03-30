@@ -4,14 +4,14 @@ date: 2016/2/1
 tags:
 ---
 
-Steeltoe provides a number of Security related services that simplify using CloudFoundry based OAuth2 security services in ASP.NET Core applications.
+Steeltoe provides a number of Security related services that simplify using Cloud Foundry based OAuth2 security services in ASP.NET Core applications.
 
 These providers enable using the Cloud Foundry (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) for Authentication and Authorization credentials.
 
 There are two providers to choose from when adding Cloud Foundry security integration:
 
-* A provider that enables OAuth2 Single Sign-on with CloudFoundry Security services.
-* A provider that enables using JWT tokens issued by CloudFoundry Security services for securing access to REST resources/endpoints.
+* A provider that enables OAuth2 Single Sign-on with Cloud Foundry Security services.
+* A provider that enables using JWT tokens issued by Cloud Foundry Security services for securing access to REST resources/endpoints.
 
 In addition to the two providers above, Steeltoe also makes available an additional security provider which allows you to easily use a Cloud Foundry based Redis service for ASP.NET Core Data Protection Key Ring storage. By default, ASP.NET Core stores the key ring on the local file system. In a Cloud Foundry environment, this of course is un-workable and violates the twelve-factor guidelines for developing cloud native applications. Using the Steeltoe Redis Key Storage provider, you can reconfigure Data Protection service to use Redis on Cloud Foundry for storage. 
 
@@ -23,13 +23,13 @@ This enables you to leverage existing credentials configured in a UAA Server or 
 
 In addition to the Quick Start below, there are other Steeltoe sample applications that you can use to help you understand how to make use of this provider:
 
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, secured with OAuth2 Security Services and using Spring Cloud Services.
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on Cloud Foundry, secured with OAuth2 Security Services and using Spring Cloud Services.
 
 The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Security).
 
 #### 1.1 Quick Start
 
-This quick start makes use of a ASP.NET Core sample application to illustrate how to use the Steeltoe CloudFoundry Single Signon provider for Authentication and Authorization against a CloudFoundry UAA Server.
+This quick start makes use of a ASP.NET Core sample application to illustrate how to use the Steeltoe Cloud Foundry Single Signon provider for Authentication and Authorization against a Cloud Foundry UAA Server.
 
 ##### 1.1.1 Get Sample
 
@@ -51,9 +51,9 @@ To install the UAA command line tool and target it to your UAA server:
 
 Next you need to authenticate and obtain an access token for the `admin client` from the UAA server so that you can add the quick start application and user credentials. 
 
-You will need the `Admin Client Secret` for your installation of CloudFoundry in order to accomplish this. 
+You will need the `Admin Client Secret` for your installation of Cloud Foundry in order to accomplish this. 
 
-If you are using Pivotal CloudFoundry (PCF), you can obtain this from the `Ops Manager/Elastic Runtime` credentials page under the `UAA` section.  Look for `Admin Client Credentials` and then use it in the following:
+If you are using Pivotal Cloud Foundry (PCF), you can obtain this from the `Ops Manager/Elastic Runtime` credentials page under the `UAA` section.  Look for `Admin Client Credentials` and then use it in the following:
 
 ```
 > # Target the UAA on Cloud Foundry
@@ -161,7 +161,7 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 At this point the app is up and running. You can access it at http://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/.
 
-On the apps menu, click on the `Log in` menu item and you should be redirected to the CloudFoundry login page. Enter dave and Password1!, or whatever name/password you used above, and you should be authenticated and redirected back to the single-signon home page.
+On the apps menu, click on the `Log in` menu item and you should be redirected to the Cloud Foundry login page. Enter dave and Password1!, or whatever name/password you used above, and you should be authenticated and redirected back to the single-signon home page.
 
 If you try and access the `About` menu item you should see the `About` page as user `dave` is a member of the group that is authorized to access the end point.
 
@@ -200,19 +200,19 @@ Additionally, you should have a good understanding of how the .NET [Configuratio
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and the middleware used in the app. Specifically pay particular attention to the usage of the `Configure()` and `ConfigureService())` methods. 
 
-With regard to CloudFoundry, you should have a good understanding of CloudFoundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)).
+With regard to Cloud Foundry, you should have a good understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)).
 
 In order to use the Security provider you need to do the following:
 
-* Create and bind an instance of a CloudFoundry OAuth2 service to your application.
+* Create and bind an instance of a Cloud Foundry OAuth2 service to your application.
 * Configure any additional settings the Security provider will need. (Optional)
-* Add the CloudFoundry configuration provider to the ConfigurationBuilder.    
+* Add the Cloud Foundry configuration provider to the ConfigurationBuilder.    
 * Add and Use the security provider in the application.
 * Secure your endpoints 
 
 
 ##### 1.2.1 Add NuGet Reference
-To make use of the provider, you need to add a reference to the Steeltoe CloudFoundry Security NuGet. 
+To make use of the provider, you need to add a reference to the Steeltoe Cloud Foundry Security NuGet. 
 
 The provider can be found in the `Steeltoe.Security.Authentication.CloudFoundry` package.
 
@@ -229,7 +229,7 @@ Add the provider to your project using the following `PackageReference`:
 
 Typically you do not need to configure any additional settings for the provider.  
 
-But, sometimes it might be necessary when running on CloudFoundry and you are using self-signed certificates.  In that case, you might need to disable certificate validation.
+But, sometimes it might be necessary when running on Cloud Foundry and you are using self-signed certificates.  In that case, you might need to disable certificate validation.
 
 Here is an example on how to do that.
 
@@ -254,13 +254,13 @@ Here is an example on how to do that.
 }
 ```
 
-##### 1.2.3 CloudFoundry
+##### 1.2.3 Cloud Foundry
 
-As mentioned earlier there are a couple OAuth2 services (e.g. UAA Server or Pivotal SSO) you can use on CloudFoundry. Rather than explaining the steps here to create and bind OAuth2 service to your app, we recommend you read the documentation provided be each of the service providers.
+As mentioned earlier there are a couple OAuth2 services (e.g. UAA Server or Pivotal SSO) you can use on Cloud Foundry. Rather than explaining the steps here to create and bind OAuth2 service to your app, we recommend you read the documentation provided be each of the service providers.
 
 Regardless of which provider you choose, once you have bound the OAuth service to your application, the OAuth service settings will have been setup in `VCAP_SERVICES` and will be available to the provider.
 
-In order for these settings to be picked up and put in the configuration, you have to make use of the Steeltoe CloudFoundry configuration provider. 
+In order for these settings to be picked up and put in the configuration, you have to make use of the Steeltoe Cloud Foundry configuration provider. 
 
 To do that, you simply need to add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`. Here is an example:
 
@@ -287,7 +287,7 @@ public class Startup {
 ```
 >Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider.
 
-##### 1.2.4 Add CloudFoundry Authentication
+##### 1.2.4 Add Cloud Foundry Authentication
 
 Now in order to use the provider in your application, you need to add it to the service container.  
 
@@ -306,7 +306,7 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add CloudFoundry authentication service
+        // Add Cloud Foundry authentication service
         services.AddCloudFoundryAuthentication(Configuration);
 
         // Add framework services.
@@ -315,9 +315,9 @@ public class Startup {
     }
     ....
 ```
-The `AddCloudFoundryAuthentication(Configuration)` method call configures and adds the CloudFoundry OAuth2 authentication service to the service container.  Once in place it can then be referenced and used as middleware during request processing.
+The `AddCloudFoundryAuthentication(Configuration)` method call configures and adds the Cloud Foundry OAuth2 authentication service to the service container.  Once in place it can then be referenced and used as middleware during request processing.
 
-##### 1.2.5 Configure CloudFoundry Authentication
+##### 1.2.5 Configure Cloud Foundry Authentication
 Once you have configured and added the provider to the service container, then the last thing to do is configure the request processing pipeline to use it. 
 
 Below is an example illustrating how to do this:
@@ -339,7 +339,7 @@ public class Startup {
         ....
         app.UseStaticFiles();
 
-        // Add CloudFoundry middleware to pipeline
+        // Add Cloud Foundry middleware to pipeline
         app.UseCloudFoundryAuthentication(new CloudFoundryOptions()
         {
                 AccessDeniedPath = new PathString("/Home/AccessDenied")
@@ -352,7 +352,7 @@ public class Startup {
     ....
 ```
 
-The `UseCloudFoundryAuthentication()` call adds the CloudFoundry security middleware to the pipeline and configures the access denied action to be used.
+The `UseCloudFoundryAuthentication()` call adds the Cloud Foundry security middleware to the pipeline and configures the access denied action to be used.
 
 ##### 1.2.6 Securing Endpoints
 
@@ -397,19 +397,19 @@ The above example code establishes the following security processing to occur:
 
 ### 2.0 Resource Protection using JWT
 
-This provider, when used in an ASP.NET Core application, enables you to secure access to REST resources and endpoints using JWT tokens issued by CloudFoundry Security services.
+This provider, when used in an ASP.NET Core application, enables you to secure access to REST resources and endpoints using JWT tokens issued by Cloud Foundry Security services.
 
 This enables you to leverage existing credentials configured in a UAA Server or a Pivotal Single Signon service for authentication and authorization.
 
 In addition to the Quick Start below, there are other Steeltoe sample applications that you can use to help you understand how to make use of this connector:
  
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, secured with OAuth2 Security Services and using Spring Cloud Services.
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on Cloud Foundry, secured with OAuth2 Security Services and using Spring Cloud Services.
 
 #### 2.1 Quick Start
 
-This quick start makes use of a ASP.NET Core sample application to illustrate how you can secure your web api endpoints using JWT Bearer tokens issued by the CloudFoundry UAA server. 
+This quick start makes use of a ASP.NET Core sample application to illustrate how you can secure your web api endpoints using JWT Bearer tokens issued by the Cloud Foundry UAA server. 
 
-Note: This application is intended to be used in conjunction with the quick start application above, `CloudFoundrySingleSignon`. You should FIRST get that quick start up and running on CloudFoundry and then follow these instructions after that.
+Note: This application is intended to be used in conjunction with the quick start application above, `CloudFoundrySingleSignon`. You should FIRST get that quick start up and running on Cloud Foundry and then follow these instructions after that.
 
 ##### 2.1.1 Get Sample
 
@@ -505,21 +505,21 @@ Additionally, you should have a good understanding of how the .NET [Configuratio
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and the middleware used by the app. Specifically pay particular attention to the usage of the `Configure()` and `ConfigureServices()` methods. 
 
-With regard to CloudFoundry, you should have a good understanding of CloudFoundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) along with an understanding how they use and issue JWTs.
+With regard to Cloud Foundry, you should have a good understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) along with an understanding how they use and issue JWTs.
 
 In order to use the Security provider you need to do the following:
 
 ```
-* Create and bind an instance of a CloudFoundry OAuth2 service to your application.
+* Create and bind an instance of a Cloud Foundry OAuth2 service to your application.
 * Configure any additional settings the Security provider will need. (Optional)
-* Add the CloudFoundry configuration provider to the ConfigurationBuilder.    
+* Add the Cloud Foundry configuration provider to the ConfigurationBuilder.    
 * Add and Use the security provider in the application.
 * Secure your endpoints
 ``` 
 
 ##### 2.2.1 Add NuGet Reference
 
-To make use of the provider, you need to add a reference to the Steeltoe CloudFoundry Security NuGet.  
+To make use of the provider, you need to add a reference to the Steeltoe Cloud Foundry Security NuGet.  
 
 The provider can be found in the `Steeltoe.Security.Authentication.CloudFoundry` package.
 
@@ -536,7 +536,7 @@ Add the provider to your project using the following `PackageReference`:
 
 Typically you do not need to configure any additional settings for the provider.  
 
-But, sometimes it might be necessary when running on CloudFoundry and you are using self-signed certificates.  In that case, you might need to disable certificate validation.
+But, sometimes it might be necessary when running on Cloud Foundry and you are using self-signed certificates.  In that case, you might need to disable certificate validation.
 
 Here is an example on how to do that.
 
@@ -560,13 +560,13 @@ Here is an example on how to do that.
   .....
 }
 ```
-##### 2.2.3 CloudFoundry
+##### 2.2.3 Cloud Foundry
 
-As mentioned earlier there are a couple OAuth2 services (e.g. UAA Server or Pivotal SSO) you can use on CloudFoundry. Rather than explaining the steps here on how to create and bind OAuth2 services to your app, we recommend you read the documentation provided be each of the service providers.
+As mentioned earlier there are a couple OAuth2 services (e.g. UAA Server or Pivotal SSO) you can use on Cloud Foundry. Rather than explaining the steps here on how to create and bind OAuth2 services to your app, we recommend you read the documentation provided be each of the service providers.
 
 Regardless of which provider you choose, once you have bound the OAuth service to your application, the OAuth service settings will have been setup in `VCAP_SERVICES` and will be available to the provider.
 
-In order for these settings to be picked up and put in the configuration, you have to make use of the Steeltoe CloudFoundry configuration provider. 
+In order for these settings to be picked up and put in the configuration, you have to make use of the Steeltoe Cloud Foundry configuration provider. 
 
 To do that, you simply need to add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`. Here is an example:
 
@@ -593,7 +593,7 @@ public class Startup {
 ```
 >Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider.
 
-##### 2.2.4 Add CloudFoundry JwtAuthentication
+##### 2.2.4 Add Cloud Foundry JwtAuthentication
 
 Now in order to use the provider in your application, you need to add it to your service collection. 
 
@@ -612,7 +612,7 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add CloudFoundry authentication service
+        // Add Cloud Foundry authentication service
         services.AddCloudFoundryJwtAuthentication(Configuration);
 
         // Add framework services.
@@ -622,10 +622,10 @@ public class Startup {
     ....
 ```
 
-The `AddCloudFoundryJwtAuthentication(Configuration)` method call configures and adds the CloudFoundry JWT authentication service to the service container. Once in place it can then be referenced and used as middleware during request processing.
+The `AddCloudFoundryJwtAuthentication(Configuration)` method call configures and adds the Cloud Foundry JWT authentication service to the service container. Once in place it can then be referenced and used as middleware during request processing.
 
 
-##### 2.2.5 Configure CloudFoundry JwtAuthentication
+##### 2.2.5 Configure Cloud Foundry JwtAuthentication
 
 Once you have configured and added the provider to the service container, then the last thing to do is configure the request processing pipeline to use it. 
 
@@ -648,7 +648,7 @@ public class Startup {
         ....
         app.UseStaticFiles();
 
-        // Add CloudFoundry middleware to pipeline
+        // Add Cloud Foundry middleware to pipeline
         app.UseCloudFoundryJwtAuthentication();
 
         app.UseMvc();
@@ -657,7 +657,7 @@ public class Startup {
     }
     ....
 ```
-The `UseCloudFoundryJwtAuthentication()` method call adds the CloudFoundry middleware to the pipeline.
+The `UseCloudFoundryJwtAuthentication()` method call adds the Cloud Foundry middleware to the pipeline.
 
 ##### 2.2.6 Securing Endpoints
 
@@ -690,10 +690,10 @@ In the example above, if an incoming REST request is made to the `api/values` en
 
 ### 3.0 Redis Key Storage Provider
 
-This provider simplifies using Redis on CloudFoundry as a custom key ring repository for ASP.NET Core Data Protection.
+This provider simplifies using Redis on Cloud Foundry as a custom key ring repository for ASP.NET Core Data Protection.
 
 #### 3.1 Quick Start
-This quick start makes use of a ASP.NET Core sample application to illustrate how to use a Redis cache on CloudFoundry for storing Data Protection keys.
+This quick start makes use of a ASP.NET Core sample application to illustrate how to use a Redis cache on Cloud Foundry for storing Data Protection keys.
 
 ##### 3.1.1 Get Sample
 
@@ -785,9 +785,9 @@ When this happens, you should see the InstanceId changing but the SessionId and 
 
 A couple things to note at this point about this app:
 
-* The app is using the CloudFoundry Redis service to store session data.  As a result, the session data is available to all instances of the app.
+* The app is using the Cloud Foundry Redis service to store session data.  As a result, the session data is available to all instances of the app.
 * The `session handle` that is in the session cookie and the data that is stored in the session in Redis is encrypted using keys that are now stored in the key ring which is also stored in the 
-CloudFoundry Redis service. So when you scale the app to multiple instances the same keyring is used by all instances and therefore the `session handle` and the session data can be decrypted by any instance of the application.
+Cloud Foundry Redis service. So when you scale the app to multiple instances the same keyring is used by all instances and therefore the `session handle` and the session data can be decrypted by any instance of the application.
 
 ##### 1.1.11 Understand Sample
 
@@ -798,7 +798,7 @@ To gain an understanding of the Steeltoe related changes to generated template c
  * `RedisDataProtectionKeyStore.csproj` - Contains `PackageReference`s for Steeltoe NuGets `Steeltoe.Security.DataProtection.Redis`, `Steeltoe.CloudFoundry.Connector.Redis`, and `Steeltoe.Extensions.Configuration.CloudFoundry`.
  * `Program.cs` - Code added to read the `--server.urls` command line.
  * `Startup.cs` - Several changes made:
-   * Code added to the `ConfigurationBuilder` to add the Steeltoe CloudFoundry configuration provider.
+   * Code added to the `ConfigurationBuilder` to add the Steeltoe Cloud Foundry configuration provider.
    * Modified the `ConfigureServices()` method adding `RedisConnectionMultiplexer` to the service container by using Steeltoe Redis connector.
    * Configured `DataProtection` to `PersistKeysToRedis` using the Steeltoe Redis Key Storage Provider.
    * Added a `IDistributedCache` to the service container, configured by Steeltoe Redis connector.  This causes the ASP.NET Core Session service to use this cache for storage.
@@ -810,7 +810,7 @@ To gain an understanding of the Steeltoe related changes to generated template c
 In order to use this provider you need to do the following:
 
  * Create and bind a Redis Service instance to your application.
- * Add Steeltoe CloudFoundry config provider to your ConfigurationBuilder.
+ * Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
  * Add Redis ConnectionMultiplexer to your ServiceCollection.
  * Add DataProtection to your ServiceCollection & configure it to PersistKeysToRedis
 
@@ -843,9 +843,9 @@ Add the connector to your project using the following `PackageReference`:
 </ItemGroup>
 ```
 
-##### 3.2.2 CloudFoundry
+##### 3.2.2 Cloud Foundry
 
-To use Redis Data Protection key ring provider on Cloud Foundry you have to install a Redis service and create and bind a instance of it to your application using the CloudFoundry command line as follows:
+To use Redis Data Protection key ring provider on Cloud Foundry you have to install a Redis service and create and bind a instance of it to your application using the Cloud Foundry command line as follows:
 
 ```
 > cf target -o myorg -s myspace
@@ -861,7 +861,7 @@ Note: The commands above assume you are using the Redis service provided by Pivo
 
 Once you have bound the service to the application, then information needed to connect to the cache has been setup in `VCAP_SERVICES`.
   
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the CloudFoundry configuration provider. 
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider. 
 
 To do that, you simply need to add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`. Here is an example:
 
@@ -906,7 +906,7 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add StackExchange ConnectionMultiplexor configured from CloudFoundry
+        // Add StackExchange ConnectionMultiplexer configured from Cloud Foundry
         services.AddRedisConnectionMultiplexer(Configuration);
 
         // Add framework services.
@@ -936,10 +936,10 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add StackExchange ConnectionMultiplexor configured from CloudFoundry
+        // Add StackExchange ConnectionMultiplexer configured from Cloud Foundry
         services.AddRedisConnectionMultiplexer(Configuration);
 
-        // Add DataProtection and persist keys to CloudFoundry Redis service
+        // Add DataProtection and persist keys to Cloud Foundry Redis service
         services.AddDataProtection()
             .PersistKeysToRedis()
             .SetApplicationName("Some Name");
@@ -952,4 +952,4 @@ public class Startup {
 ```
 
 ##### 3.2.5 Use Redis Key Store
-Once this has been setup, the keys used by the DataProtection framework will be stored in the bound Redis CloudFoundry service.  There is nothing more that you need to do.
+Once this has been setup, the keys used by the DataProtection framework will be stored in the bound Redis Cloud Foundry service.  There is nothing more that you need to do.
