@@ -7,9 +7,3 @@
 		</div>
 	<% end %>
 <% end %>
-<% if !sorted_docs('library').empty? %>
-	<h5 class="regular uppercase">Library Reference</h5>
-	<% sorted_docs('library').each do |article| %>
-	  <%= link_to article.title, article.url, class: "#{nav_active(article.url)} pl1 docs-nav-link text-decoration-none color-inherit block border-bottom border-silver py1" %>
-	<% end %>
-<% end %>

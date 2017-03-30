@@ -15,6 +15,7 @@ set :markdown,
       fenced_code_blocks: true,
       smartypants: true,
       with_toc_data: true,
+      tables: true,
       xhtml: true
 
 # With alternative layout
@@ -34,14 +35,6 @@ end
 activate :blog do |blog|
   blog.name = "docs"
   blog.prefix = "docs"
-  blog.sources = "{title}.html"
-  blog.permalink = "{title}.html"
-  blog.layout = "documentation"
-end
-
-activate :blog do |blog|
-  blog.name = "library"
-  blog.prefix = "library"
   blog.sources = "{title}.html"
   blog.permalink = "{title}.html"
   blog.layout = "documentation"
