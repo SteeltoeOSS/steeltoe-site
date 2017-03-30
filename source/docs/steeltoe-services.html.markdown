@@ -1,5 +1,5 @@
 ---
-title: Steeltoe
+title: Introduction
 date: 2016/6/1
 tags:
 ---
@@ -69,3 +69,25 @@ Also, when working with Cloud Foundry, you will also need to install the [Cloud 
 In doing all of the Quick Starts, you will need the GIT command line tools installed on your machine. This is required in order to for you to get and work with the Quick Start sample code we have provided.
 
 ### 2.0 Release Notes
+
+#### 2.1 Discovery
+
+##### Eureka Version
+Steeltoe has implemented a [Eureka 1.0 client](https://github.com/Netflix/eureka/wiki), not a 2.0 client. Eureka 2.0 is expected to have significant updates to its architecture and public API. At some point in time, we will examine a 2.0 implementation.
+
+##### Eureka AWS Support 
+The Eureka client for Java contains features which enable operation on AWS.  The Steeltoe version does not currently implement those features, and instead, this version has been optimized for CloudFoundry environments. We will look at adding AWS cloud features at a future point in time.
+
+##### Eureka Client Configuration
+Not all configuration properties found in the Java client are available for configuration. Those that are supported and provided by the Steeltoe implementation have been documented within.
+
+#### 2.2 Configuration
+
+##### Config Server - Unstructured data files
+Unlike the Java version of the Config Server client, the Steeltoe client currently only supports property and yaml files; not plain text.
+
+##### Config Server - Client decryption option
+Steeltoe client only supports clear text communication with the configuration server, unless SSL/TLS is being used between the client and server. Client decryption is on our road map, but not currently supported. 
+
+##### Config Server initiated reload
+Currently reloads must be initiated by the client, Steeltoe has not implemented handlers to listen for server change events.  These changes are expected to be added in the future.
