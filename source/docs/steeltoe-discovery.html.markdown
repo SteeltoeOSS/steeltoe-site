@@ -4,7 +4,7 @@ date: 2016/4/1
 tags:
 ---
 
-A Service Registry provides a database which applications can use in implementing the Service Discovery pattern; one of the key tenets of a micro-services based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, applications can use a Service Registry to dynamically discover and call registered services.
+A service registry provides a database that applications can use in implementing the Service Discovery pattern; one of the key tenets of a micro-services based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, applications can use a service registry to dynamically discover and call registered services.
 
 There are several options to choose from when implementing the Service Discovery pattern. Steeltoe has initially chosen to support one based on Eureka; using Netflix's Service Discovery server and client. For more information about Eureka see the [Netflix/Eureka Wiki](https://github.com/Netflix/eureka/wiki) and the [Spring Cloud Netflix](http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html) documentation.
 
@@ -19,12 +19,12 @@ The Steeltoe Eureka client supports the following .NET application types:
  * ASP.NET Core
  * Console apps (.NET Framework and .NET Core)
  
- In addition to the Quick Start below, there are several other Steeltoe sample applications that you can choose from when looking for help in understanding how to make use of this client:
+ In addition to the quick start below, there are several other Steeltoe sample applications that you can choose from when looking for help in understanding how to make use of this client:
  
  * [AspDotNet4/Fortune-Teller-Service4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-Service4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container 
  * [AspDotNet4/Fortune-Teller-UI4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-UI4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container 
  * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
- * [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, and secured with OAuth2 Security Services and using Spring Cloud Services.
+ * [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on Cloud Foundry, and secured with OAuth2 Security Services and using Spring Cloud Services.
  
  The source code for this client can be found [here](https://github.com/SteeltoeOSS/Discovery).
 
@@ -445,7 +445,7 @@ For more information on using the Eureka Server on Cloud Foundry, see the [Sprin
 
 Once you have bound the service to the application, the Eureka Server settings will become available and be setup in `VCAP_SERVICES`.
 
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the CloudFoundry configuration provider.  
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.  
 
 To do that, simply add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`.  Here is an example:
 

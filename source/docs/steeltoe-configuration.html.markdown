@@ -15,11 +15,11 @@ Out of the box, .NET supports the following providers/sources:
 * Environment variables
 * Custom providers
 
-To gain a better understand of the .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation.
+To gain a better understanding of the .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation.
 
 Steeltoe Configuration services adds to the above .NET list two additional providers:
 
- * CloudFoundry
+ * Cloud Foundry
  * Spring Cloud Config Server
  
 The following sections go into more more detail on each of these new providers.
@@ -41,7 +41,7 @@ The Steeltoe CloudFoundry provider supports the following .NET application types
  The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Configuration).
 
 #### 1.1 Quick Start
-This quick start illustrates how to make use of the CloudFoundry configuration provider in an ASP.NET Core MVC application on Cloud Foundry. 
+This quick start illustrates how to make use of the Cloud Foundry configuration provider in an ASP.NET Core MVC application on Cloud Foundry. 
 
 You will need access to a Cloud Foundry runtime environment in order to complete the quick start.
 
@@ -55,7 +55,7 @@ You will need access to a Cloud Foundry runtime environment in order to complete
 ##### 1.1.2 Publish Sample
 Use the `dotnet` CLI to build and publish the application to the folder `publish`.  
 
-Note below we show how to publish for all of the target run times and frameworks the sample supports.  Just pick one in order to proceed.
+Note below we show how to publish for all of the target runtimes and frameworks the sample supports.  Just pick one in order to proceed.
 
 ```
 > # Restore all dependencies
@@ -124,19 +124,19 @@ To gain an understanding of the Steeltoe related changes to the generated templa
  
 #### 1.2 Usage
 
-The following sections describe how to make use of the CloudFoundry configuration provider. 
+The following sections describe how to make use of the Cloud Foundry configuration provider. 
 
 Its recommended that you have a good understanding of how the .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use this provider. A basic understanding of the `ConfigurationBuilder` and how to add additional providers to the builder is necessary.
 
-In order to use the Steeltoe CloudFoundry provider you need to do the following:
+In order to use the Steeltoe Cloud Foundry provider you need to do the following:
 
  * Add NuGet package reference to your project.
  * Add the provider to the Configuration builder.
- * Configure CloudFoundry Options classes by binding configuration data to the classes.
- * Inject and use the CloudFoundry Options to access Cloud Foundry configuration data.
+ * Configure Cloud Foundry options classes by binding configuration data to the classes.
+ * Inject and use the Cloud Foundry Options to access Cloud Foundry configuration data.
 
 ##### 1.2.1 Add NuGet Reference
-To make use of the provider, you need to add a reference to the Steeltoe CloudFoundry NuGet.  
+To make use of the provider, you need to add a reference to the Steeltoe Cloud Foundry NuGet.  
 
 The provider is found in the `Steeltoe.Extensions.Configuration.CloudFoundry` package.
 
@@ -263,7 +263,7 @@ public class HomeController : Controller
 
 This provider enables the Spring Cloud Config Server to be used as a source of configuration data for a .NET application.
  
-The Spring Cloud Config Server is an application configuration service, which gives you a central place to manage an applications configuration values externally across all environments. As an application moves through the deployment pipeline from development to test and into production, you can use the Config Server to manage the configuration between environments and be certain that the application has everything it needs to run when you migrate it. The Config Server easily supports labelled versions of environment-specific configurations and is accessible to a wide range of tooling for managing its content.
+The Spring Cloud Config Server is an application configuration service, which gives you a central place to manage an applications configuration values externally across all environments. As an application moves through the deployment pipeline from development to test and into production, you can use the config server to manage the configuration between environments and be certain that the application has everything it needs to run when you migrate it. The config server easily supports labelled versions of environment-specific configurations and is accessible to a wide range of tooling for managing its content.
 
 To gain a better understanding of the Spring Cloud Config Server, you are encouraged to read the [Spring Cloud](http://cloud.spring.io/spring-cloud-static/Camden.SR6/#_spring_cloud_config) documentation.
 
@@ -285,7 +285,7 @@ In addition to the Quick Start below, there are several other Steeltoe sample ap
 The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Configuration).
 
 #### 2.1 Quick Start
-This quick start makes use of an ASP.NET Core application to illustrate how to use the Steeltoe Config Server provider to fetch configuration data from a Config Server running locally on your development machine and also how to take that same application and push it to Cloud Foundry and make use of a Config Server operating there. 
+This quick start makes use of an ASP.NET Core application to illustrate how to use the Steeltoe Config Server provider to fetch configuration data from a Config Server running locally on your development machine and also how to take that same application and push it to Cloud Foundry and make use of a config server operating there. 
 
 ##### 2.1.1  Start Config Server Locally
 
@@ -336,8 +336,8 @@ Application started. Press Ctrl+C to shut down.
 
 Fire up a browser and hit http://localhost:5000.  Use the menu presented by the app to see various output:
                                                   
- * `Config Server Settings` - should show the settings used by the Steeltoe client when communicating to the Config Server.  These have been picked up from settings in `appsettings.json`.
- * `Config Server Data` - this is the configuration data returned from the Config Servers github repository. It will be some of the data from `foo.properties`, `foo-Production.properties` and `application.yml` if found in the github repository https://github.com/steeltoeoss/config-repo. 
+ * `Config Server Settings` - should show the settings used by the Steeltoe client when communicating to the config server.  These have been picked up from settings in `appsettings.json`.
+ * `Config Server Data` - this is the configuration data returned from the config server's github repository. It will be some of the data from `foo.properties`, `foo-Production.properties` and `application.yml` if found in the github repository https://github.com/steeltoeoss/config-repo. 
  * `Reload` - will cause a reload of the configuration data from the server.
 
 Change the Hosting environment variable setting to `development` (i.e. `export ASPNETCORE_ENVIRONMENT=development` or  `SET ASPNETCORE_ENVIRONMENT=development` ), then restart the application.
@@ -346,7 +346,7 @@ You will see different configuration data returned for that profile/hosting envi
 
 ##### 2.1.6 Start Config Server Cloud Foundry
 
-In this step we will use the Cloud Foundry CLI to create a service instance of the Spring Cloud Config Server on Cloud Foundry. You will find in the `config-server.json` file that we have set the Config Servers github repository to: `https://github.com/spring-cloud-samples/config-repo`.  
+In this step we will use the Cloud Foundry CLI to create a service instance of the Spring Cloud Config Server on Cloud Foundry. You will find in the `config-server.json` file that we have set the config server's github repository to: `https://github.com/spring-cloud-samples/config-repo`.  
 
 ```
 > # Target and org and space in Cloud Foundry
@@ -422,7 +422,7 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 The `cf push` will create an app by the name `foo` and will bind the `myConfigServer` service instance to the app. You can hit the app @ `http://foo.x.y.z/`.
 
-Use the menu provided by the app to see various output related to Cloud Foundry and the Config Server:
+Use the menu provided by the app to see various output related to Cloud Foundry and the config server:
 
 * `CloudFoundry Settings` - should show `VCAP_APPLICATION` and `VCAP_SERVICES` settings read as configuration data.
 * `Config Server Settings` - should show the settings used by the Steeltoe client when communicating to the Config Server.  These have been picked up from the service binding.
@@ -440,14 +440,14 @@ To gain an understanding of the Steeltoe related changes to generated template c
  * `SimpleCloudFoundry.csproj` - Contains `PackageReference` for Steeltoe NuGet `Pivotal.Extensions.Configuration.ConfigServer`
  * `Program.cs` - Code added to read the ``--server.urls`` command line
  * `appsettings.json` - Contains configuration data needed for the Steeltoe Config Server provider.
- * `ConfigServerData.cs` - Object used to hold the data retrieved from the Config Server
+ * `ConfigServerData.cs` - Object used to hold the data retrieved from the config server
  * `Startup.cs` - Code added to the `ConfigurationBuilder` and `ConfigServerData` Options added to the service container.
- * `HomeController.cs` - Code added for `ConfigServerData` Options injected into the Controller and ultimately used to display the data returned from Config Server.
- * `ConfigServer.cshtml` - The view used to display the data returned from the Config Server.
+ * `HomeController.cs` - Code added for `ConfigServerData` Options injected into the controller and ultimately used to display the data returned from config server.
+ * `ConfigServer.cshtml` - The view used to display the data returned from the config server.
  
 #### 2.2 Usage
 
-The following sections describe how to make use of the Config Server configuration provider. You should have a good understanding of how the new .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use this provider. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary.
+The following sections describe how to make use of the config server configuration provider. You should have a good understanding of how the new .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use this provider. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary.
 
 You should also have a good understanding of the [Spring Cloud Config Server](https://cloud.spring.io/spring-cloud-config/).
                                                                                              
@@ -455,13 +455,13 @@ You should also have a good understanding of the [Spring Cloud Config Server](ht
  
  * Add appropriate NuGet package reference to your project.
  * Configure the settings the Steeltoe provider will use to access the Spring Cloud Config Server.
- * Add the provider to the Configuration builder.
- * Optionally, configure the returned Config Server config data as Options 
+ * Add the provider to the configuration builder.
+ * Optionally, configure the returned config server config data as Options 
  * Inject and use Options or ConfigurationRoot to access configuration data.
 
 ##### 2.2.1 Add NuGet Reference
 
-There are two Config Server NuGets that you can choose from depending on your needs. 
+There are two config server NuGets that you can choose from depending on your needs. 
 
 If you plan on only connecting to the open source version of [Spring Cloud Config Server](http://cloud.spring.io/spring-cloud-config/), then you should use the `Steeltoe.Extensions.Configuration.ConfigServer` package.
 
@@ -491,7 +491,7 @@ In this case add the provider to your project using the following `PackageRefere
 
 The most convenient way to configure settings for the provider is to put them in a file and then use one of the other file based configuration providers to read them in.  
 
-Below is an example of some provider settings put in a JSON file. Only two settings are really necessary; the setting `spring:application:name` configures the "application name" to `foo`, and `spring:cloud:config:uri` configures the address of the Config Server. 
+Below is an example of some provider settings put in a JSON file. Only two settings are really necessary; the setting `spring:application:name` configures the "application name" to `foo`, and `spring:cloud:config:uri` configures the address of the config server. 
 
 
 ```
@@ -517,13 +517,13 @@ As illustrated above, all settings should start with `spring:cloud:config:`
 |Key|Description|
 |------|------|
 |**name**|App name to request for, defaults = `spring:application:name`|
-|**enabled**|Enable or disable Config Server client, defaults = true|
-|**uri**|Endpoint of Config Server, defaults = `http://localhost:8888`|
+|**enabled**|Enable or disable config server client, defaults = true|
+|**uri**|Endpoint of config server, defaults = `http://localhost:8888`|
 |**validate_certificates**|Enable or disable certificate validation, default = true|
 |**label**|Comma separated list of labels to request, default = none|
-|**username**|Username for Basic Authentication, default = none|
-|**password**|Password for Basic Authentication, default = none|
-|**failFast**|Enable or Disable failure at Startup, default = false|
+|**username**|Username for basic authentication, default = none|
+|**password**|Password for basic authentication, default = none|
+|**failFast**|Enable or Disable failure at startup, default = false|
 |**retry:enabled**|Enable or Disable retry logic, default = false|
 |**retry:maxAttempts**|Max retries if retry enabled, default = 6|
 |**retry:initialInterval**|Starting interval, default = 1000ms|
@@ -534,15 +534,15 @@ As illustrated above, all settings should start with `spring:cloud:config:`
 
 ##### 2.2.3 Add Configuration Provider
 
-Once the providers settings have been defined and put in a file (e.g. JSON file), the next step is to get them read in and made available to the provider. 
+Once the provider's settings have been defined and put in a file (e.g. JSON file), the next step is to get them read in and made available to the provider. 
 
-In the C# example below, the providers configuration settings from the above example would be put in the `appsettings.json` file included with the application.  Then, by using the .NET provided JSON configuration provider we are able to read the settings simply by just by adding the JSON provider to the configuration builder (e.g. `AddJsonFile("appsettings.json")`.  
+In the C# example below, the provider's configuration settings from the above example would be put in the `appsettings.json` file included with the application.  Then, by using the .NET provided JSON configuration provider we are able to read the settings simply by just by adding the JSON provider to the configuration builder (e.g. `AddJsonFile("appsettings.json")`.  
 
-Then, after the JSON provider has been added, you can then add the Config Server provider to the builder, we include a (e.g. `AddConfigServer(env)`) passing in are reference to the `IHostEnvironment`. 
+Then, after the JSON provider has been added, you can then add the config server provider to the builder, we include a (e.g. `AddConfigServer(env)`) passing in are reference to the `IHostEnvironment`. 
 
-Because the JSON provider that is reading `appsettings.json` has been added `before` the Config Server provider, the JSON based settings will become available to the Steeltoe provider.  Note that you don't have to use JSON for the Steeltoe settings; you can use any of the other off-the-shelf configuration providers for the settings (e.g. INI file, environment variables, etc.).  
+Because the JSON provider that is reading `appsettings.json` has been added `before` the config server provider, the JSON based settings will become available to the Steeltoe provider.  Note that you don't have to use JSON for the Steeltoe settings; you can use any of the other off-the-shelf configuration providers for the settings (e.g. INI file, environment variables, etc.).  
 
-The important thing to understand is; you need to `Add*()` the source of the Config Server clients settings (i.e. `AddJsonFile(..)`) BEFORE you `AddConfigServer(..)`,  otherwise the settings won't be picked up and used.
+The important thing to understand is; you need to `Add*()` the source of the config server clients settings (i.e. `AddJsonFile(..)`) *before* you `AddConfigServer(..)`,  otherwise the settings won't be picked up and used.
 
 
 ```
@@ -564,7 +564,7 @@ Normally in an ASP.NET Core application, the above C# code would be included in 
 
 ##### 2.2.4 Cloud Foundry
 
-When you want to use a Config Server on Cloud Foundry and you have installed Spring Cloud Services, you can create and bind a instance of it to your application using the Cloud Foundry CLI as follows:
+When you want to use a config server on Cloud Foundry and you have installed Spring Cloud Services, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```
 > cf target -o myorg -s myspace
@@ -578,9 +578,9 @@ When you want to use a Config Server on Cloud Foundry and you have installed Spr
 > cf restage myApp
 ```
 
-For more information on using the Config Server on Cloud Foundry, see the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-3/common/) documentation.
+For more information on using the config server on Cloud Foundry, see the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-3/common/) documentation.
 
-Once you have the service bound to the application, the Config Server settings will become available and be setup in `VCAP_SERVICES`.
+Once you have the service bound to the application, the config server settings will become available and be setup in `VCAP_SERVICES`.
 
 Then when you push the application, the Steeltoe provider will take the settings from the service binding and merge those settings with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`). 
 
@@ -588,7 +588,7 @@ If there are any merge conflicts, then the service binding settings will take pr
 
 ##### 2.2.5 Access Configuration Data
 
-Referencing the example code above, when the `Build()` method is called, the Config Server provider will make the appropriate REST call(s) to the Config Server and retrieve configuration values based on the settings that have been provided.  
+Referencing the example code above, when the `Build()` method is called, the config server provider will make the appropriate REST call(s) to the config server and retrieve configuration values based on the settings that have been provided.  
 
 If there are any errors or problems accessing the config server, the application will continue to initialize, but the values from the server will not be retrieved.  If this is not the behavior you want, then you should set the `spring:cloud:config:failFast` to true. Once thats done, then the application will fail to start if problems occur during the `Build()`.
 
@@ -629,7 +629,7 @@ public void ConfigureServices(IServiceCollection services)
 
 The above `Configure<MyConfiguration>(Configuration.GetSection("myconfiguration"))` method call instructs the Options framework to bind the `myconfiguration:...` values to an instance of the `MyConfiguration` class.
 
-After this has been done, then you are able to gain access to the data in your Controllers or Views via Dependency Injection.  Here is an example controller illustrating how this is done:
+After this has been done, then you are able to gain access to the data in your `Controller` or `View` via dependency injection.  Here is an example controller illustrating how this is done:
 
 ```
 
@@ -655,9 +655,9 @@ public class HomeController : Controller
 ##### 2.2.6 Enable Logging
 Sometimes its desirable to turn on debug logging in the provider.  
 
-To do this, you need to inject the `ILoggerFactory` into the Startup class constructor by adding it as an argument to the constructor.  Once you have access to it, then you can add a Console logger to the factory and also set its minimum logging level set to Debug.  
+To do this, you need to inject the `ILoggerFactory` into the `Startup` class constructor by adding it as an argument to the constructor.  Once you have access to it, then you can add a console logger to the factory and also set its minimum logging level set to Debug.  
 
-Once thats done, then simply pass the `ILoggerFactory` to the Steeltoe configuration provider.  The provider will then use it to establish a logger with Debug level logging turned on.
+Once thats done, then simply pass the `ILoggerFactory` to the Steeltoe configuration provider.  The provider will then use it to establish a logger with debug level logging turned on.
 
 Here is some example code:
 

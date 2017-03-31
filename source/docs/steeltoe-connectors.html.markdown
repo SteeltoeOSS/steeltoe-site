@@ -4,7 +4,7 @@ date: 2016/3/1
 tags:
 ---
 
-Steeltoe Connectors are intended to simplify the process of connecting and using services on CloudFoundry. Steeltoe Connectors provide a simple abstraction for .NET based applications running on Cloud Foundry enabling them to discover bound services together with the deployment information at runtime. The connectors also provide support for registering the services as inject-able service objects. 
+Steeltoe Connectors are intended to simplify the process of connecting and using services on Cloud Foundry. Steeltoe Connectors provide a simple abstraction for .NET based applications running on Cloud Foundry enabling them to discover bound services together with the deployment information at runtime. The connectors also provide support for registering the services as inject-able service objects. 
                                                                                            
 The Steeltoe Connectors provide out-of-the-box support for discovering many common services on Cloud Foundry. They also include the ability to use settings based configuration so developers can supply configuration settings at development and testing time,  but then have those settings overridden when pushing the application to Cloud Foundry.
 
@@ -14,18 +14,18 @@ For more information on `VCAP_SERVICES` see the Cloud Foundry [documentation](ht
 
 ### 1.0 MySQL 
 
-This connector simplifies using [Connector/NET](https://dev.mysql.com/doc/connector-net/en/) in an application running on CloudFoundry. You probably will want some understanding of how to use it before proceeding to use the connector. 
+This connector simplifies using [Connector/NET](https://dev.mysql.com/doc/connector-net/en/) in an application running on Cloud Foundry. You probably will want some understanding of how to use it before proceeding to use the connector. 
 
 In addition to the Quick Start below, there are several other Steeltoe sample applications that you can refer to in order to help you understand how to make use of this connector:
 
 * [AspDotNet4/MySql4](https://github.com/SteeltoeOSS/Samples/tree/master/Connectors/src/AspDotNet4/MySql4) - same as the Quick Start below, but built for ASP.NET 4.x.
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micros-services based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, secured with OAuth2 Security Services and using Spring Cloud Services. 
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micros-services based sample app illustrating inter-operability between Java and .NET based micro-services running on Cloud Foundry, secured with OAuth2 Security Services and using Spring Cloud Services. 
                                                                                     
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 #### 1.1 Quick Start
-This quick start consists of using several ASP.NET Core sample applications to illustrate how to use the Steeltoe MySql Connector for connecting to a MySql service on CloudFoundry.
+This quick start consists of using several ASP.NET Core sample applications to illustrate how to use the Steeltoe MySql Connector for connecting to a MySql service on Cloud Foundry.
 
 There are three sample applications you can choose from for this quick start:
 
@@ -149,7 +149,7 @@ To use this connector you need to do the following:
 
 * Create and bind a MySql Service instance to your application.
 * Optionally, configure any MySql client settings (e.g. `appsettings.json`) you need.
-* Add Steeltoe CloudFoundry configuration provider to your `ConfigurationBuilder`.
+* Add Steeltoe Cloud Foundry configuration provider to your `ConfigurationBuilder`.
 * Add `MySqlConnection` or `DbContext` to your `IServiceCollection`.
 
 ##### 1.2.1 Add NuGet Reference
@@ -228,7 +228,7 @@ If you wanted to managed the settings centrally, you can also use the Spring Clo
 
 ##### 1.2.3 Cloud Foundry
 
-When you want to use MySql on Cloud Foundry and you have installed the MySql service, you can create and bind a instance of it to your application using the CloudFoundry CLI as follows:
+When you want to use MySql on Cloud Foundry and you have installed the MySql service, you can create and bind a instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```
 > cf target -o myorg -s myspace
@@ -243,7 +243,7 @@ Note: The commands above assume you are using the MySql service provided by Pivo
 
 Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
   
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the CloudFoundry configuration provider. 
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider. 
 
 To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
 
@@ -440,13 +440,13 @@ public class HomeController : Controller
 
 ### 2.0 Postgres
 
-This connector simplifies using [Npgsql](http://www.npgsql.org/) in an application running on CloudFoundry. You probably will want some understanding of how to use it before proceeding to use the connector.
+This connector simplifies using [Npgsql](http://www.npgsql.org/) in an application running on Cloud Foundry. You probably will want some understanding of how to use it before proceeding to use the connector.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 #### 2.1 Quick Start
 
-This quick start consists of using several ASP.NET Core sample applications to illustrate how to use the Steeltoe Postgres Connector for connecting to a Postgres service on CloudFoundry.
+This quick start consists of using several ASP.NET Core sample applications to illustrate how to use the Steeltoe Postgres Connector for connecting to a Postgres service on Cloud Foundry.
 
 There are two sample applications you can choose from for this quick start:
 
@@ -564,7 +564,7 @@ To use this connector you need to do the following:
 
 * Create and bind a Postgres Service instance to your application.
 * Optionally, configure any Postgres client settings (e.g. `appsettings.json`)
-* Add Steeltoe CloudFoundry config provider to your `ConfigurationBuilder`.
+* Add Steeltoe Cloud Foundry config provider to your `ConfigurationBuilder`.
 * Add `NpgsqlConnection` or `DbContext` to your `IServiceCollection`.
 
 ##### 2.2.1 Add NuGet Reference
@@ -642,8 +642,8 @@ public class Startup {
 If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
 
 
-##### 2.2.3 CloudFoundry 
-When you want to use Postgres on Cloud Foundry and you have installed a Postgres service, you can create and bind a instance of it to your application using the CloudFoundry CLI as follows:
+##### 2.2.3 Cloud Foundry 
+When you want to use Postgres on Cloud Foundry and you have installed a Postgres service, you can create and bind a instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```
 > cf target -o myorg -s myspace
@@ -659,7 +659,7 @@ Note: The commands above assume you are using the Postgres service provided by E
 
 Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
   
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the CloudFoundry configuration provider. 
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider. 
 
 To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
 
@@ -709,7 +709,7 @@ If there are merge conflicts, then the service binding settings will take preced
      }
      public void ConfigureServices(IServiceCollection services)
      {
-         // Add NpgsqlConnection configured from CloudFoundry
+         // Add NpgsqlConnection configured from Cloud Foundry
          services.AddPostgresConnection(Configuration);
  
          // Add framework services.
@@ -830,13 +830,13 @@ public class HomeController : Controller
 ``` 
 
 ### 3.0 RabbitMQ
-This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on CloudFoundry. You probably will want some understanding of how to use it before proceeding to use the connector. 
+This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on Cloud Foundry. You probably will want some understanding of how to use it before proceeding to use the connector. 
                                                                                                        
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 #### 3.1 Quick Start
 
-This quick start consists of using an ASP.NET Core sample application which illustrates how to use the Steeltoe Rabbit Connector for connecting to a RabbitMQ service on CloudFoundry.  
+This quick start consists of using an ASP.NET Core sample application which illustrates how to use the Steeltoe Rabbit Connector for connecting to a RabbitMQ service on Cloud Foundry.  
 
 Specifically it shows how to use a `RabbitMQ.Client` to send and receive messages on the bound RabbitMQ service.
 
@@ -949,7 +949,7 @@ In order to use this Connector you need to do the following:
 
  * Create and bind a Rabbit Service instance to your application.
  * Optionally, configure any Rabbit client settings (e.g. appsettings.json)
- * Add Steeltoe CloudFoundry config provider to your ConfigurationBuilder.
+ * Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
  * Add Rabbit ConnectionFactory to your ServiceCollection.
 
 
@@ -1026,8 +1026,8 @@ public class Startup {
 
 If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
 
-##### 3.2.3 CloudFoundry 
-When you want to use RabbitMQ on Cloud Foundry and you have installed a Rabbit service, you can create and bind an instance of it to your application using the CloudFoundry CLI as follows:
+##### 3.2.3 Cloud Foundry 
+When you want to use RabbitMQ on Cloud Foundry and you have installed a Rabbit service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```
 > cf target -o myorg -s myspace
@@ -1043,7 +1043,7 @@ Note: The commands above assume you are using the Rabbit service provided by Piv
 
 Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
   
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the CloudFoundry configuration provider. 
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider. 
 
 To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
 
@@ -1093,7 +1093,7 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add Rabbit ConnectionFactory configured from CloudFoundry
+        // Add Rabbit ConnectionFactory configured from Cloud Foundry
         services.AddRabbitConnection(Configuration);
 
         // Add framework services.
@@ -1138,7 +1138,7 @@ using RabbitMQ.Client;
 
 ### 4.0 Redis
 
- This connector simplifies using a Microsoft [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or a StackExchange [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis) in an application running on CloudFoundry.
+ This connector simplifies using a Microsoft [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or a StackExchange [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis) in an application running on Cloud Foundry.
 
  In addition to the Quick Start below, there are other Steeltoe sample applications that you can use to help you understand how to make use of this connector:
 * [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore) - sample app illustrating how to make use of the Steeltoe DataProtection Key Storage Provider for Redis.
@@ -1147,7 +1147,7 @@ using RabbitMQ.Client;
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 #### 4.1 Quick Start
-This quick start consists of using a ASP.NET Core sample application to illustrate how to use the Steeltoe Redis Connector for connecting to a Redis service on CloudFoundry. 
+This quick start consists of using a ASP.NET Core sample application to illustrate how to use the Steeltoe Redis Connector for connecting to a Redis service on Cloud Foundry. 
 
 ##### 4.1.1 Get Sample
 
@@ -1258,7 +1258,7 @@ In order to use this connector you need to do the following:
 
 * Create and bind a Redis Service instance to your application.
 * Optionally, configure any Redis client settings (e.g. appsettings.json)
-* Add Steeltoe CloudFoundry config provider to your ConfigurationBuilder.
+* Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
 * Add DistributedRedisCache and/or ConnectionMultiplexer to your ServiceCollection.
 
 ##### 4.2.1 Add NuGet Reference
@@ -1344,9 +1344,9 @@ public class Startup {
 
 If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
 
-##### 4.2.3 CloudFoundry
+##### 4.2.3 Cloud Foundry
 
-When you want to use Redis on Cloud Foundry and you have installed a Redis service, you can create and bind an instance of it to your application using the CloudFoundry CLI as follows:
+When you want to use Redis on Cloud Foundry and you have installed a Redis service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```
 > cf target -o myorg -s myspace
@@ -1362,7 +1362,7 @@ Note: The commands above assume you are using the Rabbit service provided by Piv
 
 Once you have bound the service to the application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
   
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the CloudFoundry configuration provider. 
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider. 
 
 To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
 
@@ -1413,7 +1413,7 @@ If there are merge conflicts, then the service binding settings will take preced
      }
      public void ConfigureServices(IServiceCollection services)
      {
-         // Add Microsoft Redis Cache (IDistributedCache) configured from CloudFoundry
+         // Add Microsoft Redis Cache (IDistributedCache) configured from Cloud Foundry
          services.AddDistributedRedisCache(Configuration);
  
          // Add framework services
@@ -1470,7 +1470,7 @@ public class Startup {
     public void ConfigureServices(IServiceCollection services)
     {
 
-        // Add StackExchange IConnectionMultiplexer configured from CloudFoundry
+        // Add StackExchange IConnectionMultiplexer configured from Cloud Foundry
         services.AddRedisConnectionMultiplexer(Configuration);
 
         // Add framework services
@@ -1514,13 +1514,13 @@ Once you have configured and added the `ConnectionMultiplexer` to the service co
 
 ### 5.0 OAuth
 
-This connector simplifies using CloudFoundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)).
+This connector simplifies using Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)).
 
-It exposes the CloudFoundry OAuth service configuration data as inject-able `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [CloudFoundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
+It exposes the Cloud Foundry OAuth service configuration data as inject-able `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [Cloud Foundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
 
 #### 5.1 Quick Start
 
-This quick start consists of an ASP.NET Core sample app illustrating how to use the OAuth Connector to expose the binding information provided by the CloudFoundry UAA Server.
+This quick start consists of an ASP.NET Core sample app illustrating how to use the OAuth Connector to expose the binding information provided by the Cloud Foundry UAA Server.
 
 ##### 5.1.1 Get Sample
 
@@ -1537,7 +1537,7 @@ To set this up, we need to create a CUPS service the will provide the appropriat
 
 To do this, you should use the provided `oauth.json` file when creating your CUPS service. 
 
-Note, BEFORE proceeding you will need to edit its contents to match your CloudFoundry configuration.
+Note, BEFORE proceeding you will need to edit its contents to match your Cloud Foundry configuration.
 
 ```
 > # Target and org and space in Cloud Foundry
@@ -1615,7 +1615,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
  * `OAuth.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.OAuth`
  * `Program.cs` - Code added to read the `--server.urls` command line
  * `Startup.cs` - Code added to the `ConfigureServices()` method to add a `OAuthServiceOptions` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry UAA configuration values when pushed to Cloud Foundry.
- * `HomeController.cs` - Code added for injection of a `OAuthServiceOptions` into the Controller. The `OAuthServiceOptions` contains the binding information from CloudFoundry.
+ * `HomeController.cs` - Code added for injection of a `OAuthServiceOptions` into the Controller. The `OAuthServiceOptions` contains the binding information from Cloud Foundry.
  * `OAuthOptions.cshtml` - The view used to display the OAuth data.
 
 #### 5.2 Usage
@@ -1624,13 +1624,13 @@ You should have a good understanding of how the new .NET [Configuration service]
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
 
-You probably will want some understanding of CloudFoundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) before starting to use this connector.
+You probably will want some understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) before starting to use this connector.
 
 In order to use this Connector you need to do the following:
 
  * Create and bind a OAuth service instance to your application.
  * Configure any additional settings the OAuth connector will need. (Optional)
- * Add Steeltoe CloudFoundry configuration provider to your ConfigurationBuilder.
+ * Add Steeltoe Cloud Foundry configuration provider to your ConfigurationBuilder.
  * Add OAuth connector to your ServiceCollection.
  * Access the OAuth service options.
 
@@ -1654,7 +1654,7 @@ Add the connector to your project using the following `PackageReference`:
 
 Typically you do not need to configure any additional settings for the connector.  
 
-But, sometimes it might be necessary when running on CloudFoundry and you are using self-signed certificates.  In that case, you might need to disable certificate validation.
+But, sometimes it might be necessary when running on Cloud Foundry and you are using self-signed certificates.  In that case, you might need to disable certificate validation.
 
 Here is an example on how to do that.
 
@@ -1679,15 +1679,15 @@ Here is an example on how to do that.
 }
 ```
 
-##### 5.2.3 CloudFoundry
+##### 5.2.3 Cloud Foundry
 
-There are multiple ways in which you can setup OAuth services on CloudFoundry. 
+There are multiple ways in which you can setup OAuth services on Cloud Foundry. 
 
 In the quick start above, we used a CUPS based service to define a direct binding to the Cloud Foundry UAA server. Alternatively, you can also make use of the [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) product to provision a OAuth service binding. The process that you follow in creating service binding varies for each of the approaches. 
 
 Regardless of which you choose, once you have bound the OAuth service to the application, the OAuth service settings will have been made available and setup in `VCAP_SERVICES` .
 
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the CloudFoundry configuration provider. 
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider. 
 
 To do that, simply to add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`. Here is an example:
 

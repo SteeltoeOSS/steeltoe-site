@@ -6,7 +6,7 @@ tags:
 
 Steeltoe is an [open source project](https://github.com/SteeltoeOSS) aimed at taking the tremendously useful set of tools from Netflix and others and making them available to the .NET community. It was built to work with .NET Core as well as .NET 4.x.  Additionally, most of these components work stand-alone (e.g., on  your local computer) as well as on Cloud Foundry, the leading multi-cloud application platform. 
 
-Steeltoe builds on Spring Cloud by providing several packages that enable .NET developers to leverage the tools developers can use to build some of the common patterns (e.g. centralized configuration management, service discovery, circuit breakers, etc. ) found in highly scalable, resilient distributed systems. Using Steeltoe, together with Spring Cloud, developers are able to quickly standup micro-services and applications that implement these patterns. 
+Steeltoe builds on Spring Cloud by providing several packages that enable .NET developers to leverage the tools developers can use to build some of the common patterns (e.g. centralized configuration management, service discovery, circuit breakers, etc. ) found in highly scalable and resilient distributed systems. Using Steeltoe, together with Spring Cloud, developers are able to quickly standup micro-services and applications that implement these patterns. 
 
 Steeltoe provides services that can be categorized into two broad categories.
 
@@ -58,11 +58,11 @@ Below is an example NuGet.config file you can edit and use when developing appli
 
 For many of the Steeltoe services, we provide a Quick Start sample and guide that describe how to quickly get a sample application up and running using a particular Steeltoe service. A detailed break down of the sample code is provided, describing how the Steeltoe service has been integrated into the app.
 
-In many cases, these guides provide two ways of exercising the applications; one that describes how to create and run the application locally on your development machine, and a second that describes getting the application up and running on CloudFoundry. 
+In many cases, these guides provide two ways of exercising the applications; one that describes how to create and run the application locally on your development machine, and a second that describes getting the application up and running on Cloud Foundry. 
 
 For the Quick Starts in which we run the application locally, we will at times make use of Java in order to run instances of the dependent servers (e.g. Config Server, Eureka Server, etc.) locally on your machine. As such if you don't have Java available on your machine you might want to install that now.  
 
-For the Quick Starts in which we make use of CloudFoundry, you will need to acquire access to a CloudFoundry environment and also an environment which has the appropriate services (e.g. Config Server, Eureka, etc) installed. One possible source is [PCF Dev](https://docs.pivotal.io/pcf-dev/); depending on your desktop operating system and its configuration, you may or may not be able to make use of it.  PCF Dev uses Virtual Box, and depending on what other virtualization you are using or have installed, PCF Dev may or may not work for you.  
+For the Quick Starts in which we make use of Cloud Foundry, you will need to acquire access to a Cloud Foundry environment and also an environment which has the appropriate services (e.g. Config Server, Eureka, etc) installed. One possible source is [PCF Dev](https://docs.pivotal.io/pcf-dev/); depending on your desktop operating system and its configuration, you may or may not be able to make use of it.  PCF Dev uses Virtual Box, and depending on what other virtualization you are using or have installed, PCF Dev may or may not work for you.  
 
 Also, when working with Cloud Foundry, you will also need to install the [Cloud Foundry Command Line Interface (CLI)](https://github.com/cloudfoundry/cli/releases) in order to interact with the runtime. 
 
@@ -76,7 +76,7 @@ In doing all of the Quick Starts, you will need the GIT command line tools insta
 Steeltoe has implemented a [Eureka 1.0 client](https://github.com/Netflix/eureka/wiki), not a 2.0 client. Eureka 2.0 is expected to have significant updates to its architecture and public API. At some point in time, we will examine a 2.0 implementation.
 
 ##### Eureka AWS Support 
-The Eureka client for Java contains features which enable operation on AWS.  The Steeltoe version does not currently implement those features, and instead, this version has been optimized for CloudFoundry environments. We will look at adding AWS cloud features at a future point in time.
+The Eureka client for Java contains features which enable operation on AWS.  The Steeltoe version does not currently implement those features, and instead, this version has been optimized for Cloud Foundry environments. We will look at adding AWS cloud features at a future point in time.
 
 ##### Eureka Client Configuration
 Not all configuration properties found in the Java client are available for configuration. Those that are supported and provided by the Steeltoe implementation have been documented within.

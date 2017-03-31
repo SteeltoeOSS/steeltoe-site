@@ -66,7 +66,7 @@ If you are using Pivotal Cloud Foundry (PCF), you can obtain this from the `Ops 
 
 Next you will need to add a new `user` and `group` to the UAA Server database. 
 
-Do NOT change the group name: `testgroup` as that is used for policy based authorization in the quick start sample. Of course you can change the username and password to anything you would like.
+Do *not* change the group name: `testgroup` as that is used for policy based authorization in the quick start sample. Of course you can change the username and password to anything you would like.
 
 ```
 > # Add group `testgroup`
@@ -92,9 +92,9 @@ To do this you can use the line below, but you must replace the `YOUR-CLOUDFOUND
 
 Last, you will need to create a CUPS based service which will be used to provide the appropriate UAA server configuration data to the application.
 
-You should use the provided `credentials.json` file when creating the CUPS service, but you will FIRST need to edit it and replace the `YOUR-CLOUDFOUNDRY-SYSTEM-DOMAIN` with your Cloud Foundrys setup domain. 
+You should use the provided `credentials.json` file when creating the CUPS service, but you will FIRST need to edit it and replace the `YOUR-CLOUDFOUNDRY-SYSTEM-DOMAIN` with your Cloud Foundry setup domain. 
 
-Once done do the following:
+Once complete, do the following:
 
 ```
 > cf target -o myorg -s development
@@ -667,7 +667,7 @@ See the Microsoft documentation on  [ASP.NET Core Security](https://docs.asp.net
 
  Here is an example, used in a `webapi` controller illustrating how to use the security attributes:
 
- ```
+```
 using Microsoft.AspNetCore.Authentication;
 ....
 
