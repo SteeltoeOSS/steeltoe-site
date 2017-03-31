@@ -64,29 +64,36 @@ title: Steeltoe
             </div>
             <div class="terminal-body">
               <div class="code-snippet" id="bsod-terminal">
-                        <pre class="pb2 m0"><code class="c# m0">  public class FortuneService : IFortuneService
-    {
-        DiscoveryHttpClientHandler _handler;
+                        <pre class="pb2 m0"><code class="c# m0">
+  public void ConfigureServices(IServiceCollection services) 
+  { 
+    ...
+    services.AddDiscoveryClient(Configuration);
+    ...
+  }  
+  public class FortuneService : IFortuneService
+  {
+      DiscoveryHttpClientHandler _handler;
 
-        private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+      private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
 
-        public FortuneService(IDiscoveryClient client)
-        {
-            _handler = new DiscoveryHttpClientHandler(client);
-        }
+      public FortuneService(IDiscoveryClient client)
+      {
+          _handler = new DiscoveryHttpClientHandler(client);
+      }
 
-        public async Task<string> RandomFortuneAsync()
-        {
-            var client = GetClient();
-            return await client.GetStringAsync(RANDOM_FORTUNE_URL);
-        }
+      public async Task<string> RandomFortuneAsync()
+      {
+          var client = GetClient();
+          return await client.GetStringAsync(RANDOM_FORTUNE_URL);
+      }
 
-        private HttpClient GetClient()
-        {
-            var client = new HttpClient(_handler, false);
-            return client;
-        }
-    }</code></pre>
+      private HttpClient GetClient()
+      {
+          var client = new HttpClient(_handler, false);
+          return client;
+      }
+  }</code></pre>
               </div>
             </div>
           </div>
@@ -178,7 +185,13 @@ title: Steeltoe
             </div>
             <div class="terminal-body">
               <div class="code-snippet" id="pipes-terminal">
-                <pre class="pb2 m0"><code class="c# m0"> services.AddMySqlConnection(Configuration);
+                <pre class="pb2 m0"><code class="c# m0"> 
+ public void ConfigureServices(IServiceCollection services) 
+ { 
+   ...
+   services.AddMySqlConnection(Configuration);
+   ...
+ }
  ...
  public IActionResult MySqlData(
         [FromServices] MySqlConnection dbConnection)

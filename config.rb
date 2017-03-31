@@ -11,7 +11,12 @@ page '/*.txt', layout: false
 
 activate :sprockets
 set :markdown_engine, :redcarpet
-set :markdown, :fenced_code_blocks => true, :smartypants => true
+set :markdown,
+      fenced_code_blocks: true,
+      smartypants: true,
+      with_toc_data: true,
+      tables: true,
+      xhtml: true
 
 # With alternative layout
 # page "/path/to/file.html", layout: :otherlayout
@@ -30,14 +35,6 @@ end
 activate :blog do |blog|
   blog.name = "docs"
   blog.prefix = "docs"
-  blog.sources = "{title}.html"
-  blog.permalink = "{title}.html"
-  blog.layout = "documentation"
-end
-
-activate :blog do |blog|
-  blog.name = "library"
-  blog.prefix = "library"
   blog.sources = "{title}.html"
   blog.permalink = "{title}.html"
   blog.layout = "documentation"
@@ -64,6 +61,22 @@ helpers do
     is_lib = current_page.url.include? "library"
     (is_docs || is_lib) ? "active" : ""
   end
+
+  def table_of_contents(page)
+    if config.markdown_engine == :redcarpet && config.markdown[:with_toc_data]
+      renderer = Redcarpet::Markdown.new(Redcarpet::Render::HTML_TOC,
+                                         fenced_code_blocks: true,
+                                         xhtml: true)
+      file = ::File.read(page.source_file)
+      tocpre = '<nav>'
+      tocpost = '</nav>'
+      # ignore YAML frontmatter
+      file = file.gsub(/^(---\s*\n.*?\n?)^(---\s*$\n?)/m, '')
+      file = file.gsub(' & ', ' &amp; ')
+      renderer.render(file)
+    end
+  end
+
 end
 
 # Build-specific configuration

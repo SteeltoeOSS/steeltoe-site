@@ -1,6 +1,6 @@
-//= require highlight.min
-//= require particles.min
-//= require svg-injector.min
+//= require vendor/highlight.min
+//= require vendor/particles.min
+//= require vendor/svg-injector.min
 
 document.addEventListener("DOMContentLoaded", function() {
   var codeSnippets = document.querySelectorAll('.code-snippet code');
@@ -23,5 +23,4 @@ document.addEventListener("DOMContentLoaded", function() {
   drawParticles();
   injectSVgs();
   highlightCodeSnippets();
-
 });

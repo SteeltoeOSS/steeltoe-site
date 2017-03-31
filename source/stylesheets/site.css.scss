@@ -187,6 +187,7 @@ body.docs {
   code {
     background: #f7f7f7;
     font-size: 85%;
+    word-break: break-word;
   }
 
   pre {
@@ -214,4 +215,66 @@ body.docs {
     background: linear-gradient(to right, rgba(221,221,221,.185) 0%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dddddd', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 */
   }
+}
+
+$sel: '.toc-link ul';
+@for $i from 0 through 10 {
+  $sel: if($i == 0, "ul", selector-nest($sel, "ul")) !global;
+
+  #{$sel} li a {
+      padding-left: 10px * ($i + 1);
+  }
+}
+
+.toc-link {
+  ul {
+    @extend .list-reset;
+    @extend .my1;
+  }
+
+  ul li {
+    @extend .mb1;
+  }
+
+  ul li.active-toc-link > a {
+    box-shadow: inset 2px 0 0 $ms-blue;
+    opacity: 1;
+  }
+
+  ul a {
+    display: block;
+    @extend .text-decoration-none;
+    @extend .color-inherit;
+    @extend .h5;
+    @extend .m0;
+    opacity: .65;
+    transition: all .2s ease-out;
+
+    &:hover {
+      opacity: .95;
+
+    }
+  }
+}
+
+table {
+  border:#ccc 1px solid;
+  border-radius:3px;
+}
+
+table th {
+  padding:21px 25px 22px 25px;
+  border-top:1px solid #fafafa;
+  border-bottom:1px solid #e0e0e0;
+}
+
+table tr {
+  padding-left:10px;
+}
+
+table td {
+  padding:6px;
+  border-top: 1px solid #ffffff;
+  border-bottom:1px solid #e0e0e0;
+  border-left: 1px solid #e0e0e0;
 }
