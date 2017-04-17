@@ -14,7 +14,12 @@ For more information on `VCAP_SERVICES` see the Cloud Foundry [documentation](ht
 
 ### 1.0 MySQL 
 
-This connector simplifies using [Connector/NET](https://dev.mysql.com/doc/connector-net/en/) in an application running on Cloud Foundry. You probably will want some understanding of how to use it before proceeding to use the connector. 
+This connector simplifies using MySql ADO.NET providers in an application running on Cloud Foundry.  
+
+Currently the connector supports the following providers: 
+
+* [Connector/NET](https://dev.mysql.com/doc/connector-net/en/)
+* [MySqlConnector](https://mysql-net.github.io/MySqlConnector/) 
 
 In addition to the Quick Start below, there are several other Steeltoe sample applications that you can refer to in order to help you understand how to make use of this connector:
 
@@ -133,7 +138,7 @@ Each of the samples were created using the .NET Core tooling `mvc` template ( i.
 
 To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
 
- * `MySql.csproj`, `MySqlEF6.csproj`, `MySqlEFCore.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.MySql`
+ * `MySql.csproj`, `MySqlEF6.csproj`, `MySqlEFCore.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.MySql`. Additionally, a `PackageReference` for Oracles MySql provider; `MySql.Data` has been added. If Entity Framework has been used you will see references to those packages as well.
  * `Program.cs` - Code added to read the `--server.urls` command line
  * `Startup.cs` - Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry MySql configuration values when pushed to Cloud Foundry.
  * `HomeController.cs` - Code added for injection of a `MySqlConnection` or `DbContext` into the Controller.  These are used to obtain data from the database and then to display the data.
@@ -167,6 +172,21 @@ Add the connector to your project using the following `PackageReference`:
 ...
 </ItemGroup>
 ```
+In addition to the above, depending on which ADO.NET provider you wish to use, you will need to include references to those providers packages as well. 
+
+For example, if wanting to use Oracles MySql ADO.NET provider, you would add:
+
+```
+<PackageReference Include="MySql.Data" Version= "x.y.z"/>
+```
+
+For the open source MySqlConnector provider, you would add:
+
+```
+<PackageReference Include="MySqlConnector" Version= "x.y.z"/>
+```
+
+If you wish to use Entity Framework providers, you will need to include the appropriate package references as well.
 
 ##### 1.2.2 Configure Settings
 
@@ -440,7 +460,12 @@ public class HomeController : Controller
 
 ### 2.0 Postgres
 
-This connector simplifies using [Npgsql](http://www.npgsql.org/) in an application running on Cloud Foundry. You probably will want some understanding of how to use it before proceeding to use the connector.
+
+This connector simplifies using Postgres ADO.NET providers in an application running on Cloud Foundry.  
+
+Currently the connector supports the following providers: 
+
+*  [Npgsql](http://www.npgsql.org/)
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -582,6 +607,12 @@ Add the connector to your project using the following `PackageReference`:
 ...
 </ItemGroup>
 ```
+
+```
+In addition to the above, you also need to add the ADO.NET provider package reference to your application.
+
+Likewise if you are using the Entity Framework providers.
+
 ##### 2.2.2 Configure Settings
 
 Optionally you can configure the settings the connector will use when setting up the `NpgsqlConnection` to a database. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of Postgres database running elsewhere.  
@@ -964,6 +995,16 @@ Add the connector to your project using the following `PackageReference`:
 <ItemGroup>
 ....
     <PackageReference Include="Steeltoe.CloudFoundry.Connector.Rabbit" Version= "1.0.0"/>
+...
+</ItemGroup>
+```
+
+Also you will need to add to your project the RabbitMQ client using the following `PackageReference`:
+
+```
+<ItemGroup>
+....
+    <PackageReference Include="RabbitMQ.Client" Version= "x.y.z"/>
 ...
 </ItemGroup>
 ```

@@ -91,3 +91,22 @@ Steeltoe client only supports clear text communication with the configuration se
 
 ##### Config Server initiated reload
 Currently reloads must be initiated by the client, Steeltoe has not implemented handlers to listen for server change events.  These changes are expected to be added in the future.
+
+#### 2.3 Connectors
+
+##### MySql Connector
+Starting with version 1.0.1 of Steeltoe, the direct dependency on all of Oracles MySql packages have been removed.  This has allowed the connector to become more flexible in what MySql ADO.NET providers and versions it supports. With this release the connector is able to work with [Oracles MySql Provider](https://dev.mysql.com/downloads/connector/net/) and the open source [MySqlConnector](https://mysql-net.github.io/MySqlConnector/) providers. 
+
+Additionally, as it relates to Entity Framework support, the connector has been updated to support [Oracles Entity Framework Provider](https://dev.mysql.com/downloads/connector/net/) and the open source [Pomelo Entity Framework Provider](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql). 
+
+For more detail on how to use these, see the MySql connectors documentation. Note: This is a BREAKING change, as it now requires that you MUST explicitly include which packages and versions you wish to use in your application. 
+
+##### Postgres Connector
+Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source Npgsql package has been removed.  This has allowed the connector to become more flexible in what Postgres ADO.NET providers and versions it supports. 
+
+For more detail on how to use the connector see the Postgres connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include which packages and versions you wish to use in your application. 
+
+##### Rabbit Connector
+Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source RabbitMQ Client package has been removed.  This has allowed the connector to become more flexible in what version of the client it supports. 
+
+For more detail on how to use the connector see the RabbitMQ connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include which package and version you wish to use in your application. 
