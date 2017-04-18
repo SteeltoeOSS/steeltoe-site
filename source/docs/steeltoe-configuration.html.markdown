@@ -4,9 +4,9 @@ date: 2016/5/1
 tags:
 ---
 
-Steeltoe Configuration services build upon the new configuration services provided by .NET. These new services enable developers with the ability to configure an application from multiple different configuration sources using various configuration providers.  Each provider supports reading a set of name-value pairs from different source locations; adding them into a combined multi-level configuration dictionary.
+Steeltoe Configuration builds upon the new .NET configuration API, which enables developers to configure an application with values from multiple sources using various Configuration Providers. Each provider supports reading a set of name-value pairs from different source locations, and adding them into a combined multi-level configuration dictionary.
 
-Each value contained in the configuration is tied to a string typed key or name. The values are organized by key into a hierarchical list of name-value pairs in which the components of the keys are separated by a colon (e.g. spring:application:key = value). 
+Each value contained in the configuration is tied to a string-typed key or name. The values are organized by key into a hierarchical list of name-value pairs in which the components of the keys are separated by a colon (e.g. spring:application:key = value). 
 
 Out of the box, .NET supports the following providers/sources:
 
@@ -15,9 +15,9 @@ Out of the box, .NET supports the following providers/sources:
 * Environment variables
 * Custom providers
 
-To gain a better understanding of the .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation.
+To gain a better understanding of .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation.
 
-Steeltoe Configuration services adds to the above .NET list two additional providers:
+Steeltoe Configuration services adds two additional providers to the above list:
 
  * Cloud Foundry
  * Spring Cloud Config Server
@@ -28,13 +28,13 @@ The following sections go into more more detail on each of these new providers.
 
 This provider enables the standard Cloud Foundry environment variables, `VCAP_APPLICATION`,  `VCAP_SERVICES` and `CF_*` to be parsed and accessed as configuration data within a .NET application. 
 
-These environment variables are used by Cloud Foundry to communicate to an application running inside of its container, the applications environment and configuration information. For example, the values found in `VCAP_APPLICATION` provide information about the applications resource limits, addresses (i.e URLs), and version number among other things. The environment variable `VCAP_SERVICES` provides information about what external services (e.g. Databases, Caches, etc.) the application has been assigned along with the details on how to contact those services.
+These environment variables are used by Cloud Foundry to communicate an application's environment and configuration information to the application running inside a container. More specifically, the values found in `VCAP_APPLICATION` provide information about the application's resource limits, routes (i.e URIs), and version number among other things. The environment variable `VCAP_SERVICES` provides information about what external services (e.g. Databases, Caches, etc.) the application is bound to, along with  details on how to contact those services.
 
-You can read more information on the Cloud Foundry environment variables at the [Cloud Foundry docs](https://docs.cloudfoundry.org/) website.
+You can read more information on the Cloud Foundry environment variables at the [Cloud Foundry docs](http://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html) website.
 
 The Steeltoe CloudFoundry provider supports the following .NET application types:
 
- * ASP.NET - MVC, WebForm, WebAPI, WCF
+ * ASP.NET - MVC, WebForms, WebAPI, WCF
  * ASP.NET Core
  * Console apps (.NET Framework and .NET Core)
  
@@ -55,7 +55,7 @@ You will need access to a Cloud Foundry runtime environment in order to complete
 ##### 1.1.2 Publish Sample
 Use the `dotnet` CLI to build and publish the application to the folder `publish`.  
 
-Note below we show how to publish for all of the target runtimes and frameworks the sample supports.  Just pick one in order to proceed.
+Note: below we show how to publish for all of the target runtimes and frameworks the sample supports.  In order to proceed, choose the appropriate combination for your situation.
 
 ```
 > # Restore all dependencies
@@ -72,10 +72,10 @@ Note below we show how to publish for all of the target runtimes and frameworks 
 ```
 
 ##### 1.1.3 Push Sample 
-Use the Cloud Foundry CLI to target and push the published application to Cloud Foundry.
+Use the Cloud Foundry CLI to target your Cloud Foundry Org and Space. (Replace "myorg" and "myspace" below with the actual names of your org and space.) Then push the published application to Cloud Foundry.
 
 ```
-> cf target -o myorg -s development
+> cf target -o myorg -s myspace
 >
 > # Push to Linux cell
 > cf push -f manifest.yml -p publish
@@ -85,9 +85,9 @@ Use the Cloud Foundry CLI to target and push the published application to Cloud 
 ```
 
 ##### 1.1.4 Observe Logs
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs cloud`)
+To monitor the logs as you start the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs cloud`)
 
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
+On a Linux cell, you should see something like this during startup. On a Windows cell you will see something slightly different.
 
 ```
 2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
@@ -107,7 +107,7 @@ Use the menu at the top of the sample application to see the various outputs pro
 
 You will notice that there is no `VCAP_SERVICES` information. This is due to the fact that you have not bound any Cloud Foundry services to the app. 
 
-To see some service binding information, simply bind any service to the application and then restart it to see what information is exposed. You can follow the instructions on the Cloud Foundry documentation site for details on how to do this.
+To see some service binding information, simply bind any service to the application and then restart it to see what information is exposed. You can follow the instructions on the [Cloud Foundry documentation](http://docs.cloudfoundry.org/devguide/services/application-binding.html) site for details on how to do this.
 
 ##### 1.1.6 Understand Sample
 
@@ -131,7 +131,7 @@ Its recommended that you have a good understanding of how the .NET [Configuratio
 In order to use the Steeltoe Cloud Foundry provider you need to do the following:
 
  * Add NuGet package reference to your project.
- * Add the provider to the Configuration builder.
+ * Add the provider to the Configuration Builder.
  * Configure Cloud Foundry options classes by binding configuration data to the classes.
  * Inject and use the Cloud Foundry Options to access Cloud Foundry configuration data.
 
@@ -152,7 +152,7 @@ Add the provider to your project using the following `PackageReference`:
 
 ##### 1.2.2 Add Configuration Provider
 
-In order to have the Cloud Foundry environment variables parsed and made available in the applications configuration,  you need to add the Cloud Foundry configuration provider to the `ConfigurationBuilder`.  
+In order to parse the Cloud Foundry environment variables and make them available in the application's configuration, you need to add the Cloud Foundry configuration provider to the `ConfigurationBuilder`.  
 
 In an ASP.NET Core application you would normally see this done in the `Startup` class constructor with code like the following:
 
@@ -181,9 +181,9 @@ var instanceId = config["vcap:application:instance_id"]
 ....
 ```
  
-To understand what the full set of keys are for `VCAP_APPLICATION` have a look at the Cloud Foundry documentation on [VCAP_APPLICATION](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-APPLICATION).
+A list of all `VCAP_APPLICATION` keys is available in the [VCAP_APPLICATION](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-APPLICATION) topic of the Cloud Foundry documentation.
 
-You can also access the values from the `VCAP_SERVICES` environment variable settings directly from the configuration as well. For example, to access the information about the first instance of a bound Cloud Foundry service with the name `service-name` you would code the following:
+You can also access the values from the `VCAP_SERVICES` environment variable directly from the configuration as well. For example, to access the information about the first instance of a bound Cloud Foundry service with the name `service-name` you would code the following:
 
 ```
 var config = builder.Build();
@@ -192,7 +192,7 @@ var uri = config["vcap:services:service-name:0:credentials:uri"]
 ....
 ```
 
-To understand what the full set of keys are for `VCAP_SERVICES` have a look at the Cloud Foundry documentation on [VCAP_SERVICES](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES).
+A list of all `VCAP_SERVICES` keys is available in the [VCAP_SERVICES](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES) topic of the Cloud Foundry documentation.
 
 Note: This provider uses the built-in .NET [JSON Configuration Parser](https://github.com/aspnet/Configuration/tree/dev/src/Microsoft.Extensions.Configuration.Json) when parsing the JSON provided in the `VCAP_*` environment variables. As a result, you can expect the exact same key names and behavior as you would see when parsing JSON configuration files in your application.
 
@@ -200,7 +200,7 @@ Note: This provider uses the built-in .NET [JSON Configuration Parser](https://g
 
 Alternatively, instead of accessing the Cloud Foundry configuration data directly from the configuration, you can also make use of the .NET [Options](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) framework together with [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection).  
 
-This provider includes two additional classes, `CloudFoundryApplicationOptions` and `CloudFoundryServicesOptions` that can be configured using the Options framework to hold the parsed `VCAP_*` data by making use of the Options `Configure()` feature.  
+The Cloud Foundry provider includes two additional classes, `CloudFoundryApplicationOptions` and `CloudFoundryServicesOptions`, that can be configured using the Options framework to hold the parsed `VCAP_*` data by making use of the Options `Configure()` feature.  
 
 To make use of it in an ASP.NET Core application, add the the following to the `ConfigureServices()` method in the `Startup` class.
 
@@ -220,13 +220,13 @@ public void ConfigureServices(IServiceCollection services)
 
 The `Configure<CloudFoundryApplicationOptions>(Configuration)` method call uses the Options framework to bind the `vcap:application` configuration values to an instance of `CloudFoundryApplicationOptions`.  
 
-The the `Configure<CloudFoundryServicesOptions>(Configuration)` does the same, but binds the `vcap:services` values to an instance of `CloudFoundryServicesOptions`.  
+The `Configure<CloudFoundryServicesOptions>(Configuration)` does the same, but binds the `vcap:services` values to an instance of `CloudFoundryServicesOptions`.  
 
 Both of these method calls also add these objects to the service container as `IOptions`.
 
-Once this is done you can then gain access to these configuration objects in the Controllers or Views of an application using normal Dependency Injection.  
+Once this is done you can access these configuration objects in the Controllers or Views of an application using normal Dependency Injection.  
 
-Here is an example controller which illustrates how to do this:
+Here is an example controller that illustrates how to do this:
 
 ```
 #using Steeltoe.Extensions.Configuration.CloudFoundry;
