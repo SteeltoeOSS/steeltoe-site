@@ -4,7 +4,7 @@ order: 10
 tags:
 ---
 
-Steeltoe is an [open source project](https://github.com/SteeltoeOSS) aimed at taking the tremendously useful tools from Netflix and others and making them available to the .NET community. It was built to work with .NET Core as well as .NET 4.x.  Additionally, most of these components work stand-alone (e.g., on  your local computer) as well as on Cloud Foundry, the leading multi-cloud application platform. 
+Steeltoe is an [open source project](https://github.com/SteeltoeOSS) aimed at taking the tremendously useful tools from Netflix and others and making them available to the .NET community. It was built to work with .NET Core as well as .NET Framework 4.x.  Additionally, most of these components work stand-alone (e.g., on  your local computer) as well as on Cloud Foundry, the leading multi-cloud application platform. 
 
 Steeltoe builds on Spring Cloud by providing several packages that enable .NET developers to leverage these tools to implement some common patterns (e.g. centralized configuration management, service discovery, circuit breakers, etc. ) found in highly scalable and resilient distributed systems. Using Steeltoe, together with Spring Cloud, developers are able to quickly stand up microservices and applications that implement these patterns. 
 
