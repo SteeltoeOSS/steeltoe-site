@@ -217,14 +217,20 @@ body.docs {
   }
 }
 
-$sel: '.toc-link ul';
-@for $i from 0 through 10 {
-  $sel: if($i == 0, "ul", selector-nest($sel, "ul")) !global;
+.toc-link ul li a {
+  padding-left: 10px; }
 
-  #{$sel} li a {
-      padding-left: 10px * ($i + 1);
-  }
-}
+.toc-link ul ul li a {
+  padding-left: 20px; }
+
+.toc-link ul ul ul li a {
+  padding-left: 30px; }
+
+.toc-link ul ul ul ul li a {
+  padding-left: 40px; }
+
+.toc-link ul ul ul ul ul li a {
+  padding-left: 50px; }
 
 .toc-link {
   ul {
