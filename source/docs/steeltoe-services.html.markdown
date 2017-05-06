@@ -103,14 +103,16 @@ Starting with version 1.0.1 of Steeltoe, the direct dependency on all of Oracle'
 
 Additionally, as it relates to Entity Framework support, the connector has been updated to support [Oracle's Entity Framework Provider](https://dev.mysql.com/downloads/connector/net/) and the open source [Pomelo Entity Framework Provider](https://github.com/PomeloFoundation/Pomelo.EntityFrameworkCore.MySql). 
 
-For more detail on how to use these, see the MySql connector documentation. Note: This is a BREAKING change, as it now requires that you MUST explicitly include which packages and versions you wish to use in your application. 
+For more detail on how to use these, see the MySql connector documentation. Note: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the MySql/Entity framework code you wish to use in your application. 
 
 ##### Postgres Connector
 Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source Npgsql package has been removed.  This has allowed the connector to become more flexible in what Postgres ADO.NET providers and versions it supports. 
 
-For more detail on how to use the connector see the Postgres connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include which packages and versions you wish to use in your application. 
+For more detail on how to use the connector see the Postgres connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the Postgres/Entity framework code wish to use in your application. 
 
 ##### Rabbit Connector
 Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source RabbitMQ Client package has been removed.  This has allowed the connector to become more flexible in what version of the client it supports. 
 
-For more detail on how to use the connector see the RabbitMQ connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include which package and version you wish to use in your application. 
+For more detail on how to use the connector see the RabbitMQ connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the Rabbit code you wish to use in your application. 
+
+Also with this release, the connector has been updated to properly work with SSL/TLS based connections.  Prior to this release, the connector did not support using the 'amqps' URL scheme.
