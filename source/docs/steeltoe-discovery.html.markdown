@@ -1,5 +1,6 @@
 ---
 title: Service Discovery
+order: 30
 date: 2016/4/1
 tags:
 ---
@@ -284,11 +285,11 @@ To get the Steeltoe Discovery client to properly communicate with the Eureka ser
 
 What you provide depends on whether you want your application register a service and whether it will need to discover services to communicate with.
 
-General settings that control the behavior of the client are found under the prefix with the key `eureka:client`. Settings that control registering services are found under the prefix `eureka:instance`. 
+General settings that control the behavior of the client are found under the prefix with the key `eureka:client`. Settings that affect registering services are found under the prefix `eureka:instance`. 
 
-The first table below is a table of settings which control the overall behavior of the client.
+The first table below is a table of settings which control the overall behavior of the client. Note that there are some settings the affect registering as a service as well.
 
-All of these client settings should start with `eureka:client:`. 
+All of these settings should start with `eureka:client:`. 
 
 |Key|Description|
 |------|------|
@@ -313,16 +314,11 @@ All of these client settings should start with `eureka:client:`.
 
 The next table of settings describe those settings you can use to configure the behavior of the client as it relates to registering services.
 
-All of these client settings should start with `eureka:instance:`. 
+All of these settings should start with `eureka:instance:`. 
 
 |Key|Description|
 |------|------|
 |**name**|Name of the application to be registered with eureka, default='spring:application:name' or 'unknown'|
-|**shouldRegisterWithEureka**|Enable or disable registering as a service, defaults = true|
-|**serviceUrl**|Endpoint of Eureka Server, defaults = `http://localhost:8761/eureka`|
-|**validate_certificates**|Enable or disable certificate validation, default = true|
-|**registryFetchIntervalSeconds**|Service fetch interval, default = 30s|
-|**shouldFilterOnlyUpInstances**|Only fetch UP instances, default = true|
 |**port**|Port on which the instance should receive traffic, default = 80|
 |**hostName**|Address on which the instance should receive traffic, default = computed|
 |**instanceId**|Unique Id (within the scope of the appName) of instance registered with eureka, default=`computed`|
