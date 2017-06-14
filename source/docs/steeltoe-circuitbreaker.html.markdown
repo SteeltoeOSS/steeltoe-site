@@ -20,13 +20,13 @@ The Steeltoe Hystrix framework enables application developers to isolate and man
 
 Hystrix maintains its own small fixed size thread-pool from which commands are executed.  When the pool becomes exhausted, Hystrix commands will be immediately rejected, and if provided, a fallback mechanism is executed.  This prevents any single dependency from using up all of the server threads for failing external dependencies.
 
-Each Hystrix command also has the ability to time-out calls which are taking a longer period of time than the threshold provided when configuring the command. If a time-out occurs, the command will automatically execute a fallback mechanism if provided by the developer.
+Each Hystrix command also has the ability to time-out calls which are taking longer than the threshold provided when the command was configured. If a time-out occurs, the command will automatically execute a fallback mechanism if provided by the developer. Developers can configure each command with custom fallback logic that will be executed whenever a command fails, is rejected, times-out or trips the circuit-breaker.
 
 Each command has a built-in configurable circuit-breaker the will stop all requests to failing back-end dependencies when the error percentage passes a threshold. The circuit will remain open for a configurable period of time, and all requests will then be sent to the fallback mechanism until the circuit is closed again. 
 
-Developers can configure each command with custom fallback logic that will be executed whenever a command fails, is rejected, times-out or trips the circuit-breaker.
+Hystrix also provides a means to measure command successes, failures, timeouts, short-circuits, and thread rejections. Statistics are gathered for all of these and can optionally be reported to a [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) for monitoring in real-time.
 
-Hystrix also provides a means to measure command successes, failures, timeouts, short-circuits, and thread rejections. Statistics are gathered for all of these and reported to a [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) for monitoring in real-time.
+All of these features are described in more detail in the upcoming sections. Also, it important to understand that the Steeltoe Hystrix implementation follows the Java implementation closely.  As a result, its very worthwhile to review the [Java documentation](https://github.com/Netflix/Hystrix/wiki) in addition to the sections which follow.
 
 The Steeltoe Hystrix framework supports the following .NET application types:
 
@@ -39,11 +39,11 @@ The Steeltoe Hystrix framework supports the following .NET application types:
 
 #### 1.1 Quick Start
 
-This quick start makes use of two ASP.NET Core applications to illustrate how to use the Steeltoe Hystrix framework and the Hystrix Dashboard. Each application also uses the Steeltoe Discovery client to register and fetch services from an Eureka Server running locally on your development machine. 
+This quick start makes use of two ASP.NET Core applications to illustrate how to use the Steeltoe Hystrix framework and the Hystrix Dashboard. In addition to using Hystrix, each application also uses the Steeltoe Discovery client to register and fetch services from a Eureka Server running locally on your development machine. 
 
-Later on, after you have successfully run the applications locally, the quick start also walks you through how to take that same set of applications and push them to Cloud Foundry and make use of a Eureka Server and Hystrix Dashboard operating there. 
+Later on in the quick start, after you have successfully run the applications locally, the quick start also walks you through taking that same set of applications and pushing them to Cloud Foundry and making use of a Eureka Server and Hystrix Dashboard operating there. 
 
-The application consists of two components; a Fortune-Teller-Service which registers a FortuneService in a running Eureka Server and a Fortune-Teller-UI which discovers the service and uses a Hystrix command to fetch fortunes from it. The Fortune-Teller-UI has also been configured to gather metrics about the command execution and report those metrics to a Hystrix Dashboard.
+The application consists of two components; a Fortune-Teller-Service which registers a FortuneService in a Eureka Server and a Fortune-Teller-UI which discovers the service and uses a Hystrix command to fetch Fortunes from it. The Fortune-Teller-UI has also been configured to gather metrics about the commands execution and to report those metrics to a Hystrix Dashboard.
 
 ##### 1.1.1  Start Eureka Server Locally
 
@@ -58,7 +58,7 @@ In this step, we will fetch a repository from which we can start up a Netflix Eu
 
 ##### 1.1.2  Start Hystrix Dashboard Locally
 
-In this step, we will fetch a repository from which we can start up a Netflix Hystrix Dashboard locally on our desktop. This dashboard has been setup to listen for requests at http://localhost:7979/.  We will use it latter in the Quick start.
+In this step, we will fetch a repository from which we can use to start up a Netflix Hystrix Dashboard locally on your desktop. This dashboard has been setup to listen for requests at http://localhost:7979/.  We will use it later on in the Quick start.
 
 
 ```
@@ -144,7 +144,7 @@ This is the endpoint in the Fortune-Teller-UI that the Steeltoe Hystrix framewor
 
 ##### 1.1.10 Start Eureka Server Cloud Foundry
 
-Starting with this step, we will begin to setup the applications to run on Cloud Foundry. First, we use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eureka Server on Cloud Foundry.
+Starting with this step, we begin to setup the applications to run on Cloud Foundry. First, we use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eureka Server on Cloud Foundry.
 
 ```
 # Target and org and space in Cloud Foundry
@@ -277,25 +277,24 @@ You should see your fortune displayed. Refresh the browser to see a new fortune.
 
 Open a browser and connect to the Pivotal Apps Manager. You will have to use a link that is specific to your Cloud Foundry setup. (e.g. https://apps.system.testcloud.com/)
 
-Follow [these instructions](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix dashboard service on Cloud Foundry.
+Follow [these instructions](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix dashboard on Cloud Foundry.
 
 Go back to the Fortune-Teller-UI application and obtain several fortunes.  Observe the values changing in the Hystrix dashboard.  Click the refresh button on the UI app quickly to see the dashboard update.
 
 ##### 1.1.19 Understand Sample
 
-To understand the changes needed to utilize the Steeltoe Hystrix framework you should have a look at the Fortune-Teller-Ui application. 
+To understand the changes needed to utilize the Steeltoe Hystrix framework you should have a look at the Fortune-Teller-UI application. 
  
 Fortune-Teller-UI was created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ).  
 
 To gain an understanding of the Steeltoe Hystrix related changes to the generated template code, examine the following files:
 
  * `Fortune-Teller-UI.csproj`- Contains `PackageReference` for Steeltoe Hystrix NuGet `Steeltoe.CircuitBreaker.Hystrix`. It also contains references to `S.CB.Hystrix.MetricsStream` when targeting Cloud Foundry or `S.CB.Hystrix.MetricsEvents` when running locally. These last two packages are optional, and are used to expose Hystrix metrics to the dashboard.
- * `Program.cs` - Code added to read the `--server.urls` command line.
- * `appsettings.json` - Contains configuration data to name the Hystrix thread pool (i.e. `FortuneServiceTPool`)  which is used by the `FortuneService` Hystrix command. This name will be visible in the dashboard.
- * `Startup.cs`- Code added to the `ConfigureServices()` method to add a Hystrix command `FortuneService` to the service container. Code was also added to expose Hystrix metrics to the dashboard by calling `AddHystrixMetricsStream()`. Next in the `Configure()` method, code was added to cause the Hystrix Metrics stream to start communicating with the Hystrix dashboard (i.e. `UseHystrixMetricsStream()`) and also, in order to have request level logging and metrics, a Hystrix request context needs to be setup in the pipeline (i.e. `UserHystrixRequestContext()`) for each incoming request. And finally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry.
- * `FortuneService.cs` - Contains code used to fetch a fortune from the Fortune-Teller-Service.  This is the code that implements the Hystrix command which is used to retrieve fortunes.  It has `Run` and `RunFallback` methods which implement the command logic.
+ * `Program.cs` - Code was added to read the `--server.urls` command line.
+ * `appsettings.json` - Contains configuration data to name the Hystrix thread pool (i.e. `FortuneServiceTPool`)  which is used by the `FortuneService` Hystrix command. This name will become visible in the dashboard.
+ * `Startup.cs`- Code was added to the `ConfigureServices()` method to add a Hystrix command `FortuneService` to the service container. Code was also added to expose Hystrix metrics to the dashboard by calling `AddHystrixMetricsStream()`. Next in the `Configure()` method, code was added to cause the Hystrix Metrics stream to start communicating with the Hystrix dashboard (i.e. `UseHystrixMetricsStream()`) and also, in order to use request level logging and metrics, a Hystrix request context needs to be setup in the pipeline (i.e. `UseHystrixRequestContext()`) for each incoming request. And finally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry.
+ * `FortuneService.cs` - Contains the code used to fetch fortunes from the Fortune-Teller-Service.  This is the code that implements the Hystrix command which is used to retrieve fortunes.  It has `Run()` and `RunFallback()` methods which implement the command logic.
  * `HomeController.cs` - Uses the injected Hystrix command `FortuneService` to obtain a random fortune and return it to the browser.
- 
 
 #### 1.2 Usage
 You should have a good understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the Hystrix framework. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the framework.  
@@ -308,11 +307,11 @@ If you plan on using the Hystrix Dashboard, you should also spend time understan
 
 In order to use the Steeltoe framework you need to do the following:
 
- * Add NuGet package references to your project.
+ * Add Hystrix NuGet package references to your project.
  * Define Hystrix command(s).
- * Configure Hystrix Command and Thread Pool settings.
+ * Configure Hystrix command(s) and Thread Pool settings.
  * Add Hystrix command(s) to the container.
- * Use an Hystrix commands to invoke dependent services
+ * Use Hystrix command(s) to invoke dependent services.
  * Add and Use the Hystrix metrics stream service.
 
 
@@ -330,9 +329,9 @@ To use this in your project add the following `PackageReference`:
 ...
 </ItemGroup>
 ```
-Note: Referencing the above package also pulls in the `Steeltoe.CircuitBreaker.Hystrix.Core` package. 
+Note: By referencing the above package, you will also pull in the `Steeltoe.CircuitBreaker.Hystrix.Core` package. 
 
-If you plan on using Hystrix metrics and the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) then you should also include the `Steeltoe.CircuitBreaker.Hystrix.MetricsEvents` package.
+If you plan on using Hystrix metrics and you want to use the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) then you should also include the `Steeltoe.CircuitBreaker.Hystrix.MetricsEvents` package.
 
 To do this include the following `PackageReference` in your application:
 
@@ -373,11 +372,11 @@ public class HelloWorldCommand : HystrixCommand<string>
 }
 ```
 
-Each command needs to inherit from `HystrixCommand` or `HystrixCommand<T>` and override and implement the inherited method `Run()`. Optionally, the command can also override and implement the inherited method  `RunFallback()`. 
+Each command needs to inherit from `HystrixCommand` or `HystrixCommand<T>` and override and implement the inherited protected method `Run()`. Optionally, the command developer can also override and implement the inherited method  `RunFallback()`.  The `Run()` method implements the fundamental logic of the command, and the `RunFallback()` method implements the fallback logic.
 
-Also, each command must be a member of a group.  The group is specified using the `HystrixCommandGroupKeyDefault.AsKey("HelloWorldGroup")` and provided to the constructor.
+Also, each command must be a member of a group.  The group is specified using the `HystrixCommandGroupKeyDefault.AsKey("HelloWorldGroup")` and must be provided in the constructor.
 
-Here is the above command rewritten using the method overrides:
+Below is the command above rewritten using the method overrides:
 
 
 ```
@@ -402,12 +401,12 @@ public class HelloWorldCommand : HystrixCommand<string>
 
 ```
 
-Note that HystrixCommands are state-ful objects and as such once a command has been executed, it can not be reused.  You will have to create another instance of it if you want to execute it again.
+It's important to understand that `HystrixCommands` are state-ful objects and as such once it has been executed, it can no longer be reused.  You will have to create another instance (e.g. `new MyCommand()` ) of it if you want to execute it again.
 
 ##### 1.2.3 Command Settings
 Each Hystrix command that you define and use can be individually configured using normal .NET configuration services. Everything from thread-pool sizes and command time-outs to circuit-breaker thresholds can be specified.
  
-For each Hystrix setting that can be made, there are four levels of precedence that are followed and applied:
+For each Hystrix setting, there are four types of settings and levels of precedence that are followed and applied by the framework:
 
 1. `Fixed global command settings` - these are defaults for all Hystrix commands. These settings will be used if nothing else is specified.
 2. `Configured global command settings` - these are defaults specified in configuration files that override the fixed values above and apply to all Hystrix commands.
@@ -512,24 +511,24 @@ Example: `hystrix:command:foobar:threadPoolKeyOverride=FortuneServiceTPool`
 
 ##### 1.2.4 Thread Pool Settings
 
-In addition to configuring the settings for Hystrix commands, you can also configure the settings Steeltoe Hystrix will use in creating and managing its thread pools.
+In addition to configuring the settings for Hystrix commands, you can also configure settings Steeltoe Hystrix will use in creating and managing its thread pools.
 
 In most cases, you will be able to take the defaults and not have to configure these settings. 
 
-Just like for Hystrix command settings, there are four levels of precedence that are followed and applied:
+Just like for Hystrix command settings, there are four types of settings and levels of precedence that are followed and applied by the framework:
 
 1. `Fixed global pool settings` - these are defaults for all Hystrix pools. These settings will be used if nothing else is specified.
 2. `Configured global pool settings` - these are defaults specified in configuration files that override the fixed values above and apply to all Hystrix pools.
 3. `Pool settings specified in code` - these are settings you specify in the constructor of your Hystrix thread pool. These settings will apply to all commands that are created that reference that pool.
-4. `Configured pool specific settings` - these are settings specified in configuration files that are targeted at named thread pools and  will apply to all commands that are created that reference that pool.
+4. `Configured pool specific settings` - these are settings specified in configuration files that are targeted at named thread pools and will apply to all commands that are created that reference that pool.
 
-All configured Hystrix settings should be placed under the prefix with the key `hystrix:threadpool:`.  
+All configured thread pool settings should be placed under the prefix with the key `hystrix:threadpool:`.  
 
 All configured global settings, as described in #2 above, should be placed under the prefix `hystrix:threadpool:default:`. Here is an example which configures the default number of threads in all thread pools to be 20: `hystrix:threadpool:default:coreSize=20`
 
 If you wish to configure the settings for a thread pool in code, you will have to make use of the [`HystrixThreadPoolOptions`](https://github.com/SteeltoeOSS/CircuitBreaker/blob/master/src/Steeltoe.CircuitBreaker.Hystrix.Core/HystrixThreadPoolOptions.cs) type found in the `Steeltoe.CircuitBreaker.Hystrix.Core` package. More information on how to use this type and configure thread pool settings will follow in later sections.
 
-All configured pool specific settings, as described in #4 above, should be placed under the prefix `hystrix:threadpool:HYSTRIX_THREADPOOL_KEY:`, where `HYSTRIX_THREADPOOL_KEY` is the "name" of the thread pool. Here is an example which configures the number of threads for the Hystrix thread pool with the "name"=foobar to be 40:
+All configured pool specific settings, as described in #4 above, should be placed under the prefix `hystrix:threadpool:HYSTRIX_THREADPOOL_KEY:`, where `HYSTRIX_THREADPOOL_KEY` is the "name" of the thread pool. Note that the default name of the thread pool used by a command, if not overridden, will be the command group name applied to the command. Here is an example which configures the number of threads for the Hystrix thread pool with the "name"=foobar to be 40:
 `hystrix:threadpool:foobar:coreSize=40`
 
 The following tables specify all of the possible settings.  
@@ -608,7 +607,7 @@ public class Startup {
         var builder = new ConfigurationBuilder()
             .SetBasePath(env.ContentRootPath)
             
-            // Read in Discovery clients configuration
+            // Read in Hystrix configuration
             .AddJsonFile("appsettings.json")
             .AddEnvironmentVariables();
 
@@ -654,9 +653,9 @@ public class Startup {
     ....
 ```
 
-There is one requirement you must follow if you wish to use the `AddHystrixCommand()` extension methods. When you define your HystrixCommand, you need to make sure you define a public constructor for your command in which the first argument is a `IHystrixCommandOptions`. (i.e. `HystrixCommandOptions`).  You don't need to create or populate the contents `IHystrixCommandOptions`; instead the extension method will do that for you by using the configuration data you provide in the method call.
+There is one important requirement you must follow if you wish to use the `AddHystrixCommand()` extension methods. When you define your HystrixCommand, you need to make sure you define a public constructor for your command and the first argument must be a `IHystrixCommandOptions`. (i.e. `HystrixCommandOptions`).  You don't need to create or populate the contents `IHystrixCommandOptions`; instead the `AddHystrixCommand()` extension method will do that for you by using the configuration data you provide in the method call.
 
-Here is an example illustrating how to define a compatible constructor.  Notice that `FortuneService` inherits from `HystrixCommand<string`, so thereby its a command which returns results of type `string`.  Notice the constructor has as a first argument `IHystrixCommandOptions` and also note you can add additional constructor arguments.
+Here is an example illustrating how to define a compatible constructor.  Notice that `FortuneService` inherits from `HystrixCommand<string>`; its a command which returns results of type `string`.  Notice that the constructor has, as a first argument, `IHystrixCommandOptions` and also note you can add additional constructor arguments; but the first must be a `IHystrixCommandOptions`.
 
 ```
 public class FortuneService : HystrixCommand<string>, IFortuneService
@@ -671,7 +670,9 @@ public class FortuneService : HystrixCommand<string>, IFortuneService
 
 ##### 1.2.7 Use Commands
 
-If you have used the `AddHystrixCommand()` extension methods described earlier, then all you need to do to get an instance of the command in your controllers or views is to add the command as an argument in the constructor. Here is an example controller that makes use of a Hystrix command `IFortuneService` which was added to the container using `AddHystrixCommand<IFortuneService, FortuneService>("FortuneService", Configuration)`.  The controller uses the `RandomFortuneAsync()` method on the injected command to retrieve a fortune.
+If you have used the `AddHystrixCommand()` extension methods described earlier, then all you need to do to get an instance of the command in your controllers or views is to add the command as an argument in the constructor. 
+
+Here is an example controller that makes use of a Hystrix command `IFortuneService` which was added to the container using `AddHystrixCommand<IFortuneService, FortuneService>("FortuneService", Configuration)`.  The controller uses the `RandomFortuneAsync()` method on the injected command to retrieve a fortune.
 
 ```
 public class HomeController : Controller
@@ -698,7 +699,7 @@ public class HomeController : Controller
 }
 ```
 
-Below is the definition of the Hystrix command used above. As you can see, the `FortuneService` class is a Hystrix command and is intended to be used in retrieving Fortunes from a Fortune micro-service. The micro-service will have been registered under the name `fortuneService` and the command makes use of the Steeltoe Eureka client for service lookup.
+Below is the definition of the Hystrix command used above. As you can see, the `FortuneService` class is a Hystrix command and it is intended to be used in retrieving Fortunes from a Fortune micro-service. The micro-service will have been registered under the name `fortuneService` and the command makes use of the Steeltoe Eureka client for service discovery.
 
 ```
 using Pivotal.Discovery.Client;
@@ -741,28 +742,29 @@ public class FortuneService : HystrixCommand<string>, IFortuneService
 }
 ```
 
-First, notice that the `FortuneService` constructor takes a `IHystrixCommandOptions` as a parameter. This is the configuration used by the command and has been populated with configuration data read during `Startup`. 
+First, notice above that the `FortuneService` constructor takes a `IHystrixCommandOptions` as a parameter. This is the command configuration that is used by the command and has been previously populated with configuration data read during `Startup`. 
 
-Second, notice the two protected methods `Run()` and `RunFallback()`. These are the worker methods for the command and ultimately does the work the Hystrix command is intended to do. The `Run()` method uses a `HttpClient` to make a REST request of the Fortune micro-service returning the result as a string.  The `RunFallback()` method just returns a hard coded fortune. 
-The controller code simply invokes the async method `RandomFortuneAsync()` to start command execution. 
+Second, notice the two protected methods `Run()` and `RunFallback()`. These are the worker methods for the command and they ultimately do the work the Hystrix command is intended to do. The `Run()` method uses a `HttpClient` to make a REST request of the Fortune micro-service returning the result as a string.  The `RunFallback()` method just returns a hard coded fortune.
 
-You have multiple ways in which you can cause commands to execute and obtain its result. 
+To invoke the command, the controller code simply invokes the async method `RandomFortuneAsync()` to start command execution. 
 
-To execute a command synchronously you can make use of the commands `Execute()` method,
+You have multiple ways in which you can cause commands to begin executing. 
+
+To execute a command synchronously you can make use of the commands `Execute()` method:
 
 ```
 var command = new FortuneService(....);
 string result = command.Execute();
 ```
 
-To execute a command asynchronously, you should use the `ExecuteAsync()` method,
+To execute a command asynchronously, you can make use of the `ExecuteAsync()` method:
 
 ```
 var command = new FortuneService(....);
 string result = await command.ExecuteAsync();
 ```
 
-You can also use Rx.NET extensions and observe the results of a command by using the `Observe()` method.  The `Observe()` method returns a `hot` observable which has already started command execution.
+You can also use Rx.NET extensions and observe the results of a command by using the `Observe()` method.  The `Observe()` method returns a `hot` observable which will have already started execution.
 
 ```
 var command = new FortuneService(....);
@@ -770,7 +772,7 @@ IObservable<string> observable = command.Observe();
 string result = await observable.FirstOrDefaultAsync();
 ```
 
-Alternatively, you can use the `ToObservable()` method to return a `cold` observable of the command.  When you `Subscribe()` to it, the underlying command will begin execution at that point and the results will be made available in the Observers `OnNext(result)` method.
+Alternatively, you can use the `ToObservable()` method to return a `cold` observable of the command and will not have started.  Then, when you `Subscribe()` to it, the underlying command will begin execution and the results will be made available in the Observers `OnNext(result)` method.
 
 ```
 var command = new FortuneService(....);
@@ -779,25 +781,27 @@ IDisposable subscription = cold.Subscribe( (result) => { Console.WriteLine(resul
 ```
  
 ##### 1.2.8 Use Metrics
-As HystrixCommands execute, they generate metrics on execution outcomes, latency and thread pool usage. This information can be very useful in monitoring and managing your applications. The Hystrix Dashboard allows you to extract and view these metrics in real time.  With Steeltoe, there are currently two dashboards you can choose from. 
+As HystrixCommands execute, they generate metrics and status information on execution outcomes, latency and thread pool usage. This information can be very useful in monitoring and managing your applications. The Hystrix Dashboard enables you to extract and view these metrics in real time.  
+
+With Steeltoe, there are currently two dashboards you can choose from. 
 
 The first is the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard). This dashboard is appropriate when you are not using or running your application on Cloud Foundry.  For example, when you are developing and testing your application locally on your desktop.
 
 The second is the [Spring Cloud Services Hystrix Dashboard](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/).  This dashboard is part of the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-3/common/) tile and is made available to applications via the normal service instance binding mechanisms on Cloud Foundry.
 
-Note, as described in the *Add NuGet References* section above, depending on which dashboard you are targeting, you will need to make sure you include the right Steeltoe NuGet into your project. 
+Note, as described in the *Add NuGet References* section above, depending on which dashboard you are targeting, you will need to make sure you include the correct Steeltoe NuGet in your project. 
 
-The `Steeltoe.CircuitBreaker.Hystrix.MetricsEvents` package should be used when targeting the Netflix Hystrix Dashboard. When added to your app, it exposes a new REST endpoint in your application: `/hystrix/hystrix.stream`. This endpoint is used by the dashboard in receiving `SSE` metrics events from your application.
+The `Steeltoe.CircuitBreaker.Hystrix.MetricsEvents` package should be used when targeting the Netflix Hystrix Dashboard. When added to your app, it exposes a new REST endpoint in your application: `/hystrix/hystrix.stream`. This endpoint is used by the dashboard in receiving `SSE` metrics and status events from your application.
 
-The `Steeltoe.CircuitBreaker.Hystrix.MetricsStream` package should be used when targeting the Spring Cloud Services Hystrix Dashboard. When added to your app, it starts up a background thread and uses messaging to push the metrics to the dashboard.
+The `Steeltoe.CircuitBreaker.Hystrix.MetricsStream` package should be used when targeting the Spring Cloud Services Hystrix Dashboard. When added to your app, it starts up a background thread and uses messaging to push the metrics to the bound dashboard.
 
-In order to enable your application to emit metrics using either of these two mechanisms you will have to make three changes to your `Startup` class.
+Regardless of which dashboard/package you choose to use, in order to enable your application to emit metrics and status information you will have to make three changes in your `Startup` class.
 
-* Add Hystrix Metrics stream service to container
+* Add Hystrix Metrics stream service to the container
 * Use Hystrix Request context middleware in pipeline
 * Start Hystrix Metrics stream
 
-To add the metrics stream to the service container, in the `ConfigureService()` method in your `Startup` class, you will need to  use the `AddHystrixMetricsStream()` extension method.
+To add the metrics stream to the service container you will need to use the `AddHystrixMetricsStream()` extension method in the `ConfigureService()` method in your `Startup` class. 
 
 ```
 #using Steeltoe.CircuitBreaker.Hystrix;  
@@ -828,7 +832,11 @@ public class Startup {
     ....
 ```
 
-Once this is done, then you will need to configure a couple Hystrix related items in the request processing pipeline in `Configure()` of the `Startup` class.  First, metrics requires Hystrix Request contexts to be initialized and available to operate. You can enable this by using the Steeltoe extension method `UseHystrixRequestContext()` as shown below. Additionally, to startup the metrics stream service, you need to call the `UseHystrixMetricsStream()` extension method. 
+Next, you will need to configure a couple Hystrix related items in the request processing pipeline. This is done in `Configure()` method of the `Startup` class. 
+
+First, metrics requires that Hystrix Request contexts be initialized and available in every request being processed. You can enable this by using the Steeltoe extension method `UseHystrixRequestContext()` as shown below. 
+
+Additionally, in order to startup the metrics stream service, so that it starts to publish metrics and events, you need to call the `UseHystrixMetricsStream()` extension method.  See the contents of the `Configure()` method below.
 
 ```
 #using Steeltoe.CircuitBreaker.Hystrix;  
@@ -860,9 +868,9 @@ public class Startup {
 ```
 
 ###### 1.2.8.1 Netflix Dashboard
-Once you have made the changes described above, you can make use of the Netflix Hystrix Dashboard by following the instructions below. 
+Once you have made the changes described above, you can then make use of the Netflix Hystrix Dashboard by following the instructions below. 
 
-1. Clone the Hystrix dashboard. (https://github.com/spring-cloud-samples/hystrix-dashboard.git)
+1. Clone a Hystrix dashboard. (https://github.com/spring-cloud-samples/hystrix-dashboard.git)
 2. Go to the cloned directory (`hystix-dashboard`) and fire it up with `mvn spring-boot:run`.
 3. Open a browser and connect to the dashboard. (e.g. http://localhost:7979)
 4. In the first field, enter the endpoint in the application that is exposing the hystrix metrics. (e.g. http://localhost:5555/hystrix/hystrix.stream).
@@ -871,7 +879,7 @@ Once you have made the changes described above, you can make use of the Netflix 
 
 ###### 1.2.8.2 Cloud Foundry Dashboard
 
-When you want to use a Hystrix Dashboard on Cloud Foundry and you have installed Spring Cloud Services, you can create and bind a instance of it to the application using the Cloud Foundry CLI as follows:
+When you want to use a Hystrix Dashboard on Cloud Foundry you must have previously installed Spring Cloud Services. If that has been done, then you can create and bind a instance of the dashboard to the application using the Cloud Foundry CLI as follows:
 
 ```
 > cf target -o myorg -s development
@@ -883,11 +891,11 @@ When you want to use a Hystrix Dashboard on Cloud Foundry and you have installed
 
 For more information on using the Hystrix Dashboard on Cloud Foundry, see the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-3/common/) documentation.
 
-Once you have bound the service to the application, the Hystrix Dashboard settings will become available and be setup in `VCAP_SERVICES`.
+Once you have bound the service to your application, the Hystrix Dashboard settings will become available and be setup in `VCAP_SERVICES`.
 
-In order for the settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.  
+In order for the settings to be picked up and put in the configuration of your application, you have to make use of the Steeltoe Cloud Foundry configuration provider.  
 
-To do that, simply add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`.  Here is an example:
+To do that, simply add a `AddCloudFoundry()` method call to the `ConfigurationBuilder` in your `Startup` class.  Here is an example:
 
 ```
 
@@ -918,7 +926,7 @@ If there are any merge conflicts, then the service binding settings will take pr
 
 Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider.
 
-Once you have performed the steps described above, and you have made the changes described in *Use Metrics* section above, you can make use of the Spring Cloud Services Hystrix Dashboard by following the instructions below:
+Once you have performed the steps described above, and you have made the changes described in *Use Metrics* section above, you can make use of the Spring Cloud Services dashboard by following the instructions below:
 
 1. Open a browser and connect to the Pivotal Apps Manager.  
 2. Follow [these instructions](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix Dashboard service.
