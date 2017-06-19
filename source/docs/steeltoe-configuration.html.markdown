@@ -146,7 +146,7 @@ Add the provider to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundry" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundry" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -471,7 +471,7 @@ In this case add the provider to your project using the following `PackageRefere
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServer" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServer" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -483,7 +483,7 @@ In this case add the provider to your project using the following `PackageRefere
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" Version= "1.0.0"/>
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServer" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -525,6 +525,9 @@ As illustrated above, all settings should start with `spring:cloud:config:`
 |**username**|Username for basic authentication, default = none|
 |**password**|Password for basic authentication, default = none|
 |**failFast**|Enable or Disable failure at startup, default = false|
+|**token**|Hashicorp Vault authentication token, default = none|
+|**tokenTtl**|Hashicorp Vault token renewal TTL, setting valid on CloudFoundry only, default = 300000ms|
+|**tokenRenewRate**|Hashicorp Vault token renewal rate, setting valid on CloudFoundry only, default = 60000ms|
 |**retry:enabled**|Enable or Disable retry logic, default = false|
 |**retry:maxAttempts**|Max retries if retry enabled, default = 6|
 |**retry:initialInterval**|Starting interval, default = 1000ms|

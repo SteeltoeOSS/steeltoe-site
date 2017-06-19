@@ -169,7 +169,7 @@ Add the connector to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.MySql" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.MySql" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -604,7 +604,7 @@ Add the connector to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.PostgreSql" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.PostgreSql" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -995,7 +995,7 @@ Add the connector to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Rabbit" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Rabbit" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -1314,7 +1314,7 @@ Add the connector to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -1687,7 +1687,7 @@ Add the connector to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.OAuth" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.OAuth" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
