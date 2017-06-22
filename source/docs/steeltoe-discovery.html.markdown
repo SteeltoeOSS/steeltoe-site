@@ -339,6 +339,7 @@ All of these settings should start with `eureka:instance:`.
 |**healthCheckUrlPath**|, default=`/healthcheck`|
 |**healthCheckUrl**|Absolute health check page for this instance, default=computed|
 |**secureHealthCheckUrl**|Secured absolute health check page for this instance, default=computed|
+|**preferIpAddress**|Register using IpAddress instead of hostname, default=false|
 
 For a complete understanding of the effects of these settings, we recommend that you review the documentation on the [Netflix Eureka Wiki](https://github.com/Netflix/eureka/wiki). In most cases, unless you are confident you understand the effects of changing the values from their defaults, we recommend you just use the defaults.
 
