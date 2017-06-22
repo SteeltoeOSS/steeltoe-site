@@ -222,7 +222,7 @@ Add the provider to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundry" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundry" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -529,7 +529,7 @@ Add the provider to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundry" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundry" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -825,7 +825,7 @@ Add the provider to your project using the following `PackageReference` in your 
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Security.DataProtection.Redis" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.Security.DataProtection.Redis" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -839,7 +839,7 @@ Add the connector to your project using the following `PackageReference`:
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```

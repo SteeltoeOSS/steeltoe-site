@@ -263,7 +263,7 @@ In this case add the client to your project using the following `PackageReferenc
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Discovery.Client" Version= "1.0.0"/>
+    <PackageReference Include="Steeltoe.Discovery.Client" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -275,7 +275,7 @@ In this case add the client to your project using the following `PackageReferenc
 ```
 <ItemGroup>
 ....
-    <PackageReference Include="Pivotal.Discovery.Client" Version= "1.0.0"/>
+    <PackageReference Include="Pivotal.Discovery.Client" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -339,8 +339,17 @@ All of these settings should start with `eureka:instance:`.
 |**healthCheckUrlPath**|, default=`/healthcheck`|
 |**healthCheckUrl**|Absolute health check page for this instance, default=computed|
 |**secureHealthCheckUrl**|Secured absolute health check page for this instance, default=computed|
+|**preferIpAddress**|Register using IpAddress instead of hostname, default=false|
 
 For a complete understanding of the effects of these settings, we recommend that you review the documentation on the [Netflix Eureka Wiki](https://github.com/Netflix/eureka/wiki). In most cases, unless you are confident you understand the effects of changing the values from their defaults, we recommend you just use the defaults.
+
+In addition to the settings found under the prefix `eureka`, there additional settings under the `spring:cloud:discovery` namespace that affect the Steeltoe clients behavior on Cloud Foundry. The next table explains those settings.  
+
+All of these settings should start with `spring:cloud:discovery:`. 
+
+|Key|Description|
+|------|------|
+|**registrationMethod**|how to register service on Cloud Foundry, can be `route`, `direct`, or `hostname`, default=`route`|
 
 ###### 1.2.2.1 Settings to Discover
 

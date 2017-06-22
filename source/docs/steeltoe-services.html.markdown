@@ -85,6 +85,9 @@ The Eureka client for Java contains features which enable operation on AWS.  The
 ##### Eureka Client Configuration
 Not all configuration properties found in the Java client are available for configuration. Those that are supported and provided by the Steeltoe implementation have been documented within.
 
+##### Cloud Foundry C2C Support
+Starting with version 1.1.0 of Steeltoe, the Steeltoe Eureka client allows you to configure what hostname/address gets registered with the Eureka server for your service registrations.  This is provided by using a new setting, `spring:cloud:discovery:registrationMethod`.  By using this setting, you can now make use of Cloud Foundry Container to Container (C2C) networking support.
+
 #### 2.2 Configuration
 
 ##### Config Server - Unstructured data files
@@ -95,6 +98,12 @@ Steeltoe client only supports clear text communication with the configuration se
 
 ##### Config Server initiated reload
 Currently reloads must be initiated by the client, Steeltoe has not implemented handlers to listen for server change events. However this feature is expected to be added in the future.
+
+##### Config Server Settings
+Starting with version 1.1.0 of Steeltoe, you can now configure the timeout value the Steeltoe client uses when making Http requests of the Config Server.
+
+##### Config Server Vault support
+Starting with version 1.1.0 of Steeltoe, the Config Server client is compatible with Spring Cloud and Spring Cloud Services Config Server deployments which support using Hashicorp Vault as backends. 
 
 #### 2.3 Connectors
 
