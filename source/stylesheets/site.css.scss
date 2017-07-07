@@ -19,12 +19,12 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Karla', $font-family-fallback;
+  font-family: $font-family-fallback; /* 'Karla', */
 }
 
 h1, h2, h3,
 h4, h5, h6 {
-  font-family: 'Poppins', $font-family-fallback;
+  font-family: $font-family-fallback; /* 'Poppins', */
 }
 
 .bg-faint-blue {
