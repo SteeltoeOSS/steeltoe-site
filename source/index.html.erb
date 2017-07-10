@@ -9,14 +9,14 @@ title: Steeltoe
       <div class="clearfix">
         <div class="col sm-col-10 md-col-9">
           <h1 class="h2 sm-h1 white mt0 mb1 text-shadow regular">Cloud-native .NET microservices</h1>
-          <h2 class="h3 white mt0 mb2 sm-mb1 text-shadow regular">Steeltoe is an open source project that enables .NET developers to implement industry standard best practices when building resilient microservices for the cloud. The Steeltoe client libraries enable .NET Core and .NET Framework apps to easily leverage Netflix Eureka, Hystrix, Spring Cloud Config Server, and Cloud Foundry.</h2>
+          <h2 class="h3 white mt0 mb2 sm-mb1 text-shadow regular">Steeltoe is an open source project that enables .NET developers to implement industry standard best practices when building resilient microservices for the cloud. The Steeltoe client libraries enable .NET Core and .NET Framework apps to easily leverage Netflix Eureka, Hystrix, Spring Cloud Config Server, and Cloud Foundry services.</h2>
         </div>
       </div>
       <div class="clearfix sm-mt2">
         <div class="col col-12">
-          <a target="_blank" href="https://github.com/SteeltoeOSS/Samples/blob/master/MusicStore/README.md" class="btn btn-cta center sm-left block sm-inline-block bg-white ms-blue sm-mr1 not-rounded regular">
+          <a target="_blank" href="https://github.com/SteeltoeOSS/Samples/blob/master/README.md" class="btn btn-cta center sm-left block sm-inline-block bg-white ms-blue sm-mr1 not-rounded regular">
             <i class="fa fa-github mr1"></i>
-            View Sample App on GitHub
+            View Sample Apps on GitHub
           </a>
           <a target="_blank" href="http://slack.steeltoe.io/" class="btn btn-cta btn-outline center sm-left block sm-inline-block border-white white mt1 sm-mt0 not-rounded regular">
             <i class="fa fa-slack mr1"></i>
@@ -37,7 +37,7 @@ title: Steeltoe
           <h2 class="regular my0 steel-body muted">01</h2>
           <h1 class="mt0 mb1 steel-heading">Service Discovery</h1>
           <p class="mt0 steel-body">
-            How do you keep track of the services you depend on, as they dynamically scale out and in, changing addresses along the way? A service registry is essentially a database of healthy service instances that enables service consumers to load balance requests from the client side. Steeltoe includes a .NET client for Netflix Eureka so your microservices can register themselves and discover other registered services.
+            How do you keep track of the services you depend on, as they dynamically scale out and in, changing addresses along the way? A service registry is essentially a database of healthy service instances that enables service consumers to locate and load balance requests across services. Steeltoe includes a .NET client for Netflix Eureka so your microservices can register themselves and discover other registered services.
           </p>
         </div>
         <div class="col col-12 sm-col-6 sm-pl4">
@@ -54,7 +54,7 @@ title: Steeltoe
             <h2 class="regular my0 steel-body muted">02</h2>
             <h1 class="mt0 mb1 steel-heading">Config Server</h1>
             <p class="mt0 steel-body">
-              Separating configuration from application code is an important discipline in cloud-native development. Spring Cloud Config Server, provides a mechanism to store your application’s configuration externally, and have it injected into your application at runtime. Steeltoe includes a custom .NET Configuration Provider that utilizes Spring Cloud Config Server to pull in config values stored in Git, the filesystem, or Hashicorp Vault. 
+              Separating configuration from application code is an important discipline in cloud-native development. Spring Cloud Config Server provides a mechanism to store your application’s configuration externally, and have it injected into your application at runtime. Steeltoe includes a custom .NET Configuration Provider that utilizes Spring Cloud Config Server to pull in config values stored in Git, the filesystem, or Hashicorp Vault. 
             </p>
           </div>
           <div class="col col-12 sm-col-6 sm-pr1">
@@ -71,7 +71,7 @@ title: Steeltoe
           <h2 class="regular my0 steel-body muted">03</h2>
           <h1 class="mt0 mb1 steel-heading">Circuit Breaker</h1>
           <p class="mt0 steel-body">
-            What do you do when a service you depend on stops responding? Circuit breakers enable you to bypass a failing service, allowing it time to recover, and preventing your users from seeing a nasty error message. Steeltoe includes a .NET implementation of Netflix Hystrix, a proven circuit breaker implementation with rich metrics and monitoring features.
+            What do you do when a service you depend on stops responding? Circuit breakers enable you to bypass a failing service, allowing it time to recover, and preventing your users from seeing nasty error messages. Steeltoe includes a .NET implementation of Netflix Hystrix, a proven circuit breaker implementation with rich metrics and monitoring features.
           </p>
         </div>
         <div class="col col-12 sm-col-6 sm-pl4">
@@ -105,7 +105,7 @@ title: Steeltoe
           <h2 class="regular my0 steel-body muted">05</h2>
           <h1 class="mt0 mb1 steel-heading">Cloud Security Providers</h1>
           <p class="mt0 steel-body">
-            Securing your applications and microservices using the security services provided by cloud platforms can seem like an impossible and complex development effort.  Steeltoe reduces the effort by including security providers which enable you to easily integrate ASP.NET Core authentication and authorization features with Cloud Foundry security services. 
+            Securing your applications and microservices using the security services provided by cloud platforms can seem like an impossible and complex development effort.  Steeltoe reduces that effort by including security providers which enable you to easily integrate ASP.NET Core authentication and authorization features with Cloud Foundry security services. 
           </p>
         </div>
         <div class="col col-12 sm-col-6 sm-pl4">
