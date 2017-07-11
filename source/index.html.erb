@@ -8,15 +8,15 @@ title: Steeltoe
     <div class="px2 py4">
       <div class="clearfix">
         <div class="col sm-col-10 md-col-9">
-          <h1 class="h2 sm-h1 white mt0 mb1 text-shadow regular">Painless microservice patterns for .NET</h1>
-          <h2 class="h3 white mt0 mb2 sm-mb1 text-shadow regular">For all their benefits, microservice architectures expose many distributed computing problems that traditional monoliths avoided. Steeltoe brings the power of resilient, scalable microservices to .NET developers, without all the headache.</h2>
+          <h1 class="h2 sm-h1 white mt0 mb1 text-shadow regular">Cloud-native .NET microservices</h1>
+          <h2 class="h3 white mt0 mb2 sm-mb1 text-shadow regular">Steeltoe is an open source project that enables .NET developers to implement industry standard best practices when building resilient microservices for the cloud. The Steeltoe client libraries enable .NET Core and .NET Framework apps to easily leverage Netflix Eureka, Hystrix, Spring Cloud Config Server, and Cloud Foundry services.</h2>
         </div>
       </div>
       <div class="clearfix sm-mt2">
         <div class="col col-12">
-          <a target="_blank" href="https://github.com/SteeltoeOSS/Samples/blob/master/MusicStore/README.md" class="btn btn-cta center sm-left block sm-inline-block bg-white ms-blue sm-mr1 not-rounded regular">
+          <a target="_blank" href="https://github.com/SteeltoeOSS/Samples/blob/master/README.md" class="btn btn-cta center sm-left block sm-inline-block bg-white ms-blue sm-mr1 not-rounded regular">
             <i class="fa fa-github mr1"></i>
-            View Sample App on GitHub
+            View Sample Apps on GitHub
           </a>
           <a target="_blank" href="http://slack.steeltoe.io/" class="btn btn-cta btn-outline center sm-left block sm-inline-block border-white white mt1 sm-mt0 not-rounded regular">
             <i class="fa fa-slack mr1"></i>
@@ -36,7 +36,12 @@ title: Steeltoe
         <div class="col col-12 sm-col-6">
           <h2 class="regular my0 steel-body muted">01</h2>
           <h1 class="mt0 mb1 steel-heading">Service Discovery</h1>
-          <p class="mt0 steel-body">How do you make the interactions between your microservices reliable and failure tolerant?  For starters, you need a service registry—basically a phone book for your microservices—so service consumers know exactly where to find healthy service instances. Steeltoe includes a .NET client for Netflix Eureka so your microservices can register themselves and discover other registered services.</p>
+          <p class="mt0 steel-body">
+            How do you keep track of the services you depend on, as they dynamically scale out and in, changing addresses along the way? A service registry is essentially a database of healthy service instances that enables service consumers to locate and load balance requests across services. Steeltoe includes a .NET client for Netflix Eureka so your microservices can register themselves and discover other registered services.
+          </p>
+          <a href="/docs/steeltoe-discovery/" class="btn btn-cta center sm-left block sm-inline-block border-white bg-blue white sm-mr1 not-rounded regular">
+            Learn More
+          </a>
         </div>
         <div class="col col-12 sm-col-6 sm-pl4">
           <img class="svg-illustration" id="service-discovery" src="images/service-discovery.svg" alt="">
@@ -46,108 +51,22 @@ title: Steeltoe
   </div>
   <div class="bg-faint-blue">
     <div class="max-width-4 mx-auto">
-      <div class="px2 py4">
-        <div class="clearfix col-12">
-          <div class="terminal">
-            <div class="terminal-top-bar p1 bg-ms-blue">
-              <ul class="list-reset m0 flex items-center justify-end">
-                <li class="inline-block mr1">
-                  <img src="images/icons/icon-minimize.svg" alt="">
-                </li>
-                <li class="inline-block mr1">
-                  <img src="images/icons/icon-maximize.svg" alt="">
-                </li>
-                <li class="inline-block mr1" data-ee="bsod">
-                  <img src="images/icons/icon-close.svg" alt="">
-                </li>
-              </ul>
-            </div>
-            <div class="terminal-body">
-              <div class="code-snippet" id="bsod-terminal">
-                        <pre class="pb2 m0"><code class="c# m0">
-  public void ConfigureServices(IServiceCollection services) 
-  { 
-    ...
-    services.AddDiscoveryClient(Configuration);
-    ...
-  }  
-  public class FortuneService : IFortuneService
-  {
-      DiscoveryHttpClientHandler _handler;
-
-      private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
-
-      public FortuneService(IDiscoveryClient client)
-      {
-          _handler = new DiscoveryHttpClientHandler(client);
-      }
-
-      public async Task<string> RandomFortuneAsync()
-      {
-          var client = GetClient();
-          return await client.GetStringAsync(RANDOM_FORTUNE_URL);
-      }
-
-      private HttpClient GetClient()
-      {
-          var client = new HttpClient(_handler, false);
-          return client;
-      }
-  }</code></pre>
-              </div>
-            </div>
+      <div class="px2 py2 sm-py4">
+        <section class="clearfix py1 sm-py4">
+          <div class="col col-12 sm-col-6 sm-col-right sm-pl2">
+            <h2 class="regular my0 steel-body muted">02</h2>
+            <h1 class="mt0 mb1 steel-heading">Config Server</h1>
+            <p class="mt0 steel-body">
+              Separating configuration from application code is an important discipline in cloud-native development. Spring Cloud Config Server provides a mechanism to store your application’s configuration externally, and have it injected into your application at runtime. Steeltoe includes a custom .NET Configuration Provider that utilizes Spring Cloud Config Server to pull in config values stored in Git, the filesystem, or Hashicorp Vault. 
+            </p>
+            <a href="/docs/steeltoe-configuration/#2-0-config-server-provider/" class="btn btn-cta center sm-left block sm-inline-block border-white bg-blue white sm-mr1 not-rounded regular">
+              Learn More
+            </a>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="max-width-4 mx-auto">
-    <div class="px2 py2 sm-py4">
-      <section class="clearfix py1 sm-py4">
-        <div class="col col-12 sm-col-6 sm-col-right sm-pl2">
-          <h2 class="regular my0 steel-body muted">02</h2>
-          <h1 class="mt0 mb1 steel-heading">Config Server</h1>
-          <p class="mt0 steel-body">
-            <em>“Strict separation of config from code”</em> has become a cloud <a class="steel-body" href="https://12factor.net/config" target="_blank">mandate</a>, but that begs the question, where do you put it? And once you’ve externalized your config from your app, how do you track who changed what, when? Steeltoe leverages Spring Cloud Config Server so you can store your app’s config in a centralized, version-controlled <code>git</code> repo and then load it at runtime.
-          </p>
-        </div>
-        <div class="col col-12 sm-col-6 sm-pr1">
-          <img class="svg-illustration" id="external-configuration" src="images/external-configuration.svg" alt="">
-        </div>
-      </section>
-    </div>
-  </div>
-  <div class="bg-faint-blue">
-    <div class="max-width-4 mx-auto">
-      <div class="px2 py4">
-        <div class="clearfix col-12">
-          <div class="terminal">
-            <div class="terminal-top-bar p1 bg-ms-blue">
-              <ul class="list-reset m0 flex items-center justify-end">
-                <li class="inline-block mr1">
-                  <img src="images/icons/icon-minimize.svg" alt="">
-                </li>
-                <li class="inline-block mr1">
-                  <img src="images/icons/icon-maximize.svg" alt="">
-                </li>
-                <li class="inline-block mr1" data-ee="launch">
-                  <img src="images/icons/icon-close.svg" alt="">
-                </li>
-              </ul>
-            </div>
-            <div class="terminal-body">
-               <div class="code-snippet" id="launch-terminal">
-                 <pre class="pb2 m0"><code class="c# m0"> var builder = new ConfigurationBuilder()
-                  .SetBasePath(env.ContentRootPath)
-                  .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                  .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                  .AddEnvironmentVariables()
-                  .AddConfigServer(env);
-              Configuration = builder.Build();</code></pre>
-               </div>
-            </div>
+          <div class="col col-12 sm-col-6 sm-pr1">
+            <img class="svg-illustration" id="external-configuration" src="images/external-configuration.svg" alt="">
           </div>
-        </div>
+        </section>
       </div>
     </div>
   </div>
@@ -156,94 +75,86 @@ title: Steeltoe
       <section class="clearfix py1 sm-py4">
         <div class="col col-12 sm-col-6">
           <h2 class="regular my0 steel-body muted">03</h2>
-          <h1 class="mt0 mb1 steel-heading">Cloud Connectors</h1>
-          <p class="mt0 steel-body">Steeltoe automatically wires up common backing services like Redis, RabbitMQ, MySQL and Postgres because no microservice is an island. And because it was built by Pivotal, Steeltoe integrates elegantly with Cloud Foundry.</p>
+          <h1 class="mt0 mb1 steel-heading">Circuit Breaker</h1>
+          <p class="mt0 steel-body">
+            What do you do when a service you depend on stops responding? Circuit breakers enable you to bypass a failing service, allowing it time to recover, and preventing your users from seeing nasty error messages. Steeltoe includes a .NET implementation of Netflix Hystrix, a proven circuit breaker implementation with rich metrics and monitoring features.
+          </p>
+            <a href="/docs/steeltoe-circuitbreaker/" class="btn btn-cta center sm-left block sm-inline-block border-white bg-blue white sm-mr1 not-rounded regular">
+              Learn More
+            </a>
         </div>
         <div class="col col-12 sm-col-6 sm-pl4">
-          <img class="svg-illustration" id="cloud-connector" src="images/cloud-connector.svg" alt="">
+          <img class="svg-illustration" id="circuit-breaker" src="images/circuit-breaker.svg" alt="">
         </div>
       </section>
     </div>
   </div>
   <div class="bg-faint-blue">
     <div class="max-width-4 mx-auto">
-      <div class="px2 py4">
-        <div class="clearfix col-12">
-          <div class="terminal">
-            <div class="terminal-top-bar p1 bg-ms-blue">
-              <ul class="list-reset m0 flex items-center justify-end">
-                <li class="inline-block mr1">
-                  <img src="images/icons/icon-minimize.svg" alt="">
-                </li>
-                <li class="inline-block mr1">
-                  <img src="images/icons/icon-maximize.svg" alt="">
-                </li>
-                <li class="inline-block mr1" data-ee="pipes">
-                  <img src="images/icons/icon-close.svg">
-                </li>
-              </ul>
-            </div>
-            <div class="terminal-body">
-              <div class="code-snippet" id="pipes-terminal">
-                <pre class="pb2 m0"><code class="c# m0"> 
- public void ConfigureServices(IServiceCollection services) 
- { 
-   ...
-   services.AddMySqlConnection(Configuration);
-   ...
- }
- ...
- public IActionResult MySqlData(
-        [FromServices] MySqlConnection dbConnection)
-    {
-        dbConnection.Open();
-
-        MySqlCommand cmd = new MySqlCommand("SELECT * FROM TestData;", dbConnection);
-        MySqlDataReader rdr = cmd.ExecuteReader();
-
-        while (rdr.Read())
-        {
-            ViewData["Key" + rdr[0]] = rdr[1];
-        }
-
-        rdr.Close();
-        dbConnection.Close();
-
-        return View();
-    }
-}
-                </code></pre>
-              </div>
-            </div>
+      <div class="px2 py2 sm-py4">
+        <section class="clearfix py1 sm-py4">
+          <div class="col col-12 sm-col-6 sm-col-right sm-pl2">
+            <h2 class="regular my0 steel-body muted">04</h2>
+            <h1 class="mt0 mb1 steel-heading">Cloud Connectors</h1>
+            <p class="mt0 steel-body">
+              One of the many advantages of running applications on the cloud is the easy availability of a variety of backing services. Steeltoe simplifies using those services by automatically configuring and wiring up connections to common Cloud Foundry  services like Redis, RabbitMQ, MySQL and Postgres.
+            </p>
+            <a href="/docs/steeltoe-connectors/" class="btn btn-cta center sm-left block sm-inline-block border-white bg-blue white sm-mr1 not-rounded regular">
+              Learn More
+            </a>
           </div>
-        </div>
+          <div class="col col-12 sm-col-6 sm-pr1">
+            <img class="svg-illustration" id="cloud-connector" src="images/cloud-connector.svg" alt="">
+          </div>
+        </section>
       </div>
     </div>
   </div>
   <div class="max-width-4 mx-auto">
     <div class="px2 py2 sm-py4">
-      <section class="py1 sm-py4 sm-mxn1">
-        <h2 class="regular my0 steel-body muted">
-          <i class="fa fa-quote-left"></i>
-        </h2>
-        <h1 class="mt0 mb3 steel-heading">What They're Saying</h1>
-        <div class="clearfix">
-          <div class="col col-12 sm-col-6 sm-px1">
-            <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Thanks <a href="https://twitter.com/DotNetRocksShow">@DotNetRocksShow</a> for introducing me to <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a>. It is a dream come true!</p>&mdash; Matt Hensley (@matthensleyio) <a href="https://twitter.com/matthensleyio/status/877336759511564288">June 21, 2017</a></blockquote>
-          </div>
-          <div class="col col-12 sm-col-6 sm-px1">
-            <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Thanks <a href="https://twitter.com/andy_clement">@andy_clement</a> for showing me <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a>. I&#39;ve got a lot of C# people who will be happy to enter the <a href="https://twitter.com/springcloud">@springcloud</a> world.</p>&mdash; Daniel Lavoie (@dalavoie) <a href="https://twitter.com/dalavoie/status/869683588475891713">May 30, 2017</a></blockquote>
-          </div>
+      <section class="clearfix py1 sm-py4">
+        <div class="col col-12 sm-col-6">
+          <h2 class="regular my0 steel-body muted">05</h2>
+          <h1 class="mt0 mb1 steel-heading">Cloud Security Providers</h1>
+          <p class="mt0 steel-body">
+            Securing your applications and microservices using the security services provided by cloud platforms can seem like an impossible and complex development effort.  Steeltoe reduces that effort by including security providers which enable you to easily integrate ASP.NET Core authentication and authorization features with Cloud Foundry security services. 
+          </p>
+            <a href="/docs/steeltoe-security/" class="btn btn-cta center sm-left block sm-inline-block border-white bg-blue white sm-mr1 not-rounded regular">
+              Learn More
+            </a>
         </div>
-        <div class="clearfix">
-          <div class="col col-12 sm-col-6 sm-px1">
-            <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">The power of <a href="https://twitter.com/netflix">@netflix</a> <a href="https://twitter.com/hashtag/Cloud?src=hash">#Cloud</a> architecture comes to .Net via a port of <a href="https://twitter.com/springcloud">@springcloud</a> by <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a> <a href="https://t.co/PxEKieBvdH">https://t.co/PxEKieBvdH</a> <a href="https://twitter.com/hashtag/startup?src=hash">#startup</a> <a href="https://twitter.com/hashtag/tip?src=hash">#tip</a></p>&mdash; Shailen Sukul  शैलेन (@shailensukul) <a href="https://twitter.com/shailensukul/status/866816954719272962">May 23, 2017</a></blockquote>
-          </div>
-          <div class="col col-12 sm-col-6 sm-px1">
-            <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Great to see the enthusiasm form cloud-native patterns building in .Net shops and awesome to see frameworks like <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a> ready to use! <a href="https://t.co/tBdw2SduRk">https://t.co/tBdw2SduRk</a></p>&mdash; Mark D. Carlson (@mdcarlson) <a href="https://twitter.com/mdcarlson/status/846396790626828288">March 27, 2017</a></blockquote>
-          </div>
+        <div class="col col-12 sm-col-6 sm-pl4">
+          <img class="svg-illustration" id="cloud-scurity" src="images/cloud-security.svg" alt="">
         </div>
       </section>
+    </div>
+  </div>
+  <div class="bg-faint-blue">
+    <div class="max-width-4 mx-auto">
+      <div class="px2 py2 sm-py4">
+        <section class="py1 sm-py4 sm-mxn1">
+          <h2 class="regular my0 steel-body muted">
+            <i class="fa fa-quote-left"></i>
+          </h2>
+          <h1 class="mt0 mb3 steel-heading">What They're Saying</h1>
+          <div class="clearfix">
+            <div class="col col-12 sm-col-6 sm-px1">
+              <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Thanks <a href="https://twitter.com/DotNetRocksShow">@DotNetRocksShow</a> for introducing me to <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a>. It is a dream come true!</p>&mdash; Matt Hensley (@matthensleyio) <a href="https://twitter.com/matthensleyio/status/877336759511564288">June 21, 2017</a></blockquote>
+            </div>
+            <div class="col col-12 sm-col-6 sm-px1">
+              <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Thanks <a href="https://twitter.com/andy_clement">@andy_clement</a> for showing me <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a>. I&#39;ve got a lot of C# people who will be happy to enter the <a href="https://twitter.com/springcloud">@springcloud</a> world.</p>&mdash; Daniel Lavoie (@dalavoie) <a href="https://twitter.com/dalavoie/status/869683588475891713">May 30, 2017</a></blockquote>
+            </div>
+          </div>
+          <div class="clearfix">
+            <div class="col col-12 sm-col-6 sm-px1">
+              <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">The power of <a href="https://twitter.com/netflix">@netflix</a> <a href="https://twitter.com/hashtag/Cloud?src=hash">#Cloud</a> architecture comes to .Net via a port of <a href="https://twitter.com/springcloud">@springcloud</a> by <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a> <a href="https://t.co/PxEKieBvdH">https://t.co/PxEKieBvdH</a> <a href="https://twitter.com/hashtag/startup?src=hash">#startup</a> <a href="https://twitter.com/hashtag/tip?src=hash">#tip</a></p>&mdash; Shailen Sukul  शैलेन (@shailensukul) <a href="https://twitter.com/shailensukul/status/866816954719272962">May 23, 2017</a></blockquote>
+            </div>
+            <div class="col col-12 sm-col-6 sm-px1">
+              <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Great to see the enthusiasm form cloud-native patterns building in .Net shops and awesome to see frameworks like <a href="https://twitter.com/SteeltoeOSS">@SteeltoeOSS</a> ready to use! <a href="https://t.co/tBdw2SduRk">https://t.co/tBdw2SduRk</a></p>&mdash; Mark D. Carlson (@mdcarlson) <a href="https://twitter.com/mdcarlson/status/846396790626828288">March 27, 2017</a></blockquote>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </div>
 </main>
