@@ -318,7 +318,7 @@ All of these settings should start with `eureka:instance:`.
 
 |Key|Description|
 |------|------|
-|**name**|Name of the application to be registered with eureka, default='spring:application:name' or 'unknown'|
+|**appname**|Name of the application to be registered with eureka, default='spring:application:name' or 'unknown'|
 |**port**|Port on which the instance should receive traffic, default = 80|
 |**hostName**|Address on which the instance should receive traffic, default = computed|
 |**instanceId**|Unique Id (within the scope of the appName) of instance registered with eureka, default=`computed`|
