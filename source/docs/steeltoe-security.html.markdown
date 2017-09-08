@@ -170,7 +170,7 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 1.1.10 What to expect
 
-At this point the app is up and running. You can access it at http://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/.
+At this point the app is up and running. You can access it at <http://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/>.
 
 On the apps menu, click on the `Log in` menu item and you should be redirected to the Cloud Foundry login page. Enter dave and Password1!, or whatever name/password you used above, and you should be authenticated and redirected back to the single-signon home page.
 

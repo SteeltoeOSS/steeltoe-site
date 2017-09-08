@@ -44,11 +44,9 @@ When developing applications using Steeltoe, whether on .NET Core or .NET Framew
 
 To use the latest releases of Steeltoe, you can subscribe to any one of the following feeds, depending on your needs:
 
-* [Release or Release Candidates](https://www.nuget.org/) - https://www.nuget.org/
-
-* [Pre-release - Stable](https://www.myget.org/gallery/steeltoemaster) - https://www.myget.org/gallery/steeltoemaster
-
-* [Development - Less Stable](https://www.myget.org/gallery/steeltoedev) - https://www.myget.org/gallery/steeltoedev
+* [Release or Release Candidates](https://www.nuget.org/)
+* [Pre-release - Stable](https://www.myget.org/gallery/steeltoemaster)
+* [Development - Less Stable](https://www.myget.org/gallery/steeltoedev)
 
 Below is an example NuGet.config file you can edit and use when developing applications using Steeltoe.  Note that if you only want to use release or pre-release (RC) versions of Steeltoe, you do not need to make any changes to your NuGet.config file, as those are served from `nuget.org`.
 

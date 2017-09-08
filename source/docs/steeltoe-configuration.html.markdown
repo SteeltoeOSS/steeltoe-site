@@ -301,7 +301,7 @@ This quick start makes use of an ASP.NET Core application to illustrate how to u
 
 ### 2.1.1  Start Config Server Locally
 
-In this step, we will fetch a repository from which we can start up a Spring Cloud Config Server locally on your desktop. This particular server has been pre-configured to fetch its configuration data from https://github.com/steeltoeoss/config-repo.
+In this step, we will fetch a repository from which we can start up a Spring Cloud Config Server locally on your desktop. This particular server has been pre-configured to fetch its configuration data from <https://github.com/steeltoeoss/config-repo>.
 
 Make a note that you can use this same repository for your own future development work. In so doing, at some point you will want to change the location from which the server fetches its configuration data.
 
@@ -347,15 +347,15 @@ Application started. Press Ctrl+C to shut down.
 
 ### 2.1.5 What to expect
 
-Fire up a browser and hit http://localhost:5000.  Use the menu presented by the app to see various output:
+Fire up a browser and hit <http://localhost:5000>.  Use the menu presented by the app to see various output:
 
 * `Config Server Settings` - should show the settings used by the Steeltoe client when communicating to the config server.  These have been picked up from settings in `appsettings.json`.
-* `Config Server Data` - this is the configuration data returned from the config server's github repository. It will be some of the data from `foo.properties`, `foo-Production.properties` and `application.yml` if found in the github repository https://github.com/steeltoeoss/config-repo.
+* `Config Server Data` - this is the configuration data returned from the config server's github repository. It will be some of the data from `foo.properties`, `foo-Production.properties` and `application.yml` if found in the github repository <https://github.com/steeltoeoss/config-repo>.
 * `Reload` - will cause a reload of the configuration data from the server.
 
 Change the Hosting environment variable setting to `development` (i.e. `export ASPNETCORE_ENVIRONMENT=development` or  `SET ASPNETCORE_ENVIRONMENT=development`), then restart the application.
 
-You will see different configuration data returned for that profile/hosting environment.  This time it will be some of the data from `foo.properties`, `foo-development.properties` and `application.yml` if found in the github repository https://github.com/steeltoeoss/config-repo.
+You will see different configuration data returned for that profile/hosting environment.  This time it will be some of the data from `foo.properties`, `foo-development.properties` and `application.yml` if found in the github repository <https://github.com/steeltoeoss/config-repo>.
 
 ### 2.1.6 Start Config Server Cloud Foundry
 
@@ -444,7 +444,7 @@ Use the menu provided by the app to see various output related to Cloud Foundry 
 
 * `CloudFoundry Settings` - should show `VCAP_APPLICATION` and `VCAP_SERVICES` settings read as configuration data.
 * `Config Server Settings` - should show the settings used by the Steeltoe client when communicating to the Config Server.  These have been picked up from the service binding.
-* `Config Server Data` - this is the configuration data returned from the Config Servers configured github repository. It will be some of the data from `foo.properties`, `foo-development.properties` and `application.yml` found in the github repository. ("https://github.com/spring-cloud-samples/config-repo).
+* `Config Server Data` - this is the configuration data returned from the Config Servers configured github repository. It will be some of the data from `foo.properties`, `foo-development.properties` and `application.yml` found in the github repository (<https://github.com/spring-cloud-samples/config-repo>).
 * `Reload` - will cause a reload of the configuration data from the Config Server.
 
 Change the Hosting environment setting to `production` (i.e. `export ASPNETCORE_ENVIRONMENT=production` or  `SET ASPNETCORE_ENVIRONMENT=production` ), and then re-push the application. You will see different configuration data returned for that profile/hosting environment.

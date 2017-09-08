@@ -23,8 +23,8 @@ The Steeltoe Eureka client supports the following .NET application types:
 
  In addition to the quick start below, there are several other Steeltoe sample applications that you can choose from when looking for help in understanding how to make use of this client:
 
-* [AspDotNet4/Fortune-Teller-Service4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-Service4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container 
-* [AspDotNet4/Fortune-Teller-UI4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-UI4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container 
+* [AspDotNet4/Fortune-Teller-Service4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-Service4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container
+* [AspDotNet4/Fortune-Teller-UI4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-UI4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
 * [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on Cloud Foundry, and secured with OAuth2 Security Services and using Spring Cloud Services.
 
@@ -38,7 +38,7 @@ The application consists of two components; a Fortune-Teller-Service which regis
 
 ### 1.1.1  Start Eureka Server Locally
 
-In this step, we will fetch a repository from which we can start up a Netflix Eureka Server locally on our desktop. This server has been pre-configured to listen for service registrations and discovery requests at  http://localhost:8761/eureka .
+In this step, we will fetch a repository from which we can start up a Netflix Eureka Server locally on our desktop. This server has been pre-configured to listen for service registrations and discovery requests at  <http://localhost:8761/eureka> .
 
 ```bash
 > git clone https://github.com/spring-cloud-samples/eureka.git
@@ -110,7 +110,7 @@ Application started. Press Ctrl+C to shut down.
 
 ### 1.1.7 What to expect
 
-Fire up a browser and hit http://localhost:5555.  You should see your fortune displayed. Refresh the browser to see a new fortune.
+Fire up a browser and hit <http://localhost:5555>.  You should see your fortune displayed. Refresh the browser to see a new fortune.
 
 ### 1.1.8 Start Eureka Server Cloud Foundry
 
@@ -222,7 +222,7 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 1.1.14 What to expect
 
-Fire up a browser and hit http://fortuneui.x.y.z/ where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
+Fire up a browser and hit <http://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
 
 You should see your fortune displayed. Refresh the browser to see a new fortune.
 
