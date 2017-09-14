@@ -27,16 +27,16 @@ And services that enable .NET and ASP.NET developers to leverage Spring Cloud:
 
 # 1.0 Getting Started
 
-If you plan on developing applications using Steeltoe, you will need to download and install the latest [.NET Core SDK 1.1](https://www.microsoft.com/net/download/core).
+If you plan on developing applications using Steeltoe, you will need to download and install the latest [.NET Core SDK](https://www.microsoft.com/net/download/core).
 
-Additionally, while not required, it is recommended to install one of the development tools [Visual Studio](https://www.visualstudio.com/) or [Visual Studio Code](https://code.visualstudio.com/) provided by Microsoft.
+Additionally, while not required, it is recommended that you install one of the development tools [Visual Studio](https://www.visualstudio.com/) or [Visual Studio Code](https://code.visualstudio.com/) provided by Microsoft.
 
-If you are new to [.NET Core](https://docs.microsoft.com/en-us/dotnet/articles/core/) or [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/), we recommend you first spend time working through some of the following tutorials from Microsoft:
+If you are planning to develop using [.NET Core](https://docs.microsoft.com/en-us/dotnet/articles/core/) or [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/), we recommend you first spend time working through some of the following tutorials from Microsoft:
 
 * [Getting Started with ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/getting-started)
 * [Getting Started with C#](https://www.microsoft.com/net/tutorials/csharp/getting-started)
 
-Note: The Steeltoe packages can also be used with .NET Framework and ASP.NET 4 based applications. You are not required to target .NET/ASP.NET Core when using Steeltoe.
+Note: Many of the Steeltoe packages can also be used with .NET Framework and ASP.NET 4 based applications. You are not required to target .NET/ASP.NET Core when using Steeltoe.
 
 ## 1.1 NuGet Feeds
 
@@ -44,7 +44,7 @@ When developing applications using Steeltoe, whether on .NET Core or .NET Framew
 
 To use the latest releases of Steeltoe, you can subscribe to any one of the following feeds, depending on your needs:
 
-* [Release or Release Candidates](https://www.nuget.org/)
+* [Release or Release Candidates](https://www.nuget.org/profiles/steeltoe)
 * [Pre-release - Stable](https://www.myget.org/gallery/steeltoemaster)
 * [Development - Less Stable](https://www.myget.org/gallery/steeltoedev)
 
@@ -67,9 +67,9 @@ For many of the Steeltoe services, we provide Quick Start samples and a guide th
 
 In many cases, these guides provide two ways of exercising the applications: one that describes how to create and run the application locally on your development machine, and a second that describes getting the application up and running on Cloud Foundry.
 
-For the Quick Starts in which we run the application locally, we will at times make use of Java in order to run instances of the dependent servers (e.g. Config Server, Eureka Server, etc.) locally on your machine. As such if you don't have Java available on your machine you may want to install that now.
+For the Quick Starts in which we run the application locally, we will at times make use of Java in order to run instances of the dependent servers (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) locally on your machine. As such if you don't have Java available on your machine you may want to install that now.
 
-For the Quick Starts in which we make use of Cloud Foundry, you will need access to a Cloud Foundry environment that has the appropriate services (e.g. Config Server, Eureka, etc) installed. One option is to run [PCF Dev](https://docs.pivotal.io/pcf-dev/), the local developer version of Pivotal Cloud Foundry on your development machine. PCF Dev uses Virtual Box, so depending on your desktop operating system and configuration, you may or may not be able to make use of it.
+For the Quick Starts in which we make use of Cloud Foundry, you will need access to a Cloud Foundry environment that has the appropriate services  (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) installed. One option is to run [PCF Dev](https://docs.pivotal.io/pcf-dev/), the local developer version of Pivotal Cloud Foundry on your development machine. PCF Dev makes use of  Virtual Box and so depending on your desktop operating system and configuration you may or may not be able to make use of it.
 
 Alternatively you can sign up for a free trial account of [Pivotal Web Services](http://run.pivotal.io/) the hosted multi-tenant edition of [Pivotal Cloud Foundry](https://pivotal.io/platform). Note that if you want to work solely with .NET framework applications that target the Windows operating system, you'll likely need access to a corporate Cloud Foundry environment, as neither of the above options currently support deploying Windows apps.
 

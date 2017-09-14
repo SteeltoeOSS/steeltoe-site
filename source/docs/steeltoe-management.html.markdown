@@ -5,9 +5,9 @@ date: 2016/4/1
 tags:
 ---
 
-Steeltoe includes a number of optional features you can add to your applications to aid in monitoring and managing it while its running in production. These features are implemented as a number of management endpoints that you can add to your application.
+Steeltoe includes a number of optional features you can add to your applications to aid in monitoring and managing it while its running in production. These features are implemented as a number of management endpoints which you can easily add to your application.
 
-The way the endpoints are exposed and used depend on the type of technology you choose in order to expose the functionality of the endpoint. Out of the box, Steeltoe provides an easy way to expose the endpoints using HTTP in ASP.NET Core applications.  Of course you have the option to build and use whatever you would like in your situation.
+The way the endpoints are exposed and used depends on the type of technology you choose to expose the functionality of the endpoint. Out of the box, Steeltoe provides an easy way to expose these endpoints using HTTP in an ASP.NET Core application.  Of course you have the option to build and use whatever you would like to meet your needs and your situation.
 
 # 1.0 Management Endpoints
 
@@ -16,7 +16,7 @@ Below is a table of all of the currently available Steeltoe management endpoints
 |ID|Description|
 |------|------|
 |**health**|Customizable endpoint that reports application health information|
-|**info**|Customizable endpoint that reports arbitrary application information (e.g. Git Build info)|
+|**info**|Customizable endpoint that reports arbitrary application information (e.g. Git Build info, etc)|
 |**loggers**|Allows remote access and modification of logging levels in a .NET application|
 |**trace**|Reports a configurable set of trace information (e.g. last 100 Http requests)|
 |**cloudfoundry**|Enables management endpoint integration with Cloud Foundry|
@@ -35,7 +35,7 @@ In addition to the Quick Start below, there are other Steeltoe sample applicatio
 
 ## 1.1 Quick Start
 
-This quick start consists of an ASP.NET Core sample app illustrating how to use all of the above management endpoints on Cloud Foundry and integrating the endpoint information with Pivotal Cloud Foundry Apps Manager.
+This quick start consists of an ASP.NET Core sample app illustrating how to use all of the above management endpoints on Cloud Foundry and integrating the endpoint information via HTTP with [Pivotal Cloud Foundry Apps Manager](https://docs.pivotal.io/pivotalcf/1-11/console/index.html).
 
 ### 1.1.1 Get Sample
 
@@ -46,7 +46,7 @@ This quick start consists of an ASP.NET Core sample app illustrating how to use 
 
 ### 1.1.2 Create Service
 
-You must first create an instance of a MySql service in a org/space. This is necessary in order to illustrate how a custom Health contributor can be created to monitor the health of a database.
+You must first create an instance of a MySql service in a org/space. This is necessary in order to illustrate how a custom Health contributor can be created to monitor the health of a connection to a back-end database.
 
 ```bash
 > # Target and org and space in Cloud Foundry

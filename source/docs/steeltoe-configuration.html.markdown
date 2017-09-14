@@ -5,7 +5,7 @@ date: 2016/5/1
 tags:
 ---
 
-Steeltoe Configuration builds upon the new .NET configuration API, which enables developers to configure an application with values from a variety of sources using Configuration Providers. Each provider supports reading a set of name-value pairs from a given source location, and adding them into a combined multi-level configuration dictionary.
+Steeltoe Configuration builds upon the new .NET configuration API, which enables developers to configure an application with values from a variety of sources using Configuration Providers. Each provider supports reading a set of name-value pairs from a given source location, adding them into a combined multi-level configuration dictionary.
 
 Each value contained in the configuration is tied to a string-typed key or name. The values are organized by key into a hierarchical list of name-value pairs in which the components of the keys are separated by a colon (e.g. spring:application:key = value).
 
@@ -18,7 +18,7 @@ Out of the box, .NET supports the following providers/sources:
 
 To gain a better understanding of .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation. Note that while the documentation link suggests this service is tied to ASP.NET Core, you will find that it is not, and in fact can be used in many different application types, including Console, ASP.NET 4.x., UWP, etc.
 
-Steeltoe Configuration services adds two additional providers to the above list:
+Steeltoe adds two additional configuration providers to the above list:
 
 * Cloud Foundry
 * Spring Cloud Config Server
@@ -27,9 +27,9 @@ The following sections go into more more detail on each of these new providers.
 
 # 1.0 Cloud Foundry Provider
 
-This provider enables the standard Cloud Foundry environment variables, `VCAP_APPLICATION`,  `VCAP_SERVICES` and `CF_*` to be parsed and accessed as configuration data within a .NET application.
+The Cloud Foundry provider enables the standard Cloud Foundry environment variables, `VCAP_APPLICATION`,  `VCAP_SERVICES` and `CF_*` to be parsed and accessed as configuration data within a .NET application.
 
-These environment variables are used by Cloud Foundry to communicate an application's environment and configuration information to the application running inside a container. More specifically, the values found in `VCAP_APPLICATION` provide information about the application's resource limits, routes (i.e URIs), and version number among other things. The environment variable `VCAP_SERVICES` provides information about what external services (e.g. Databases, Caches, etc.) the application is bound to, along with  details on how to contact those services.
+These environment variables are created and used by Cloud Foundry to communicate an application's environment and configuration to the application code running inside a container. More specifically, the values found in `VCAP_APPLICATION` provide information about the application's resource limits, routes (i.e URIs), and version number among other things. The environment variable `VCAP_SERVICES` provides information about what external services (e.g. Databases, Caches, etc.) the application is bound to, along with details on how to contact those services.
 
 You can read more information on the Cloud Foundry environment variables at the [Cloud Foundry docs](http://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html) website.
 

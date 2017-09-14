@@ -5,7 +5,7 @@ date: 2016/4/1
 tags:
 ---
 
-The Steeltoe Circuit Breaker frameworks provide applications with an implementation of the Circuit Breaker pattern. Cloud-native architectures are typically composed of multiple layers of distributed services. End-user requests may comprise multiple calls to these services, and if a lower-level service fails, the failure can cascade up to the end user and spread to other dependent services. Heavy traffic to a failing service can also make it difficult to repair. By using Circuit Breaker frameworks, you can prevent failures from cascading and provide fallback behavior until a failing service is restored to normal operation.
+The Steeltoe Circuit Breaker framework provide applications with an implementation of the Circuit Breaker pattern. Cloud-native architectures are typically composed of multiple layers of distributed services. End-user requests may comprise multiple calls to these services, and if a lower-level service fails, the failure can cascade up to the end user and spread to other dependent services. Heavy traffic to a failing service can also make it difficult to repair. By using Circuit Breaker frameworks, you can prevent failures from cascading and provide fallback behavior until a failing service is restored to normal operation.
 
 ![cb](/images/circuit-breaker-overview.png)
 
@@ -13,7 +13,7 @@ When applied to a service, a circuit breaker watches for failing calls to the se
 
 There are several options to choose from when implementing the Circuit Breaker pattern. Steeltoe has initially chosen to support one based on Hystrix; Netflix's Latency and Fault Tolerance library for distributed systems. For more information about Hystrix see the [Netflix/Hystrix Wiki](https://github.com/Netflix/Hystrix/wiki) and the [Spring Cloud Netflix](http://projects.spring.io/spring-cloud/) documentation.
 
-In the future you can expect to see more Circuit Breaker options as part of the Steeltoe framework.
+In the future you can expect to see more Circuit Breaker options as part of Steeltoe.
 
 # 1.0 Netflix Hystrix
 
