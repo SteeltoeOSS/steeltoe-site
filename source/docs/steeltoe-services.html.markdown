@@ -7,7 +7,7 @@ tags:
 
 Steeltoe is an [open source project](https://github.com/SteeltoeOSS) aimed at taking the tremendously useful tools from Netflix and others and making them available to the .NET community. It was built to work with .NET Core as well as .NET Framework 4.x.  Additionally, most of these components work stand-alone (e.g., on  your local computer) as well as on Cloud Foundry, the leading multi-cloud application platform.
 
-Steeltoe builds on Spring Cloud by providing several packages that enable .NET developers to leverage these tools to implement some common patterns (e.g. centralized configuration management, service discovery, circuit breakers, etc. ) found in highly scalable and resilient distributed systems. Using Steeltoe, together with Spring Cloud, developers are able to quickly stand up microservices and applications that implement these patterns.
+Steeltoe builds on Spring Cloud by providing several packages that enable .NET developers to leverage these tools to implement some common patterns (e.g. centralized configuration management, service discovery, circuit breakers, etc. ) found in highly scalable and resilient distributed systems. Using Steeltoe, together with Spring Cloud, developers are able to quickly stand up micro-services and applications that implement these patterns.
 
 Steeltoe provides services that fall broadly into two categories.
 
@@ -22,7 +22,7 @@ And services that enable .NET and ASP.NET developers to leverage Spring Cloud:
 
 * Configuration Server client
 * Service Discovery client
-* Hysrix Circuit Breaker
+* Hystrix Circuit Breaker
 * Management endpoints
 
 # 1.0 Getting Started
@@ -117,7 +117,7 @@ Starting with version 1.1.0 of Steeltoe, you can now configure the timeout value
 
 ### Config Server Vault support
 
-Starting with version 1.1.0 of Steeltoe, the Config Server client is compatible with Spring Cloud and Spring Cloud Services Config Server deployments which support using Hashicorp Vault as backends.
+Starting with version 1.1.0 of Steeltoe, the Config Server client is compatible with Spring Cloud and Spring Cloud Services Config Server deployments which support using Hashicorp Vault as back-ends.
 
 ## 2.3 Connectors
 

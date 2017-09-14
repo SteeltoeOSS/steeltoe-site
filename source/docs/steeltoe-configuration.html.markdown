@@ -16,7 +16,7 @@ Out of the box, .NET supports the following providers/sources:
 * Environment variables
 * Custom providers
 
-To gain a better understanding of .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation. Note that while the documenation link suggests this service is tied to ASP.NET Core, you will find that it is not, and in fact can be used in many different application types, including Console, ASP.NET 4.x., UWP, etc.
+To gain a better understanding of .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation. Note that while the documentation link suggests this service is tied to ASP.NET Core, you will find that it is not, and in fact can be used in many different application types, including Console, ASP.NET 4.x., UWP, etc.
 
 Steeltoe Configuration services adds two additional providers to the above list:
 
@@ -58,7 +58,7 @@ You will need access to a Cloud Foundry runtime environment in order to complete
 
 Use the `dotnet` CLI to build and publish the application.
 
-Note: below we show how to publish for all of the target runtimes and frameworks the sample supports.  In order to proceed, choose the appropriate combination for your situation.
+Note: below we show how to publish for all of the target run-times and frameworks the sample supports.  In order to proceed, choose the appropriate combination for your situation.
 
 ```bash
 > # Restore all dependencies
@@ -538,6 +538,7 @@ As illustrated above, all settings should start with `spring:cloud:config:`
 |**name**|App name to request config for, defaults = `IHostingEnvironment.ApplicationName`|
 |**enabled**|Enable or disable config server client, defaults = true|
 |**uri**|Endpoint of config server, defaults = `http://localhost:8888`|
+|**env**|Environment/profile used in server request, defaults = `IHostingEnvironment.EnvironmentName`|
 |**validate_certificates**|Enable or disable certificate validation, default = true|
 |**label**|Comma separated list of labels to request, default = none|
 |**timeout**|Time to wait for response from server, in milliseconds, default = 6s|

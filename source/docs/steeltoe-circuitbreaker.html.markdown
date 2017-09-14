@@ -315,7 +315,7 @@ To gain an understanding of the Steeltoe Hystrix related changes to the generate
 * `Fortune-Teller-UI.csproj`- Contains `PackageReference` for Steeltoe Hystrix NuGet `Steeltoe.CircuitBreaker.Hystrix`. It also contains references to `Steeltoe.CircuitBreaker.Hystrix.MetricsStream` when targeting Cloud Foundry or `Steeltoe.CircuitBreaker.Hystrix.MetricsEvents` when running locally. These last two packages are used to expose Hystrix metrics to the dashboard.
 * `appsettings.json` - Contains configuration data to name the Hystrix thread pool (i.e. `FortuneServiceTPool`)  which is used by the `FortuneServiceCommand` command. This name will become visible in the dashboard. It also contains a configuration value for the `FortuneServiceCollapser` used to obtain multiple fortunes.
 * `FortuneServiceCommand.cs` - This is the code that implements the Hystrix command which is used to retrieve fortunes.  It has `RunAsync()` and `RunFallbackAsync()` methods which implement the commands logic.
-* `FortuneServiceCollapser.cs` - This is the code that implements the Hystrix Collapser which is used to illustrate how to use a Collapser to retrieve multiple fortunes.  It has `CreateCommand()` and `MapResponseToRequests()` methods which implement the collapsers logic.
+* `FortuneServiceCollapser.cs` - This is the code that implements the Hystrix Collapser which is used to illustrate how to use a Collapser to retrieve multiple fortunes.  It has `CreateCommand()` and `MapResponseToRequests()` methods which implement the Collapser logic.
 * `MultiFortuneServiceCommand` - This is the Hystrix Command that the Collapser uses to obtain multiple fortunes.
 * `HomeController.cs` - Uses the injected Hystrix command `FortuneServiceCommand` to obtain a fortunes and return them to the browser.
 * `Startup.cs`- Multiple changes were made as follows:
@@ -349,7 +349,7 @@ In order to use the Steeltoe framework you need to do the following:
 
 There are three main Hystrix NuGets that you can choose from depending on your needs.
 
-The first, and main package that you will always need to use is the  `Steeltoe.CircuitBreaker.Hystrix` package. This package contains everything you need in order to define and use Hystrix commands and collapsers in your application.
+The first, and main package that you will always need to use is the  `Steeltoe.CircuitBreaker.Hystrix` package. This package contains everything you need in order to define and use Hystrix commands and collapser in your application.
 
 To use this in your project add the following `PackageReference`:
 
@@ -568,7 +568,7 @@ All configured pool specific settings, as described in #4 above, should be place
 
 The following tables specify all of the possible settings.
 
-Note that the settings provided below follow closely those implemented by the Neflix Hystrix implementation. As a result, to obtain a further understanding of each setting and how it affects Hystrix thread pool operations, you are encouraged to read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki.
+Note that the settings provided below follow closely those implemented by the Netflix Hystrix implementation. As a result, to obtain a further understanding of each setting and how it affects Hystrix thread pool operations, you are encouraged to read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki.
 
 #### 1.2.4.1 Sizing
 
@@ -596,9 +596,9 @@ These settings control the behavior of capturing metrics from Hystrix thread poo
 
 Example: `hystrix:threadpool:foobar:metrics:rollingStats:timeInMilliseconds=20000`
 
-### 1.2.5 Collapser Setttings
+### 1.2.5 Collapser Settings
 
-The last group of settings you can configure pertain to the usage of Hystrix collapsers.
+The last group of settings you can configure pertain to the usage of a Hystrix collapser.
 
 Just like for all other Hystrix settings, there are four types of settings and levels of precedence that are followed and applied by the framework:
 
@@ -617,7 +617,7 @@ All configured collapser specific settings, as described in #4 above, should be 
 
 The following tables specify all of the possible settings.
 
-Note that the settings provided below follow closely those implemented by the Neflix Hystrix implementation. As a result, to obtain a further understanding of each setting and how it affects Hystrix collapser operations, you are encouraged to read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki.
+Note that the settings provided below follow closely those implemented by the Netflix Hystrix implementation. As a result, to obtain a further understanding of each setting and how it affects Hystrix collapser operations, you are encouraged to read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki.
 
 #### 1.2.5.1 Sizing
 
@@ -934,7 +934,7 @@ public class FortuneServiceCommand  : HystrixCollapser<List<Fortune>, Fortune, i
 
 ### 1.2.10 Use Collapsers
 
-You use Hystrix collapsers in a similiar way to the way you use Hystrix commands.  If you have added the collapser to the service container, then you can inject it into any controller, view or other services created by the container.
+You use Hystrix collapsers in a similar way to the way you use Hystrix commands.  If you have added the collapser to the service container, then you can inject it into any controller, view or other services created by the container.
 
 Here is an example controller that makes use of a Hystrix collapser `FortuneServiceCollapser` which was added to the container using `AddHystrixCollapser<FortuneServiceCollapser>("FortuneCollapser", Configuration)`.
 
@@ -1023,11 +1023,11 @@ public class FortuneServiceCollapser : HystrixCollapser<List<Fortune>, Fortune, 
 }
 ```
 
-To understand how the collapser functions you first need to understand what happens during the processing of an incoming request. For each incoming request to the application, each seperate execution of a `FortuneServiceCollapser` instance causes the Hystrix collapser to add a request into a batch of requests to be handed off to a `MultiFortuneServiceCommand` created by `CreateCommand()`.
+To understand how the collapser functions you first need to understand what happens during the processing of an incoming request. For each incoming request to the application, each separate execution of a `FortuneServiceCollapser` instance causes the Hystrix collapser to add a request into a batch of requests to be handed off to a `MultiFortuneServiceCommand` created by `CreateCommand()`.
 
 Notice that `CreateCommand()` takes as an argument a collection of `ICollapsedRequest<Fortune, int>` requests. Each element of that collection represents a request for a specific `Fortune` by its Id (i.e. an Integer). `CreateCommand` returns the Hystrix command responsible for executing those requests and returning a list of `Fortunes` for those requests.
 
-Next, notice the `MapResponsetoRequests` method. After the `MultiFortuneServiceCommand` finishes, then some logic has to be applied which maps the `Fortunes` returned from the command (i.e. `List<Fortune> batchResponse`) to the individual requests (i.e. `ICollection<ICollapsedRequest<Fortune, int>> requests`) we started with.  Doing this enables each seperate execution of a `FortuneServiceCollapser` instance that was used to 'queue up' a request to complete, and to return the `Fortune` that was requested by it.
+Next, notice the `MapResponseToRequests` method. After the `MultiFortuneServiceCommand` finishes, then some logic has to be applied which maps the `Fortunes` returned from the command (i.e. `List<Fortune> batchResponse`) to the individual requests (i.e. `ICollection<ICollapsedRequest<Fortune, int>> requests`) we started with.  Doing this enables each separate execution of a `FortuneServiceCollapser` instance that was used to 'queue up' a request to complete, and to return the `Fortune` that was requested by it.
 
 Just like with Hystrix commands, you have multiple ways in which you can cause collapsers to begin executing.
 
@@ -1154,7 +1154,7 @@ public class Startup {
 Once you have made the changes described above, you can then make use of the Netflix Hystrix Dashboard by following the instructions below.
 
 1. Clone a Hystrix dashboard. (<https://github.com/spring-cloud-samples/hystrix-dashboard.git>)
-1. Go to the cloned directory (`hystix-dashboard`) and start it up with `mvn spring-boot:run`.
+1. Go to the cloned directory (`hystrix-dashboard`) and start it up with `mvn spring-boot:run`.
 1. Open a browser and connect to the dashboard. (e.g. <http://localhost:7979>)
 1. In the first field, enter the endpoint in the application that is exposing the hystrix metrics. (e.g. <http://localhost:5555/hystrix/hystrix.stream>).
 1. Click the monitor button.

@@ -11,9 +11,9 @@ This package when used with the Steeltoe Logger Management endpoint enables chan
 
 # 1.0 Cloud Foundry Provider
 
-This logging provider is simply a wrapper around the [Microsoft Console Logging](https://github.com/aspnet/Logging) provider currently provided by Microsoft. This wrapper allows for querying the currently defined loggers and their levels as well as then modifying the levels dynamically at run time.
+This logging provider is simply a wrapper around the [Microsoft Console Logging](https://github.com/aspnet/Logging) provider currently provided by Microsoft. This wrapper allows for querying the currently defined loggers and their levels as well as then modifying the levels dynamically at runtime.
 
-For more information on how to use Pivotal Application Manager Console on Cloud Foundry for viewing and modifing logging levels, see the Pivotal documenation on [Managing Log Levels](https://docs.pivotal.io/pivotalcf/1-11/console/using-actuators.html)
+For more information on how to use Pivotal Application Manager Console on Cloud Foundry for viewing and modifying logging levels, see the Pivotal documentation on [Managing Log Levels](https://docs.pivotal.io/pivotalcf/1-11/console/using-actuators.html)
 
 The source code for the Logging provider can be found [here](https://github.com/SteeltoeOSS/Logging).
 
@@ -47,7 +47,7 @@ Add the provider to your project using the following `PackageReference`:
 
 ### 1.1.2 Configure Settings
 
-As mentioned earlier, the Steeltoe Logging provider is simply a wrapper around the Microsoft Console logging provider. As such, when it comes to configuring it, you can configure it the same way you do the Microsoft provider. For more details on how this is done, see the documenation section on [Console logging provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging?tabs=aspnetcore1x#console).
+As mentioned earlier, the Steeltoe Logging provider is simply a wrapper around the Microsoft Console logging provider. As such, when it comes to configuring it, you can configure it the same way you do the Microsoft provider. For more details on how this is done, see the documentation section on [Console logging provider](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging?tabs=aspnetcore1x#console).
 
 ### 1.1.3 Add Logging Provider
 

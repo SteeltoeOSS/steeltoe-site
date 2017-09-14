@@ -7,7 +7,7 @@ tags:
 
 Steeltoe provides a number of Security related services that simplify using Cloud Foundry based OAuth2 security services in ASP.NET Core applications.
 
-These providers enable using the Cloud Foundry (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) for Authentication and Authorization credentials.
+These providers enable using the Cloud Foundry (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) for Authentication and Authorization credentials.
 
 There are two providers to choose from when adding Cloud Foundry security integration:
 
@@ -30,7 +30,7 @@ The source code for this provider can be found [here](https://github.com/Steelto
 
 ## 1.1 Quick Start
 
-This quick start makes use of a ASP.NET Core sample application to illustrate how to use the Steeltoe Cloud Foundry Single Signon provider for Authentication and Authorization against a Cloud Foundry UAA Server.
+This quick start makes use of a ASP.NET Core sample application to illustrate how to use the Steeltoe Cloud Foundry Single Sign-on provider for Authentication and Authorization against a Cloud Foundry UAA Server.
 
 ### 1.1.1 Get Sample
 
@@ -527,7 +527,7 @@ Additionally, you should have a good understanding of how the .NET [Configuratio
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and the middleware used by the app. Pay particular attention to the usage of the `Configure()` and `ConfigureServices()` methods.
 
-With regard to Cloud Foundry, you should have a good understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) along with an understanding how they use and issue JWTs.
+With regard to Cloud Foundry, you should have a good understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) along with an understanding how they use and issue JWT.
 
 In order to use the Security provider you need to do the following:
 
@@ -821,7 +821,7 @@ A couple things to note at this point about this app:
 
 * The app is using the Cloud Foundry Redis service to store session data.  As a result, the session data is available to all running instances of the app.
 * The `session handle` that is stored in the Session Cookie sent down to the browser along with the data that is stored in the Session in Redis has been encrypted using keys that are now stored in the key ring which is also stored in the Cloud Foundry Redis service.
-* When you scale the app to multiple instances the same keyring will be used by all instances of the app and therefore the `session handle` and the Session data can be decrypted by any instance of the application.
+* When you scale the app to multiple instances the same key-ring will be used by all instances of the app and therefore the `session handle` and the Session data can be decrypted by any instance of the application.
 
 ### 3.1.7 Understand Sample
 

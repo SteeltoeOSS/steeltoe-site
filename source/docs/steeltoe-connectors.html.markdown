@@ -597,7 +597,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 * `Program.cs` - Code added to read the `--server.urls` command line.
 * `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Postgres configuration values when pushed to Cloud Foundry.
 * `HomeController.cs` - Code added for injection of a `NpgsqlConnection` or `DbContext` into the Controller.  These are used to obtain data from the database and then to display the data.
-* `PostgresData.cshtml` - The view used to display the Postres data values.
+* `PostgresData.cshtml` - The view used to display the Postgres data values.
 * `Models folder` - contains code to initialize the database and also the `DbContext` for PostgreEFCore sample.
 
 ## 2.2 Usage
@@ -637,7 +637,7 @@ Likewise if you are using the Entity Framework providers.
 
 Optionally you can configure the settings the connector will use when setting up the `NpgsqlConnection` to a database. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of Postgres database running elsewhere.
 
-Here is an example Postres connector configuration in JSON that shows how to setup a connection to a database at `myserver:5432`:
+Here is an example Postgres connector configuration in JSON that shows how to setup a connection to a database at `myserver:5432`:
 
 ```json
 {
@@ -746,7 +746,7 @@ If there are merge conflicts, then the service binding settings will take preced
 
 >Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
 
-### 2.2.4 Add PostresConnection
+### 2.2.4 Add PostgresConnection
 
  If you want to use a `NpgsqlConnection` in your application, then you need to add it to your `IServiceCollection` .
 
@@ -1073,6 +1073,8 @@ As shown above, all of these settings should be prefixed with `rabbit:client:`
 |**username**|Username for authentication, defaults = empty|
 |**password**|Password for authentication, default = empty|
 |**virtualHost**|Virtual host to connect to, default = empty|
+|**sslEnabled**|Should SSL be enabled, default = false|
+|**sslPort**|SSL Port number of server, default = 5671|
 |**uri**|Full connection string, use instead of above individual settings, default = empty|
 
 Once the connectors settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the connector.
@@ -1606,7 +1608,7 @@ Once you have configured and added the `IConnectionMultiplexer` to the service c
 
 # 5.0 OAuth
 
-This connector simplifies using Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)).
+This connector simplifies using Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)).
 
 It exposes the Cloud Foundry OAuth service configuration data as inject-able `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [Cloud Foundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
 
@@ -1721,7 +1723,7 @@ You should have a good understanding of how the new .NET [Configuration service]
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
 
-You probably will want some understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) before starting to use this connector.
+You probably will want some understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) before starting to use this connector.
 
 In order to use this Connector you need to do the following:
 
@@ -1780,7 +1782,7 @@ Here is an example on how to do that.
 
 There are multiple ways in which you can setup OAuth services on Cloud Foundry.
 
-In the quick start above, we used a CUPS based service to define a direct binding to the Cloud Foundry UAA server. Alternatively, you can also make use of the [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) product to provision a OAuth service binding. The process that you follow in creating service binding varies for each of the approaches.
+In the quick start above, we used a CUPS based service to define a direct binding to the Cloud Foundry UAA server. Alternatively, you can also make use of the [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) product to provision a OAuth service binding. The process that you follow in creating service binding varies for each of the approaches.
 
 Regardless of which you choose, once you have bound the OAuth service to the application, the OAuth service settings will have been made available and setup in `VCAP_SERVICES`.
 
@@ -1873,7 +1875,7 @@ The `AddOAuthServiceOptions(Configuration)` method call configures a `OAuthServi
          ViewData["TokenInfoUrl"] = _options.TokenInfoUrl;
          ViewData["JwtKeyUrl"] = _options.JwtKeyUrl;
          ViewData["ValidateCertificates"] = _options.ValidateCertificates;
-         ViewData["Scopes"] = CommanDelimit(_options.Scope);
+         ViewData["Scopes"] = CommaDelimit(_options.Scope);
 
          return View();
      }
