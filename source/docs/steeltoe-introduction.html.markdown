@@ -1,7 +1,7 @@
 ---
 title: Introduction
 order: 10
-date: 2016/6/1
+date: 2018/1/21
 tags:
 ---
 
@@ -63,15 +63,15 @@ Below is an example NuGet.config file you can edit and use when developing appli
 
 ## 1.2 Quick Starts
 
-For many of the Steeltoe services, we provide Quick Start samples and a guide that describes how to quickly get a sample application up and running using a particular Steeltoe service. A detailed breakdown of the sample code is provided, describing how the Steeltoe service has been integrated into the app.
+For many of the Steeltoe components, we provide Quick Start samples and a guide that describes how to quickly get a sample application up and running using a particular Steeltoe component. A detailed breakdown of the sample code is provided, describing how Steeltoe has been integrated into the app.
 
-In many cases, these guides provide two ways of exercising the applications: one that describes how to create and run the application locally on your development machine, and a second that describes getting the application up and running on Cloud Foundry.
+In many cases, these guides provide two ways of exercising the applications: one that describes how to create and run the application locally on your development machine, and a second that describes running the application on Cloud Foundry.
 
-For the Quick Starts in which we run the application locally, we will at times make use of Java in order to run instances of the dependent servers (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) locally on your machine. As such if you don't have Java available on your machine you may want to install that now.
+For the Quick Starts in which we run the application locally, Java is required to run instances of some of the servers (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) on your machine. If you don't have Java available on your machine you may want to install that now.
 
-For the Quick Starts in which we make use of Cloud Foundry, you will need access to a Cloud Foundry environment that has the appropriate services  (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) installed. One option is to run [PCF Dev](https://docs.pivotal.io/pcf-dev/), the local developer version of Pivotal Cloud Foundry on your development machine. PCF Dev makes use of  Virtual Box and so depending on your desktop operating system and configuration you may or may not be able to make use of it.
+For the Quick Starts running on Cloud Foundry, you will need access to a Cloud Foundry environment that has the appropriate services  (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) installed. One option is to run [PCF Dev](https://docs.pivotal.io/pcf-dev/), the local developer version of Pivotal Cloud Foundry on your development machine. PCF Dev makes use of  Virtual Box, so depending on your desktop operating system and configuration you may or may not be able to make use of it.
 
-Alternatively you can sign up for a free trial account of [Pivotal Web Services](http://run.pivotal.io/) the hosted multi-tenant edition of [Pivotal Cloud Foundry](https://pivotal.io/platform). Note that if you want to work solely with .NET framework applications that target the Windows operating system, you'll likely need access to a corporate Cloud Foundry environment, as neither of the above options currently support deploying Windows apps.
+Alternatively, you can sign up for a free trial account of [Pivotal Web Services](https://run.pivotal.io/) the hosted multi-tenant edition of [Pivotal Cloud Foundry](https://pivotal.io/platform). Note that if you want to work solely with .NET framework applications that target the Windows operating system, you'll likely need access to a corporate Cloud Foundry environment, as neither of the above options currently support deploying Windows apps.
 
 Regardless of which Cloud Foundry option you choose, in order to work with Cloud Foundry, you will need to install the [Cloud Foundry Command Line Interface (CLI)](https://github.com/cloudfoundry/cli/releases).
 
@@ -79,37 +79,31 @@ Finally, for all of the Quick Starts, you will need to install the [GIT command 
 
 # 2.0 Release Notes
 
-## 2.1 Discovery
+A large focus of Steeltoe version 2.0 is compatibility with .NET Standard 2.0. As part of this initiative, virtually all packages have been reorganized and renamed to minimize hard dependencies on other libraries and also help differentiate between packages with full-framework support and those for .NET Core. Most Steeltoe libraries now include a package ending with "Base" that provides the majority of the functionality. Packages ending with "Core" provide extra methods for working with Microsoft's Dependency Injection Framework, with the naming intended to coincide with .NET Core development. Full-framework support to date has been focused on Autofac, relevant Steeltoe packages have names ending in "Autofac".
 
-### Eureka Version
+## 2.1 CircuitBreaker
 
-Steeltoe has implemented a [Eureka 1.0 client](https://github.com/Netflix/eureka/wiki), not a 2.0 client. Eureka 2.0 is expected to have significant updates to its architecture and public API. At some point in time, we will examine a 2.0 implementation.
+### New Features for version 2.0
 
-### Eureka AWS Support
+* Autofac support
 
-The Eureka client for Java contains features which enable operation on AWS.  The Steeltoe version does not currently implement those features. Instead, this version has been optimized for Cloud Foundry environments. We may look at adding AWS cloud features at a future point in time.
+### Package Organization and Name Changes in version 2.0
 
-### Eureka Client Configuration
+As described in the general release notes above, these are now the names of the Steeltoe Circuit breaker packages: `Steeltoe.CircuitBreaker.HystrixBase`, `Steeltoe.CircuitBreaker.HystrixCore`, `Steeltoe.CircuitBreaker.HystrixAutofac`, `Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore` and `Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`
 
-Not all configuration properties found in the Java client are available for configuration. Those that are supported and provided by the Steeltoe implementation have been documented within.
+## 2.2 Common
 
-### Cloud Foundry C2C Support
+New for Steeltoe 2.0 is a set of libraries with code shared between our libraries. You're welcome to use this code as well, but these libraries are not likely to receive much attention in this documentation.
 
-Starting with version 1.1.0 of Steeltoe, the Steeltoe Eureka client allows you to configure what hostname/address gets registered with the Eureka server for your service registrations.  This is provided by using a new setting, `spring:cloud:discovery:registrationMethod`.  By using this setting, you can now make use of Cloud Foundry Container to Container (C2C) networking support.
+## 2.3 Configuration
 
-## 2.2 Configuration
+### New Features for version 2.0
 
-### Config Server - Unstructured data files
+* Autofac support
 
-Unlike the Java version of the Config Server client, the Steeltoe client currently only supports property and yaml files, not plain text.
+### Package Organization and Name Changes in version 2.0
 
-### Config Server - Client decryption option
-
-Steeltoe client only supports clear text communication with the configuration server, unless SSL/TLS is being used between the client and server. Client decryption is on our road map, but not currently supported.
-
-### Config Server initiated reload
-
-Currently reloads must be initiated by the client, Steeltoe has not implemented handlers to listen for server change events. However this feature is expected to be added in the future.
+In Steeltoe version 1.x, there are 3 packages for Configuration. As of 2.0, each of those packages now has a &ast;Base, &ast;Core and &ast;Autofac (eg: `Steeltoe.Extensions.Configuration.ConfigServerBase`, `Steeltoe.Extensions.Configuration.ConfigServerCore`, etc) for a total of 9 packages. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry.
 
 ### Config Server Settings
 
@@ -119,7 +113,29 @@ Starting with version 1.1.0 of Steeltoe, you can now configure the timeout value
 
 Starting with version 1.1.0 of Steeltoe, the Config Server client is compatible with Spring Cloud and Spring Cloud Services Config Server deployments which support using Hashicorp Vault as back-ends.
 
-## 2.3 Connectors
+### Known Issues
+
+#### Unstructured data files
+
+Unlike the Java version of the Config Server client, the Steeltoe client currently only supports property and yaml files, not plain text.
+
+#### Client decryption option
+
+Steeltoe client only supports clear text communication with the configuration server, unless SSL/TLS is being used between the client and server. Client decryption is on our road map, but not currently supported.
+
+#### Server initiated reload
+
+Currently reloads must be initiated by the client, Steeltoe has not implemented handlers to listen for server change events. However this feature is expected to be added in the future.
+
+## 2.4 Connectors
+
+### New features for version 2.0
+
+* Microsoft SQL Server Connector
+
+### Package Organization and Name Changes in version 2.0
+
+As of version 2.0.0, all of the individual connectors have been rolled up into a single package: `Steeltoe.CloudFoundry.ConnectorBase`. Helper methods for ASP.NET Core/Microsoft DI have been moved to `Steeltoe.CloudFoundry.ConnectorCore`, `Steeltoe.CloudFoundry.Connector.EF6Core` (Entity Framework 6) and `Steeltoe.CloudFoundry.Connector.EFCore` (Entity Framework Core). Additionally, classes and namespaces related to RabbitMQ have been renamed from `*Rabbit` to `*RabbitMQ`
 
 ### MySql Connector
 
@@ -135,10 +151,66 @@ Starting with version 1.0.1 of Steeltoe, the direct dependency on the open sourc
 
 For more detail on how to use the connector see the Postgres connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the Postgres/Entity framework code wish to use in your application.
 
-### Rabbit Connector
+### RabbitMQ Connector
 
 Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source RabbitMQ Client package has been removed.  This has allowed the connector to become more flexible in what version of the client it supports.
 
-For more detail on how to use the connector see the RabbitMQ connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the Rabbit code you wish to use in your application.
+For more detail on how to use the connector see the RabbitMQ connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the RabbitMQ code you wish to use in your application.
 
 Also with this release, the connector has been updated to properly work with SSL/TLS based connections.  Prior to this release, the connector did not support using the 'amqps' URL scheme.
+
+### Redis Connector
+
+Starting with version 2.0.0 of Steeltoe, the direct dependencies on Redis packages have been removed. The Steeltoe connector works with the StackExchange libraries or `Microsoft.Extensions.Caching.Redis`. You include the package and version you prefer and use the appropriate methods to wire it up. See the Redis Connector documentation for more information.
+
+## 2.5 Discovery
+
+### New features for version 2.0
+
+* Added support for dynamic update of configuration options
+* Autofac support
+
+### Package Organization and Name Changes in version 2.0
+
+In version 1.x of Steeltoe, there were 3 packages, in version 2.x there are 9: `Steeltoe.Discovery.ClientAutofac`, `Steeltoe.Discovery.ClientCore`, `Steeltoe.Discovery.Eureka.Client`, `Pivotal.Discovery.ClientCore`, `Pivotal.Discovery.ClientAutofac`, `Pivotal.Discovery.Eureka.Client`. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry.
+
+### Eureka Version
+
+Steeltoe has implemented a [Eureka 1.0 client](https://github.com/Netflix/eureka/wiki), not a 2.0 client. Eureka 2.0 is still a work in progress and is expected to have significant updates to its architecture and public API. At some point in time, we will examine a 2.0 implementation.
+
+### Eureka AWS Support
+
+The Eureka client for Java contains features which enable operation on AWS.  The Steeltoe version does not currently implement those features. Instead, this version has been optimized for Cloud Foundry environments. We may look at adding AWS cloud features at a future point in time.
+
+### Eureka Client Configuration
+
+Not all configuration properties found in the Java client are available for configuration. Those that are supported and provided by the Steeltoe implementation have been documented within.
+
+### Cloud Foundry C2C Support
+
+Starting with version 1.1.0 of Steeltoe, the Steeltoe Eureka client allows you to configure what hostname/address gets registered with the Eureka server for your service registrations.  This is provided by using a new setting, `spring:cloud:discovery:registrationMethod`.  By using this setting, you can now make use of Cloud Foundry Container to Container (C2C) networking support.
+
+## 2.6 Logging
+
+### Package Name Change in version 2.0
+
+`Steeltoe.Extensions.Logging.CloudFoundry` is now called `Steeltoe.Extensions.Logging.DynamicLogger`
+
+## 2.7 Management
+
+### New features for version 2.0
+
+* Actuators now identify themselves to PCF as Steeltoe, resulting in a Steeltoe icon in Pivotal Apps Manager.
+* Certificate validation can be disabled on management endpoints
+
+### Package Organization and Name Changes in version 2.0
+
+As of version 2.0.0, all of the individual management endpoints have been rolled up into a single package: `Steeltoe.Management.EndpointBase`. Helper methods for ASP.NET Core/Microsoft DI have been moved to `Steeltoe.Management.EndpointCore`, convenience helpers to set up all endpoints at once are available in `Steeltoe.Management.CloudFoundryCore`.
+
+## 2.8 Security
+
+### New features for version 2.0
+
+* CredHub Client
+* .NET Framework 4.x. Owin CloudFoundry Provider
+* WCF JWT Provider
