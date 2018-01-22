@@ -83,13 +83,7 @@ A large focus of Steeltoe version 2.0 is compatibility with .NET Standard 2.0. A
 
 ## 2.1 CircuitBreaker
 
-### New Features for version 2.0
-
-* Autofac support
-
-### Package Organization and Name Changes in version 2.0
-
-As described in the general release notes above, these are now the names of the Steeltoe Circuit breaker packages: `Steeltoe.CircuitBreaker.HystrixBase`, `Steeltoe.CircuitBreaker.HystrixCore`, `Steeltoe.CircuitBreaker.HystrixAutofac`, `Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore` and `Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`
+As described in the general release notes above, these are now the names of the Steeltoe Circuit breaker packages: `Steeltoe.CircuitBreaker.HystrixBase`, `Steeltoe.CircuitBreaker.HystrixCore`, `Steeltoe.CircuitBreaker.HystrixAutofac`, `Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore` and `Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`.
 
 ## 2.2 Common
 
@@ -97,13 +91,7 @@ New for Steeltoe 2.0 is a set of libraries with code shared between our librarie
 
 ## 2.3 Configuration
 
-### New Features for version 2.0
-
-* Autofac support
-
-### Package Organization and Name Changes in version 2.0
-
-In Steeltoe version 1.x, there are 3 packages for Configuration. As of 2.0, each of those packages now has a &ast;Base, &ast;Core and &ast;Autofac (eg: `Steeltoe.Extensions.Configuration.ConfigServerBase`, `Steeltoe.Extensions.Configuration.ConfigServerCore`, etc) for a total of 9 packages. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry.
+In Steeltoe version 1.x, there are 3 packages for Configuration. As of 2.0.0, each of those packages now has a &ast;Base, &ast;Core and &ast;Autofac (eg: `Steeltoe.Extensions.Configuration.ConfigServerBase`, `Steeltoe.Extensions.Configuration.ConfigServerCore`, etc) for a total of 9 packages. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry.
 
 ### Config Server Settings
 
@@ -129,13 +117,7 @@ Currently reloads must be initiated by the client, Steeltoe has not implemented 
 
 ## 2.4 Connectors
 
-### New features for version 2.0
-
-* Microsoft SQL Server Connector
-
-### Package Organization and Name Changes in version 2.0
-
-As of version 2.0.0, all of the individual connectors have been rolled up into a single package: `Steeltoe.CloudFoundry.ConnectorBase`. Helper methods for ASP.NET Core/Microsoft DI have been moved to `Steeltoe.CloudFoundry.ConnectorCore`, `Steeltoe.CloudFoundry.Connector.EF6Core` (Entity Framework 6) and `Steeltoe.CloudFoundry.Connector.EFCore` (Entity Framework Core). Additionally, classes and namespaces related to RabbitMQ have been renamed from `*Rabbit` to `*RabbitMQ`
+As of version 2.0.0, all of the individual connectors have been rolled up into a single package: `Steeltoe.CloudFoundry.ConnectorBase`. Helper methods for ASP.NET Core/Microsoft DI have been moved to `Steeltoe.CloudFoundry.ConnectorCore`, `Steeltoe.CloudFoundry.Connector.EF6Core` (Entity Framework 6) and `Steeltoe.CloudFoundry.Connector.EFCore` (Entity Framework Core). Version 2.0.0 now includes a Microsoft SQL Server Connector, and classes and namespaces related to RabbitMQ have been renamed from `*Rabbit` to `*RabbitMQ`
 
 ### MySql Connector
 
@@ -165,14 +147,7 @@ Starting with version 2.0.0 of Steeltoe, the direct dependencies on Redis packag
 
 ## 2.5 Discovery
 
-### New features for version 2.0
-
-* Added support for dynamic update of configuration options
-* Autofac support
-
-### Package Organization and Name Changes in version 2.0
-
-In version 1.x of Steeltoe, there were 3 packages, in version 2.x there are 9: `Steeltoe.Discovery.ClientAutofac`, `Steeltoe.Discovery.ClientCore`, `Steeltoe.Discovery.Eureka.Client`, `Pivotal.Discovery.ClientCore`, `Pivotal.Discovery.ClientAutofac`, `Pivotal.Discovery.Eureka.Client`. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry.
+In version 1.x of Steeltoe, there were 3 packages, in version 2.0.0 there are 9: `Steeltoe.Discovery.ClientAutofac`, `Steeltoe.Discovery.ClientCore`, `Steeltoe.Discovery.Eureka.Client`, `Pivotal.Discovery.ClientCore`, `Pivotal.Discovery.ClientAutofac`, `Pivotal.Discovery.Eureka.Client`. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry. Version 2.0.0 also includes support for dynamic update of configuration options.
 
 ### Eureka Version
 
@@ -192,25 +167,12 @@ Starting with version 1.1.0 of Steeltoe, the Steeltoe Eureka client allows you t
 
 ## 2.6 Logging
 
-### Package Name Change in version 2.0
-
-`Steeltoe.Extensions.Logging.CloudFoundry` is now called `Steeltoe.Extensions.Logging.DynamicLogger`
+As of version 2.0.0, `Steeltoe.Extensions.Logging.CloudFoundry` is now called `Steeltoe.Extensions.Logging.DynamicLogger`
 
 ## 2.7 Management
 
-### New features for version 2.0
-
-* Actuators now identify themselves to PCF as Steeltoe, resulting in a Steeltoe icon in Pivotal Apps Manager.
-* Certificate validation can be disabled on management endpoints
-
-### Package Organization and Name Changes in version 2.0
-
-As of version 2.0.0, all of the individual management endpoints have been rolled up into a single package: `Steeltoe.Management.EndpointBase`. Helper methods for ASP.NET Core/Microsoft DI have been moved to `Steeltoe.Management.EndpointCore`, convenience helpers to set up all endpoints at once are available in `Steeltoe.Management.CloudFoundryCore`.
+As of version 2.0.0, all of the individual management endpoints have been rolled up into a single package: `Steeltoe.Management.EndpointBase`. Helper methods for ASP.NET Core/Microsoft DI have been moved to `Steeltoe.Management.EndpointCore`, convenience helpers to set up all endpoints at once are available in `Steeltoe.Management.CloudFoundryCore`. Additionally in 2.0.0, actuators identify themselves to PCF as Steeltoe, resulting in a Steeltoe icon in Pivotal Apps Manager and certificate validation can be disabled on management endpoints.
 
 ## 2.8 Security
 
-### New features for version 2.0
-
-* CredHub Client
-* .NET Framework 4.x. Owin CloudFoundry Provider
-* WCF JWT Provider
+New features for Steeltoe Security 2.0.0 include a client for [CredHub](https://github.com/cloudfoundry-incubator/credhub), support for using CloudFoundry as an authentication provider in .NET Framework 4.x applications and a JWT Provider for WCF applications.
