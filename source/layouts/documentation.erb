@@ -7,12 +7,12 @@
       <div class="p2">
         <h2 class="mt0 steel-heading"><i class="fa fa-file-text muted"></i> Documentation</h2>
         <div class="sm-flex">
-          <div class="col-12 sm-col-4 sm-pr3">
+          <div class="col-12 sm-col-3 sm-pr3">
             <div id="toc">
               <%= partial 'shared/docs-toc' %>
             </div>
           </div>
-          <div class="col-12 sm-col-8 js-toc-content">
+          <div class="col-12 sm-col-9 js-toc-content">
             <% if !current_article.nil? %>
               <h1 class="js-toc-ignore regular"><%= current_article.metadata[:page][:title] %></h1>
             <% end %>

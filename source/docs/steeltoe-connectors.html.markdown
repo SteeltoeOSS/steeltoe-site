@@ -6,9 +6,9 @@ tags:
 ---
 <span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
-Steeltoe Connectors are intended to simplify the process of connecting and using services on Cloud Foundry. Steeltoe Connectors provide a simple abstraction for .NET based applications running on Cloud Foundry enabling them to discover bound services together with the deployment information at runtime. The connectors also provide support for registering the services as inject-able service objects.
+Steeltoe Connectors are intended to simplify the process of connecting and using services on Cloud Foundry. Steeltoe Connectors provide a simple abstraction for .NET based applications running on Cloud Foundry enabling them to discover bound services together with the deployment information at runtime. The connectors also provide support for registering the services as injectable service objects.
 
-The Steeltoe Connectors provide out-of-the-box support for discovering many common services on Cloud Foundry. They also include the ability to use settings based configuration so developers can supply configuration settings at development and testing time, but then have those settings overridden when pushing the application to Cloud Foundry.
+The Steeltoe Connectors provide out-of-the-box support for discovering many common services on Cloud Foundry. They also include the ability to use settings-based configuration so developers can supply configuration settings at development and testing time, but then have those settings overridden when pushing the application to Cloud Foundry.
 
 All connectors use configuration information from Cloud Foundry's `VCAP_SERVICES` environment variable to detect and configure the available services. This a Cloud Foundry standard that is used to hold connection and identification information for all service instances that have been bound to Cloud Foundry applications.
 
@@ -151,15 +151,15 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 * `Startup.cs` - Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry MySql configuration values when pushed to Cloud Foundry.
 * `HomeController.cs` - Code added for injection of a `MySqlConnection` or `DbContext` into the Controller. These are used to obtain data from the database and then to display the data.
 * `MySqlData.cshtml` - The view used to display the MySql data values.
-* `Models folder` - Contains code to initialize the database and also the definition of `DbContexts` classes for the MySqlEF6 and MySqlEFCore samples.
+* `Models folder` - Contains code to initialize the database and also the definition of `DbContext` classes for the MySqlEF6 and MySqlEFCore samples.
 
 ## 1.2 Usage
 
 You should have a good understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the connector. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the connector.
 
-You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
+You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay attention to the usage of the `ConfigureServices()` method.
 
-To use this connector you need to do the following:
+To use this connector:
 
 * Create and bind a MySql Service instance to your application.
 * Optionally, configure any MySql client settings (e.g. `appsettings.json`) you need.
@@ -168,72 +168,71 @@ To use this connector you need to do the following:
 
 ### 1.2.1 Add NuGet Reference
 
-To make use of this connector, you need to add a reference to the Steeltoe MySql connector NuGet.
+To make use of this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
 
-The connector can be found in the `Steeltoe.CloudFoundry.Connector.MySql` package.
+App Type | ORM | Package |
+--- | --- | --- |
+ASP.NET Core | Entity Framework 6 | `Steeltoe.CloudFoundry.Connector.EF6Core` |
+ASP.NET Core | Entity Framework Core | `Steeltoe.CloudFoundry.Connector.EFCore` |
+ASP.NET Core | Other | `Steeltoe.CloudFoundry.ConnectorCore`
+Other | Other | `Steeltoe.CloudFoundry.ConnectorBase`
 
-Add the connector to your project using the following `PackageReference`:
+Use the Nuget package manager tools or directly add the appropriate package to your project using the a `PackageReference`:
 
 ```xml
 <ItemGroup>
-....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.MySql" Version= "1.1.0"/>
+...
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0-rc1"/>
 ...
 </ItemGroup>
 ```
 
-In addition to the above, depending on which ADO.NET provider you wish to use, you will need to include references to those providers packages as well.
-
-For example, if wanting to use Oracles MySql ADO.NET provider, you would add:
-
-```xml
-<PackageReference Include="MySql.Data" Version= "x.y.z"/>
-```
-
-For the open source MySqlConnector provider, you would add:
-
-```xml
-<PackageReference Include="MySqlConnector" Version= "x.y.z"/>
-```
-
-If you wish to use Entity Framework providers, you will need to include the appropriate package references as well.
+In addition to the above, you will need a MySql-specific package: `MySql.Data`, `MySqlConnector` or `Pomelo.EntityFrameworkCore.MySql`.
 
 ### 1.2.2 Configure Settings
 
-Optionally you can configure the settings the MySql connector will use when setting up a `MySqlConnection` to a database. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of MySql database running elsewhere.
+The MySql connector supports a variety of configuration options. These settings can be used to develop or test an application locally and overridden during deployment.
 
-Here is an example MySql connector configuration in JSON that shows how to setup a connection to a database at `myserver:3306`:
+This MySql connector configuration in shows how to connect to a database at `myserver:3306`:
 
 ```json
 {
-...
+  ...
   "mysql": {
     "client": {
       "server": "myserver",
       "port": 3309
     }
   }
-  .....
+  ...
 }
 ```
 
-Below is a table showing all possible settings for the connector.
+Below is a table showing available settings for the connector. These settings are not specific to Steeltoe, they are passed through to the underlying data provider. See the [Oracle MySQL Connection String docs](https://dev.mysql.com/doc/connector-net/en/connector-net-connection-options.html) or [open source MySQL Connection String docs](https://mysql-net.github.io/MySqlConnector/connection-options/) for more information.
 
 As shown above, all of these settings should be prefixed with `mysql:client:`
 
-|Key|Description|
-|------|------|
-|**server**|Hostname or IP Address of server, defaults = localhost|
-|**port**|Port number of server, defaults = 3306|
-|**username**|Username for authentication, defaults = empty|
-|**password**|Password for authentication, default = empty|
-|**database**|Schema to connect to, default = empty|
-|**connectionString**|Full connection string, use instead of above individual settings|
-|**sslMode**|SSL usage option, `None`, `Preferred`, `Required`, default = none|
+|Key|Description|Steeltoe Default|
+|---|---|---|
+|server|Hostname or IP Address of server|localhost|
+|port|Port number of server|3306|
+|username|Username for authentication|not set|
+|password|Password for authentication|not set|
+|database|Schema to connect to|not set|
+|connectionString|Full connection string, use instead individual settings|
+|sslMode|SSL usage option, `None`, `Preferred`, `Required`|none|
+|allowUserVariables|`true` indicates that the provider expects user variables in the SQL|not set|
+|connectionTimeout|Seconds to wait for a connection before throwing an error|not set|
+|defaultCommandTimeout|Seconds each command can execute before timing out, use zero to disable timeouts|not set|
+|oldGuids|Set `true` to use a GUID of data type BINARY(16)|not set|
+|persistSecurityInfo|Set to `true` **_(not recommended)_** to allow the application to access to security-sensitive information, such as the password.|not set|
+|treatTinyAsBoolean|Set to `false` to return tinyint(1) as sbyte/byte|not set|
+|useAffectedRows|Set to `false` to report found rows instead of changed (affected) rows|not set|
+|useCompression|If `true` (and server-supported), packets sent between client and server are compressed|not set|
 
-Once the connectors settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the connector.
+Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
 
-Using the code below, you can see that the connectors settings from above should be put in `appsettings.json` and included with the application. Then, by using the .NET provided JSON configuration provider we are able to read in the settings simply by adding the provider to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
+The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
 
 ```csharp
 public class Startup {
@@ -255,11 +254,11 @@ public class Startup {
     ....
 ```
 
-If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
+To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
 ### 1.2.3 Cloud Foundry
 
-When you want to use MySql on Cloud Foundry and you have installed the MySql service, you can create and bind a instance of it to your application using the Cloud Foundry CLI as follows:
+To use MySql on Cloud Foundry, you may create and bind an instance of MySql to your application using the Cloud Foundry CLI as follows:
 
 ```bash
 > cf target -o myorg -s myspace
@@ -274,17 +273,13 @@ When you want to use MySql on Cloud Foundry and you have installed the MySql ser
 > cf restage myApp
 ```
 
-Note: The commands above assume you are using the MySql service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
+> Note: The commands above assume you are using [MySql for PCF](https://network.pivotal.io/products/p-mysql), provided by Pivotal on Cloud Foundry. If you are using a different service, you will have to adjust the `create-service` command to fit your environment.
 
-Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
-
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
-
-To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`. Here is an example:
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
 
 ```csharp
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -302,28 +297,28 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
-When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
+When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
 
-If there are merge conflicts, then the service binding settings will take precedence and will override all others.
+If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
 
->Note: If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
 
 ### 1.2.4 Add MySqlConnection
 
-Now in order to use a `MySqlConnection` in your application, you need to add it to the service container. You do this in the `ConfigureServices()` method of the `Startup` class.
+To use a `MySqlConnection` in your application, add it to the service container in the `ConfigureServices()` method of the `Startup` class.
 
 ```csharp
-#using Steeltoe.CloudFoundry.Connector.MySql;
+using Steeltoe.CloudFoundry.Connector.MySql;
 
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(...)
     {
-      .....
+      ...
     }
     public void ConfigureServices(IServiceCollection services)
     {
@@ -334,28 +329,25 @@ public class Startup {
         services.AddMvc();
         ...
     }
-    ....
+    ...
 ```
 
-The `AddMySqlConnection(Configuration)` method call above configures the `MySqlConnection` using the configuration built by the application and it then adds the connection to the service container.
+The `AddMySqlConnection(Configuration)` method call above configures the `MySqlConnection` using the configuration built by the application and adds the connection to the service container.
 
 ### 1.2.5 Use MySqlConnection
 
-Once you have configured and added the connection to the service container, then its very easy to inject and use it in a controller or a view.
-
-Below is an example illustrating how to do this an then use it in a controller:
+Once you have configured and added the connection to the service container, it is trivial to inject and use in a controller or a view:
 
 ```csharp
 using MySql.Data.MySqlClient;
-....
+...
 public class HomeController : Controller
 {
     public HomeController()
     {
     }
     ...
-    public IActionResult MySqlData(
-        [FromServices] MySqlConnection dbConnection)
+    public IActionResult MySqlData([FromServices] MySqlConnection dbConnection)
     {
         dbConnection.Open();
 
@@ -377,23 +369,19 @@ public class HomeController : Controller
 
 ### 1.2.6 Add DbContext
 
-If you want to use the Entity Framework, then you are going to want to inject and use a `DbContext` in your application instead of a connection.
-
-To set this up, you need use the `AddDbContext<>()` method to add a `DbContext` instead of a `MySqlConnection`.
-
-Just like above, you do this in the `ConfigureServices(..)` method of the `Startup` class:
+To use Entity Framework, inject and use a `DbContext` in your application instead of a `MySqlConnection` by using the `AddDbContext<>()` method:
 
 ```csharp
-#using Steeltoe.CloudFoundry.Connector.MySql.EFCore
+using Steeltoe.CloudFoundry.Connector.MySql.EFCore
 ... OR
-#using Steeltoe.CloudFoundry.Connector.MySql.EF6;
+using Steeltoe.CloudFoundry.Connector.MySql.EF6;
 
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(...)
     {
-      .....
+      ...
     }
     public void ConfigureServices(IServiceCollection services)
     {
@@ -407,7 +395,7 @@ public class Startup {
         services.AddMvc();
         ...
     }
-    ....
+    ...
 ```
 
 The `AddDbContext<TestContext>(..)` method call configures `TestContext` using the configuration built earlier and then adds the DbContext (i.e. `TestContext`) to the service container.
@@ -431,7 +419,7 @@ public class TestContext : DbContext
     public DbSet<TestData> TestData { get; set; }
 }
 
-// ---------- EFCore DbContext ---------------
+// ---------- EFCore DbContext ------------
 using Microsoft.EntityFrameworkCore;
 ...
 
@@ -448,31 +436,21 @@ public class TestContext : DbContext
 
 ### 1.2.7 Use DbContext
 
-Once you have configured and added the DbContext to the service container, then its very simple to inject and use it in a controller or a view.
-
-Here is an example illustrating this:
+Once you have configured and added the DbContext to the service container, inject and use it in a controller or a view:
 
 ```csharp
 using Project.Models;
-....
+...
 public class HomeController : Controller
 {
     public HomeController()
     {
     }
-    public IActionResult MySqlData(
-        [FromServices] TestContext context)
+
+    public IActionResult MySqlData([FromServices] TestContext context)
     {
-
-        var td = context.TestData.ToList();
-        foreach (var d in td)
-        {
-            ViewData["Key" + d.Id] = d.Data;
-        }
-
-        return View();
+        return View(context.TestDat.ToList());
     }
-
 ```
 
 # 2.0 Postgres

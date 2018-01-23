@@ -225,7 +225,7 @@ body.docs {
   overflow: hidden;
   width: inherit;
   padding-right: 3em;
-  max-width: 400px;
+  max-width: 375px;
 }
 
 .toc-link ul li a {
@@ -248,6 +248,9 @@ body.docs {
   padding-left: 50px; }
 
 .toc-link {
+  &.is-active-link::before {
+    background-color: $ms-blue;
+  }
   &::before {
      max-height: 28px;
   }
@@ -287,6 +290,19 @@ body.docs {
 }
 .is-collapsed{
   display: none;
+}
+
+.js-toc-content {
+  blockquote {
+    background-color: $faint-blue;
+    border:1px solid #a0a0a0;
+    font-size:1em;
+    font-style:normal;
+    margin:0;
+    p {
+      margin: .35em;
+    }
+  }
 }
 
 table {
