@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			contentSelector: '.js-toc-content',
 			ignoreSelector: '.js-toc-ignore',
 			// Which headings to grab inside of the contentSelector element.
-			headingSelector: 'h1, h2, h3',
+			headingSelector: 'h1, h2, h3, h4',
 			positionFixedSelector: '#toc',
 			// Fixed position class to add to make sidebar fixed after scrolling down past the fixedSidebarOffset.
 			positionFixedClass: 'is-position-fixed',
