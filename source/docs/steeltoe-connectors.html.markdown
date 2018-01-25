@@ -14,6 +14,24 @@ All connectors use configuration information from Cloud Foundry's `VCAP_SERVICES
 
 For more information on `VCAP_SERVICES` see the Cloud Foundry [documentation](https://docs.cloudfoundry.org/).
 
+# 0.0 Initialize Dev Environment
+
+All of the Steeltoe sample applications are in the same repository. If you haven't already, use git to clone the repository or download with your browser from GitHub: [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples)
+
+```bash
+> git clone https://github.com/SteeltoeOSS/Samples.git
+```
+
+> Note: all connector samples in that repository have a base path of `Samples/Connectors/src/`
+
+Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space:
+
+```bash
+> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+or
+> cf target -o <YourOrg> -s <YourSpace>
+```
+
 # 1.0 MySQL
 
 This connector simplifies using MySql ADO.NET providers in an application running on Cloud Foundry.
@@ -37,17 +55,15 @@ This quick start consists of using several ASP.NET Core sample applications to i
 
 There are three sample applications you can choose from for this quick start:
 
-* MySql - illustrates how to use a `MySqlConnection` to issue commands to the bound database.
-* MySqlEF6 - illustrates how to use a Entity Framework 6 `DbContext` to access the bound database.
-* MySqlEFCore - illustrates how to use a Entity Framework Core `DbContext` to access the bound database.
+* AspDotNetCore/MySql - uses a `MySqlConnection` to issue commands to the bound database.
+* AspDotNetCore/MySqlEF6 - uses an Entity Framework 6 `DbContext` to access the bound database.
+* AspDotNetCore/MySqlEFCore - uses a Entity Framework Core `DbContext` to access the bound database.
 
-### 1.1.1 Get Sample
+### 1.1.1 Locate Sample
 
 Depending on your specific interests, pick one of the following samples to work with going forward.
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
->
 > # Use a `MySqlConnection` sample
 > cd Samples/Connectors/src/AspDotNetCore/MySql
 >
@@ -64,12 +80,9 @@ In this step, use the Cloud Foundry CLI to create a service instance of MySql on
 
 The commands below assume you are using the MySql service provided by Pivotal on Cloud Foundry.
 
-If you are using a different service then you will have to adjust the `create-service` command below to fit your setup.
+If you are using a different service, adjust the `create-service` command below to fit your environment.
 
 ```bash
-> # Target and org and space in Cloud Foundry
-> cf target -o myorg -s development
->
 > # Create a MySql service instance on Cloud Foundry
 > cf create-service p-mysql 100mb myMySqlService
 >
@@ -146,7 +159,7 @@ Each of the samples were created using the .NET Core tooling `mvc` template ( i.
 
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
-* `MySql.csproj`, `MySqlEF6.csproj`, `MySqlEFCore.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.MySql`. Additionally, a `PackageReference` for Oracles MySql provider; `MySql.Data` has been added. If Entity Framework has been used you will see references to those packages as well.
+* `*.csproj` files contain `PackageReference` for Steeltoe NuGet Connector and Configuration packages. Additionally, a `PackageReference` for Oracle's MySql provider; `MySql.Data` has been added. If Entity Framework has been used you will see references to those packages as well.
 * `Program.cs` - Code added to read the `--server.urls` command line
 * `Startup.cs` - Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry MySql configuration values when pushed to Cloud Foundry.
 * `HomeController.cs` - Code added for injection of a `MySqlConnection` or `DbContext` into the Controller. These are used to obtain data from the database and then to display the data.
@@ -170,12 +183,12 @@ To use this connector:
 
 To make use of this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
 
-App Type | ORM | Package |
---- | --- | --- |
-ASP.NET Core | Entity Framework 6 | `Steeltoe.CloudFoundry.Connector.EF6Core` |
-ASP.NET Core | Entity Framework Core | `Steeltoe.CloudFoundry.Connector.EFCore` |
-ASP.NET Core | Other | `Steeltoe.CloudFoundry.ConnectorCore`
-Other | Other | `Steeltoe.CloudFoundry.ConnectorBase`
+|App Type|ORM|Package|
+|---|---|---|
+|ASP.NET Core|Entity Framework 6|`Steeltoe.CloudFoundry.Connector.EF6Core`|
+|ASP.NET Core|Entity Framework Core|`Steeltoe.CloudFoundry.Connector.EFCore`|
+|ASP.NET Core|Other|`Steeltoe.CloudFoundry.ConnectorCore`|
+|Other|Other|`Steeltoe.CloudFoundry.ConnectorBase`|
 
 Use the Nuget package manager tools or directly add the appropriate package to your project using the a `PackageReference`:
 
@@ -213,13 +226,13 @@ Below is a table showing available settings for the connector. These settings ar
 As shown above, all of these settings should be prefixed with `mysql:client:`
 
 |Key|Description|Steeltoe Default|
-|---|---|---|
+|---|---|:---:|
 |server|Hostname or IP Address of server|localhost|
 |port|Port number of server|3306|
 |username|Username for authentication|not set|
 |password|Password for authentication|not set|
 |database|Schema to connect to|not set|
-|connectionString|Full connection string, use instead individual settings|
+|connectionString|Full connection string|built from settings
 |sslMode|SSL usage option, `None`, `Preferred`, `Required`|none|
 |allowUserVariables|`true` indicates that the provider expects user variables in the SQL|not set|
 |connectionTimeout|Seconds to wait for a connection before throwing an error|not set|
@@ -236,7 +249,7 @@ The code below reads connector settings from the file `appsettings.json` with th
 
 ```csharp
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -251,7 +264,7 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
 To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
@@ -261,8 +274,6 @@ To manage application settings centrally instead of with individual files, use [
 To use MySql on Cloud Foundry, you may create and bind an instance of MySql to your application using the Cloud Foundry CLI as follows:
 
 ```bash
-> cf target -o myorg -s myspace
->
 > # Create MySql service
 > cf create-service p-mysql 100mb myMySqlService
 >
@@ -343,10 +354,6 @@ using MySql.Data.MySqlClient;
 ...
 public class HomeController : Controller
 {
-    public HomeController()
-    {
-    }
-    ...
     public IActionResult MySqlData([FromServices] MySqlConnection dbConnection)
     {
         dbConnection.Open();
@@ -405,7 +412,7 @@ You will define your `DbContext` differently depending on whether you are using 
 Here are examples for both:
 
 ```csharp
-// ---------- EF6 DbContext ---------------
+// ------- EF6 DbContext ---------
 using MySql.Data.Entity;
 using System.Data.Entity;
 ...
@@ -419,7 +426,7 @@ public class TestContext : DbContext
     public DbSet<TestData> TestData { get; set; }
 }
 
-// ---------- EFCore DbContext ------------
+// ------- EFCore DbContext ------
 using Microsoft.EntityFrameworkCore;
 ...
 
@@ -443,19 +450,15 @@ using Project.Models;
 ...
 public class HomeController : Controller
 {
-    public HomeController()
-    {
-    }
-
     public IActionResult MySqlData([FromServices] TestContext context)
     {
-        return View(context.TestDat.ToList());
+        return View(context.TestData.ToList());
     }
 ```
 
-# 2.0 Postgres
+# 2.0 PostgreSQL
 
-This connector simplifies using Postgres ADO.NET providers in an application running on Cloud Foundry.
+This connector simplifies using PostgreSQL in an application running on Cloud Foundry.
 
 Currently the connector supports the following providers:
 
@@ -465,20 +468,18 @@ The source code for this connector can be found [here](https://github.com/Steelt
 
 ## 2.1 Quick Start
 
-This quick start consists of using several ASP.NET Core sample applications to illustrate how to use the Steeltoe Postgres Connector for connecting to a Postgres service on Cloud Foundry.
+This quick start consists of several ASP.NET Core sample applications to illustrate how to use the Steeltoe PostgreSQL Connector for connecting to a PostgreSQL service on Cloud Foundry.
 
-There are two sample applications you can choose from for this quick start:
+There are two sample applications to choose from:
 
 * PostgreSql - illustrates how to use a `NpgsqlConnection` to issue commands to the bound database.
 * PostgreEFCore - illustrates how to use a Entity Framework Core `DbContext` to access the bound database.
 
-### 2.1.1 Get Sample
+### 2.1.1 Locate Sample
 
 Depending on your specific interests, pick one of the following samples to work with going forward.
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
->
 > # Use a `NpgsqlConnection`
 > cd Samples/Connectors/src/AspDotNetCore/PostgreSql
 >
@@ -488,17 +489,14 @@ Depending on your specific interests, pick one of the following samples to work 
 
 ### 2.1.2 Create Service
 
-In this step, you will create a service instance of Postgres on Cloud Foundry.
+Use the Cloud Foundry CLI to create a service instance of PostgreSQL on Cloud Foundry.
 
-The commands below assume you are using the EDB Postgres service on Cloud Foundry.
+The commands below assume you are using the EDB PostgreSQL service on Cloud Foundry.
 
-If you are using a different service then you will have to adjust the `create-service` command below to fit your setup.
+If you are using a different service, adjust the `create-service` command to fit environment.
 
 ```bash
-> # Target and org and space in Cloud Foundry
-> cf target -o myorg -s development
->
-> # Create a Postgres service instance on Cloud Foundry
+> # Create a PostgreSQL service instance on Cloud Foundry
 > cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
 >
 > # Make sure the service is ready
@@ -507,9 +505,7 @@ If you are using a different service then you will have to adjust the `create-se
 
 ### 2.1.3 Publish Sample
 
-Use the `dotnet` CLI to build and publish the application.
-
-Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
 ```bash
 > dotnet restore --configfile nuget.config
@@ -526,9 +522,7 @@ Note below we show how to publish for all of the target run times and frameworks
 
 ### 2.1.4 Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry.
-
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
 > # Push to Linux cell
@@ -541,7 +535,7 @@ Note below we show how to push for both Linux and Windows. Just pick one in orde
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-Note that the manifests have been defined to bind the application to `myPostgres` created above.
+> Note: the manifest files have all been defined to bind the application to the `myPostgres` instance created above.
 
 ### 2.1.5 Observe Logs
 
@@ -562,9 +556,9 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 2.1.6 What to expect
 
-At this point the app is up and running. Upon startup it inserts a couple rows into the bound Postgres database.
+At this point, the app is up and running. Upon startup it inserts a couple rows into the bound PostgreSQL database.
 
-To display those rows click on the `Postgres Data`` link in the top menu and you should see the row data displayed.
+To display those rows, click on the `Postgres Data` link in the top menu.
 
 ### 2.1.7 Understand Sample
 
@@ -572,62 +566,66 @@ Each of the samples were created from the .NET Core tooling `mvc` template ( i.e
 
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
-* `PostgreSql.csproj`, `PostgreEFCore.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.PostgreSql`
+* `PostgreSql.csproj` - Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
+* `PostgreEFCore.csproj` - Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.Connector.EFCore`
 * `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Postgres configuration values when pushed to Cloud Foundry.
-* `HomeController.cs` - Code added for injection of a `NpgsqlConnection` or `DbContext` into the Controller. These are used to obtain data from the database and then to display the data.
-* `PostgresData.cshtml` - The view used to display the Postgres data values.
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry PostgreSQL configuration values when pushed to Cloud Foundry.
+* `HomeController.cs` - Code added to inject a `NpgsqlConnection` or `DbContext` into the Controller and obtain data from the database for the view.
+* `PostgresData.cshtml` - The view used to display the PostgreSQL data values.
 * `Models folder` - contains code to initialize the database and also the `DbContext` for PostgreEFCore sample.
 
 ## 2.2 Usage
 
 You should have a good understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the connector. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the connector.
 
-You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
+You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Pay attention to the `ConfigureServices()` method.
 
-To use this connector you need to do the following:
+To use this connector:
 
-* Create and bind a Postgres Service instance to your application.
-* Optionally, configure any Postgres client settings (e.g. `appsettings.json`)
+* Create and bind a PostgreSQL Service instance to your application.
+* Optionally, configure any PostgreSQL client settings (e.g. `appsettings.json`)
 * Add Steeltoe Cloud Foundry config provider to your `ConfigurationBuilder`.
 * Add `NpgsqlConnection` or `DbContext` to your `IServiceCollection`.
 
 ### 2.2.1 Add NuGet Reference
 
-To make use of this connector, you need to add a reference to the Steeltoe PostgreSql connector NuGet.
+To make use of this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
 
-The connector can be found in the `Steeltoe.CloudFoundry.Connector.PostgreSql` package.
+|App Type | ORM | Package |
+|--- | --- | --- |
+|ASP.NET Core | Entity Framework 6 | `Steeltoe.CloudFoundry.Connector.EF6Core` |
+|ASP.NET Core | Entity Framework Core | `Steeltoe.CloudFoundry.Connector.EFCore` |
+|ASP.NET Core | Other | `Steeltoe.CloudFoundry.ConnectorCore`
+|Other | Other | `Steeltoe.CloudFoundry.ConnectorBase`
 
-Add the connector to your project using the following `PackageReference`:
+Use the Nuget package manager tools or directly add the appropriate package to your project using the a `PackageReference`:
 
 ```xml
 <ItemGroup>
-....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.PostgreSql" Version= "1.1.0"/>
+...
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0-rc1"/>
 ...
 </ItemGroup>
 ```
 
-In addition to the above, you also need to add the ADO.NET provider package reference to your application.
-
-Likewise if you are using the Entity Framework providers.
+In addition to the above, you also need to add a PostgreSQL package reference to your application, as you would if you were not using Cloud Foundry (eg: `Npgsql` or `Npgsql.EntityFrameworkCore.PostgreSQL`)
 
 ### 2.2.2 Configure Settings
 
-Optionally you can configure the settings the connector will use when setting up the `NpgsqlConnection` to a database. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of Postgres database running elsewhere.
+The PostgreSQL connector supports several settings for creating the `NpgsqlConnection` to a database. This can be useful when you are developing and testing an application locally and need to configure the connector for non-default settings.
 
-Here is an example Postgres connector configuration in JSON that shows how to setup a connection to a database at `myserver:5432`:
+Here is an example PostgreSQL connector configuration in JSON that shows how to setup a connection to a database at `myserver:5432`:
 
 ```json
 {
-...
+  ...
   "postgres": {
     "client": {
       "host": "myserver",
       "port": 5432
     }
   }
-  .....
+  ...
 }
 ```
 
@@ -635,23 +633,23 @@ Below is a table showing all possible settings for the connector.
 
 As shown above, all of these settings should be prefixed with `postgres:client:`
 
-|Key|Description|
-|------|------|
-|**server**|Hostname or IP Address of server, defaults = localhost|
-|**port**|Port number of server, defaults = 5432|
-|**username**|Username for authentication, defaults = empty|
-|**password**|Password for authentication, default = empty|
-|**database**|Schema to connect to, default = empty|
-|**connectionString**|Full connection string, use instead of above individual settings|
+|Key|Description|Default
+|---|---|---|
+|server|Hostname or IP Address of server|localhost|
+|port|Port number of server|5432|
+|username|Username for authentication|empty|
+|password|Password for authentication|empty|
+|database|Schema to connect to|empty|
+|connectionString|Full connection string|built from settings
 
-Once the connectors settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the connector.
+Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
 
-Using the code below, you can see that the connectors settings from above should be put in `appsettings.json` and included with the application. Then, by using the .NET provided JSON configuration provider we are able to read in the settings simply by adding the provider to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
+The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
 
 ```csharp
 
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -666,19 +664,17 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
-If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
+To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
 ### 2.2.3 Cloud Foundry
 
-When you want to use Postgres on Cloud Foundry and you have installed a Postgres service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
+To use PostgreSQL on Cloud Foundry, after a PostgreSQL service is installed, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```bash
-> cf target -o myorg -s myspace
->
-> # Create Postgres service
+> # Create PostgreSQL service
 > cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
 >
 > # Bind service to `myApp`
@@ -688,17 +684,13 @@ When you want to use Postgres on Cloud Foundry and you have installed a Postgres
 > cf restage myApp
 ```
 
-Note: The commands above assume you are using the Postgres service provided by EDB on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
+> Note: The commands above are for the PostgreSQL service provided by EDB on Cloud Foundry. For another service, adjust the `create-service` command to fit your environment.
 
-Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
-
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
-
-To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to be available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` method call to the `ConfigurationBuilder`:
 
 ```csharp
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -716,30 +708,28 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
-When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
+When pushing the application to Cloud Foundry, the settings that have been provided by the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
 
-If there are merge conflicts, then the service binding settings will take precedence and will override all others.
+If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
 
-> Note: If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
 
-### 2.2.4 Add PostgresConnection
+### 2.2.4 Add NpgsqlConnection
 
- If you want to use a `NpgsqlConnection` in your application, then you need to add it to your `IServiceCollection` .
-
- You do this in the `ConfigureServices()` method of the `Startup` class. Here is some sample code illustrating how:
+ To use a `NpgsqlConnection` in your application, add it to the service container in the `ConfigureServices()` method of the `Startup` class:
 
  ```csharp
- #using Steeltoe.CloudFoundry.Connector.PostgreSql;
+ using Steeltoe.CloudFoundry.Connector.PostgreSql;
 
  public class Startup {
-     .....
+     ...
      public IConfigurationRoot Configuration { get; private set; }
      public Startup(...)
      {
-       .....
+       ...
      }
      public void ConfigureServices(IServiceCollection services)
      {
@@ -750,28 +740,21 @@ If there are merge conflicts, then the service binding settings will take preced
          services.AddMvc();
          ...
      }
-     ..
+     ...
  ```
 
- The `AddPostgresConnection(Configuration)` method call configures the `NpgsqlConnection` using the configuration built by the application earlier and it then adds the connection to the service container.
+ The `AddPostgresConnection(Configuration)` method call configures the `NpgsqlConnection` using the configuration built by the application and adds the connection to the service container.
 
 ### 2.2.5 Use NpgsqlConnection
 
- Once you have configured and added the connection to the service container, then its very easy to inject and use it in a controller or a view.
-
- Below is an example illustrating how to use it in a controller:
+ Once the connection is configured and added to the service container, it is easy to inject and use in a controller or a view:
 
 ```csharp
 using Npgsql;
-....
+...
 public class HomeController : Controller
 {
-    public HomeController()
-    {
-    }
-    ...
-    public IActionResult PostgresData(
-        [FromServices] NpgsqlConnection dbConnection)
+    public IActionResult PostgresData([FromServices] NpgsqlConnection dbConnection)
     {
         dbConnection.Open();
 
@@ -794,34 +777,29 @@ public class HomeController : Controller
 
 ### 2.2.6 Add DbContext
 
-If you would prefer to use a `DbContext` in your application, then you need to add it, instead of a `NpgsqlConnection` to your `IServiceCollection`.
-
-Just like above, you do this in the `ConfigureServices()` method of the `Startup` class:
+To use Entity Framework, inject and use a `DbContext` in your application instead of a `NpgsqlConnection` via the `AddDbContext<>()` method:
 
 ```csharp
 #using Steeltoe.CloudFoundry.Connector.PostgreSql.EFCore;
 
 public class Startup {
-    .....
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(...)
     {
-      .....
+      ...
     }
     public void ConfigureServices(IServiceCollection services)
     {
-
-        // Add EFCore TestContext configured with a Postgres configuration
+        // Add EFCore TestContext configured with a PostgreSQL configuration
         services.AddDbContext<TestContext>(options => options.UseNpgsql(Configuration));
 
         // Add framework services.
         services.AddMvc();
         ...
     }
-    ..
 ```
 
-The `AddDbContext<TestContext>(options => options.UseNpgsql(Configuration));` method call configures the `TestContext` using the configuration built by the application and it then adds the context to the service container.
+The `AddDbContext<TestContext>(options => options.UseNpgsql(Configuration));` method call configures the `TestContext` using the configuration built by the application and adds the context to the service container.
 
 Here is how you would define the `DbContext`:
 
@@ -840,76 +818,70 @@ public class TestContext : DbContext
 
 ### 2.2.7 Use DbContext
 
-Once you have configured and added the context to the service container, then its very simple to inject and use it in a controller or a view.
-
-Here is an example on how to do that:
+Once you have configured and added the context to the service container, inject and use it in a controller or a view:
 
 ```csharp
 using Project.Models;
-....
+...
 public class HomeController : Controller
 {
-    public HomeController()
+    public IActionResult PostgresData([FromServices] TestContext context)
     {
-    }
-    public IActionResult PostgresData(
-            [FromServices] TestContext context)
-    {
-
-        var td = context.TestData.ToList();
-        foreach (var d in td)
-        {
-            ViewData["Key" + d.Id] = d.Data;
-        }
-
-        return View();
+        return View(context.TestData.ToList());
     }
 }
 ```
 
-# 3.0 RabbitMQ
+# 3.0 Microsoft SQL Server
 
-This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on Cloud Foundry. You probably will want some understanding of how to use it before proceeding to use the connector.
+This connector simplifies using Microsoft SQL Server in an application running on Cloud Foundry. The connector is built to work with `System.Data.SqlClient` and provides additional extension methods for using Entity Framework.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 3.1 Quick Start
 
-This quick start consists of using an ASP.NET Core sample application which illustrates how to use the Steeltoe RabbitMQ Connector for connecting to a RabbitMQ service on Cloud Foundry.
+This quick start consists of several ASP.NET sample applications to illustrate how to use the Steeltoe SQL Server Connector for connecting to a SQL server from an application running on Cloud Foundry.
 
-Specifically it shows how to use a `RabbitMQ.Client` to send and receive messages on the bound RabbitMQ service.
+There are two sample applications to choose from:
 
-### 3.1.1 Get Sample
+AspDotNet4/MsSql4 - using MVC5 and Entity Framework to issue commands to the bound database.
+AspDotNetCore/SqlServerEFCore - using ASP.NET Core and Entity Framework Core to access the bound database.
+
+### 3.1.1 Locate Sample
+
+Depending on your specific interests, pick one of the following samples to work with going forward.
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Connectors/src/AspDotNetCore/Rabbit
+> # Use a .NET4/EF6 sample
+> cd Samples/Connectors/src/AspDotNet4/MsSql4
+>
+> # Use a .NETCORE/EFCore sample
+> cd Samples/Connectors/src/AspDotNetCore/SqlServerEFCore
 ```
 
 ### 3.1.2 Create Service
 
-In this step, use the Cloud Foundry CLI to create a service instance of RabbitMQ on Cloud Foundry.
-
-The commands below assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry.
-
-If you are using a different service then you will have to adjust the `create-service` command below to fit your setup.
+If the [Microsoft SQL Server broker](https://github.com/cf-platform-eng/mssql-server-broker) is installed in your Cloud Foundry instance, use it to create a new service instance:
 
 ```bash
-> # Target and org and space in Cloud Foundry
-> cf target -o myorg -s development
->
-> # Create a RabbitMQ service instance on Cloud Foundry
-> cf create-service p-rabbitmq standard myRabbitService
->
-> # Make sure the service is ready
-> cf services
+> cf create-service SqlServer sharedVM mySqlServerService
+```
+
+An alternative to the broker is to use a User-Provided service to explicitly provide connection information to the application:
+
+```bash
+> cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
 ```
 
 ### 3.1.3 Publish Sample
 
+#### 3.1.3.1 Publish ASP.NET Core
+
 Use the `dotnet` CLI to build and publish the application.
 
-Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
+Note that not all quick start samples can be built to run on all frameworks and run-times.
+
+For example, the Entity Framework 6 DbContext sample can only run on Windows and on the .NET Framework, and the Entity Framework Core DbContext sample can only run on .NET Core.
 
 ```bash
 > dotnet restore --configfile nuget.config
@@ -924,28 +896,37 @@ Note below we show how to publish for all of the target run times and frameworks
 > dotnet publish -f net461 -r win10-x64
 ```
 
+#### 3.1.3.2 Publish ASP.NET 4.x
+
+To publish ASP.NET 4.x applications, you'll want to use the Visual Studio publishing tools:
+
+1. Select MsSql4 project in Solution Explorer.
+1. Right-click and select Publish
+1. Select the profile `FolderProfile` *(if for some reason this profile is missing, create a profile that publishes to a local folder `bin/Debug/net461/win10-x64/publish`)*
+1. Click Publish
+
 ### 3.1.4 Push Sample
 
 Use the Cloud Foundry CLI to push the published application to Cloud Foundry.
 
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
+Note below we show how to push for both Linux and Windows. Select one in order to proceed, but be aware that the only one that works for the ASP.NET 4x sample is the first one:
 
 ```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+> # Push to Windows cell, .NET Framework
+> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 >
 > # Push to Windows cell, .NET Core
 > cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
 >
-> # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+> # Push to Linux cell
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
 ```
 
-Note that the manifests have been defined to bind the application to `myRabbitService` created above.
+> Note: the manifest files have been defined to bind the application to the `mySqlServerService` created above.
 
 ### 3.1.5 Observe Logs
 
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs rabbit`)
+To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs sqlserverefcore-connector` or `cf logs mssql4-connector`)
 
 On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
 
@@ -958,112 +939,113 @@ On a Linux cell, you should see something like this during startup. On Windows c
 2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
 2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
 2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-
 ```
 
 ### 3.1.6 What to expect
 
-At this point the app is up and running.
+At this point the application is up and running. Upon startup it inserts two rows into the bound Microsoft SQL database.
 
-To send a message click "Send" and send a message over RabbitMQ.
+Loading the home page of the application will display those rows.
 
-Having sent a message, click "Receive" and you will start seeing those messages.
+### 3.1.7 Understand Samples
 
-### 3.1.7 Understand Sample
+#### 3.1.7.1 Understanding ASP.NET Core Sample
 
-The sample was created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ) and then modified to use the Steeltoe framework.
+This sample was created from the .NET Core tooling mvc template (i.e. `dotnet new mvc`) and then modified to include the Steeltoe framework.
 
-To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
+To understand the Steeltoe related changes to the generated template code, examine the following files:
 
-* `Rabbit.csproj` - Contains `PackageReference` for `RabbitMQ.Client` and Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
-* `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a RabbitMQ `ConnectionFactory` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry RabbitMQ configuration values when pushed to Cloud Foundry.
-* `RabbitController.cs` - Code added for injection of a RabbitMQ `ConnectionFactory` into the Controller. The `ConnectionFactory` is used in the `Send` and `Receive` action methods.
-* `Receive.cshtml` - The view used to display the received message data values.
-* `Send.cshtml` - The view used to submit message data.
+* `*.csproj` file contains `PackageReference` for Steeltoe NuGet Connector and Entity Framework.
+* `Program.cs` - Code added to read the `--server.urls` command line
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Microsoft SQL Server configuration values when pushed to Cloud Foundry.
+* `HomeController.cs` - Code added for injection of a `TestContext` into the Controller to obtain data from the database and then to display the data.
+* `Index.cshtml` - The view used to display the data values from SQL Server.
+* `Models folder` - Contains code to initialize the database and also the definition of `DbContext` class.
+
+#### 3.1.7.2 Understanding ASP.NET 4.x Sample
+
+This sample was created using the standard Visual Studio template (File -> New Project) and then modified to add the Steeltoe framework.
+
+To understand the Steeltoe related changes to the generated template code, examine the following files:
+
+* `packages.config` contains references to the Steeltoe Common, Connector and Configuration packages along with Entity Framework and StructureMap.
+* `DependencyResolution folder` - contains several classes from the StructureMap package - `IoC.cs` is what orchestrates application configuration and sets up dependency injection.
+* `Data folder` - Contains code to initialize the database and also the definition of `DbContext` class.
+* `HomeController.cs` - Code added for injection of `IBloggingContext` into the Controller to obtain data from the database and then to display the data.
+* `Index.cshtml` - The view used to display the data values from SQL Server.
 
 ## 3.2 Usage
 
-You should have a good understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the connector. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the connector.
+You should have some understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the connector. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the connector.
 
-You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
+You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay attention to the usage of the `ConfigureServices()` method.
 
-You probably will want some understanding of how to use the [RabbitMq Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) before starting to use this connector.
+To use this connector:
 
-In order to use this Connector you need to do the following:
-
-* Create and bind a RabbitMQ Service instance to your application.
-* Optionally, configure any RabbitMQ client settings (e.g. appsettings.json)
-* Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
-* Add RabbitMQ ConnectionFactory to your ServiceCollection.
+* Create and bind a Microsoft SQL Service instance to your application.
+* Optionally, configure any MySql client settings (e.g. `appsettings.json`) you need.
+* Add Steeltoe Cloud Foundry configuration provider to your `ConfigurationBuilder`.
+* Add `SqlConnection` or `DbContext` to your `IServiceCollection`.
 
 ### 3.2.1 Add NuGet Reference
 
-To make use of the connector, you need to add a reference to the Steeltoe RabbitMQ connector NuGet.
+To make use of this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
 
-The connector can be found in the `Steeltoe.CloudFoundry.Connector.Rabbit` package.
+|App Type|ORM|Steeltoe Package|SQL Server Package|
+|---|---|---|---|
+|ASP.NET Core|Entity Framework 6|`Steeltoe.CloudFoundry.Connector.EF6Core`|`EntityFramework`|
+|ASP.NET Core|Entity Framework Core|`Steeltoe.CloudFoundry.Connector.EFCore`|`Microsoft.EntityFrameworkCore.SqlServer`|
+|ASP.NET Core|Other|`Steeltoe.CloudFoundry.ConnectorCore`|`System.Data.SqlClient`|
+|Other|Other|`Steeltoe.CloudFoundry.ConnectorBase`|`System.Data.SqlClient`|
 
-Add the connector to your project using the following `PackageReference`:
+Use the Nuget package manager tools or directly add the appropriate packages to your project using the a `PackageReference`:
 
 ```xml
 <ItemGroup>
-....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Rabbit" Version= "1.1.0"/>
 ...
-</ItemGroup>
-```
-
-Also you will need to add to your project the RabbitMQ client using the following `PackageReference`:
-
-```xml
-<ItemGroup>
-....
-    <PackageReference Include="RabbitMQ.Client" Version= "x.y.z"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0-rc1"/>
+    <PackageReference Include="System.Data.SqlClient" Version= "4.4.0"/>
 ...
 </ItemGroup>
 ```
 
 ### 3.2.2 Configure Settings
 
-Optionally you can configure the settings the connector will use when setting up the RabbitMQ ConnectionFactory. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of a RabbitMQ server running elsewhere.
+The Microsoft SQL Server connector supports several configuration options. These settings can be used to develop or test an application locally and overridden during deployment.
 
-Here is an example of the connectors configuration in JSON that shows how to setup a connection to a RabbitMQ server at `amqp://guest:guest@127.0.0.1/`.
+This Microsoft SQL Server connector configuration shows how to connect to SQL Server 2016 Express LocalDB:
 
 ```json
 {
-...
-  "rabbit": {
-    "client": {
-      "uri": "amqp://guest:guest@127.0.0.1/"
+  ...
+  "sqlserver": {
+    "credentials": {
+        "connectionString": "Server=(localdb)\\mssqllocaldb;database=Steeltoe;Trusted_Connection=True;"
     }
   }
-  .....
+  ...
 }
 ```
 
-Below is a table showing all possible settings for the connector.
+Below is a table showing available settings for the connector. As shown above, all of these settings should be prefixed with `sqlserver:credentials:`
 
-As shown above, all of these settings should be prefixed with `rabbit:client:`
+|Key|Description|Steeltoe Default|
+|---|---|---|
+|server|Hostname or IP Address of server|localhost|
+|port|Port number of server|1433|
+|username|Username for authentication|not set|
+|password|Password for authentication|not set|
+|database|Schema to connect to|not set|
+|connectionString|Full connection string|built from settings|
+|integratedSecurity|Enable Windows Authentication (For local use only)|not set|
 
-|Key|Description|
-|------|------|
-|**server**|Hostname or IP Address of server, defaults = 127.0.0.1|
-|**port**|Port number of server, defaults = 5672|
-|**username**|Username for authentication, defaults = empty|
-|**password**|Password for authentication, default = empty|
-|**virtualHost**|Virtual host to connect to, default = empty|
-|**sslEnabled**|Should SSL be enabled, default = false|
-|**sslPort**|SSL Port number of server, default = 5671|
-|**uri**|Full connection string, use instead of above individual settings, default = empty|
+Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
 
-Once the connectors settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the connector.
-
-Using the code below, you can see that the connectors settings from above should be put in `appsettings.json` and included with the application. Then, by using the .NET provided JSON configuration provider we are able to read in the settings simply by adding the provider to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
+The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
 
 ```csharp
-
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -1078,39 +1060,42 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
-If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
+To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
 ### 3.2.3 Cloud Foundry
 
-When you want to use RabbitMQ on Cloud Foundry and you have installed a RabbitMQ service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
+To use Microsoft SQL Server on Cloud Foundry, you need a service instance bound to your application. If the [Microsoft SQL Server broker](https://github.com/cf-platform-eng/mssql-server-broker) is installed in your Cloud Foundry instance, use it to create a new service instance:
 
 ```bash
-> cf target -o myorg -s myspace
->
-> # Create RabbitMQ service
->cf create-service p-rabbitmq standard myRabbitService
->
+> cf create-service SqlServer sharedVM mySqlServerService
+```
+
+An alternative to the broker is to use a User-Provided service to explicitly provide connection information to the application:
+
+```bash
+> cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
+```
+
+If you are creating the service for an app that has already been deployed, you will need to bind the service and restart or restage the app with the commands below. If the application has not already been deployed, using a reference in the manifest.yml file will take care of the binding for you.
+
+```bash
 > # Bind service to `myApp`
-> cf bind-service myApp myRabbitService
+> cf bind-service myApp mySqlServerService
 >
 > # Restage the app to pick up change
 > cf restage myApp
 ```
 
-> Note: The commands above assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
+> Note: The commands above are may not exactly match the service or plan names available in your environment. You may have to adjust the `create-service` command to fit your environment. Use `cf marketplace` to see what is available.
 
-Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
-
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
-
-To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`. Here is an example:
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
 
 ```csharp
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -1128,112 +1113,183 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
-When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
+When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
 
-If there are merge conflicts, then the service binding settings will take precedence and will override all others.
+If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
 
-> Note: If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
 
-### 3.2.4 Add RabbitMQ ConnectionFactory
+### 3.2.4 Add SqlConnection
 
-If you want to use a RabbitMQ `ConnectionFactory` in your application, then you need to add it to the service container. You do this in the `ConfigureServices()` method of the `Startup` class.
-
-Here is some sample code illustrating how:
+To use a `SqlConnection` in your application, add it to the service container in the `ConfigureServices()` method of the `Startup` class.
 
 ```csharp
-#using Steeltoe.CloudFoundry.Connector.Rabbit;
+using Steeltoe.CloudFoundry.Connector.MySql;
 
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(...)
     {
-      .....
+      ...
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add RabbitMQ ConnectionFactory configured from Cloud Foundry
-        services.AddRabbitConnection(Configuration);
+        // Add SqlConnection configured from Configuration
+        services.AddSqlServerConnection(Configuration);
 
         // Add framework services.
         services.AddMvc();
         ...
     }
-    ....
+    ...
 ```
 
-### 3.2.5 Use RabbitMQ ConnectionFactory
+The `AddSqlServerConnection(Configuration)` method call above configures the `SqlConnection` using the configuration built by the application and adds the connection to the service container.
 
-Once you have configured and added the RabbitMQ `ConnectionFactory` to the service container, then its very simple to inject and use it in a controller or a view.
+### 3.2.5 Use SqlConnection
 
-Below is an example illustrating this:
+Once you have configured and added the connection to the service container, it is trivial to inject and use in a controller or a view:
 
- ```csharp
-using RabbitMQ.Client;
- ....
- public class HomeController : Controller
- {
-     ...
-     public IActionResult RabbitData([FromServices] ConnectionFactory factory)
-     {
+```csharp
+using System.Data.SqlClient;
+...
+public class HomeController : Controller
+{
+    public IActionResult SqlData([FromServices] SqlConnection dbConnection)
+    {
+        dbConnection.Open();
 
-         using (var connection = factory.CreateConnection())
-         using (var channel = connection.CreateModel())
-         {
-             CreateQueue(channel);
-             var body = Encoding.UTF8.GetBytes("a message");
-             channel.BasicPublish(exchange: "",
-                                  routingKey: "a-topic",
-                                  basicProperties: null,
-                                  body: body);
+        MySqlCommand cmd = new MySqlCommand("SELECT * FROM TestData;", dbConnection);
+        MySqlDataReader rdr = cmd.ExecuteReader();
 
-         }
-         return View();
-     }
+        while (rdr.Read())
+        {
+            ViewData["Key" + rdr[0]] = rdr[1];
+        }
 
- }
+        rdr.Close();
+        dbConnection.Close();
 
- ```
+        return View();
+    }
+}
+```
 
-# 4.0 Redis
+> Note: the above code does not create a database, table or insert data! It will fail as written unless you create the database, table and data ahead of time.
 
- This connector simplifies using a Microsoft [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or a StackExchange [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis) in an application running on Cloud Foundry.
+### 3.2.6 Add DbContext
 
- In addition to the Quick Start below, there are other Steeltoe sample applications that you can use to help you understand how to make use of this connector:
+To use Entity Framework, inject and use a `DbContext` in your application instead of a `SqlConnection` by using the `AddDbContext<>()` method:
 
-* [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore) - sample app illustrating how to make use of the Steeltoe DataProtection Key Storage Provider for Redis.
-* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
+```csharp
+using Steeltoe.CloudFoundry.Connector.Sql.EFCore
+// OR
+using Steeltoe.CloudFoundry.Connector.Sql.EF6;
+
+public class Startup {
+    ...
+    public IConfigurationRoot Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // If using EF6
+        services.AddDbContext<TestContext>(Configuration);
+
+        // If using EFCore
+        services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration));
+
+        // Add framework services.
+        services.AddMvc();
+        ...
+    }
+    ...
+```
+
+The `AddDbContext<TestContext>(..)` method call configures `TestContext` using the configuration built earlier and then adds the `DbContext` (i.e. `TestContext`) to the service container.
+
+You will define your `DbContext` differently depending on whether you are using Entity Framework 6 or Entity Framework Core.
+
+Here are examples for both:
+
+```csharp
+// ------- EF6 DbContext ---------
+using System.Data.Entity;
+...
+
+public class TestContext : DbContext
+{
+    public TestContext(string connectionString) : base(connectionString)
+    {
+    }
+    public DbSet<TestData> TestData { get; set; }
+}
+
+// ------- EFCore DbContext ------
+using Microsoft.EntityFrameworkCore;
+...
+
+public class TestContext : DbContext
+{
+    public TestContext(DbContextOptions options) : base(options)
+    {
+
+    }
+    public DbSet<TestData> TestData { get; set; }
+}
+
+```
+
+### 3.2.7 Use DbContext
+
+Once you have configured and added the DbContext to the service container, inject and use it in a controller or a view:
+
+```csharp
+using Project.Models;
+...
+public class HomeController : Controller
+{
+    public IActionResult SqlData([FromServices] TestContext context)
+    {
+        return View(context.TestData.ToList());
+    }
+```
+
+# 4.0 RabbitMQ
+
+This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on Cloud Foundry. You probably will want some understanding of how to use it before proceeding to use the connector.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 4.1 Quick Start
 
-This quick start consists of using a ASP.NET Core sample application to illustrate how to use the Steeltoe Redis Connector for connecting to a Redis service on Cloud Foundry.
+This quick start consists of using an ASP.NET Core sample application which illustrates how to use the Steeltoe RabbitMQ Connector for connecting to a RabbitMQ service on Cloud Foundry.
 
-### 4.1.1 Get Sample
+Specifically it shows how to use a `RabbitMQ.Client` to send and receive messages on the bound RabbitMQ service.
+
+### 4.1.1 Locate Sample
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Connectors/src/AspDotNetCore/Redis
+> cd Samples/Connectors/src/AspDotNetCore/Rabbit
 ```
 
 ### 4.1.2 Create Service
 
-In this step, use the Cloud Foundry CLI to create a service instance of Redis on Cloud Foundry.
+In this step, use the Cloud Foundry CLI to create a service instance of RabbitMQ on Cloud Foundry.
 
-The commands below assume you are using the Redis service provided by Pivotal on Cloud Foundry.
+The commands below assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry.
 
 If you are using a different service then you will have to adjust the `create-service` command below to fit your setup.
 
 ```bash
-> # Target and org and space in Cloud Foundry
-> cf target -o myorg -s development
->
-> # Create a Redis service instance on Cloud Foundry
-> cf create-service p-redis shared-vm myRedisService
+> # Create a RabbitMQ service instance on Cloud Foundry
+> cf create-service p-rabbitmq standard myRabbitService
 >
 > # Make sure the service is ready
 > cf services
@@ -1268,18 +1324,18 @@ Note below we show how to push for both Linux and Windows. Just pick one in orde
 > # Push to Linux cell
 > cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
 >
->  # Push to Windows cell, .NET Core
+> # Push to Windows cell, .NET Core
 > cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
 >
->  # Push to Windows cell, .NET Framework
+> # Push to Windows cell, .NET Framework
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-Note that the manifests have been defined to bind the application to `myRedisService` created above.
+Note that the manifests have been defined to bind the application to `myRabbitService` created above.
 
 ### 4.1.5 Observe Logs
 
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs redis-connector`)
+To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs rabbit`)
 
 On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
 
@@ -1292,29 +1348,29 @@ On a Linux cell, you should see something like this during startup. On Windows c
 2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
 2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
 2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
+
 ```
 
 ### 4.1.6 What to expect
 
-At this point the app is up and running. Upon startup the app inserts a key/values into the bound Redis Cache.
+At this point the app is up and running.
 
-To display those values click on the Cache Data link in the menu and you should see the key/values displayed using the Microsoft `RedisCache`.
+To send a message click "Send" and send a message over RabbitMQ.
 
-You can click on the ConnectionMultiplexer Data link to view data using the StackExchange `ICollectionMultiplexer`.
+Having sent a message, click "Receive" and you will start seeing those messages.
 
 ### 4.1.7 Understand Sample
 
-The sample was created from the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ), and modified to use the Steeltoe frameworks.
+The sample was created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ) and then modified to use the Steeltoe framework.
 
-To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
+To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
-* `Redis.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.Redis`
+* `Rabbit.csproj` - Contains `PackageReference` for `RabbitMQ.Client` and Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
 * `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `IDistributedCache` and a `IConnectionMultiplexer` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Redis service configuration values when pushed to Cloud Foundry.
-* `HomeController.cs` - Code added for injection of a `IDistributedCache` or `IConnectionMultiplexer` into the Controller.  These are used to obtain data from the cache and then to display it.
-* `CacheData.cshtml` - The view used to display the Redis data values obtained using `IDistributedCache`.
-* `ConnData.cshtml` - The view used to display the Redis data values obtained using `IConnectionMultiplexer`.
-* `Models folder`- contains code to initialize the Redis cache.
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a RabbitMQ `ConnectionFactory` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry RabbitMQ configuration values when pushed to Cloud Foundry.
+* `RabbitController.cs` - Code added for injection of a RabbitMQ `ConnectionFactory` into the Controller. The `ConnectionFactory` is used in the `Send` and `Receive` action methods.
+* `Receive.cshtml` - The view used to display the received message data values.
+* `Send.cshtml` - The view used to submit message data.
 
 ## 4.2 Usage
 
@@ -1322,70 +1378,73 @@ You should have a good understanding of how the new .NET [Configuration service]
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
 
-You probably will want some understanding of how to use the [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Basics.md) before starting to use this connector.
+You probably will want some understanding of how to use the [RabbitMq Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) before starting to use this connector.
 
-In order to use this connector you need to do the following:
+In order to use this Connector you need to do the following:
 
-* Create and bind a Redis Service instance to your application.
-* Optionally, configure any Redis client settings (e.g. appsettings.json)
+* Create and bind a RabbitMQ Service instance to your application.
+* Optionally, configure any RabbitMQ client settings (e.g. appsettings.json)
 * Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
-* Add DistributedRedisCache and/or ConnectionMultiplexer to your ServiceCollection.
+* Add RabbitMQ ConnectionFactory to your ServiceCollection.
 
 ### 4.2.1 Add NuGet Reference
 
-To make use of the connector, you need to add a reference to the Steeltoe Redis connector NuGet.
+To make use of the connector, you need to add a reference to the Steeltoe RabbitMQ connector NuGet.
 
-The connector can be found in the `Steeltoe.CloudFoundry.Connector.Redis` package.
+The connector can be found in the `Steeltoe.CloudFoundry.Connector.Rabbit` package.
 
 Add the connector to your project using the following `PackageReference`:
 
 ```xml
 <ItemGroup>
-....
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" Version= "1.1.0"/>
+...
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Rabbit" Version= "1.1.0"/>
+...
+</ItemGroup>
+```
+
+Also you will need to add to your project the RabbitMQ client using the following `PackageReference`:
+
+```xml
+<ItemGroup>
+...
+    <PackageReference Include="RabbitMQ.Client" Version= "x.y.z"/>
 ...
 </ItemGroup>
 ```
 
 ### 4.2.2 Configure Settings
 
-Optionally you can configure the settings the connector will use when setting up the RedisCache. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of a RabbitMQ server running elsewhere.
+Optionally you can configure the settings the connector will use when setting up the RabbitMQ ConnectionFactory. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of a RabbitMQ server running elsewhere.
 
-Here is an example of the connectors configuration in JSON that shows how to setup a connection to a Redis server at `http://foo.bar:1111`
+Here is an example of the connectors configuration in JSON that shows how to setup a connection to a RabbitMQ server at `amqp://guest:guest@127.0.0.1/`.
 
 ```json
 {
-...
-  "redis": {
+  ...
+  "rabbit": {
     "client": {
-      "host": "http://foo.bar",
-      "port": 1111
+      "uri": "amqp://guest:guest@127.0.0.1/"
     }
   }
-  .....
+  ...
 }
 ```
 
 Below is a table showing all possible settings for the connector.
 
-As shown above, all of these settings should be prefixed with `redis:client:`
+As shown above, all of these settings should be prefixed with `rabbit:client:`
 
 |Key|Description|
-|------|------|
-|**host**|Hostname or IP Address of server, defaults = localhost|
-|**port**|Port number of server, defaults = 6379|
-|**endPoints**|Comma separated list of host:port pairs, defaults empty|
-|**clientName**|Identification for the connection within redis, defaults = empty|
-|**connectRetry**|Times to repeat initial connect attempts, default = 3|
-|**connectTimeout**|Timeout (ms) for connect operations, default = 5000|
-|**abortOnConnectFail**|Will not create a connection while no servers are available, default = true|
-|**keepAlive**|Time (seconds) at which to send a message to help keep sockets alive, default = -1|
-|**resolveDns**|DNS resolution should be explicit and eager, rather than implicit, default = false|
-|**ssl**|SSL encryption should be used, default = false|
-|**sslHost**|Enforces a particular SSL host identity on the server's certificate, default = empty|
-|**writeBuffer**|Size of the output buffer, default = 4096|
-|**connectionString**|Connection string, use instead of values above, default = empty|
-|**instanceId**|Cache id, used only with IDistributedCache, default = empty|
+|---|---|
+|**server**|Hostname or IP Address of server, defaults = 127.0.0.1|
+|**port**|Port number of server, defaults = 5672|
+|**username**|Username for authentication, defaults = empty|
+|**password**|Password for authentication, default = empty|
+|**virtualHost**|Virtual host to connect to, default = empty|
+|**sslEnabled**|Should SSL be enabled, default = false|
+|**sslPort**|SSL Port number of server, default = 5671|
+|**uri**|Full connection string, use instead of above individual settings, default = empty|
 
 Once the connectors settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the connector.
 
@@ -1394,7 +1453,7 @@ Using the code below, you can see that the connectors settings from above should
 ```csharp
 
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -1409,39 +1468,37 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
 If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
 
 ### 4.2.3 Cloud Foundry
 
-When you want to use Redis on Cloud Foundry and you have installed a Redis service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
+When you want to use RabbitMQ on Cloud Foundry and you have installed a RabbitMQ service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```bash
-> cf target -o myorg -s myspace
->
-> # Create Redis service
-> cf create-service p-redis shared-vm myRedisCache
+> # Create RabbitMQ service
+>cf create-service p-rabbitmq standard myRabbitService
 >
 > # Bind service to `myApp`
-> cf bind-service myApp myRedisCache
+> cf bind-service myApp myRabbitService
 >
 > # Restage the app to pick up change
 > cf restage myApp
 ```
 
-Note: The commands above assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
+> Note: The commands above assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
 
-Once you have bound the service to the application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
+Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
 
 In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
 
-To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
+To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`. Here is an example:
 
 ```csharp
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -1459,165 +1516,108 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
 When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
 
 If there are merge conflicts, then the service binding settings will take precedence and will override all others.
 
->Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+> Note: If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
 
-### 4.2.4 Add IDistributedCache
+### 4.2.4 Add RabbitMQ ConnectionFactory
 
- If you want to use the Microsoft provided `IDistributedCache` in your application, then you need to add it to the service container .
+If you want to use a RabbitMQ `ConnectionFactory` in your application, then you need to add it to the service container. You do this in the `ConfigureServices()` method of the `Startup` class.
 
- You do this in the `ConfigureServices()` method of the `Startup` class. Here is some sample code illustrating how:
+Here is some sample code illustrating how:
 
- ```csharp
- #using Steeltoe.CloudFoundry.Connector.Redis;
-
- public class Startup {
-
-     public IConfigurationRoot Configuration { get; private set; }
-     public Startup()
-     {
-
-     }
-     public void ConfigureServices(IServiceCollection services)
-     {
-         // Add Microsoft Redis Cache (IDistributedCache) configured from Cloud Foundry
-         services.AddDistributedRedisCache(Configuration);
-
-         // Add framework services
-         services.AddMvc();
-     }
-
-```
-The above `AddDistributedRedisCache(Configuration)` method call configures the `IDistributedCache` using the configuration built by the application earlier and it then adds the connection to the service container.
-
-### 4.2.5 Use IDistributedCache
-
- Below is an example illustrating how to inject and then use the `IDistributedCache` in a controller once its been added to the service container.
-
- ```csharp
- using Microsoft.Extensions.Caching.Distributed;
- ....
- public class HomeController : Controller
- {
-     private IDistributedCache _cache;
-     public HomeController(IDistributedCache cache)
-     {
-         _cache = cache;
-     }
-     ...
-     public IActionResult CacheData()
-     {
-         string key1 = Encoding.Default.GetString(_cache.Get("Key1"));
-         string key2 = Encoding.Default.GetString(_cache.Get("Key2"));
-
-         ViewData["Key1"] = key1;
-         ViewData["Key2"] = key2;
-
-         return View();
-     }
- }
- ```
-
-### 4.2.6 Add IConnectionMultiplexer
-
-If you would prefer to use a StackExchange `IConnectionMultiplexer` in your application, then you need to add it, instead of a `DistributedRedisCache` to the service container.  Note, you can use both `IDistributedCache` and `I`ConnectionMultiplexer` in your application if you need to.
-
-Just like above, you do this in the `ConfigureServices()` method of the `Startup` class.
-
- ```csharp
-using Steeltoe.CloudFoundry.Connector.Redis;
+```csharp
+#using Steeltoe.CloudFoundry.Connector.Rabbit;
 
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(...)
     {
-      .....
+      ...
     }
     public void ConfigureServices(IServiceCollection services)
     {
+        // Add RabbitMQ ConnectionFactory configured from Cloud Foundry
+        services.AddRabbitConnection(Configuration);
 
-        // Add StackExchange IConnectionMultiplexer configured from Cloud Foundry
-        services.AddRedisConnectionMultiplexer(Configuration);
-
-        // Add framework services
+        // Add framework services.
         services.AddMvc();
         ...
     }
-    ....
+    ...
 ```
 
-The above `AddRedisConnectionMultiplexer(Configuration)` method call configures the `IConnectionMultiplexer` using the configuration built by the application and it then adds the connection to the service container.
+### 4.2.5 Use RabbitMQ ConnectionFactory
 
-### 4.2.7 Use IConnectionMultiplexer
+Once you have configured and added the RabbitMQ `ConnectionFactory` to the service container, then its very simple to inject and use it in a controller or a view.
 
-Once you have configured and added the `IConnectionMultiplexer` to the service container, then its very simple to inject and use it in a controller or a view.
+Below is an example illustrating this:
 
  ```csharp
- using Microsoft.Extensions.Caching.Distributed;
- ....
+using RabbitMQ.Client;
+ ...
  public class HomeController : Controller
  {
-     private IConnectionMultiplexer _conn;
-     public HomeController(IConnectionMultiplexer conn)
-     {
-         _conn = conn;
-     }
      ...
-      public IActionResult ConnData()
-    {
-        IDatabase db = _conn.GetDatabase();
+     public IActionResult RabbitData([FromServices] ConnectionFactory factory)
+     {
 
-        string key1 = db.StringGet("ConnectionMultiplexerKey1");
-        string key2 = db.StringGet("ConnectionMultiplexerKey2");
+         using (var connection = factory.CreateConnection())
+         using (var channel = connection.CreateModel())
+         {
+             CreateQueue(channel);
+             var body = Encoding.UTF8.GetBytes("a message");
+             channel.BasicPublish(exchange: "",
+                                  routingKey: "a-topic",
+                                  basicProperties: null,
+                                  body: body);
 
-        ViewData["ConnectionMultiplexerKey1"] = key1;
-        ViewData["ConnectionMultiplexerKey2"] = key2;
+         }
+         return View();
+     }
 
-        return View();
-    }
  }
+
  ```
 
-# 5.0 OAuth
+# 5.0 Redis
 
-This connector simplifies using Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)).
+ This connector simplifies using a Microsoft [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or a StackExchange [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis) in an application running on Cloud Foundry.
 
-It exposes the Cloud Foundry OAuth service configuration data as inject-able `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [Cloud Foundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
+ In addition to the Quick Start below, there are other Steeltoe sample applications that you can use to help you understand how to make use of this connector:
+
+* [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore) - sample app illustrating how to make use of the Steeltoe DataProtection Key Storage Provider for Redis.
+* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
+
+The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 5.1 Quick Start
 
-This quick start consists of an ASP.NET Core sample app illustrating how to use the OAuth Connector to expose the binding information provided by the Cloud Foundry UAA Server.
+This quick start consists of using a ASP.NET Core sample application to illustrate how to use the Steeltoe Redis Connector for connecting to a Redis service on Cloud Foundry.
 
-### 5.1.1 Get Sample
+### 5.1.1 Locate Sample
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Connectors/src/AspDotNetCore/OAuth
+> cd Samples/Connectors/src/AspDotNetCore/Redis
 ```
 
 ### 5.1.2 Create Service
 
-You must first create an instance of a OAuth2 service in a org/space. As mentioned above there are a couple to choose from. In this quick start we will use the UAA Server as the provider of OAuth2 services.
+In this step, use the Cloud Foundry CLI to create a service instance of Redis on Cloud Foundry.
 
-To set this up, we need to create a CUPS service the will provide the appropriate UAA server configuration data as part of the binding information.
+The commands below assume you are using the Redis service provided by Pivotal on Cloud Foundry.
 
-To do this, you should use the provided `oauth.json` file when creating your CUPS service.
-
-Note, before proceeding you will need to edit its contents to match your Cloud Foundry configuration.
+If you are using a different service then you will have to adjust the `create-service` command below to fit your setup.
 
 ```bash
-> # Target and org and space in Cloud Foundry
-> cf target -o myorg -s development
->
-> # Create a OAuth service instance on Cloud Foundry
-> cf cups myOAuthService -p oauth.json
+> # Create a Redis service instance on Cloud Foundry
+> cf create-service p-redis shared-vm myRedisService
 >
 > # Make sure the service is ready
 > cf services
@@ -1625,7 +1625,7 @@ Note, before proceeding you will need to edit its contents to match your Cloud F
 
 ### 5.1.3 Publish Sample
 
-Use the `dotnet` tool to build and publish the application.
+Use the `dotnet` CLI to build and publish the application.
 
 Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
 
@@ -1659,11 +1659,11 @@ Note below we show how to push for both Linux and Windows. Just pick one in orde
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-Note that the manifests have been defined to bind the application to `myOAuthService` created above.
+Note that the manifests have been defined to bind the application to `myRedisService` created above.
 
 ### 5.1.5 Observe Logs
 
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs oauth`)
+To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs redis-connector`)
 
 On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
 
@@ -1680,11 +1680,388 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 5.1.6 What to expect
 
+At this point the app is up and running. Upon startup the app inserts a key/values into the bound Redis Cache.
+
+To display those values click on the Cache Data link in the menu and you should see the key/values displayed using the Microsoft `RedisCache`.
+
+You can click on the ConnectionMultiplexer Data link to view data using the StackExchange `ICollectionMultiplexer`.
+
+### 5.1.7 Understand Sample
+
+The sample was created from the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ), and modified to use the Steeltoe frameworks.
+
+To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
+
+* `Redis.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.Redis`
+* `Program.cs` - Code added to read the `--server.urls` command line.
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `IDistributedCache` and a `IConnectionMultiplexer` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Redis service configuration values when pushed to Cloud Foundry.
+* `HomeController.cs` - Code added for injection of a `IDistributedCache` or `IConnectionMultiplexer` into the Controller.  These are used to obtain data from the cache and then to display it.
+* `CacheData.cshtml` - The view used to display the Redis data values obtained using `IDistributedCache`.
+* `ConnData.cshtml` - The view used to display the Redis data values obtained using `IConnectionMultiplexer`.
+* `Models folder`- contains code to initialize the Redis cache.
+
+## 5.2 Usage
+
+You should have a good understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the connector. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the connector.
+
+You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
+
+You probably will want some understanding of how to use the [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Basics.md) before starting to use this connector.
+
+In order to use this connector you need to do the following:
+
+* Create and bind a Redis Service instance to your application.
+* Optionally, configure any Redis client settings (e.g. appsettings.json)
+* Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
+* Add DistributedRedisCache and/or ConnectionMultiplexer to your ServiceCollection.
+
+### 5.2.1 Add NuGet Reference
+
+To make use of the connector, you need to add a reference to the Steeltoe Redis connector NuGet.
+
+The connector can be found in the `Steeltoe.CloudFoundry.Connector.Redis` package.
+
+Add the connector to your project using the following `PackageReference`:
+
+```xml
+<ItemGroup>
+...
+    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" Version= "1.1.0"/>
+...
+</ItemGroup>
+```
+
+### 5.2.2 Configure Settings
+
+Optionally you can configure the settings the connector will use when setting up the RedisCache. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of a RabbitMQ server running elsewhere.
+
+Here is an example of the connectors configuration in JSON that shows how to setup a connection to a Redis server at `http://foo.bar:1111`
+
+```json
+{
+  ...
+  "redis": {
+    "client": {
+      "host": "http://foo.bar",
+      "port": 1111
+    }
+  }
+  ...
+}
+```
+
+Below is a table showing all possible settings for the connector.
+
+As shown above, all of these settings should be prefixed with `redis:client:`
+
+|Key|Description|
+|---|---|
+|**host**|Hostname or IP Address of server, defaults = localhost|
+|**port**|Port number of server, defaults = 6379|
+|**endPoints**|Comma separated list of host:port pairs, defaults empty|
+|**clientName**|Identification for the connection within redis, defaults = empty|
+|**connectRetry**|Times to repeat initial connect attempts, default = 3|
+|**connectTimeout**|Timeout (ms) for connect operations, default = 5000|
+|**abortOnConnectFail**|Will not create a connection while no servers are available, default = true|
+|**keepAlive**|Time (seconds) at which to send a message to help keep sockets alive, default = -1|
+|**resolveDns**|DNS resolution should be explicit and eager, rather than implicit, default = false|
+|**ssl**|SSL encryption should be used, default = false|
+|**sslHost**|Enforces a particular SSL host identity on the server's certificate, default = empty|
+|**writeBuffer**|Size of the output buffer, default = 4096|
+|**connectionString**|Connection string, use instead of values above, default = empty|
+|**instanceId**|Cache id, used only with IDistributedCache, default = empty|
+
+Once the connectors settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the connector.
+
+Using the code below, you can see that the connectors settings from above should be put in `appsettings.json` and included with the application. Then, by using the .NET provided JSON configuration provider we are able to read in the settings simply by adding the provider to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
+
+```csharp
+
+public class Startup {
+    ...
+    public IConfigurationRoot Configuration { get; private set; }
+    public Startup(IHostingEnvironment env)
+    {
+        // Set up configuration sources.
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+
+            // Read in Connectors configuration
+            .AddJsonFile("appsettings.json")
+
+            .AddEnvironmentVariables();
+
+        Configuration = builder.Build();
+    }
+    ...
+```
+
+If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
+
+### 5.2.3 Cloud Foundry
+
+When you want to use Redis on Cloud Foundry and you have installed a Redis service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
+
+```bash
+> # Create Redis service
+> cf create-service p-redis shared-vm myRedisCache
+>
+> # Bind service to `myApp`
+> cf bind-service myApp myRedisCache
+>
+> # Restage the app to pick up change
+> cf restage myApp
+```
+
+Note: The commands above assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
+
+Once you have bound the service to the application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
+
+In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
+
+To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
+
+```csharp
+public class Startup {
+    ...
+    public IConfigurationRoot Configuration { get; private set; }
+    public Startup(IHostingEnvironment env)
+    {
+        // Set up configuration sources.
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+
+            // Read in Connectors configuration
+            .AddJsonFile("appsettings.json")
+
+            // Add `VCAP_` configuration info
+            .AddCloudFoundry()
+
+            .AddEnvironmentVariables();
+
+        Configuration = builder.Build();
+    }
+    ...
+```
+
+When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
+
+If there are merge conflicts, then the service binding settings will take precedence and will override all others.
+
+>Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+
+### 5.2.4 Add IDistributedCache
+
+ If you want to use the Microsoft provided `IDistributedCache` in your application, then you need to add it to the service container .
+
+ You do this in the `ConfigureServices()` method of the `Startup` class. Here is some sample code illustrating how:
+
+ ```csharp
+ #using Steeltoe.CloudFoundry.Connector.Redis;
+
+ public class Startup {
+
+     public IConfigurationRoot Configuration { get; private set; }
+     public Startup()
+     {
+     }
+     public void ConfigureServices(IServiceCollection services)
+     {
+         // Add Microsoft Redis Cache (IDistributedCache) configured from Cloud Foundry
+         services.AddDistributedRedisCache(Configuration);
+
+         // Add framework services
+         services.AddMvc();
+     }
+
+```
+The above `AddDistributedRedisCache(Configuration)` method call configures the `IDistributedCache` using the configuration built by the application earlier and it then adds the connection to the service container.
+
+### 5.2.5 Use IDistributedCache
+
+ Below is an example illustrating how to inject and then use the `IDistributedCache` in a controller once its been added to the service container.
+
+ ```csharp
+ using Microsoft.Extensions.Caching.Distributed;
+ ...
+ public class HomeController : Controller
+ {
+     private IDistributedCache _cache;
+     public HomeController(IDistributedCache cache)
+     {
+         _cache = cache;
+     }
+     ...
+     public IActionResult CacheData()
+     {
+         string key1 = Encoding.Default.GetString(_cache.Get("Key1"));
+         string key2 = Encoding.Default.GetString(_cache.Get("Key2"));
+
+         ViewData["Key1"] = key1;
+         ViewData["Key2"] = key2;
+
+         return View();
+     }
+ }
+ ```
+
+### 5.2.6 Add IConnectionMultiplexer
+
+If you would prefer to use a StackExchange `IConnectionMultiplexer` in your application, then you need to add it, instead of a `DistributedRedisCache` to the service container.  Note, you can use both `IDistributedCache` and `I`ConnectionMultiplexer` in your application if you need to.
+
+Just like above, you do this in the `ConfigureServices()` method of the `Startup` class.
+
+ ```csharp
+using Steeltoe.CloudFoundry.Connector.Redis;
+
+public class Startup {
+    ...
+    public IConfigurationRoot Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+
+        // Add StackExchange IConnectionMultiplexer configured from Cloud Foundry
+        services.AddRedisConnectionMultiplexer(Configuration);
+
+        // Add framework services
+        services.AddMvc();
+        ...
+    }
+    ...
+```
+
+The above `AddRedisConnectionMultiplexer(Configuration)` method call configures the `IConnectionMultiplexer` using the configuration built by the application and it then adds the connection to the service container.
+
+### 5.2.7 Use IConnectionMultiplexer
+
+Once you have configured and added the `IConnectionMultiplexer` to the service container, then its very simple to inject and use it in a controller or a view.
+
+ ```csharp
+ using Microsoft.Extensions.Caching.Distributed;
+ ...
+ public class HomeController : Controller
+ {
+     private IConnectionMultiplexer _conn;
+     public HomeController(IConnectionMultiplexer conn)
+     {
+         _conn = conn;
+     }
+     ...
+      public IActionResult ConnData()
+    {
+        IDatabase db = _conn.GetDatabase();
+
+        string key1 = db.StringGet("ConnectionMultiplexerKey1");
+        string key2 = db.StringGet("ConnectionMultiplexerKey2");
+
+        ViewData["ConnectionMultiplexerKey1"] = key1;
+        ViewData["ConnectionMultiplexerKey2"] = key2;
+
+        return View();
+    }
+ }
+ ```
+
+# 6.0 OAuth
+
+This connector simplifies using Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)).
+
+It exposes the Cloud Foundry OAuth service configuration data as inject-able `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [Cloud Foundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
+
+## 6.1 Quick Start
+
+This quick start consists of an ASP.NET Core sample app illustrating how to use the OAuth Connector to expose the binding information provided by the Cloud Foundry UAA Server.
+
+### 6.1.1 Locate Sample
+
+```bash
+> cd Samples/Connectors/src/AspDotNetCore/OAuth
+```
+
+### 6.1.2 Create Service
+
+You must first create an instance of a OAuth2 service in a org/space. As mentioned above there are a couple to choose from. In this quick start we will use the UAA Server as the provider of OAuth2 services.
+
+To set this up, we need to create a CUPS service the will provide the appropriate UAA server configuration data as part of the binding information.
+
+To do this, you should use the provided `oauth.json` file when creating your CUPS service.
+
+Note, before proceeding you will need to edit its contents to match your Cloud Foundry configuration.
+
+```bash
+> # Create a OAuth service instance on Cloud Foundry
+> cf cups myOAuthService -p oauth.json
+>
+> # Make sure the service is ready
+> cf services
+```
+
+### 6.1.3 Publish Sample
+
+Use the `dotnet` tool to build and publish the application.
+
+Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
+
+```bash
+> dotnet restore --configfile nuget.config
+>
+> # Publish for Linux, .NET Core
+> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
+>
+> # Publish for Windows, .NET Core
+> dotnet publish -f netcoreapp2.0 -r win10-x64
+>
+> # Publish for Windows, .NET Framework
+> dotnet publish -f net461 -r win10-x64
+```
+
+### 6.1.4 Push Sample
+
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry.
+
+Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
+
+```bash
+> # Push to Linux cell
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+>
+>  # Push to Windows cell, .NET Core
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+>
+>  # Push to Windows cell, .NET Framework
+> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+```
+
+Note that the manifests have been defined to bind the application to `myOAuthService` created above.
+
+### 6.1.5 Observe Logs
+
+To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs oauth`)
+
+On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
+
+```bash
+2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
+2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
+2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
+2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
+```
+
+### 6.1.6 What to expect
+
 At this point the app is up and running.
 
 On the apps menu, click on the `OAuth Options` menu item and you should see meaningful configuration data for the bound OAuth service.
 
-### 5.1.7 Understand Sample
+### 6.1.7 Understand Sample
 
 The sample was created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` )  and then modified to use the Steeltoe frameworks.
 
@@ -1696,7 +2073,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 * `HomeController.cs` - Code added for injection of a `OAuthServiceOptions` into the Controller. The `OAuthServiceOptions` contains the binding information from Cloud Foundry.
 * `OAuthOptions.cshtml` - The view used to display the OAuth data.
 
-## 5.2 Usage
+## 6.2 Usage
 
 You should have a good understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the connector. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the connector.
 
@@ -1712,7 +2089,7 @@ In order to use this Connector you need to do the following:
 * Add OAuth connector to your ServiceCollection.
 * Access the OAuth service options.
 
-### 5.2.1 Add NuGet Reference
+### 6.2.1 Add NuGet Reference
 
 To make use of the connector, you need to add a reference to the Steeltoe OAuth connector NuGet.
 
@@ -1722,13 +2099,13 @@ Add the connector to your project using the following `PackageReference`:
 
 ```xml
 <ItemGroup>
-....
+...
     <PackageReference Include="Steeltoe.CloudFoundry.Connector.OAuth" Version= "1.1.0"/>
 ...
 </ItemGroup>
 ```
 
-### 5.2.2 Configure Settings
+### 6.2.2 Configure Settings
 
 Typically you do not need to configure any additional settings for the connector.
 
@@ -1753,11 +2130,11 @@ Here is an example on how to do that.
       }
     }
   }
-  .....
+  ...
 }
 ```
 
-### 5.2.3 Cloud Foundry
+### 6.2.3 Cloud Foundry
 
 There are multiple ways in which you can setup OAuth services on Cloud Foundry.
 
@@ -1771,7 +2148,7 @@ To do that, simply to add a `AddCloudFoundry()` method call to the `Configuratio
 
 ```csharp
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(IHostingEnvironment env)
     {
@@ -1789,7 +2166,7 @@ public class Startup {
 
         Configuration = builder.Build();
     }
-    ....
+    ...
 ```
 
 When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
@@ -1798,7 +2175,7 @@ If there are merge conflicts, then the service binding settings will take preced
 
 >Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
 
-### 5.2.4 Add OAuthServiceOptions
+### 6.2.4 Add OAuthServiceOptions
 
 Once the OAuth service has been bound to the application, then the next step is to add OAuth connector to your service collection.  You do this in the `ConfigureServices()` method of the `Startup` class:
 
@@ -1806,11 +2183,11 @@ Once the OAuth service has been bound to the application, then the next step is 
 using Steeltoe.CloudFoundry.Connector.OAuth;
 
 public class Startup {
-    .....
+    ...
     public IConfigurationRoot Configuration { get; private set; }
     public Startup(...)
     {
-      .....
+      ...
     }
     public void ConfigureServices(IServiceCollection services)
     {
@@ -1821,12 +2198,12 @@ public class Startup {
         services.AddMvc();
         ...
     }
-    ....
+    ...
 ```
 
 The `AddOAuthServiceOptions(Configuration)` method call configures a `OAuthServiceOptions` instance using the configuration built by the application and then adds it to the service container.
 
-### 5.2.5 Use OAuthServiceOptions
+### 6.2.5 Use OAuthServiceOptions
 
  The final step is to use the configured `OAuthServiceOptions`.
 
@@ -1834,7 +2211,7 @@ The `AddOAuthServiceOptions(Configuration)` method call configures a `OAuthServi
 
  ```csharp
  using Steeltoe.CloudFoundry.Connector.OAuth;
- ....
+ ...
  public class HomeController : Controller
  {
      OAuthServiceOptions _options;
