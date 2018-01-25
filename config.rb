@@ -33,8 +33,8 @@ configure :development do
 end
 
 activate :blog do |blog|
-  blog.name = "docs"
-  blog.prefix = "docs"
+  blog.name = "1x"
+  blog.prefix = "1x"
   blog.sources = "{title}.html"
   blog.permalink = "{title}.html"
   blog.layout = "documentation"
@@ -57,7 +57,7 @@ helpers do
   end
 
   def docs_nav_active()
-    is_docs = current_page.url.include? "docs"
+    is_docs = current_page.url.include? "1x"
     is_lib = current_page.url.include? "library"
     (is_docs || is_lib) ? "active" : ""
   end
