@@ -1478,7 +1478,7 @@ To use RabbitMQ on Cloud Foundry, you may create and bind an instance to your ap
 
 Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`.
 
-For the settings to be available in the configuration, use the Cloud Foundry configuration providerby adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
+For the settings to be available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
 
 ```csharp
 public class Startup {
@@ -1568,12 +1568,12 @@ using RabbitMQ.Client;
 
 # 5.0 Redis
 
- This connector simplifies using a Microsoft [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or a StackExchange [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis) in an application running on Cloud Foundry.
+ This connector simplifies using a Microsoft [RedisCache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed#using-a-redis-distributed-cache) and/or a StackExchange [IConnectionMultiplexer](https://stackexchange.github.io/StackExchange.Redis/) in an application running on Cloud Foundry.
 
- In addition to the Quick Start below, there are other Steeltoe sample applications that you can use to help you understand how to make use of this connector:
+ In addition to the Quick Start below, there are other Steeltoe sample applications available to help you understand how to make use of this connector:
 
-* [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore) - sample app illustrating how to make use of the Steeltoe DataProtection Key Storage Provider for Redis.
-* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
+* [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore) - sample app illustrating how to use the Steeltoe DataProtection Key Storage Provider for Redis.
+* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) - a sample app illustrating how to use all of the Steeltoe components together in an ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -1589,11 +1589,11 @@ This quick start consists of using a ASP.NET Core sample application to illustra
 
 ### 5.1.2 Create Service
 
-In this step, use the Cloud Foundry CLI to create a service instance of Redis on Cloud Foundry.
+Use the Cloud Foundry CLI to create a service instance of Redis on Cloud Foundry.
 
 The commands below assume you are using the Redis service provided by Pivotal on Cloud Foundry.
 
-If you are using a different service then you will have to adjust the `create-service` command below to fit your setup.
+If you are using a different service then you will have to adjust the `create-service` command below to fit your environment.
 
 ```bash
 > # Create a Redis service instance on Cloud Foundry
@@ -1605,9 +1605,7 @@ If you are using a different service then you will have to adjust the `create-se
 
 ### 5.1.3 Publish Sample
 
-Use the `dotnet` CLI to build and publish the application.
-
-Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
 ```bash
 > dotnet restore --configfile nuget.config
@@ -1639,7 +1637,7 @@ Note below we show how to push for both Linux and Windows. Just pick one in orde
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-Note that the manifests have been defined to bind the application to `myRedisService` created above.
+> Note: the manifests have been defined to bind the application to `myRedisService` created above.
 
 ### 5.1.5 Observe Logs
 
@@ -1660,21 +1658,21 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 5.1.6 What to expect
 
-At this point the app is up and running. Upon startup the app inserts a key/values into the bound Redis Cache.
+At this point the app is up and running. Upon startup, the app inserts two key/value pairs into the bound Redis Cache.
 
-To display those values click on the Cache Data link in the menu and you should see the key/values displayed using the Microsoft `RedisCache`.
+To display those values, click on the Cache Data link in the menu and you should see the key/value pairs displayed using the Microsoft `RedisCache`.
 
-You can click on the ConnectionMultiplexer Data link to view data using the StackExchange `ICollectionMultiplexer`.
+Click on the ConnectionMultiplexer Data link to view data using the StackExchange `ICollectionMultiplexer`.
 
 ### 5.1.7 Understand Sample
 
-The sample was created from the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ), and modified to use the Steeltoe frameworks.
+The sample was created from the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`) and modified to use the Steeltoe frameworks.
 
-To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
+To understand the Steeltoe related changes to the generated template code, examine the following files:
 
-* `Redis.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.Redis`
+* `Redis.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
 * `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `IDistributedCache` and a `IConnectionMultiplexer` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Redis service configuration values when pushed to Cloud Foundry.
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add an `IDistributedCache` and an `IConnectionMultiplexer` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Redis service configuration values when pushed to Cloud Foundry.
 * `HomeController.cs` - Code added for injection of a `IDistributedCache` or `IConnectionMultiplexer` into the Controller.  These are used to obtain data from the cache and then to display it.
 * `CacheData.cshtml` - The view used to display the Redis data values obtained using `IDistributedCache`.
 * `ConnData.cshtml` - The view used to display the Redis data values obtained using `IConnectionMultiplexer`.
@@ -1686,36 +1684,41 @@ You should have a good understanding of how the new .NET [Configuration service]
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
 
-You probably will want some understanding of how to use the [RedisCache](https://github.com/aspnet/Caching/tree/dev/src/Microsoft.Extensions.Caching.Redis) and/or [IConnectionMultiplexer](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Basics.md) before starting to use this connector.
+You probably will want some understanding of how to use the [RedisCache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed#using-a-redis-distributed-cache) and/or [IConnectionMultiplexer](https://stackexchange.github.io/StackExchange.Redis/) before starting to use this connector.
 
-In order to use this connector you need to do the following:
+To use this connector:
 
 * Create and bind a Redis Service instance to your application.
-* Optionally, configure any Redis client settings (e.g. appsettings.json)
+* Optionally, configure any Redis client settings (e.g. `appsettings.json`)
 * Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
 * Add DistributedRedisCache and/or ConnectionMultiplexer to your ServiceCollection.
 
 ### 5.2.1 Add NuGet Reference
 
-To make use of the connector, you need to add a reference to the Steeltoe Redis connector NuGet.
+To use the connector, you need to add a reference to the appropriate Steeltoe Connector NuGet package and a reference to `Microsoft.Extensions.Caching.Redis`, `StackExchange.Redis` or `StackExchange.Redis.StrongName`.
 
-The connector can be found in the `Steeltoe.CloudFoundry.Connector.Redis` package.
+> Note: This requirement is a change for version 2.x - version 1.x packages do NOT require a direct Redis package reference!
 
-Add the connector to your project using the following `PackageReference`:
+If your application uses Microsoft's Dependency Injection, use the `Steeltoe.CloudFoundry.ConnectorCore` package. If you do not use Microsoft's Dependency Injection, use `Steeltoe.CloudFoundry.ConnectorBase`.
+
+Use the NuGet Package Manager tools or directly add the following package references to your .csproj file to include the Steeltoe connector and Redis libraries:
 
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.Redis" Version= "1.1.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0-rc1"/>
+    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version= "x.y.z"/>
 ...
 </ItemGroup>
 ```
 
+> Note: because `Microsoft.Extensions.Caching.Redis` depends on `StackExchange.Redis.StrongName`, adding a reference to the Microsoft library will also enable access to the StackExchange classes as seen in the sample application.
+
 ### 5.2.2 Configure Settings
 
-Optionally you can configure the settings the connector will use when setting up the RedisCache. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of a RabbitMQ server running elsewhere.
+The connector supports several settings for the Redis connection, which can be useful when you are developing and testing an application locally and you need to have the connector configure the connection for non-default settings.
 
-Here is an example of the connectors configuration in JSON that shows how to setup a connection to a Redis server at `http://foo.bar:1111`
+Here is an example of the connector's configuration in JSON that shows how to setup a connection to a Redis server at `http://foo.bar:1111`
 
 ```json
 {
@@ -1734,26 +1737,26 @@ Below is a table showing all possible settings for the connector.
 
 As shown above, all of these settings should be prefixed with `redis:client:`
 
-|Key|Description|
-|---|---|
-|**host**|Hostname or IP Address of server, defaults = localhost|
-|**port**|Port number of server, defaults = 6379|
-|**endPoints**|Comma separated list of host:port pairs, defaults empty|
-|**clientName**|Identification for the connection within redis, defaults = empty|
-|**connectRetry**|Times to repeat initial connect attempts, default = 3|
-|**connectTimeout**|Timeout (ms) for connect operations, default = 5000|
-|**abortOnConnectFail**|Will not create a connection while no servers are available, default = true|
-|**keepAlive**|Time (seconds) at which to send a message to help keep sockets alive, default = -1|
-|**resolveDns**|DNS resolution should be explicit and eager, rather than implicit, default = false|
-|**ssl**|SSL encryption should be used, default = false|
-|**sslHost**|Enforces a particular SSL host identity on the server's certificate, default = empty|
-|**writeBuffer**|Size of the output buffer, default = 4096|
-|**connectionString**|Connection string, use instead of values above, default = empty|
-|**instanceId**|Cache id, used only with IDistributedCache, default = empty|
+|Key|Description|Default|
+|---|---|---|
+|host|Hostname or IP Address of server|localhost|
+|port|Port number of server|6379|
+|endPoints|Comma separated list of host:port pairs|not set|
+|clientName|Identification for the connection within redis|not set|
+|connectRetry|Times to repeat initial connect attempts|3|
+|connectTimeout|Timeout (ms) for connect operations|5000|
+|abortOnConnectFail|Will not create a connection while no servers are available|true|
+|keepAlive|Time (seconds) at which to send a message to help keep sockets alive|-1|
+|resolveDns|DNS resolution should be explicit and eager, rather than implicit|false|
+|ssl|SSL encryption should be used|false|
+|sslHost|Enforces a particular SSL host identity on the server's certificate|not set|
+|writeBuffer|Size of the output buffer|4096|
+|connectionString|Connection string, use instead of values above|not set|
+|instanceId|Cache id, used only with IDistributedCache|not set|
 
-Once the connectors settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the connector.
+Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
 
-Using the code below, you can see that the connectors settings from above should be put in `appsettings.json` and included with the application. Then, by using the .NET provided JSON configuration provider we are able to read in the settings simply by adding the provider to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
+The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
 
 ```csharp
 
@@ -1776,11 +1779,11 @@ public class Startup {
     ...
 ```
 
-If you wanted to managed the settings centrally, you can also use the Spring Cloud Config Server (i.e. `AddConfigServer()`) instead of a local JSON file (i.e. `AddJsonFile()`) simply by putting the settings in a github repository and configuring the Config server to serve its configuration from that repository.
+To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
 ### 5.2.3 Cloud Foundry
 
-When you want to use Redis on Cloud Foundry and you have installed a Redis service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
+To use Redis on Cloud Foundry, create and bind an instance to your application using the Cloud Foundry CLI:
 
 ```bash
 > # Create Redis service
@@ -1793,13 +1796,11 @@ When you want to use Redis on Cloud Foundry and you have installed a Redis servi
 > cf restage myApp
 ```
 
-Note: The commands above assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
+> Note: The commands above assume you are using the Redis service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your environment.
 
-Once you have bound the service to the application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
+Once the service is bound to the application, the connector's settings will be available in `VCAP_SERVICES`.
 
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
-
-To do that, simply add a `AddCloudFoundry(`) method call to the `ConfigurationBuilder`.  Here is an example:
+For the settings to be available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
 
 ```csharp
 public class Startup {
@@ -1824,42 +1825,38 @@ public class Startup {
     ...
 ```
 
-When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
+When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
 
-If there are merge conflicts, then the service binding settings will take precedence and will override all others.
+If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
 
->Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
 
 ### 5.2.4 Add IDistributedCache
 
- If you want to use the Microsoft provided `IDistributedCache` in your application, then you need to add it to the service container .
-
- You do this in the `ConfigureServices()` method of the `Startup` class. Here is some sample code illustrating how:
+ To use Microsoft's `IDistributedCache` in your application, add it to the service container:
 
  ```csharp
- #using Steeltoe.CloudFoundry.Connector.Redis;
+using Steeltoe.CloudFoundry.Connector.Redis;
+public class Startup {
+    public IConfigurationRoot Configuration { get; private set; }
+    public Startup()
+    {
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Add Microsoft Redis Cache (IDistributedCache) configured from Cloud Foundry
+        services.AddDistributedRedisCache(Configuration);
 
- public class Startup {
-
-     public IConfigurationRoot Configuration { get; private set; }
-     public Startup()
-     {
-     }
-     public void ConfigureServices(IServiceCollection services)
-     {
-         // Add Microsoft Redis Cache (IDistributedCache) configured from Cloud Foundry
-         services.AddDistributedRedisCache(Configuration);
-
-         // Add framework services
-         services.AddMvc();
-     }
-
+        // Add framework services
+        services.AddMvc();
+    }
 ```
-The above `AddDistributedRedisCache(Configuration)` method call configures the `IDistributedCache` using the configuration built by the application earlier and it then adds the connection to the service container.
+
+The `AddDistributedRedisCache(Configuration)` method call configures the `IDistributedCache` using the configuration built by the application earlier and adds the connection to the service container.
 
 ### 5.2.5 Use IDistributedCache
 
- Below is an example illustrating how to inject and then use the `IDistributedCache` in a controller once its been added to the service container.
+ This example shows how to inject and use the `IDistributedCache` in a controller once it has been added to the service container:
 
  ```csharp
  using Microsoft.Extensions.Caching.Distributed;
@@ -1887,9 +1884,7 @@ The above `AddDistributedRedisCache(Configuration)` method call configures the `
 
 ### 5.2.6 Add IConnectionMultiplexer
 
-If you would prefer to use a StackExchange `IConnectionMultiplexer` in your application, then you need to add it, instead of a `DistributedRedisCache` to the service container.  Note, you can use both `IDistributedCache` and `I`ConnectionMultiplexer` in your application if you need to.
-
-Just like above, you do this in the `ConfigureServices()` method of the `Startup` class.
+To use a StackExchange `IConnectionMultiplexer` in your application directly, add it to the service container in the `ConfigureServices()` method of the `Startup` class:
 
  ```csharp
 using Steeltoe.CloudFoundry.Connector.Redis;
@@ -1914,11 +1909,13 @@ public class Startup {
     ...
 ```
 
-The above `AddRedisConnectionMultiplexer(Configuration)` method call configures the `IConnectionMultiplexer` using the configuration built by the application and it then adds the connection to the service container.
+The `AddRedisConnectionMultiplexer(Configuration)` method call configures the `IConnectionMultiplexer` using the configuration built by the application and adds the connection to the service container.
+
+> Note: you can use both `IDistributedCache` and `IConnectionMultiplexer` in your application if you need to.
 
 ### 5.2.7 Use IConnectionMultiplexer
 
-Once you have configured and added the `IConnectionMultiplexer` to the service container, then its very simple to inject and use it in a controller or a view.
+Once you have configured and added the `IConnectionMultiplexer` to the service container, inject and use it in a controller or a view:
 
  ```csharp
  using Microsoft.Extensions.Caching.Distributed;
