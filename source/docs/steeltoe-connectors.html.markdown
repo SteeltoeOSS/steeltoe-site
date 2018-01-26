@@ -113,9 +113,7 @@ For example, the Entity Framework 6 DbContext sample can only run on Windows and
 
 ### 1.1.4 Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry.
-
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
 > # Push to Linux cell
@@ -1622,9 +1620,7 @@ Use the `dotnet` CLI to build and locally publish the application with your pref
 
 ### 5.1.4 Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry.
-
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
 > # Push to Linux cell
@@ -1945,9 +1941,7 @@ Once you have configured and added the `IConnectionMultiplexer` to the service c
 
 # 6.0 OAuth
 
-This connector simplifies using Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)).
-
-It exposes the Cloud Foundry OAuth service configuration data as inject-able `IOption<OAuthServiceOptions>`. It primarily used by the ASP.NET Core [Cloud Foundry External Security Provider](https://github.com/SteeltoeOSS/Security), but can be used standalone as well.
+This connector simplifies using Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) by exposing the Cloud Foundry OAuth service configuration data as injectable `IOption<OAuthServiceOptions>`. It is used by the [Cloud Foundry External Security Providers](../steeltoe-security), but can be used separately.
 
 ## 6.1 Quick Start
 
@@ -1961,13 +1955,11 @@ This quick start consists of an ASP.NET Core sample app illustrating how to use 
 
 ### 6.1.2 Create Service
 
-You must first create an instance of a OAuth2 service in a org/space. As mentioned above there are a couple to choose from. In this quick start we will use the UAA Server as the provider of OAuth2 services.
+You must first create an instance of a OAuth2 service in a org/space. There are two to choose from, but in this quick start we will use the UAA Server.
 
-To set this up, we need to create a CUPS service the will provide the appropriate UAA server configuration data as part of the binding information.
+To set up UAA, we need to create a user-provided service that will provide the appropriate UAA server configuration data to the application.
 
-To do this, you should use the provided `oauth.json` file when creating your CUPS service.
-
-Note, before proceeding you will need to edit its contents to match your Cloud Foundry configuration.
+> Note: the contents of `oauth.json` must be modified to match your Cloud Foundry configuration.
 
 ```bash
 > # Create a OAuth service instance on Cloud Foundry
@@ -1979,9 +1971,7 @@ Note, before proceeding you will need to edit its contents to match your Cloud F
 
 ### 6.1.3 Publish Sample
 
-Use the `dotnet` tool to build and publish the application.
-
-Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
 ```bash
 > dotnet restore --configfile nuget.config
@@ -1998,9 +1988,7 @@ Note below we show how to publish for all of the target run times and frameworks
 
 ### 6.1.4 Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry.
-
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
 > # Push to Linux cell
@@ -2013,7 +2001,7 @@ Note below we show how to push for both Linux and Windows. Just pick one in orde
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-Note that the manifests have been defined to bind the application to `myOAuthService` created above.
+> Note: the manifests have been defined to bind the application to `myOAuthService` created above.
 
 ### 6.1.5 Observe Logs
 
@@ -2036,15 +2024,15 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 At this point the app is up and running.
 
-On the apps menu, click on the `OAuth Options` menu item and you should see meaningful configuration data for the bound OAuth service.
+On the apps menu, click on the `OAuth Options` menu item to see meaningful configuration data for the bound OAuth service.
 
 ### 6.1.7 Understand Sample
 
-The sample was created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` )  and then modified to use the Steeltoe frameworks.
+The sample was created using the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`)  and then modified to use the Steeltoe frameworks.
 
 To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
 
-* `OAuth.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.OAuth`
+* `OAuth.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
 * `Program.cs` - Code added to read the `--server.urls` command line.
 * `Startup.cs` - Code added to the `ConfigureServices()` method to add a `OAuthServiceOptions` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry UAA configuration values when pushed to Cloud Foundry.
 * `HomeController.cs` - Code added for injection of a `OAuthServiceOptions` into the Controller. The `OAuthServiceOptions` contains the binding information from Cloud Foundry.
@@ -2054,13 +2042,13 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 You should have a good understanding of how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the connector. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the connector.
 
-You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()` method.
+You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay attention to the usage of the `ConfigureServices()` method.
 
 You probably will want some understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) before starting to use this connector.
 
-In order to use this Connector you need to do the following:
+To use this Connector:
 
-* Create and bind a OAuth service instance to your application.
+* Create and bind an OAuth service instance to your application.
 * Configure any additional settings the OAuth connector will need. (Optional)
 * Add Steeltoe Cloud Foundry configuration provider to your ConfigurationBuilder.
 * Add OAuth connector to your ServiceCollection.
@@ -2068,42 +2056,29 @@ In order to use this Connector you need to do the following:
 
 ### 6.2.1 Add NuGet Reference
 
-To make use of the connector, you need to add a reference to the Steeltoe OAuth connector NuGet.
+To use the connector, you need to add a reference to the appropriate Steeltoe Connector NuGet package. If your application uses Microsoft's Dependency Injection, use the `Steeltoe.CloudFoundry.ConnectorCore` package. If you do not use Microsoft's Dependency Injection, use `Steeltoe.CloudFoundry.ConnectorBase`.
 
-The connector can be found in the `Steeltoe.CloudFoundry.Connector.OAuth` package.
-
-Add the connector to your project using the following `PackageReference`:
+Use the NuGet Package Manager tools or directly add the following package references to your .csproj file to include the Steeltoe connector library:
 
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.Connector.OAuth" Version= "1.1.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0-rc1"/>
 ...
 </ItemGroup>
 ```
 
 ### 6.2.2 Configure Settings
 
-Typically you do not need to configure any additional settings for the connector.
-
-But, sometimes it might be necessary when running on Cloud Foundry and you are using self-signed certificates.  In that case, you might need to disable certificate validation.
-
-Here is an example on how to do that.
+Configuring additional settings for the connector is not typically required, but when Cloud Foundry is using self-signed certificates you might need to disable certificate validation:
 
 ```json
 {
-"Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Debug",
-      "System": "Information",
-      "Microsoft": "Information"
-    }
-  },
-"security": {
+  ...
+  "security": {
     "oauth2": {
       "client": {
-        "validate_certificates": false
+        "validateCertificates": false
       }
     }
   }
@@ -2113,15 +2088,11 @@ Here is an example on how to do that.
 
 ### 6.2.3 Cloud Foundry
 
-There are multiple ways in which you can setup OAuth services on Cloud Foundry.
+There are multiple ways to setup OAuth services on Cloud Foundry.
 
-In the quick start above, we used a CUPS based service to define a direct binding to the Cloud Foundry UAA server. Alternatively, you can also make use of the [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) product to provision a OAuth service binding. The process that you follow in creating service binding varies for each of the approaches.
+In the quick start above, we used a user-provided service to define a direct binding to the Cloud Foundry UAA server. Alternatively, you can use the [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) product to provision an OAuth service binding. The process to create service binding varies for each of the approaches.
 
-Regardless of which you choose, once you have bound the OAuth service to the application, the OAuth service settings will have been made available and setup in `VCAP_SERVICES`.
-
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
-
-To do that, simply to add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`. Here is an example:
+Regardless of which you choose, once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
 
 ```csharp
 public class Startup {
@@ -2146,15 +2117,15 @@ public class Startup {
     ...
 ```
 
-When you push the application to Cloud Foundry, the settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
+When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
 
-If there are merge conflicts, then the service binding settings will take precedence and will override all others.
+If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
 
->Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
 
 ### 6.2.4 Add OAuthServiceOptions
 
-Once the OAuth service has been bound to the application, then the next step is to add OAuth connector to your service collection.  You do this in the `ConfigureServices()` method of the `Startup` class:
+Once the OAuth service has been bound to the application, add the OAuth connector to your service collection in the `ConfigureServices()` method of the `Startup` class:
 
 ```csharp
 using Steeltoe.CloudFoundry.Connector.OAuth;
@@ -2178,13 +2149,11 @@ public class Startup {
     ...
 ```
 
-The `AddOAuthServiceOptions(Configuration)` method call configures a `OAuthServiceOptions` instance using the configuration built by the application and then adds it to the service container.
+The `AddOAuthServiceOptions(Configuration)` method call configures a `OAuthServiceOptions` instance using the configuration built by the application and adds it to the service container.
 
 ### 6.2.5 Use OAuthServiceOptions
 
- The final step is to use the configured `OAuthServiceOptions`.
-
- Below is an example illustrating how to use the dependency injection services to inject the information into a controller:
+ Finally, inject and use the configured `OAuthServiceOptions` into a controller:
 
  ```csharp
  using Steeltoe.CloudFoundry.Connector.OAuth;
