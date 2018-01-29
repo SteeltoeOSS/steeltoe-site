@@ -90,68 +90,17 @@ If you are using a different service, adjust the `create-service` command below 
 > cf services
 ```
 
-### 1.1.3 Publish Sample
+### 1.1.3 Publish and Push Sample, observe logs
 
-Use the `dotnet` CLI to build and publish the application.
+See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-Note that not all quick start samples can be built to run on all frameworks and run-times.
-
-For example, the Entity Framework 6 DbContext sample can only run on Windows and on the .NET Framework, and the Entity Framework Core DbContext sample can only run on .NET Core.
-
-```bash
-> dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
-
-### 1.1.4 Push Sample
-
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
-
-```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
-> # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
-> # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-Note that the manifests have been defined to bind the application to `myMySqlService` created above.
-
-### 1.1.5 Observe Logs
-
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs mysqlefcore-connector`, `cf logs mysqlef6-connector` or `cf logs mysql-connector`)
-
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
-
-```bash
-2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
-2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
-2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
-2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-```
-
-### 1.1.6 What to expect
+### 1.1.4 What to expect
 
 At this point the application is up and running. Upon startup it inserts a couple rows into the bound MySql database.
 
 To display those rows click on the `MySql Data` link in the top menu and you should see the row data displayed.
 
-### 1.1.7 Understand Sample
+### 1.1.5 Understand Sample
 
 Each of the samples were created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ) and then modified to add the Steeltoe framework.
 
@@ -501,64 +450,17 @@ If you are using a different service, adjust the `create-service` command to fit
 > cf services
 ```
 
-### 2.1.3 Publish Sample
+### 2.1.3 Publish and Push Sample, observe logs
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-```bash
-> dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
-
-### 2.1.4 Push Sample
-
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
-
-```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
-> # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
-> # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-> Note: the manifest files have all been defined to bind the application to the `myPostgres` instance created above.
-
-### 2.1.5 Observe Logs
-
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs postgres-connector`)
-
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
-
-```bash
-2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
-2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
-2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
-2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-```
-
-### 2.1.6 What to expect
+### 2.1.4 What to expect
 
 At this point, the app is up and running. Upon startup it inserts a couple rows into the bound PostgreSQL database.
 
 To display those rows, click on the `Postgres Data` link in the top menu.
 
-### 2.1.7 Understand Sample
+### 2.1.5 Understand Sample
 
 Each of the samples were created from the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ) and then modified to include the Steeltoe framework.
 
@@ -903,43 +805,11 @@ To publish ASP.NET 4.x applications, you'll want to use the Visual Studio publis
 1. Select the profile `FolderProfile` *(if for some reason this profile is missing, create a profile that publishes to a local folder `bin/Debug/net461/win10-x64/publish`)*
 1. Click Publish
 
-### 3.1.4 Push Sample
+### 3.1.4 Push Samples, observe logs
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry.
+See [Common References](#push-sample) for instructions on how to push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-Note below we show how to push for both Linux and Windows. Select one in order to proceed, but be aware that the only one that works for the ASP.NET 4x sample is the first one:
-
-```bash
-> # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
->
-> # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
-```
-
-> Note: the manifest files have been defined to bind the application to the `mySqlServerService` created above.
-
-### 3.1.5 Observe Logs
-
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs sqlserverefcore-connector` or `cf logs mssql4-connector`)
-
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
-
-```bash
-2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
-2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
-2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
-2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-```
-
-### 3.1.6 What to expect
+### 3.1.5 What to expect
 
 At this point the application is up and running. Upon startup it inserts two rows into the bound Microsoft SQL database.
 
@@ -1293,58 +1163,11 @@ If you are using a different service, adjust the `create-service` command below 
 > cf services
 ```
 
-### 4.1.3 Publish Sample
+### 4.1.3 Publish and Push Sample, observe logs
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-```bash
-> dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
-
-### 4.1.4 Push Sample
-
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
-
-```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
-> # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
-> # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-> Note: the manifests have been defined to bind the application to the `myRabbitService` created above.
-
-### 4.1.5 Observe Logs
-
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs rabbit`)
-
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
-
-```bash
-2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
-2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
-2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
-2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-```
-
-### 4.1.6 What to expect
+### 4.1.4 What to expect
 
 At this point the app is up and running.
 
@@ -1352,7 +1175,7 @@ To send a message click "Send" and use the form to send a message over RabbitMQ.
 
 Having sent a message, click "Receive" to see those messages.
 
-### 4.1.7 Understand Sample
+### 4.1.5 Understand Sample
 
 The sample was created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ) and then modified to use the Steeltoe framework.
 
@@ -1601,58 +1424,11 @@ If you are using a different service then you will have to adjust the `create-se
 > cf services
 ```
 
-### 5.1.3 Publish Sample
+### 5.1.3 Publish and Push Sample, observe logs
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-```bash
-> dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
-
-### 5.1.4 Push Sample
-
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
-
-```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-> Note: the manifests have been defined to bind the application to `myRedisService` created above.
-
-### 5.1.5 Observe Logs
-
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs redis-connector`)
-
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
-
-```bash
-2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
-2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
-2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
-2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-```
-
-### 5.1.6 What to expect
+### 5.1.4 What to expect
 
 At this point the app is up and running. Upon startup, the app inserts two key/value pairs into the bound Redis Cache.
 
@@ -1660,7 +1436,7 @@ To display those values, click on the Cache Data link in the menu and you should
 
 Click on the ConnectionMultiplexer Data link to view data using the StackExchange `ICollectionMultiplexer`.
 
-### 5.1.7 Understand Sample
+### 5.1.5 Understand Sample
 
 The sample was created from the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`) and modified to use the Steeltoe frameworks.
 
@@ -1969,64 +1745,17 @@ To set up UAA, we need to create a user-provided service that will provide the a
 > cf services
 ```
 
-### 6.1.3 Publish Sample
+### 6.1.3 Publish and Push Sample, observe logs
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-```bash
-> dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
-
-### 6.1.4 Push Sample
-
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
-
-```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-> Note: the manifests have been defined to bind the application to `myOAuthService` created above.
-
-### 6.1.5 Observe Logs
-
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs oauth`)
-
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
-
-```bash
-2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
-2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
-2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
-2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
-2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-```
-
-### 6.1.6 What to expect
+### 6.1.4 What to expect
 
 At this point the app is up and running.
 
 On the apps menu, click on the `OAuth Options` menu item to see meaningful configuration data for the bound OAuth service.
 
-### 6.1.7 Understand Sample
+### 6.1.5 Understand Sample
 
 The sample was created using the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`)  and then modified to use the Steeltoe frameworks.
 
@@ -2183,3 +1912,56 @@ The `AddOAuthServiceOptions(Configuration)` method call configures a `OAuthServi
      }
  }
  ```
+
+# Common References
+
+## Publish Sample
+
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+
+```bash
+> dotnet restore --configfile nuget.config
+>
+> # Publish for Linux, .NET Core
+> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
+>
+> # Publish for Windows, .NET Core
+> dotnet publish -f netcoreapp2.0 -r win10-x64
+>
+> # Publish for Windows, .NET Framework
+> dotnet publish -f net461 -r win10-x64
+```
+
+## Push Sample
+
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
+
+```bash
+> # Push to Linux cell
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+>
+>  # Push to Windows cell, .NET Core
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+>
+>  # Push to Windows cell, .NET Framework
+> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+```
+
+> Note: all sample manifests have been defined to bind their application to their service(s) as created above.
+
+## Observe Logs
+
+To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs oauth`)
+
+On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
+
+```bash
+2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
+2016-06-01T09:14:15.93-0600 [CELL/0]     OUT Successfully created container
+2016-06-01T09:14:17.14-0600 [CELL/0]     OUT Starting health monitoring of container
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Hosting environment: Development
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Content root path: /home/vcap/app
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
+2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
+2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
+```
