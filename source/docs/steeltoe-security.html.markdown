@@ -996,3 +996,6 @@ public class Startup {
 ### 3.2.5 Use Redis Key Store
 
 Once this has been setup, the keys used by the DataProtection framework will be stored in the bound Redis Cloud Foundry service.  There is nothing more that you need to do.
+
+[//]: # (this is a hack to prevent the TOC from drifting down into the footer)
+<div style="height:518px"></div>
