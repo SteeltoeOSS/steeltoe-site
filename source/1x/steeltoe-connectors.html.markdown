@@ -1847,7 +1847,7 @@ public class Startup {
 
 The `AddOAuthServiceOptions(Configuration)` method call configures a `OAuthServiceOptions` instance using the configuration built by the application and then adds it to the service container.
 
-### 5.2.5 Use OAuthServiceOptions
+### 5.2.5&nbsp;Use&nbsp;OAuthServiceOptions
 
  The final step is to use the configured `OAuthServiceOptions`.
 

@@ -5,13 +5,19 @@
     <%= partial 'shared/nav' %>
     <div class="max-width-4 mx-auto">
       <div class="p2">
-        <h2 class="mt0 steel-heading"><i class="fa fa-file-text muted"></i> Documentation</h2>
-        <ul>
-          <li>v1.x</li>
-          <li><a href="<%= current_page.url.sub! '1x', 'docs' %>">v2.x</a></li>
-        </ul>
         <div class="sm-flex">
           <div class="col-12 sm-col-3 sm-pr3">
+            <h2 class="mt0 steel-heading">
+              <i class="fa fa-file-text muted"></i>
+              Documentation
+              <select onchange="viewV2()" id="docselector" class="iscollapsed">
+                <option selected>v1.x</option>
+                <option>v2.x</option>
+              </select>
+            </h2>
+            <noscript>
+              <a href="<%= current_page.url.sub! '1x', 'docs' %>">View v2.x Docs</a>
+            </noscript>
             <div id="toc">
               <%= partial 'shared/docs-toc' %>
             </div>
@@ -28,5 +34,10 @@
     <%= partial 'shared/footer' %>
     <%= javascript_include_tag :docs %>
     <%= partial 'shared/ga' %>
-  </body>
+    <script>
+      function viewV2(){
+        window.location.href='<%= current_page.url.sub! '1x', 'docs' %>';
+      }
+      document.getElementById('docselector').style.display = "inline";
+    </script>  </body>
 </html>
