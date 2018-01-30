@@ -92,7 +92,7 @@ If you are using a different service, adjust the `create-service` command below 
 
 ### 1.1.3 Publish and Push Sample, observe logs
 
-See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
 ### 1.1.4 What to expect
 
@@ -107,8 +107,8 @@ Each of the samples were created using the .NET Core tooling `mvc` template ( i.
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
 * `*.csproj` files contain `PackageReference` for Steeltoe NuGet Connector and Configuration packages. Additionally, a `PackageReference` for Oracle's MySql provider; `MySql.Data` has been added. If Entity Framework has been used you will see references to those packages as well.
-* `Program.cs` - Code added to read the `--server.urls` command line
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry MySql configuration values when pushed to Cloud Foundry.
+* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs` - Code added for injection of a `MySqlConnection` or `DbContext` into the Controller. These are used to obtain data from the database and then to display the data.
 * `MySqlData.cshtml` - The view used to display the MySql data values.
 * `Models folder` - Contains code to initialize the database and also the definition of `DbContext` classes for the MySqlEF6 and MySqlEFCore samples.
@@ -190,31 +190,7 @@ As shown above, all of these settings should be prefixed with `mysql:client:`
 |useAffectedRows|Set to `false` to report found rows instead of changed (affected) rows|not set|
 |useCompression|If `true` (and server-supported), packets sent between client and server are compressed|not set|
 
-Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
-
-The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
+The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 1.2.3 Cloud Foundry
 
@@ -233,36 +209,7 @@ To use MySql on Cloud Foundry, you may create and bind an instance of MySql to y
 
 > Note: The commands above assume you are using [MySql for PCF](https://network.pivotal.io/products/p-mysql), provided by Pivotal on Cloud Foundry. If you are using a different service, you will have to adjust the `create-service` command to fit your environment.
 
-Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            // Add `VCAP_` configuration info
-            .AddCloudFoundry()
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
-
-If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
-
-> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 1.2.4 Add MySqlConnection
 
@@ -327,7 +274,7 @@ To use Entity Framework, inject and use a `DbContext` in your application instea
 
 ```csharp
 using Steeltoe.CloudFoundry.Connector.MySql.EFCore
-... OR
+// OR
 using Steeltoe.CloudFoundry.Connector.MySql.EF6;
 
 public class Startup {
@@ -452,7 +399,7 @@ If you are using a different service, adjust the `create-service` command to fit
 
 ### 2.1.3 Publish and Push Sample, observe logs
 
-See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
 ### 2.1.4 What to expect
 
@@ -468,8 +415,8 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 * `PostgreSql.csproj` - Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
 * `PostgreEFCore.csproj` - Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.Connector.EFCore`
-* `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry PostgreSQL configuration values when pushed to Cloud Foundry.
+* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NgpsqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs` - Code added to inject a `NpgsqlConnection` or `DbContext` into the Controller and obtain data from the database for the view.
 * `PostgresData.cshtml` - The view used to display the PostgreSQL data values.
 * `Models folder` - contains code to initialize the database and also the `DbContext` for PostgreEFCore sample.
@@ -542,32 +489,7 @@ As shown above, all of these settings should be prefixed with `postgres:client:`
 |database|Schema to connect to|not set|
 |connectionString|Full connection string|built from settings
 
-Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
-
-The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
-
-```csharp
-
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
+The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 2.2.3 Cloud Foundry
 
@@ -586,36 +508,7 @@ To use PostgreSQL on Cloud Foundry, after a PostgreSQL service is installed, you
 
 > Note: The commands above are for the PostgreSQL service provided by EDB on Cloud Foundry. For another service, adjust the `create-service` command to fit your environment.
 
-Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to be available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` method call to the `ConfigurationBuilder`:
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            // Add `VCAP_` configuration info
-            .AddCloudFoundry()
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-When pushing the application to Cloud Foundry, the settings that have been provided by the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
-
-If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
-
-> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 2.2.4 Add NpgsqlConnection
 
@@ -680,7 +573,7 @@ public class HomeController : Controller
 To use Entity Framework, inject and use a `DbContext` in your application instead of a `NpgsqlConnection` via the `AddDbContext<>()` method:
 
 ```csharp
-#using Steeltoe.CloudFoundry.Connector.PostgreSql.EFCore;
+using Steeltoe.CloudFoundry.Connector.PostgreSql.EFCore;
 
 public class Startup {
     public IConfigurationRoot Configuration { get; private set; }
@@ -824,8 +717,8 @@ This sample was created from the .NET Core tooling mvc template (i.e. `dotnet ne
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `*.csproj` file contains `PackageReference` for Steeltoe NuGet Connector and Entity Framework.
-* `Program.cs` - Code added to read the `--server.urls` command line
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Microsoft SQL Server configuration values when pushed to Cloud Foundry.
+* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `DbContext` to the service container.
 * `HomeController.cs` - Code added for injection of a `TestContext` into the Controller to obtain data from the database and then to display the data.
 * `Index.cshtml` - The view used to display the data values from SQL Server.
 * `Models folder` - Contains code to initialize the database and also the definition of `DbContext` class.
@@ -851,7 +744,7 @@ You should also have a good understanding of how the ASP.NET Core [Startup](http
 To use this connector:
 
 * Create and bind a Microsoft SQL Service instance to your application.
-* Optionally, configure any MySql client settings (e.g. `appsettings.json`) you need.
+* Optionally, configure any Microsoft SQL Server client settings (e.g. `appsettings.json`) you need.
 * Add Steeltoe Cloud Foundry configuration provider to your `ConfigurationBuilder`.
 * Add `SqlConnection` or `DbContext` to your `IServiceCollection`.
 
@@ -907,31 +800,7 @@ Below is a table showing available settings for the connector. As shown above, a
 |connectionString|Full connection string|built from settings|
 |integratedSecurity|Enable Windows Authentication (For local use only)|not set|
 
-Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
-
-The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
+The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 3.2.3 Cloud Foundry
 
@@ -959,36 +828,7 @@ If you are creating the service for an app that has already been deployed, you w
 
 > Note: The commands above are may not exactly match the service or plan names available in your environment. You may have to adjust the `create-service` command to fit your environment. Use `cf marketplace` to see what is available.
 
-Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            // Add `VCAP_` configuration info
-            .AddCloudFoundry()
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
-
-If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
-
-> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 3.2.4 Add SqlConnection
 
@@ -1144,7 +984,7 @@ Specifically it shows how to use a `RabbitMQ.Client` to send and receive message
 ### 4.1.1 Locate Sample
 
 ```bash
-> cd Samples/Connectors/src/AspDotNetCore/Rabbit
+> cd Samples/Connectors/src/AspDotNetCore/RabbitMQ
 ```
 
 ### 4.1.2 Create Service
@@ -1157,7 +997,7 @@ If you are using a different service, adjust the `create-service` command below 
 
 ```bash
 > # Create a RabbitMQ service instance on Cloud Foundry
-> cf create-service p-rabbitmq standard myRabbitService
+> cf create-service p-rabbitmq standard myRabbitMQService
 >
 > # Make sure the service is ready
 > cf services
@@ -1165,7 +1005,7 @@ If you are using a different service, adjust the `create-service` command below 
 
 ### 4.1.3 Publish and Push Sample, observe logs
 
-See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
 ### 4.1.4 What to expect
 
@@ -1181,10 +1021,10 @@ The sample was created using the .NET Core tooling `mvc` template ( i.e. `dotnet
 
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
-* `Rabbit.csproj` - Contains `PackageReference` for `RabbitMQ.Client` and Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
-* `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a RabbitMQ `ConnectionFactory` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry RabbitMQ configuration values when pushed to Cloud Foundry.
-* `RabbitController.cs` - Code added for injection of a RabbitMQ `ConnectionFactory` into the Controller. The `ConnectionFactory` is used in the `Send` and `Receive` action methods.
+* `RabbitMQ.csproj` - Contains `PackageReference` for `RabbitMQ.Client` and Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
+* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a RabbitMQ `ConnectionFactory` to the service container
+* `RabbitMQController.cs` - Code added for injection of a RabbitMQ `ConnectionFactory` into the Controller. The `ConnectionFactory` is used in the `Send` and `Receive` action methods.
 * `Receive.cshtml` - The view used to display the received message data values.
 * `Send.cshtml` - The view used to submit message data.
 
@@ -1229,7 +1069,7 @@ Here is an example of the connectors configuration in JSON that shows how to set
 ```json
 {
   ...
-  "rabbit": {
+  "rabbitmq": {
     "client": {
       "uri": "amqp://guest:guest@127.0.0.1/"
     }
@@ -1240,7 +1080,7 @@ Here is an example of the connectors configuration in JSON that shows how to set
 
 Below is a table showing all possible settings for the connector.
 
-As shown above, all of these settings should be prefixed with `rabbit:client:`
+As shown above, all of these settings should be prefixed with `rabbitmq:client:`
 
 |Key|Description|Default|
 |---|---|---|
@@ -1253,32 +1093,7 @@ As shown above, all of these settings should be prefixed with `rabbit:client:`
 |sslPort|SSL Port number of server|5671|
 |uri|Full connection string|built from settings|
 
-Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
-
-The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
-
-```csharp
-
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
+The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 4.2.3 Cloud Foundry
 
@@ -1286,10 +1101,10 @@ To use RabbitMQ on Cloud Foundry, you may create and bind an instance to your ap
 
 ```bash
 > # Create RabbitMQ service
->cf create-service p-rabbitmq standard myRabbitService
+>cf create-service p-rabbitmq standard myRabbitMQService
 >
 > # Bind service to `myApp`
-> cf bind-service myApp myRabbitService
+> cf bind-service myApp myRabbitMQService
 >
 > # Restage the app to pick up change
 > cf restage myApp
@@ -1297,45 +1112,14 @@ To use RabbitMQ on Cloud Foundry, you may create and bind an instance to your ap
 
 > Note: The commands above assume you are using the RabbitMQ service provided by Pivotal on Cloud Foundry. If you are using a different service, adjust the `create-service` command to fit your environment.
 
-Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`.
-
-For the settings to be available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            // Add `VCAP_` configuration info
-            .AddCloudFoundry()
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
-
-If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
-
-> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 4.2.4 Add RabbitMQ ConnectionFactory
 
 To use a RabbitMQ `ConnectionFactory` in your application, add it to the service container in the `ConfigureServices()` method of the `Startup` class:
 
 ```csharp
-using Steeltoe.CloudFoundry.Connector.Rabbit;
+using Steeltoe.CloudFoundry.Connector.RabbitMQ;
 
 public class Startup {
     ...
@@ -1366,7 +1150,7 @@ using RabbitMQ.Client;
  public class HomeController : Controller
  {
      ...
-     public IActionResult RabbitData([FromServices] ConnectionFactory factory)
+     public IActionResult RabbitMQData([FromServices] ConnectionFactory factory)
      {
 
          using (var connection = factory.CreateConnection())
@@ -1426,7 +1210,7 @@ If you are using a different service then you will have to adjust the `create-se
 
 ### 5.1.3 Publish and Push Sample, observe logs
 
-See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
 ### 5.1.4 What to expect
 
@@ -1443,8 +1227,8 @@ The sample was created from the .NET Core tooling `mvc` template (i.e. `dotnet n
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `Redis.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
-* `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add an `IDistributedCache` and an `IConnectionMultiplexer` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Redis service configuration values when pushed to Cloud Foundry.
+* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add an `IDistributedCache` and an `IConnectionMultiplexer` to the service container.
 * `HomeController.cs` - Code added for injection of a `IDistributedCache` or `IConnectionMultiplexer` into the Controller.  These are used to obtain data from the cache and then to display it.
 * `CacheData.cshtml` - The view used to display the Redis data values obtained using `IDistributedCache`.
 * `ConnData.cshtml` - The view used to display the Redis data values obtained using `IConnectionMultiplexer`.
@@ -1526,32 +1310,7 @@ As shown above, all of these settings should be prefixed with `redis:client:`
 |connectionString|Connection string, use instead of values above|not set|
 |instanceId|Cache id, used only with IDistributedCache|not set|
 
-Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
-
-The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider and adds them to the configuration builder (e.g. `AddJsonFile("appsettings.json"))`.
-
-```csharp
-
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
+The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 5.2.3 Cloud Foundry
 
@@ -1570,38 +1329,7 @@ To use Redis on Cloud Foundry, create and bind an instance to your application u
 
 > Note: The commands above assume you are using the Redis service provided by Pivotal on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your environment.
 
-Once the service is bound to the application, the connector's settings will be available in `VCAP_SERVICES`.
-
-For the settings to be available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            // Add `VCAP_` configuration info
-            .AddCloudFoundry()
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
-
-If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
-
-> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
+Once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 5.2.4 Add IDistributedCache
 
@@ -1747,7 +1475,7 @@ To set up UAA, we need to create a user-provided service that will provide the a
 
 ### 6.1.3 Publish and Push Sample, observe logs
 
-See [Common References](#common-references) for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
 ### 6.1.4 What to expect
 
@@ -1762,8 +1490,8 @@ The sample was created using the .NET Core tooling `mvc` template (i.e. `dotnet 
 To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
 
 * `OAuth.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
-* `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `OAuthServiceOptions` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry UAA configuration values when pushed to Cloud Foundry.
+* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `OAuthServiceOptions` to the service container.
 * `HomeController.cs` - Code added for injection of a `OAuthServiceOptions` into the Controller. The `OAuthServiceOptions` contains the binding information from Cloud Foundry.
 * `OAuthOptions.cshtml` - The view used to display the OAuth data.
 
@@ -1815,42 +1543,15 @@ Configuring additional settings for the connector is not typically required, but
 }
 ```
 
+The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
+
 ### 6.2.3 Cloud Foundry
 
 There are multiple ways to setup OAuth services on Cloud Foundry.
 
 In the quick start above, we used a user-provided service to define a direct binding to the Cloud Foundry UAA server. Alternatively, you can use the [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) product to provision an OAuth service binding. The process to create service binding varies for each of the approaches.
 
-Regardless of which you choose, once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. For the settings to available in the configuration, use the Cloud Foundry configuration provider by adding `AddCloudFoundry()` to the `ConfigurationBuilder`:
-
-```csharp
-public class Startup {
-    ...
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
-    {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Connectors configuration
-            .AddJsonFile("appsettings.json")
-
-            // Add `VCAP_` configuration info
-            .AddCloudFoundry()
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
-    }
-    ...
-```
-
-When pushing the application to Cloud Foundry, the settings from the service binding will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
-
-If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
-
-> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
+Regardless of which you choose, once the service is bound to your application, the connector's settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 6.2.4 Add OAuthServiceOptions
 
@@ -1965,3 +1666,41 @@ On a Linux cell, you should see something like this during startup. On Windows c
 2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
 2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
 ```
+
+## Reading Configuration Values
+
+Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
+
+The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider (i.e. `AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`. Both sources are then added to the configuration builder:
+
+```csharp
+public class Program {
+    ...
+    public static IWebHost BuildWebHost(string[] args)
+    {
+        return new WebHostBuilder()
+            ...
+            .UseCloudFoundryHosting()
+            ...
+            .ConfigureAppConfiguration((builderContext, configBuilder) =>
+            {
+                var env = builderContext.HostingEnvironment;
+                configBuilder.SetBasePath(env.ContentRootPath)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                    .AddEnvironmentVariables()
+                    // Add to configuration the Cloudfoundry VCAP settings
+                    .AddCloudFoundry();
+            })
+            .Build();
+    }
+    ...
+```
+
+When pushing the application to Cloud Foundry, the settings from service bindings will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
+
+If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
+
+To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
+
+> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
