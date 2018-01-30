@@ -706,3 +706,6 @@ public Startup(IHostingEnvironment env, ILoggerFactory logFactory)
 
 }
 ```
+
+[//]: # (this is a hack to prevent the TOC from drifting down into the footer)
+<div style="height:500px"></div>

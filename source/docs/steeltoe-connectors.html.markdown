@@ -142,7 +142,7 @@ Use the Nuget package manager tools or directly add the appropriate package to y
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0-rc1"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
 ...
 </ItemGroup>
 ```
@@ -416,7 +416,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 * `PostgreSql.csproj` - Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
 * `PostgreEFCore.csproj` - Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.Connector.EFCore`
 * `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NgpsqlConnection` or a `DbContext`, depending on the application, to the service container.
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs` - Code added to inject a `NpgsqlConnection` or `DbContext` into the Controller and obtain data from the database for the view.
 * `PostgresData.cshtml` - The view used to display the PostgreSQL data values.
 * `Models folder` - contains code to initialize the database and also the `DbContext` for PostgreEFCore sample.
@@ -450,7 +450,7 @@ Use the Nuget package manager tools or directly add the appropriate package to y
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0-rc1"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
 ...
 </ItemGroup>
 ```
@@ -764,7 +764,7 @@ Use the Nuget package manager tools or directly add the appropriate packages to 
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0-rc1"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
     <PackageReference Include="System.Data.SqlClient" Version= "4.4.0"/>
 ...
 </ItemGroup>
@@ -1054,7 +1054,7 @@ Use the NuGetPackage manager or directly add the following package references to
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0-rc1"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0"/>
     <PackageReference Include="RabbitMQ.Client" Version= "x.y.z"/>
 ...
 </ItemGroup>
@@ -1262,7 +1262,7 @@ Use the NuGet Package Manager tools or directly add the following package refere
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0-rc1"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0"/>
     <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version= "x.y.z"/>
 ...
 </ItemGroup>
@@ -1520,7 +1520,7 @@ Use the NuGet Package Manager tools or directly add the following package refere
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0-rc1"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0"/>
 ...
 </ItemGroup>
 ```

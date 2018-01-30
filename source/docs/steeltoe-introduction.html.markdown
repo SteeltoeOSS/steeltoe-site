@@ -147,7 +147,7 @@ Starting with version 2.0.0 of Steeltoe, the direct dependencies on Redis packag
 
 ## 2.5 Discovery
 
-In version 1.x of Steeltoe, there were 3 packages, in version 2.0.0 there are 9: `Steeltoe.Discovery.ClientAutofac`, `Steeltoe.Discovery.ClientCore`, `Steeltoe.Discovery.Eureka.Client`, `Pivotal.Discovery.ClientCore`, `Pivotal.Discovery.ClientAutofac`, `Pivotal.Discovery.Eureka.Client`. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry. Version 2.0.0 also includes support for dynamic update of configuration options.
+In version 1.x of Steeltoe, there were 3 packages, in version 2.0.0 there are 9: `Steeltoe.Discovery.ClientAutofac`, `Steeltoe.Discovery.ClientCore`, `Steeltoe.Discovery.Eureka.ClientBase`, `Pivotal.Discovery.ClientCore`, `Pivotal.Discovery.ClientAutofac`, `Pivotal.Discovery.Eureka.ClientBase`. Be sure to use the `Pivotal.&ast;` packages if you are deploying your application to Pivotal Cloud Foundry. Version 2.0.0 also includes support for dynamic update of configuration options.
 
 ### Eureka Version
 
@@ -176,3 +176,5 @@ As of version 2.0.0, all of the individual management endpoints have been rolled
 ## 2.8 Security
 
 New features for Steeltoe Security 2.0.0 include a client for [CredHub](https://github.com/cloudfoundry-incubator/credhub), support for using CloudFoundry as an authentication provider in .NET Framework 4.x applications and a JWT Provider for WCF applications.
+[//]: # (this is a hack to prevent the TOC from drifting down into the footer)
+<div style="height:500px"></div>
