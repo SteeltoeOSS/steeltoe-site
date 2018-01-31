@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			// Fixed position class to add to make sidebar fixed after scrolling down past the fixedSidebarOffset.
 			positionFixedClass: 'is-position-fixed',
 			// fixedSidebarOffset can be any number but by default is set to auto which sets the fixedSidebarOffset to the sidebar element's offsetTop from the top of the document on init.
-			fixedSidebarOffset: '200',
+			fixedSidebarOffset: '150',
 		});
 	}
 });
