@@ -116,6 +116,7 @@ At this point the Fortune-Teller-Service is up and running and ready for the For
 Use the dotnet CLI to run the application. Note below we show how to run the app on both of the frameworks the sample supports. Just pick one in order to proceed.
 
 ```bash
+>
 > # Set BUILD environment variable to `LOCAL`
 > SET BUILD=LOCAL or export BUILD=LOCAL
 >
@@ -352,6 +353,8 @@ In order to use the Steeltoe framework you need to do the following:
 * Use Hystrix Command(s) and/or Collapser(s) to invoke dependent services.
 * Add and Use the Hystrix metrics stream service.
 
+> Note: Most of the example code in the following sections are based on using Hystrix in a ASP.NET Core application. If you are developing a ASP.NET 4.x application or a Console based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/CircuitBreaker) for example code you can use.
+
 ### 1.2.1 Add NuGet References
 
 There are two types of NuGets that you need to be concerned with when adding Hystrix to your application.
@@ -361,7 +364,7 @@ The first type is required in order to bring in the basic Hystrix functionality 
 |App Type|Package|Description|
 |---|---|---|
 |Console/ASP.NET 4.x|`Steeltoe.CircuitBreaker.HystrixBase`|Base functionality, no DI|
-|ASP.NET Core with DI|`Steeltoe.CircuitBreaker.HystrixCore`|Adds ASP.NET Core DI|
+|ASP.NET Core|`Steeltoe.CircuitBreaker.HystrixCore`|Adds ASP.NET Core DI|
 |ASP.NET 4.x with Autofac|`Steeltoe.CircuitBreaker.HystrixAutofac`|Adds Autofac DI|
 
 To add this type of NuGet to your project add something like the following `PackageReference`:
@@ -390,15 +393,18 @@ Alternatively, if you will be pushing your application to Cloud Foundry and you 
 
 |App Type|Package|Description|
 |---|---|---|
-|ASP.NET Core with DI|`Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`|Adds ASP.NET Core DI|
+|ASP.NET Core|`Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`|Adds ASP.NET Core DI|
 |ASP.NET 4.x with Autofac|`Steeltoe.CircuitBreaker.Hystrix.MetricsStreamAutofac`|Adds Autofac DI|
 
-To add this type of NuGet to your project add something like the following `PackageReference`:
+In addition to one of the above package references, you also need to include a package reference to a RabbitMQ client.
+
+To add this type of NuGet to your project add something like the following:
 
 ```xml
 <ItemGroup>
 ....
     <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version= "2.0.0"/>
+    <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
 ...
 </ItemGroup>
 ```
@@ -695,24 +701,25 @@ Once the Hystrix settings have been defined and put in a file, then the next ste
 Using the code below, you can see that the configuration settings from above should be put in `appsettings.json` and included with the application.  Then, by using the .NET provided JSON configuration provider we are able to read in the settings simply by adding the provider to the configuration builder (e.g. `AddJsonFile("appsettings.json")`.
 
 ```csharp
-
-public class Startup {
-    .....
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
+public class Program {
+    ...
+    public static IWebHost BuildWebHost(string[] args)
     {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Hystrix configuration
-            .AddJsonFile("appsettings.json")
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
+        return new WebHostBuilder()
+            ...
+            .UseCloudFoundryHosting()
+            ...
+            .ConfigureAppConfiguration((builderContext, configBuilder) =>
+            {
+                var env = builderContext.HostingEnvironment;
+                configBuilder.SetBasePath(env.ContentRootPath)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                    .AddEnvironmentVariables();
+            })
+            .Build();
     }
-    ....
+    ...
 ```
 
 If you wanted to managed the settings centrally, you can use the Spring Cloud Config Server (i.e. `AddConfigServer()`), instead of a local JSON file (i.e. `AddJsonFile()`). In that case you would put the settings above in a github repository and configuring the Config server to serve its configuration data from that repository.
@@ -725,14 +732,12 @@ Note that you do NOT need to add your commands to the container. Instead, you ar
 
 But if you do want to have them injected, then you can do this in the `ConfigureServices()` method of the `Startup` class. Simply make use of the `AddHystrixCommand()` extension methods provided by the Steeltoe package.
 
-> Note: The code below is an example of how you can add Hystrix commands to the service container provided by ASP.NET Core. If you are working with ASP.NET 4.x and using Autofac, see the [ASP.NET 4.x Sample](https://github.com/SteeltoeOSS/Samples/tree/master/CircuitBreaker/src/AspDotNet4/FortuneTeller) for example code you can use.
-
 ```csharp
 using Steeltoe.CircuitBreaker.Hystrix;
 
 public class Startup {
     .....
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       .....
@@ -897,14 +902,12 @@ Note that you do NOT need to add your collapser to the container, and instead, y
 
 If you do want to have them injected, then you can do this in the `ConfigureServices()` method of the `Startup` class. Simply make use of the `AddHystrixCollapser()` extension methods provided by the Steeltoe package.
 
-> Note: The code below is an example of how you can add Hystrix collapsers to the service container provided by ASP.NET Core. If you are working with ASP.NET 4.x and using Autofac, see the [ASP.NET 4.x Sample](https://github.com/SteeltoeOSS/Samples/tree/master/CircuitBreaker/src/AspDotNet4/FortuneTeller) for example code you can use.
-
 ```csharp
 using Steeltoe.CircuitBreaker.Hystrix;
 
 public class Startup {
     .....
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       .....
@@ -1099,14 +1102,12 @@ Regardless of which dashboard/package you choose to use, in order to enable your
 
 To add the metrics stream to the service container you will need to use the `AddHystrixMetricsStream()` extension method in the `ConfigureService()` method in your `Startup` class.
 
-> Note: The code below is an example of how you can add Metrics to the service container provided by ASP.NET Core. If you are working with ASP.NET 4.x and using Autofac, see the [ASP.NET 4.x Sample](https://github.com/SteeltoeOSS/Samples/tree/master/CircuitBreaker/src/AspDotNet4/FortuneTeller) for example code you can use.
-
 ```csharp
 #using Steeltoe.CircuitBreaker.Hystrix;
 
 public class Startup {
     .....
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       .....
@@ -1136,14 +1137,12 @@ First, metrics requires that Hystrix Request contexts be initialized and availab
 
 Additionally, in order to startup the metrics stream service so that it starts to publish metrics and events, you need to call the `UseHystrixMetricsStream()` extension method.  See the contents of the `Configure()` method below.
 
-> Note: The code below is an example of how you start the stream when using the service container provided by ASP.NET Core. If you are working with ASP.NET 4.x and using Autofac, see the [ASP.NET 4.x Sample](https://github.com/SteeltoeOSS/Samples/tree/master/CircuitBreaker/src/AspDotNet4/FortuneTeller) for example code you can use.
-
 ```csharp
 using Steeltoe.CircuitBreaker.Hystrix;
 
 public class Startup {
     .....
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       .....
@@ -1201,27 +1200,27 @@ In order for the settings to be picked up and put in the configuration of your a
 To do that, simply add a `AddCloudFoundry()` method call to the `ConfigurationBuilder` in your `Startup` class.  Here is an example:
 
 ```csharp
-
-public class Startup {
-    .....
-    public IConfigurationRoot Configuration { get; private set; }
-    public Startup(IHostingEnvironment env)
+public class Program {
+    ...
+    public static IWebHost BuildWebHost(string[] args)
     {
-        // Set up configuration sources.
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-
-            // Read in Discovery clients configuration
-            .AddJsonFile("appsettings.json")
-
-            // Add `VCAP_` configuration info
-            .AddCloudFoundry()
-
-            .AddEnvironmentVariables();
-
-        Configuration = builder.Build();
+        return new WebHostBuilder()
+            ...
+            .UseCloudFoundryHosting()
+            ...
+            .ConfigureAppConfiguration((builderContext, configBuilder) =>
+            {
+                var env = builderContext.HostingEnvironment;
+                configBuilder.SetBasePath(env.ContentRootPath)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                    .AddEnvironmentVariables()
+                    // Add to configuration the Cloudfoundry VCAP settings
+                    .AddCloudFoundry();
+            })
+            .Build();
     }
-    ....
+    ...
 ```
 
 Then when you push the application to Cloud Foundry, the Hystrix Dashboard settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
