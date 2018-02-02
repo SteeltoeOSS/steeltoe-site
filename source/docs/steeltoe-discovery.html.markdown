@@ -285,8 +285,8 @@ If you plan on only connecting to the open source version of [Spring Cloud Eurek
 |App Type|Package|Description|
 |---|---|---|
 |Console/ASP.NET 4.x|`Steeltoe.Discovery.EurekaBase`|Base functionality, no DI|
-|ASP.NET Core|`Steeltoe.Discovery.ClientCore`|Adds ASP.NET Core DI|
-|ASP.NET 4.x with Autofac|`Steeltoe.Discovery.ClientAutofac`|Adds Autofac DI|
+|ASP.NET Core|`Steeltoe.Discovery.ClientCore`|Includes base, adds ASP.NET Core DI|
+|ASP.NET 4.x with Autofac|`Steeltoe.Discovery.ClientAutofac`|Includes base, adds Autofac DI|
 
 To add this type of NuGet to your project add something like the following `PackageReference`:
 
@@ -303,8 +303,8 @@ If you plan on connecting to the open source version of [Spring Cloud Eureka Ser
 |App Type|Package|Description|
 |---|---|---|
 |Console/ASP.NET 4.x|`Pivotal.Discovery.EurekaBase`|Base functionality, no DI|
-|ASP.NET Core|`Pivotal.Discovery.ClientCore`|Adds ASP.NET Core DI|
-|ASP.NET 4.x with Autofac|`Pivotal.Discovery.ClientAutofac`|Adds Autofac DI|
+|ASP.NET Core|`Pivotal.Discovery.ClientCore`|Includes base, adds ASP.NET Core DI|
+|ASP.NET 4.x with Autofac|`Pivotal.Discovery.ClientAutofac`|Includes base, adds Autofac DI|
 
 To add this type of NuGet to your project add something like the following `PackageReference`:
 
@@ -585,6 +585,8 @@ Next, notice that when the `RandomFortuneAsync()` method is called, you see that
 If the name can't be resolved, the handler simply ignores the request URL, and allows the request to continue unchanged. But in the case where the the lookup has succeeded, the handler will replace service name with the resolved host and port and then let the request continue processing.
 
 Of course you don't have to use the handler, instead you can make lookup requests directly on the `IDiscoveryClient` interface if you need to.
+
+> Note: When you utilize the Steeltoe handler for discovering services, you automatically get random load balancer client functionality. That is, if there are multiple instances registered under a particular service name, the handler will randomly select one of those instances each time the handler is invoked.
 
 ```csharp
 #using Pivotal.Discovery.Client;

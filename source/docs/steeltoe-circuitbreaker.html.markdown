@@ -364,8 +364,8 @@ The first type is required in order to bring in the basic Hystrix functionality 
 |App Type|Package|Description|
 |---|---|---|
 |Console/ASP.NET 4.x|`Steeltoe.CircuitBreaker.HystrixBase`|Base functionality, no DI|
-|ASP.NET Core|`Steeltoe.CircuitBreaker.HystrixCore`|Adds ASP.NET Core DI|
-|ASP.NET 4.x with Autofac|`Steeltoe.CircuitBreaker.HystrixAutofac`|Adds Autofac DI|
+|ASP.NET Core|`Steeltoe.CircuitBreaker.HystrixCore`|Includes base, adds ASP.NET Core DI|
+|ASP.NET 4.x with Autofac|`Steeltoe.CircuitBreaker.HystrixAutofac`|Includes base, adds Autofac DI|
 
 To add this type of NuGet to your project add something like the following `PackageReference`:
 
@@ -393,8 +393,8 @@ Alternatively, if you will be pushing your application to Cloud Foundry and you 
 
 |App Type|Package|Description|
 |---|---|---|
-|ASP.NET Core|`Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`|Adds ASP.NET Core DI|
-|ASP.NET 4.x with Autofac|`Steeltoe.CircuitBreaker.Hystrix.MetricsStreamAutofac`|Adds Autofac DI|
+|ASP.NET Core|`Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`|ASP.NET Core DI|
+|ASP.NET 4.x with Autofac|`Steeltoe.CircuitBreaker.Hystrix.MetricsStreamAutofac`|Autofac DI|
 
 In addition to one of the above package references, you also need to include a package reference to a RabbitMQ client.
 
