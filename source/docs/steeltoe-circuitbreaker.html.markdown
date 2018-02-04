@@ -332,7 +332,7 @@ To gain an understanding of the Steeltoe Hystrix related changes to the generate
   * Code was also added to expose Hystrix metrics to the dashboard by calling `AddHystrixMetricsStream()`.
   * Next in the `Configure()` method, code was added to cause the Hystrix Metrics stream to start communicating with the Hystrix dashboard (i.e. `UseHystrixMetricsStream()`)
   * Also in the `Configure()` method, in order to use request level logging and metrics, code was added to setup a Hystrix request context for each incoming request in the pipeline (i.e. `UseHystrixRequestContext()`) .
-  * And finally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry.
+* `Program.cs` - Code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use CloudFoundry hosting.
 
 ## 1.2 Usage
 

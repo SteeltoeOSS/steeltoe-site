@@ -244,18 +244,18 @@ Fortune-Teller-Service was created using the .NET Core tooling `webapi` template
 To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files. Note that there are various other files added to the project that pertain the the application, but do not directly interact with the Steeltoe Discovery client.
 
 * `Fortune-Teller-Service.csproj` - Contains `PackageReference` for Steeltoe NuGet `Pivotal.Discovery.Client`
-* `Program.cs` - Code added to read the `--server.urls` command line.
+* `Program.cs` - Code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use CloudFoundry hosting.
 * `appsettings.json` - Contains configuration data needed to cause the Steeltoe Discovery client to register the FortuneService with the Eureka server and to NOT fetch service information from the Eureka server.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add the Discovery Client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server. And finally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry.
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add the Discovery Client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server. 
 
 Fortune-Teller-UI was created using the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`),  and then modifications were made to add the Steeltoe frameworks.
 
 To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
 
 * `Fortune-Teller-UI.csproj`- Contains `PackageReference` for Steeltoe NuGet `Pivotal.Discovery.Client`
-* `Program.cs` - Code added to read the `--server.urls` command line.
+* `Program.cs` - Code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use CloudFoundry hosting.
 * `appsettings.json` - Contains configuration data needed to cause the Steeltoe Discovery client to NOT register as a service, but yet it will still fetch service information from the Eureka server.
-* `Startup.cs`- Code added to the `ConfigureServices()` method to add Discovery Client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server. And finally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry.
+* `Startup.cs`- Code added to the `ConfigureServices()` method to add Discovery Client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server.
 * `FortuneService.cs` - Contains code used to fetch the fortune from the FortuneService.  Uses injected `IDiscoveryClient` together with the `DiscoveryHttpClientHandler` to do the service lookup and to issue the HTTP GET request to the Fortune-Teller-Service.
 
 ## 1.2 Usage
