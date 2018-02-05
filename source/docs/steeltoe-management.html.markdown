@@ -641,7 +641,7 @@ If your plan is to expose all of the Steeltoe endpoints over HTTP on Cloud Found
 
 The Steeltoe Heap dump endpoint can be used to generate and download a mini-dump of your application. The mini-dump can then be read into Visual Studio for analysis.
 
-> Note: At this time, dumps are only possible on the Windows operating system. When integrating with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you will not have the ability to obtain dumps from apps running in Linux cells.
+> Note: At this time, dumps are only possible on the Windows operating system. When integrating with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you will not have the ability to obtain dumps from apps running in Linux cells. Also, the heap dump filename used by the Pivotal Apps Manager will end with the extension `.hprof` instead of the expected `.dmp` extension. This may cause problems when opening the dump with Visual Studio or some other diagnostic tool. This issue will be fixed in a future release of the Apps Manager and as a workaround you can simply rename the file to use the `.dmp` extension.
 
 #### 1.2.8.1 Settings
 
