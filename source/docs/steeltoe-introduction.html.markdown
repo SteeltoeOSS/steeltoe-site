@@ -69,7 +69,7 @@ In many cases, these guides provide two ways of exercising the applications: one
 
 For the Quick Starts in which we run the application locally, Java is required to run instances of some of the servers (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) on your machine. If you don't have Java available on your machine you may want to install that now.
 
-For the Quick Starts running on Cloud Foundry, you will need access to a Cloud Foundry environment that has the appropriate services  (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) installed. One option is to run [PCF Dev](https://docs.pivotal.io/pcf-dev/), the local developer version of Pivotal Cloud Foundry on your development machine. PCF Dev makes use of  Virtual Box, so depending on your desktop operating system and configuration you may or may not be able to make use of it.
+For the Quick Starts running on Cloud Foundry, you will need access to a Cloud Foundry environment that has the appropriate services (e.g. Spring Cloud Config Server, Netflix Eureka Server, etc.) installed. One option is to run [PCF Dev](https://docs.pivotal.io/pcf-dev/), the local developer version of Pivotal Cloud Foundry on your development machine. PCF Dev depends on Virtual Box, so depending on your desktop operating system and configuration you may or may not be able to use it.
 
 Alternatively, you can sign up for a free trial account of [Pivotal Web Services](https://run.pivotal.io/) the hosted multi-tenant edition of [Pivotal Cloud Foundry](https://pivotal.io/platform). Note that if you want to work solely with .NET framework applications that target the Windows operating system, you'll likely need access to a corporate Cloud Foundry environment, as neither of the above options currently support deploying Windows apps.
 
@@ -134,6 +134,8 @@ Starting with version 1.0.1 of Steeltoe, the direct dependency on the open sourc
 For more detail on how to use the connector see the Postgres connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the Postgres/Entity framework code wish to use in your application.
 
 ### RabbitMQ Connector
+
+In version 2.0.0, all namespaces, classes and methods with `Rabbit` in the name were changed to `RabbitMQ` (e.g. `AddRabbitConnection()` is now `AddRabbitMQConnection()`)
 
 Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source RabbitMQ Client package has been removed.  This has allowed the connector to become more flexible in what version of the client it supports.
 

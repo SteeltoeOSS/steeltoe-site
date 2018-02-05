@@ -41,7 +41,7 @@ Currently the connector supports the following providers:
 * [Connector/NET](https://dev.mysql.com/doc/connector-net/en/)
 * [MySqlConnector](https://mysql-net.github.io/MySqlConnector/)
 
-In addition to the Quick Start below, there are several other Steeltoe sample applications that you can refer to in order to help you understand how to make use of this connector:
+In addition to the Quick Start below, there are several other Steeltoe sample applications that you can refer to in order to help you understand how to use this connector:
 
 * [AspDotNet4/MySql4](https://github.com/SteeltoeOSS/Samples/tree/master/Connectors/src/AspDotNet4/MySql4) - same as the Quick Start below, but built for ASP.NET 4.x.
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) - a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
@@ -128,7 +128,7 @@ To use this connector:
 
 ### 1.2.1 Add NuGet Reference
 
-To make use of this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
+To use this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
 
 |App Type|ORM|Package|
 |---|---|---|
@@ -436,7 +436,7 @@ To use this connector:
 
 ### 2.2.1 Add NuGet Reference
 
-To make use of this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
+To use this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
 
 |App Type | ORM | Package |
 |--- | --- | --- |
@@ -750,7 +750,7 @@ To use this connector:
 
 ### 3.2.1 Add NuGet Reference
 
-To make use of this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
+To use this connector, add a reference to one of the Steeltoe connector NuGet packages. Use this table to determine which package you need:
 
 |App Type|ORM|Steeltoe Package|SQL Server Package|
 |---|---|---|---|
@@ -1175,7 +1175,7 @@ using RabbitMQ.Client;
 
  This connector simplifies using a Microsoft [RedisCache](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed#using-a-redis-distributed-cache) and/or a StackExchange [IConnectionMultiplexer](https://stackexchange.github.io/StackExchange.Redis/) in an application running on Cloud Foundry.
 
- In addition to the Quick Start below, there are other Steeltoe sample applications available to help you understand how to make use of this connector:
+ In addition to the Quick Start below, there are other Steeltoe sample applications available to help you understand how to use this connector:
 
 * [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore) - sample app illustrating how to use the Steeltoe DataProtection Key Storage Provider for Redis.
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) - a sample app illustrating how to use all of the Steeltoe components together in an ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
