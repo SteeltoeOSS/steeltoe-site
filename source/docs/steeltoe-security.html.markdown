@@ -16,7 +16,7 @@ There are several providers to choose from when adding Cloud Foundry security in
 * `Steeltoe.Security.Authentication.CloudFoundryOwin` for ASP.NET 4.x applications using OWIN
 * `Steeltoe.Security.Authentication.CloudFoundryWcf` for ASP.NET 4.x applications using WCF
 
-In addition to Authentication/Authorization providers, Steeltoe offers:
+In addition to Authentication/Authorization providers, Steeltoe Security offers:
 
 * A security provider for [using Redis on Cloud Foundry with ASP.NET Core Data Protection Key Ring storage](#3-0-redis-key-storage-provider)
 * A [CredHub API Client for .NET applications](#4-0-credhub-api-client) to perform credential storage, retrieval and generation.
@@ -40,6 +40,8 @@ or
 ```
 
 # 1.0 OAuth2 Single Sign-on
+
+<span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
 This provider enables log-in functionality with OAuth 2.0 and credentials provided from Cloud Foundry security services in ASP.NET Core applications.
 
@@ -322,6 +324,8 @@ The above example code establishes the following security rules:
 > See the Microsoft documentation on [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) for more information.
 
 # 2.0 Resource Protection using JWT
+
+<span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
 This provider enables you to control access to REST resources by using JWT tokens issued by Cloud Foundry Security services (e.g. UAA or Pivotal Single Signon) in ASP.NET Core.
 
@@ -704,11 +708,11 @@ This quick start uses an ASP.NET Core application to illustrate how to use CredH
 > cd Samples/Security/src/CredHubDemo
 ```
 
-### 4.1.3 Publish and Push Sample, observe logs
+### 4.1.2 Publish and Push Sample, observe logs
 
 See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-### 4.1.6 What to expect
+### 4.1.3 What to expect
 
 At this point the app is up and running. Bring up the home page of the app and you should see something like the following:
 
@@ -725,7 +729,7 @@ Generated credential was deleted successfully
 
 This application uses all functionality enabled by the Steeltoe CredHub Client, which is virtually all functionality available via the CredHub API. Use the navigation across the top of the web application to explore, or keep reading to see what else is demonstrated with this application.
 
-### 4.1.7 Understand Sample
+### 4.1.4 Understand Sample
 
 The `CredHubDemo` sample was created using the Visual Studio ASP.NET Core MVC Web Application template, scaled back to remove some of the bells and whistles and then modified to add the Steeltoe libraries.
 
@@ -813,21 +817,51 @@ There are several ways to create a `CredHubClient`, depending on whether you wan
 
 #### 4.2.4.1 Create and Inject Client
 
-If you are using Microsoft's Dependency injection framework, you can use `IServiceCollection.AddCredHubClient(IConfiguration, ILoggerFactory?)` to have the framework create, configure and inject `CredHubClient` for you. This method will look for
+If you are using Microsoft's Dependency injection framework, you can use `IServiceCollection.AddCredHubClient()` to create, configure and inject `CredHubClient`:
+
+```csharp
+using Steeltoe.Security.DataProtection.CredHubCore;
+...
+public class Startup
+{
+    ILoggerFactory logFactory;
+    public Startup(IConfiguration configuration, ILoggerFactory logFactory)
+    {
+        Configuration = configuration;
+        this.logFactory = logFactory;
+    }
+    public IConfiguration Configuration { get; }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddMvc();
+        services.AddCredHubClient(Configuration, logFactory);
+    }
+    ...
+}
+...
+```
 
 #### 4.2.4.2 Create mTLS Client
 
-Use `CredHubClient.CreateMTLSClientAsync(credHubOptions)` to directly create a CredHub client that will authenticate with a client certificate and key. This method expects the environment variables `CF_INSTANCE_CERT` and `CF_INSTANCE_KEY` to contain paths on disk to certificate and key files (as is automatically configured by a PCF 2.0 environment).
+Use `CredHubClient.CreateMTLSClientAsync()` to directly create a CredHub client that will authenticate with a client certificate and key. This method expects the environment variables `CF_INSTANCE_CERT` and `CF_INSTANCE_KEY` to contain paths on disk to certificate and key files (as is automatically configured by a PCF 2.0 environment).
+
+```csharp
+var credHubClient = await CredHubClient.CreateMTLSClientAsync(new CredHubOptions());
+```
 
 #### 4.2.4.3 Create UAA Client
 
-Use `CredHubClient.CreateUAAClientAsync(credHubOptions)` to directly create a CredHub client that will authenticate with a username and password that is valid on the UAA server CredHub is configured to trust. This client will call `/info` on the CredHub server to discover the UAA server's address, and will append `/oauth/token` when requesting a token.
+Use `CredHubClient.CreateUAAClientAsync()` to directly create a CredHub client that will authenticate with a username and password that is valid on the UAA server CredHub is configured to trust. This client will call `/info` on the CredHub server to discover the UAA server's address, and will append `/oauth/token` when requesting a token.
+
+```csharp
+var credHubClient = await CredHubClient.CreateUAAClientAsync(new CredHubOptions());
+```
 
 > Note: if you need to override the UAA server address, use the environment variable `UAA_Server_Override`, making sure to include the path to the token endpoint.
 
 #### 4.2.4.4 Interpolation-Only
 
-If you wish to use CredHub to interpolate entries in `VCAP_SERVICES`, you can use `WebHostBuilder.UseCredHubInterpolation(ILoggerFactory?)`. This method will look for `credhub-ref` in `VCAP_SERVICES`, and use a `CredHubClient` to replace the credential references with credentials stored in CredHub, but does not return the `CredHubClient`.
+If you wish to use CredHub to interpolate entries in `VCAP_SERVICES`, you can use `WebHostBuilder.UseCredHubInterpolation()`. This method will look for `credhub-ref` in `VCAP_SERVICES`, and use a `CredHubClient` to replace the credential references with credentials stored in CredHub, but does not return the `CredHubClient`.
 
 ```csharp
     var host = new WebHostBuilder()
@@ -985,7 +1019,7 @@ All `CredHubClient` Change operations operate asynchronously and affect stored c
 
 #### 4.2.7.1 Write
 
-In order to make Write operations a little cleaner, `CredHubClient.WriteAsync<T>()` expects a request object that descends from `CredentialSetRequest`. There is a `[Type]SetRequest` class for each credential type (e.g. `ValueSetRequest`, `PasswordSetRequest`, etc). The SetRequest family of classes include optional parameters for overwriting existing values and setting permissions in addition to value properties for the credential. Include the type of credential you are requesting to write to CredHub in the T parameter so the compiler knows the return type.
+If you already have a credential that you want to store in CredHub, use a Write request. `CredHubClient.WriteAsync<T>()` expects a request object that descends from `CredentialSetRequest`. There is a `[Type]SetRequest` class for each credential type (e.g. `ValueSetRequest`, `PasswordSetRequest`, etc). The SetRequest family of classes include optional parameters for overwriting existing values and setting permissions in addition to value properties for the credential. Include the type of credential you are requesting to write to CredHub in the T parameter so the compiler knows the return type.
 
 ```csharp
 var setValueRequest = new ValueSetRequest("sampleValueCredential", "someValue");
@@ -997,7 +1031,7 @@ setValueRequest.Overwrite = true;
 var setValue2 = await _credHub.WriteAsync<ValueCredential>(setValueRequest);
 ```
 
-> Note: the default behavior on Write requests is to leave existing values alone. If you wish to ovewrite a credential, be sure to pass `true` for the `overwrite` parameter on your request object.
+> Note: the default behavior on Write requests is to leave existing values alone. If you wish to overwrite a credential, be sure to pass either `OverwriteMode.converge` or `OverwriteMode.overwrite` for the `overwriteMode` parameter on your request object. See [Overwriting Credential Values](https://credhub-api.cfapps.io/#overwriting-credential-values) for more information.
 
 Write requests allow the setting of permissions on a credential during generation:
 
@@ -1038,7 +1072,7 @@ var genRequest = new PasswordGenerationRequest("generatedPW", genParams, new Lis
 CredHubCredential<PasswordCredential> genPassword = await _credHub.GenerateAsync<PasswordCredential>(genRequest);
 ```
 
-> Note: the default behavior on Generate requests is to leave existing values alone. If you wish to ovewrite a credential, be sure to pass `true` for the `overwrite` parameter on your request object.
+> Note: the default behavior on Generate requests is to leave existing values alone. If you wish to overwrite a credential, be sure to pass either `OverwriteMode.converge` or `OverwriteMode.overwrite` for the `overwriteMode` parameter on your request object. See [Overwriting Credential Values](https://credhub-api.cfapps.io/#overwriting-credential-values) for more information.
 
 #### 4.2.7.3 Regenerate
 
@@ -1189,5 +1223,3 @@ If there are merge conflicts, the last provider added to the Configuration will 
 To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
 > Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
-
-[//]: # (this is a hack to prevent the TOC from drifting down into the footer<div style="height:518px"></div>)
