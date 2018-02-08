@@ -751,8 +751,9 @@ Once thats done, then simply pass the `ILoggerFactory` to the Steeltoe configura
 Here is some example code:
 
 ```csharp
-public Startup(IHostingEnvironment env, ILoggerFactory logFactory)
-{
+#using Steeltoe.Extensions.Configuration;
+
+    LoggerFactory logFactory = new LoggerFactory();
     logFactory.AddConsole(minLevel: LogLevel.Debug);
 
     // Set up configuration sources.
@@ -762,9 +763,7 @@ public Startup(IHostingEnvironment env, ILoggerFactory logFactory)
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
         .AddEnvironmentVariables()
         .AddConfigServer(env, logFactory);
-....
 
-}
 ```
 
 [//]: # (this is a hack to prevent the TOC from drifting down into the footer)
