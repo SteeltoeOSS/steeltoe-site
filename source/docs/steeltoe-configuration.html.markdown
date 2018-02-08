@@ -16,7 +16,7 @@ Out of the box, .NET supports the following providers/sources:
 * Environment variables
 * Custom providers
 
-To gain a better understanding of .NET configuration services you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation. Note that while the documentation link suggests this service is tied to ASP.NET Core, you will find that it is not, and in fact can be used in many different application types, including Console, ASP.NET 4.x., UWP, etc.
+To better understand .NET configuration services, you are encouraged to read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation. Note that while the documentation link suggests this service is tied to ASP.NET Core, you will find that it is not, and can be used in many different application types, including Console, ASP.NET 4.x., UWP, etc.
 
 Steeltoe adds two additional configuration providers to the above list:
 
@@ -25,7 +25,29 @@ Steeltoe adds two additional configuration providers to the above list:
 
 The following sections go into more more detail on each of these new providers.
 
+# 0.0 Initialize Dev Environment
+
+All of the Steeltoe sample applications are in the same repository. If you haven't already, use git to clone the repository or download with your browser from GitHub: [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples)
+
+```bash
+> git clone https://github.com/SteeltoeOSS/Samples.git
+```
+
+> Note: all Configuration samples in the Samples repository have a base path of `Samples/Configuration/src/`
+
+Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space:
+
+```bash
+> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+or
+> cf target -o <YourOrg> -s <YourSpace>
+```
+
+The Configuration sample requires a Config server. If you intend to run the samples locally, install the Java 8 JDK and Maven 3.x now.
+
 # 1.0 Cloud Foundry Provider
+
+<span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
 The Cloud Foundry provider enables the standard Cloud Foundry environment variables, `VCAP_APPLICATION`,  `VCAP_SERVICES` and `CF_*` to be parsed and accessed as configuration data within a .NET application.
 
@@ -43,51 +65,23 @@ The Steeltoe CloudFoundry provider supports the following .NET application types
 
 ## 1.1 Quick Start
 
-This quick start illustrates how to make use of the Cloud Foundry configuration provider in an ASP.NET Core MVC application on Cloud Foundry.
+This quick start illustrates how to use the Cloud Foundry configuration provider in an ASP.NET Core MVC application on Cloud Foundry.
 
 You will need access to a Cloud Foundry runtime environment in order to complete the quick start.
 
-### 1.1.1 Get Sample
+### 1.1.1 Locate Sample
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
 > cd Samples/Configuration/src/AspDotNetCore/CloudFoundry
 ```
 
 ### 1.1.2 Publish Sample
 
-Use the `dotnet` CLI to build and publish the application.
-
-Note: below we show how to publish for all of the target run-times and frameworks the sample supports.  In order to proceed, choose the appropriate combination for your situation.
-
-```bash
->
-> # Build and publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Build and publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Build and publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
+See [Publish Sample](#publish-sample) for instructions on how to publish this sample to either Linux or Windows.
 
 ### 1.1.3 Push Sample
 
-Use the Cloud Foundry CLI to target your Cloud Foundry Org and Space. (Replace "myorg" and "myspace" below with the actual names of your org and space.) Then push the published application to Cloud Foundry.
-
-```bash
-> cf target -o myorg -s myspace
->
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
+See [Push Sample](#push-sample) for instructions on how to push this sample to either Linux or Windows on Cloud Foundry.
 
 ### 1.1.4 Observe Logs
 
@@ -130,7 +124,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 ## 1.2 Usage
 
-The following sections describe in more detail, how to make use of the Cloud Foundry configuration provider.
+The following sections describe in more detail, how to use the Cloud Foundry configuration provider.
 
 Its recommended that you have a good understanding of how the .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use this provider. A basic understanding of the `ConfigurationBuilder` and how to add additional providers to the builder is necessary.
 
@@ -145,7 +139,7 @@ In order to use the Steeltoe Cloud Foundry provider you need to do the following
 
 ### 1.2.1 Add NuGet Reference
 
-To make use of the provider, you need to add a reference to the appropriate Steeltoe Cloud Foundry NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any.
+To use the provider, you need to add a reference to the appropriate Steeltoe Cloud Foundry NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any.
 
 |App Type|Package|Description|
 |---|---|---|
@@ -157,7 +151,7 @@ To add this type of NuGet to your project add something like the following `Pack
 
 ```xml
 <ItemGroup>
-....
+...
     <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundryCore" Version= "2.0.0"/>
 ...
 </ItemGroup>
@@ -170,7 +164,7 @@ In order to parse the Cloud Foundry environment variables and make them availabl
 Here is some example code showing how that can be done:
 
 ```csharp
-#using Steeltoe.Extensions.Configuration;
+using Steeltoe.Extensions.Configuration;
 ...
 
 var builder = new ConfigurationBuilder()
@@ -215,7 +209,7 @@ You can access the values from the `VCAP_APPLICATION` environment variable setti
 var config = builder.Build();
 var appName = config["vcap:application:application_name"]
 var instanceId = config["vcap:application:instance_id"]
-....
+...
 ```
 
 A list of all `VCAP_APPLICATION` keys is available in the [VCAP_APPLICATION](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-APPLICATION) topic of the Cloud Foundry documentation.
@@ -226,7 +220,7 @@ You can also access the values from the `VCAP_SERVICES` environment variable dir
 var config = builder.Build();
 var name = config["vcap:services:service-name:0:name"]
 var uri = config["vcap:services:service-name:0:credentials:uri"]
-....
+...
 ```
 
 A list of all `VCAP_SERVICES` keys is available in the [VCAP_SERVICES](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES) topic of the Cloud Foundry documentation.
@@ -235,14 +229,14 @@ Note: This provider uses the built-in .NET [JSON Configuration Parser](https://g
 
 ### 1.2.4 Access Configuration Data as Options
 
-Alternatively, instead of accessing the Cloud Foundry configuration data directly from the configuration, you can also make use of the .NET [Options](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) framework together with [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection).
+Alternatively, instead of accessing the Cloud Foundry configuration data directly from the configuration, you can also use the .NET [Options](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) framework together with [Dependency Injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection).
 
 The Cloud Foundry provider includes two additional classes, `CloudFoundryApplicationOptions` and `CloudFoundryServicesOptions`. Both can be configured using the Options framework to hold the parsed `VCAP_*` data by making use of the Options `Configure()` feature.
 
-To make use of it in an ASP.NET Core application, add the the following to the `ConfigureServices()` method in the `Startup` class.
+To use it in an ASP.NET Core application, add the the following to the `ConfigureServices()` method in the `Startup` class.
 
 ```csharp
-#using Steeltoe.Extensions.Configuration.CloudFoundry;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 
 public void ConfigureServices(IServiceCollection services)
 {
@@ -263,7 +257,7 @@ Once this is done you can access these configuration objects in the Controllers 
 Here is an example controller that illustrates how to do this:
 
 ```csharp
-#using Steeltoe.Extensions.Configuration.CloudFoundry;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 
 public class HomeController : Controller
 {
@@ -307,22 +301,24 @@ The Steeltoe Config Server provider supports the following .NET application type
 * ASP.NET Core
 * Console apps (.NET Framework and .NET Core)
 
-In addition to the Quick Start below, there are several other Steeltoe sample applications that you can refer to when needing help in understanding how to make use of this provider:
+In addition to the Quick Start below, there are several other Steeltoe sample applications that you can refer to when needing help in understanding how to use this provider:
 
 * [AspDotNetCore/Simple](https://github.com/SteeltoeOSS/Samples/tree/master/Configuration/src/AspDotNetCore/Simple) - ASP.NET Core sample app illustrating how to use the open source Config Server.
 * [AspDotNet4/Simple](https://github.com/SteeltoeOSS/Samples/tree/master/Configuration/src/AspDotNet4/Simple) - same as AspDotNetCore/Simple but built for ASP.NET 4.x
 * [AspDotNet4/SimpleCloudFoundry](https://github.com/SteeltoeOSS/Samples/tree/master/Configuration/src/AspDotNet4/SimpleCloudFoundry) - same as the Quick Start sample used below, but built for ASP.NET 4.x.
 * [AspDotNet4/AutofacCloudFoundry](https://github.com/SteeltoeOSS/Samples/tree/master/Configuration/src/AspDotNet4/AutofacCloudFoundry) - same as AspDotNet4/SimpleCloudFoundry, but built using the Autofac IOC container.
-* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on CloudFoundry, and secured with OAuth2 Security Services and using Spring Cloud Services.
+* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) - a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot microservices-based sample app illustrating inter-operability between Java and .NET on Cloud Foundry, secured with OAuth2 Security Services and using Spring Cloud Services.
 
 The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Configuration).
 
 ## 2.1 Quick Start
 
-This quick start makes use of an ASP.NET Core application to illustrate how to use the Steeltoe Config Server provider to fetch configuration data from a Config Server running locally on your development machine and also how to take that same application and push it to Cloud Foundry and make use of a config server operating there.
+This quick start uses an ASP.NET Core application to illustrate how to use the Steeltoe Config Server provider to fetch configuration data from a Config Server running locally on your development machine and also how to take that same application and push it to Cloud Foundry and use a config server operating there.
 
-### 2.1.1  Start Config Server Locally
+### 2.1.1  Running Locally
+
+#### 2.1.1.1 Start Config Server
 
 In this step, we will fetch a GitHub repository from which we can start up a Spring Cloud Config Server locally on your desktop. This particular server has been pre-configured to fetch its configuration data from <https://github.com/steeltoeoss/config-repo>.
 
@@ -336,14 +332,13 @@ To do that you must modify `configserver/src/main/resources/application.yml` to 
 > mvnw spring-boot:run
 ```
 
-### 2.1.2 Get Sample
+#### 2.1.1.2 Locate Sample
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
 > cd Samples/Configuration/src/AspDotNetCore/SimpleCloudFoundry
 ```
 
-### 2.1.3 Run Sample
+#### 2.1.1.3 Run Sample
 
 Use the dotnet CLI to run the application. Note below we show how to run the app on both frameworks the sample supports. Just pick one in order to proceed.
 
@@ -357,7 +352,7 @@ Use the dotnet CLI to run the application. Note below we show how to run the app
 > dotnet run -f net461
 ```
 
-### 2.1.4 Observe Logs
+#### 2.1.1.4 Observe Logs
 
 When you startup the application, you should see something like the following:
 
@@ -368,7 +363,7 @@ Now listening on: http://localhost:5000
 Application started. Press Ctrl+C to shut down.
 ```
 
-### 2.1.5 What to expect
+#### 2.1.1.5 What to expect
 
 Fire up a browser and hit <http://localhost:5000>.  Use the menu presented by the app to see various output:
 
@@ -380,14 +375,13 @@ Change the Hosting environment variable setting to `development` (i.e. `export A
 
 You will see different configuration data returned for that profile/hosting environment.  This time it will be some of the data from `foo.properties`, `foo-development.properties` and `application.yml` if found in the github repository <https://github.com/steeltoeoss/config-repo>.
 
-### 2.1.6 Start Config Server Cloud Foundry
+### 2.1.2 Running on Cloud Foundry
+
+#### 2.1.2.1 Start Config Server
 
 In this step we will use the Cloud Foundry CLI to create a service instance of the Spring Cloud Config Server on Cloud Foundry. You will find in the `config-server.json` file that we have set the config server's github repository to: `https://github.com/spring-cloud-samples/config-repo`.
 
 ```bash
-> # Target an org and space on Cloud Foundry
-> cf target -o myorg -s development
->
 > # Make sure you're in samples directory
 > cd Samples/Configuration/src/AspDotNetCore/SimpleCloudFoundry
 >
@@ -400,48 +394,15 @@ In this step we will use the Cloud Foundry CLI to create a service instance of t
 
 The above creates on Cloud Foundry a Spring Cloud Config Server instance named `myConfigServer` configured from the contents of the file `config-server.json`.
 
-### 2.1.7 Publish Sample
+#### 2.1.2.2 Publish Sample
 
-Use the `dotnet` CLI to build and publish the application.
+See [Publish Sample](#publish-sample) for instructions on how to publish this sample to either Linux or Windows.
 
-Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
+#### 2.1.2.3 Push Sample
 
-```bash
-> dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
+See [Push Sample](#push-sample) for instructions on how to push this sample to either Linux or Windows on Cloud Foundry.
 
-### 2.1.8 Push Sample
-
-Use the Cloud Foundry CLI to target and push the published application to Cloud Foundry.
-
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
-
-```bash
-> # Target an org and space on Cloud Foundry
-> cf target -o myorg -s development
->
-> # Push to Linux cell, .NET Core
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-Note that the manifests have been defined to bind the application to `myConfigServer` created above.
-
-### 2.1.9 Observe Logs
+#### 2.1.2.4 Observe Logs
 
 To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs foo`)
 
@@ -459,7 +420,7 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ```
 
-### 2.1.10 What to expect
+#### 2.1.2.5 What to expect
 
 The `cf push` will create an app by the name `foo` and will bind the `myConfigServer` service instance to the app. You can hit the app at `http://foo.x.y.z/`.
 
@@ -472,7 +433,7 @@ Use the menu provided by the app to see various output related to Cloud Foundry 
 
 Change the Hosting environment setting to `production` (i.e. `export ASPNETCORE_ENVIRONMENT=production` or  `SET ASPNETCORE_ENVIRONMENT=production` ), and then re-push the application. You will see different configuration data returned for that profile/hosting environment.
 
-### 2.1.11 Understand Sample
+### 2.1.3 Understand Sample
 
 The `SimpleCloudFoundry` sample was created from the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ) and then modified to add the Steeltoe framework.
 
@@ -488,7 +449,7 @@ To gain an understanding of the Steeltoe related changes to generated template c
 
 ## 2.2 Usage
 
-The following sections describe how to make use of the config server configuration provider. You should have a good understanding of how the new .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use this provider. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary.
+The following sections describe how to use the config server configuration provider. You should have a good understanding of how the new .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use this provider. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary.
 
 You should also have a good understanding of the [Spring Cloud Config Server](http://cloud.spring.io/spring-cloud-config/).
 
@@ -516,13 +477,13 @@ To add this type of NuGet to your project add something like the following `Pack
 
 ```xml
 <ItemGroup>
-....
+...
     <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version= "2.0.0"/>
 ...
 </ItemGroup>
 ```
 
-If you plan on connecting to the open source version of [Spring Cloud Config Server](http://projects.spring.io/spring-cloud/), AND you plan on pushing your application to Cloud Foundry to make use of [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), then you should use one of the following packages, depending on your application type and needs.
+If you plan on connecting to the open source version of [Spring Cloud Config Server](http://projects.spring.io/spring-cloud/), AND you plan on pushing your application to Cloud Foundry to use [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), then you should use one of the following packages, depending on your application type and needs.
 
 |App Type|Package|Description|
 |---|---|---|
@@ -534,7 +495,7 @@ To add this type of NuGet to your project add something like the following `Pack
 
 ```xml
 <ItemGroup>
-....
+...
     <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServerCore" Version= "2.0.0"/>
 ...
 </ItemGroup>
@@ -546,7 +507,7 @@ The most convenient way to configure settings for the provider is to put them in
 
 Below is an example of some provider settings put in a JSON file. Only two settings are really necessary; the setting `spring:application:name` configures the "application name" to `foo`, and `spring:cloud:config:uri` configures the address of the config server.
 
-Note that the configuration setting `spring:application:name` is also used by other Steeltoe frameworks in addition to the config server.
+> Note: the configuration setting `spring:application:name` is also used by other Steeltoe libraries in addition to the config server.
 
 ```json
 {
@@ -560,7 +521,7 @@ Note that the configuration setting `spring:application:name` is also used by ot
       }
     }
   }
-  .....
+  ...
 }
 ```
 
@@ -568,28 +529,28 @@ Below is a table of all the settings which can be used to configure the behavior
 
 As illustrated above, all settings should start with `spring:cloud:config:`
 
-|Key|Description|
-|------|------|
-|**name**|App name to request config for, defaults = `IHostingEnvironment.ApplicationName`|
-|**enabled**|Enable or disable config server client, defaults = true|
-|**uri**|Endpoint of config server, defaults = `http://localhost:8888`|
-|**env**|Environment/profile used in server request, defaults = `IHostingEnvironment.EnvironmentName`|
-|**validateCertificates**|Enable or disable certificate validation, default = true|
-|**label**|Comma separated list of labels to request, default = master|
-|**timeout**|Time to wait for response from server, in milliseconds, default = 6s|
-|**username**|Username for basic authentication, default = none|
-|**password**|Password for basic authentication, default = none|
-|**failFast**|Enable or Disable failure at startup, default = false|
-|**token**|Hashicorp Vault authentication token, default = none|
-|**tokenTtl**|Hashicorp Vault token renewal TTL, setting valid on CloudFoundry only, default = 300000ms|
-|**tokenRenewRate**|Hashicorp Vault token renewal rate, setting valid on CloudFoundry only, default = 60000ms|
-|**retry:enabled**|Enable or Disable retry logic, default = false|
-|**retry:maxAttempts**|Max retries if retry enabled, default = 6|
-|**retry:initialInterval**|Starting interval, default = 1000ms|
-|**retry:maxInterval**|Maximum retry interval, default = 2000ms|
-|**retry:multiplier**|Retry interval multiplier, default = 1.1|
+|Key|Description|Default|
+|---|---|---|
+|name|App name to request config for|`IHostingEnvironment.ApplicationName`|
+|enabled|Enable or disable config server client|true|
+|uri|Endpoint of config server|`http://localhost:8888`|
+|env|Environment/profile used in server request|`IHostingEnvironment.EnvironmentName`|
+|validateCertificates|Enable or disable certificate validation|true|
+|label|Comma separated list of labels to request|master|
+|timeout|Time to wait for response from server, in milliseconds|6s|
+|username|Username for basic authentication|none|
+|password|Password for basic authentication|none|
+|failFast|Enable or Disable failure at startup|false|
+|token|Hashicorp Vault authentication token|none|
+|tokenTtl|Hashicorp Vault token renewal TTL, setting valid on CloudFoundry only|300000ms|
+|tokenRenewRate|Hashicorp Vault token renewal rate, setting valid on CloudFoundry only|60000ms|
+|retry:enabled|Enable or Disable retry logic|false|
+|retry:maxAttempts|Max retries if retry enabled|6|
+|retry:initialInterval|Starting interval|1000ms|
+|retry:maxInterval|Maximum retry interval|2000ms|
+|retry:multiplier|Retry interval multiplier|1.1|
 
->If you are using self-signed certificates on Cloud Foundry, it is possible that you might run into certificate validation issues when pushing an app. A quick way to work around this is to disable certificate validation until a proper solution can be put in place.
+>Note: If you are using self-signed certificates on Cloud Foundry, you might run into certificate validation issues when pushing an app. A quick way to work around this is to disable certificate validation until a proper solution can be put in place.
 
 ### 2.2.3 Add Configuration Provider
 
@@ -604,7 +565,7 @@ Because the JSON provider that is reading `appsettings.json` has been added `bef
 The important thing to understand is; you need to `Add*()` the source of the config server clients settings (i.e. `AddJsonFile(..)`) *before* you `AddConfigServer(..)`,  otherwise the settings won't be picked up and used.
 
 ```csharp
-#using Steeltoe.Extensions.Configuration;
+using Steeltoe.Extensions.Configuration;
 ...
 
 var builder = new ConfigurationBuilder()
@@ -643,9 +604,6 @@ public class Program
 When you want to use a Config Server on Cloud Foundry and you have installed [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```bash
-> # Target an org and space on Cloud Foundry
-> cf target -o myorg -s myspace
->
 > # Create config server instance named `myConfigServer`
 > cf create-service p-config-server standard myConfigServer
 >
@@ -659,11 +617,11 @@ When you want to use a Config Server on Cloud Foundry and you have installed [Sp
 > cf restage myApp
 ```
 
-Once you have the service bound to the application, the config server settings will become available and be setup in `VCAP_SERVICES`.
+Once the service is bound to the application, the config server settings will be available and be setup in `VCAP_SERVICES`.
 
 Then when you push the application, the Steeltoe provider will take the settings from the service binding and merge those settings with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
 
-If there are any merge conflicts, then the service binding settings will take precedence and will override all others.
+If there are any merge conflicts, the last provider added to the Configuration will take precedence and override all others.
 
 ### 2.2.5 Access Configuration Data
 
@@ -671,14 +629,14 @@ When the `ConfigurationBuilder` builds the configuration, the Config Server clie
 
 If there are any errors or problems accessing the server, the application will continue to initialize, but the values from the server will not be retrieved.  If this is not the behavior you want, then you should set the `spring:cloud:config:failFast` to true. Once thats done, then the application will fail to start if problems occur during the build.
 
-After the configuration has been built you can then access the retrieved data directly using `IConfiguration`.  Here is some sample code illustrating how this is done:
+After the configuration has been built you can then access the retrieved data directly using `IConfiguration`. Here is some sample code illustrating how this is done:
 
 ```csharp
-....
+...
 var config = builder.Build();
 var property1 = config["myconfiguration:property1"]
 var property2 = config["myconfiguration:property2"]
-....
+...
 ```
 
 Alternatively, you can create a class to hold your configuration data and then use the [Options](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) framework together with [Dependency Injection](http://docs.asp.net/en/latest/fundamentals/dependency-injection.html) to inject an instance of the class into your controllers and view.
@@ -710,7 +668,7 @@ public class Startup
 
         // Configure IOptions<MyConfiguration>
         services.Configure<MyConfiguration>(Configuration.GetSection("myconfiguration"));
-        ....
+        ...
     }
 }
 ```
@@ -751,7 +709,7 @@ Once thats done, then simply pass the `ILoggerFactory` to the Steeltoe configura
 Here is some example code:
 
 ```csharp
-#using Steeltoe.Extensions.Configuration;
+using Steeltoe.Extensions.Configuration;
 
     LoggerFactory logFactory = new LoggerFactory();
     logFactory.AddConsole(minLevel: LogLevel.Debug);
@@ -763,8 +721,43 @@ Here is some example code:
         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
         .AddEnvironmentVariables()
         .AddConfigServer(env, logFactory);
-
+...
 ```
 
-[//]: # (this is a hack to prevent the TOC from drifting down into the footer)
-<div style="height:500px"></div>
+# Common References
+
+## Publish Sample
+
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+
+```bash
+> dotnet restore --configfile nuget.config
+>
+> # Publish for Linux, .NET Core
+> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
+>
+> # Publish for Windows, .NET Core
+> dotnet publish -f netcoreapp2.0 -r win10-x64
+>
+> # Publish for Windows, .NET Framework
+> dotnet publish -f net461 -r win10-x64
+```
+
+## Push Sample
+
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
+
+```bash
+> # Push to Linux cell
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+>
+>  # Push to Windows cell, .NET Core
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+>
+>  # Push to Windows cell, .NET Framework
+> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+```
+
+Manifest file names may vary, some samples use a different manifest for .NET 4 vs .NET Core.
+
+> Note: all sample manifests have been defined to bind their application to their service(s) as created above.

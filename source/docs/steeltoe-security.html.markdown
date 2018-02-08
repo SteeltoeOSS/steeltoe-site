@@ -241,7 +241,7 @@ The samples and most templates are already setup to read from `appsettings.json`
 
 As mentioned above, there are two ways to use OAuth2 services on Cloud Foundry. Rather than go in-depth here, we recommend you read the offical documentation ([UAA Server](https://github.com/cloudfoundry/uaa) and [Pivotal SSO](http://docs.pivotal.io/p-identity/1-5/getting-started.html)) or follow the instructions included in the samples for [UAA Server](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/CloudFoundrySingleSignon/README.md) and [Pivotal SSO](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/CloudFoundrySingleSignon/README-SSO.md) to quickly learn how to create and bind OAuth2 services.
 
-Regardless of which provider you choose, once the service is bound to your application, the settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
+Regardless of which provider you choose, once the service is bound to your application, the settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading `VCAP_SERVICES`.
 
 ### 1.2.4 Add Cloud Foundry OAuth
 

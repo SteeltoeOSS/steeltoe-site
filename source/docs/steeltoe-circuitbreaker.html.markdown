@@ -70,7 +70,7 @@ The application consists of two components:
 
 The Fortune-Teller-UI has also been configured to gather metrics about command executions and to report those metrics to a Hystrix Dashboard.
 
-### 1.1.1 Running Fortune Teller Locally
+### 1.1.1 Running Locally
 
 #### 1.1.1.1 Start Eureka Server
 
@@ -1136,7 +1136,6 @@ Use the Cloud Foundry CLI to push the published application to Cloud Foundry usi
 Manifest file names may vary, some samples use a different manifest for .NET 4 vs .NET Core.
 
 > Note: all sample manifests have been defined to bind their application to their service(s) as created above.
-
 ## Reading Configuration Values
 
 Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.

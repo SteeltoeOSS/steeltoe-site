@@ -1,15 +1,35 @@
 ---
 title: Service Discovery
 order: 30
-date: 2016/4/1
+date: 2018/2/8
 tags:
 ---
 
-A service registry provides a database that applications can use in implementing the Service Discovery pattern; one of the key tenets of a micro-services based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, applications can use a service registry to dynamically discover and call registered services.
+A service registry provides a database that applications can use in implementing the Service Discovery pattern; one of the key tenets of a microservices-based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, applications can use a service registry to dynamically discover and call registered services.
 
 There are several options to choose from when implementing the Service Discovery pattern. Steeltoe has initially chosen to support one based on Eureka; using Netflix's Service Discovery server and client. For more information about Eureka see the [Netflix/Eureka Wiki](https://github.com/Netflix/eureka/wiki) and the [Spring Cloud Netflix](http://projects.spring.io/spring-cloud/) documentation.
 
 In the future you can expect to see more Service Discovery options as part of the Steeltoe framework.
+
+# 0.0 Initialize Dev Environment
+
+All of the Steeltoe sample applications are in the same repository. If you haven't already, use git to clone the repository or download with your browser from GitHub: [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples)
+
+```bash
+> git clone https://github.com/SteeltoeOSS/Samples.git
+```
+
+> Note: all Service Discovery samples in the Samples repository have a base path of `Samples/Discovery/src/`
+
+Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space:
+
+```bash
+> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+or
+> cf target -o <YourOrg> -s <YourSpace>
+```
+
+The Service Discovery sample requires a Eureka server. If you intend to run the samples locally, install the Java 8 JDK and Maven 3.x now.
 
 # 1.0 Netflix Eureka
 
@@ -21,24 +41,26 @@ The Steeltoe Eureka client supports the following .NET application types:
 * ASP.NET Core
 * Console apps (.NET Framework and .NET Core)
 
- In addition to the quick start below, there are several other Steeltoe sample applications that you can choose from when looking for help in understanding how to make use of this client:
+ In addition to the quick start below, there are several other Steeltoe sample applications that you can choose from when looking for help in understanding how to use this client:
 
 * [AspDotNet4/Fortune-Teller-Service4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-Service4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container
 * [AspDotNet4/Fortune-Teller-UI4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-UI4) - same as the Quick Start below, but built for ASP.NET 4.x and using the Autofac IOC container
-* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) -  a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot (i.e. Java and .NET) micro-services based sample app illustrating inter-operability between Java and .NET based micro-services running on Cloud Foundry, and secured with OAuth2 Security Services and using Spring Cloud Services.
+* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) - a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot microservices-based sample app illustrating inter-operability between Java and .NET on Cloud Foundry, secured with OAuth2 Security Services and using Spring Cloud Services.
 
  The source code for discovery can be found [here](https://github.com/SteeltoeOSS/Discovery).
 
 ## 1.1 Quick Start
 
-This quick start makes use of multiple ASP.NET Core applications to illustrate how to use the Steeltoe Discovery client to register and fetch services from an Eureka Server running locally on your development machine and also how to take that same set of applications and push them to Cloud Foundry and make use of an Eureka Server operating there.
+This quick start uses multiple ASP.NET Core applications to illustrate how to use the Steeltoe Discovery client to register and fetch services from an Eureka Server running locally on your development machine and also how to take that same set of applications and push them to Cloud Foundry and use an Eureka Server operating there.
 
 The application consists of two components; a Fortune-Teller-Service which registers a FortuneService and a Fortune-Teller-UI which discovers the service and fetches fortunes from it.
 
-### 1.1.1  Start Eureka Server Locally
+### 1.1.1 Running Locally
 
-In this step, we will fetch a GitHub repository from which we can start up a Netflix Eureka Server locally on our desktop. This server has been pre-configured to listen for service registrations and discovery requests at  <http://localhost:8761/eureka> .
+#### 1.1.1.1 Start Eureka Server
+
+In this step, we will fetch a GitHub repository from which we can start up a Netflix Eureka Server locally on our desktop. This server has been pre-configured to listen for service registrations and discovery requests at <http://localhost:8761/eureka> .
 
 ```bash
 > git clone https://github.com/spring-cloud-samples/eureka.git
@@ -46,38 +68,39 @@ In this step, we will fetch a GitHub repository from which we can start up a Net
 > mvnw spring-boot:run
 ```
 
-### 1.1.2 Get Sample
+#### 1.1.1.2 Locate Sample
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
+> cd Samples/Discovery/src/AspDotNetCore
 ```
 
-### 1.1.3 Run Fortune-Teller-Service
+#### 1.1.1.3 Run Fortune Teller
 
-Use the dotnet CLI to run the application. Note below we show how to run the app on both frameworks the sample supports. Just pick one in order to proceed.
+The recommended approach to running this application is with the dotnet CLI. Scripts are provided to start both the service and the UI with a single command:
 
 ```bash
->
+# Use the helper scripts, passing in either net461 or netcoreapp2.0
+> .\RunFortuneTeller net461
+```
+
+You are also welcome to run the commands directly yourself:
+
+```bash
+# Run the service in one window:
 > cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-Service
->
-> # Set port to listen on
-> SET PORT=5000 or export PORT=5000
->
-> dotnet restore --configfile nuget.config
->
-> # Run on .NET Core
-> dotnet run -f netcoreapp2.0
->
-> # Run on .NET Framework on Windows
-> dotnet run -f net461
+> dotnet run -f netcoreapp2.0 --force
+
+# And the UI in another:
+> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
+> dotnet run -f netcoreapp2.0 --force
 ```
 
-### 1.1.4 Observe Logs
+#### 1.1.1.4 Observe Logs
 
-When you startup the Fortune-Teller-Service, you should see something like the following:
+Each of the samples should produce logs like the following:
 
 ```bash
-> dotnet run -f netcoreapp2.0 --server.urls http://*:5000
+> dotnet run -f netcoreapp2.0
 info: Microsoft.Data.Entity.Storage.Internal.InMemoryStore[1]
       Saved 50 entities to in-memory store.
 Hosting environment: Production
@@ -85,52 +108,19 @@ Now listening on: http://*:5000
 Application started. Press Ctrl+C to shut down.
 ```
 
-At this point the Fortune-Teller-Service is up and running and ready for the Fortune-Teller-UI to ask for fortunes.
+Once you see "Application started..." for both applications, the Fortune Teller sample is ready to go.
 
-### 1.1.5 Run Fortune-Teller-UI
+#### 1.1.1.5 What to expect
 
-Use the dotnet CLI to run the application. Note below we show how to run the app on both frameworks the sample supports. Just pick one in order to proceed.
+Fire up a browser and hit <http://localhost:5555>. You should see your fortune displayed. Refresh the browser to see a new fortune.
 
-```bash
->
-> # Set port to listen on
-> SET PORT=5555 or export PORT=5555
->
-> # Make sure your in correct directory
-> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
->
-> dotnet restore --configfile nuget.config
->
->  # Run on .NET Core
-> dotnet run -f netcoreapp2.0
->
->  # Run on .NET Framework on Windows
-> dotnet run -f net461
-```
+### 1.1.2 Running on Cloud Foundry
 
-### 1.1.6 Observe Logs
+#### 1.1.2.1 Start Eureka Server
 
-When you startup the Fortune-Teller-UI, you should see something like the following:
+Use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eureka Server on Cloud Foundry:
 
 ```bash
-> dotnet run -f netcoreapp2.0 --server.urls http://*:5555
-Hosting environment: Production
-Now listening on: http://*:5555
-Application started. Press Ctrl+C to shut down.
-```
-
-### 1.1.7 What to expect
-
-Fire up a browser and hit <http://localhost:5555>.  You should see your fortune displayed. Refresh the browser to see a new fortune.
-
-### 1.1.8 Start Eureka Server Cloud Foundry
-
-In this step, we use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eureka Server on Cloud Foundry.
-
-```bash
-# Target and org and space in Cloud Foundry
-> cf target -o myorg -s development
->
 # Create a Eureka Server instance on Cloud Foundry
 > cf create-service p-service-registry standard myDiscoveryService
 >
@@ -138,83 +128,19 @@ In this step, we use the Cloud Foundry CLI to create a service instance of the S
 > cf services
 ```
 
-### 1.1.9 Publish Fortune-Teller-Service
+#### 1.1.2.2 Publish Both Applications
 
-Use the `dotnet` CLI to build and publish the Fortune-Teller-Service.
+.NET Applications should be published before pushing to Cloud Foundry. You will need to publish both Fortune-Teller-Service and Fortune-Teller-UI.
 
-Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
+See [Publish Sample](#publish-sample) for instructions on how to publish this sample for either Linux or Windows.
 
-```bash
-> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-Service
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish  -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
+#### 1.1.2.3 Push Both Applications
 
-### 1.1.10 Push Fortune-Teller-Service
+In order for the Fortune Teller to work on Cloud Foundry, you will need to push both Fortune-Teller-Service and Fortune-Teller-UI.
 
-Use the Cloud Foundry CLI to push the published Fortune-Teller-Service to Cloud Foundry.
+See [Push Sample](#push-sample) for instructions on how to push this sample to either Linux or Windows on Cloud Foundry.
 
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
-
-```bash
-> # Push to Linux cell, .NET Core
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-Note that the manifests have been defined to bind the Fortune-Teller-Service to `myDiscoveryService` created above.
-
-### 1.1.11 Publish Fortune-Teller-UI
-
-Use the `dotnet` CLI to build and publish the Fortune-Teller-UI.
-
-Note below we show how to publish for all of the target run times and frameworks the sample supports. Just pick one in order to proceed.
-
-```bash
-> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
-```
-
-### 1.1.12 Push Fortune-Teller-UI
-
-Use the Cloud Foundry CLI to push the published Fortune-Teller-UI to Cloud Foundry.
-
-Note below we show how to push for both Linux and Windows. Just pick one in order to proceed.
-
-```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
-```
-
-Note that the manifests have been defined to bind the Fortune-Teller-UI to `myDiscoveryService` created above.
-
-### 1.1.13 Observe Logs
+#### 1.1.2.4 Observe Logs
 
 To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs fortuneService` or `cf logs fortuneui`)
 
@@ -231,32 +157,32 @@ On a Linux cell, you should see something like this during startup. On Windows c
 2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
 ```
 
-### 1.1.14 What to expect
+#### 1.1.2.5 What to expect
 
 Fire up a browser and hit <http://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
 
 You should see your fortune displayed. Refresh the browser to see a new fortune.
 
-### 1.1.15 Understand Sample
+### 1.1.3 Understand Sample
 
 Fortune-Teller-Service was created using the .NET Core tooling `webapi` template ( i.e. `dotnet new webapi` ), and then modifications were made to add the Steeltoe frameworks.
 
-To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files. Note that there are various other files added to the project that pertain the the application, but do not directly interact with the Steeltoe Discovery client.
+To understand the Steeltoe related changes to the generated template code, examine the following files. There are various other files added to the project that pertain the the application, but do not directly interact with the Steeltoe Discovery client.
 
 * `Fortune-Teller-Service.csproj` - Contains `PackageReference` for Steeltoe NuGet `Pivotal.Discovery.Client`
 * `Program.cs` - Code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use CloudFoundry hosting.
 * `appsettings.json` - Contains configuration data needed to cause the Steeltoe Discovery client to register the FortuneService with the Eureka server and to NOT fetch service information from the Eureka server.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add the Discovery Client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server. 
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add the Discovery Client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server.
 
-Fortune-Teller-UI was created using the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`),  and then modifications were made to add the Steeltoe frameworks.
+Fortune-Teller-UI was created using the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`), and then modifications were made to add the Steeltoe frameworks.
 
-To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
+To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `Fortune-Teller-UI.csproj`- Contains `PackageReference` for Steeltoe NuGet `Pivotal.Discovery.Client`
 * `Program.cs` - Code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use CloudFoundry hosting.
 * `appsettings.json` - Contains configuration data needed to cause the Steeltoe Discovery client to NOT register as a service, but yet it will still fetch service information from the Eureka server.
 * `Startup.cs`- Code added to the `ConfigureServices()` method to add Discovery Client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server.
-* `FortuneService.cs` - Contains code used to fetch the fortune from the FortuneService.  Uses injected `IDiscoveryClient` together with the `DiscoveryHttpClientHandler` to do the service lookup and to issue the HTTP GET request to the Fortune-Teller-Service.
+* `FortuneService.cs` - Contains code used to fetch the fortune from the FortuneService. Uses injected `IDiscoveryClient` together with the `DiscoveryHttpClientHandler` to do the service lookup and to issue the HTTP GET request to the Fortune-Teller-Service.
 
 ## 1.2 Usage
 
@@ -292,13 +218,13 @@ To add this type of NuGet to your project add something like the following `Pack
 
 ```xml
 <ItemGroup>
-....
+...
     <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.0.0"/>
 ...
 </ItemGroup>
 ```
 
-If you plan on connecting to the open source version of [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/), AND you plan on pushing your application to Cloud Foundry to make use of [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), then you should use one of the following packages, depending on your application type and needs.
+If you plan on connecting to the open source version of [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/), AND you plan on pushing your application to Cloud Foundry to use [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), then you should use one of the following packages, depending on your application type and needs.
 
 |App Type|Package|Description|
 |---|---|---|
@@ -310,7 +236,7 @@ To add this type of NuGet to your project add something like the following `Pack
 
 ```xml
 <ItemGroup>
-....
+...
     <PackageReference Include="Pivotal.Discovery.ClientCore" Version= "2.0.0"/>
 ...
 </ItemGroup>
@@ -328,59 +254,59 @@ The first table below is a table of settings which control the overall behavior 
 
 All of these settings should start with `eureka:client:`
 
-|Key|Description|
-|------|------|
-|**shouldRegisterWithEureka**|Enable or disable registering as a service, defaults = true|
-|**shouldFetchRegistry**|Enable or disable discovering services, defaults = true|
-|**serviceUrl**|Endpoint of Eureka Server, defaults = `http://localhost:8761/eureka`|
-|**validateCertificates**|Enable or disable certificate validation, default = true|
-|**registryFetchIntervalSeconds**|Service fetch interval, default = 30s|
-|**shouldFilterOnlyUpInstances**|Only fetch UP instances, default = true|
-|**instanceInfoReplicationIntervalSeconds**|How often to replicate instance changes, default = 40s |
-|**allowRedirects**|Can redirect a client request to a backup, default = false|
-|**shouldDisableDelta**|Disable fetching of delta, instead get the full registry, default = false |
-|**registryRefreshSingleVipAddress**|Only interested in the registry information for a single VIP, default = none |
-|**shouldOnDemandUpdateStatusChange**|Status updates trigger on-demand register/update,  default = true|
-|**accessTokenUri**|URI to use to obtain OAUTH access token,  default = true|
-|**clientSecret**|Secret to use to obtain OAUTH access token,  default = true|
-|**clientId**|Client ID to use to obtain OAUTH access token,  default = true|
-|**eurekaServer:proxyHost**|Proxy host to Eureka Server, default = none|
-|**eurekaServer:proxyPort**|Proxy port to Eureka Server, default = none|
-|**eurekaServer:proxyUserName**|Proxy user name to Eureka Server, default = none|
-|**eurekaServer:proxyPassword**| Proxy password to Eureka Server, default = none
-|**eurekaServer:shouldGZipContent**|Content compressed, default = true|
-|**eurekaServer:connectTimeoutSeconds**|Connection timeout, default = 5s|
+|Key|Description|Default|
+|---|---|---|
+|shouldRegisterWithEureka|Enable or disable registering as a service|true|
+|shouldFetchRegistry|Enable or disable discovering services|true|
+|serviceUrl|Endpoint of Eureka Server|`http://localhost:8761/eureka`|
+|validateCertificates|Enable or disable certificate validation|true|
+|registryFetchIntervalSeconds|Service fetch interval|30s|
+|shouldFilterOnlyUpInstances|Only fetch UP instances|true|
+|instanceInfoReplicationIntervalSeconds|How often to replicate instance changes|40s |
+|allowRedirects|Can redirect a client request to a backup|false|
+|shouldDisableDelta|Disable fetching of delta, instead get the full registry|false |
+|registryRefreshSingleVipAddress|Only interested in the registry information for a single VIP|none |
+|shouldOnDemandUpdateStatusChange|Status updates trigger on-demand register/update|true|
+|accessTokenUri|URI to use to obtain OAUTH access token|true|
+|clientSecret|Secret to use to obtain OAUTH access token|true|
+|clientId|Client ID to use to obtain OAUTH access token|true|
+|eurekaServer:proxyHost|Proxy host to Eureka Server|none|
+|eurekaServer:proxyPort|Proxy port to Eureka Server|none|
+|eurekaServer:proxyUserName|Proxy user name to Eureka Server|none|
+|eurekaServer:proxyPassword| Proxy password to Eureka Server|none
+|eurekaServer:shouldGZipContent|Content compressed|true|
+|eurekaServer:connectTimeoutSeconds|Connection timeout|5s|
 
 The next table of settings describe those settings you can use to configure the behavior of the client as it relates to registering services.
 
 All of these settings should start with `eureka:instance:`
 
-|Key|Description|
-|------|------|
-|**appName**|Name of the application to be registered with eureka, default='spring:application:name' or 'unknown'|
-|**port**|Port on which the instance will be registered under, default = 80|
-|**hostName**|Address on which the instance will be registered under, default = computed|
-|**instanceId**|Unique Id (within the scope of the appName) of instance registered with eureka, default=`computed`|
-|**appGroupName**|Name of the application group to be registered with eureka, default = none|
-|**instanceEnabledOnInit**|Instance should take traffic as soon as it is registered, default=false|
-|**securePort**|Secure port on which the instance should receive traffic, default = 443|
-|**nonSecurePortEnabled**|Non-secure port enabled for traffic, default = true|
-|**securePortEnabled**|Secure port enabled for traffic, default=false|
-|**leaseRenewalIntervalInSeconds**|How often client needs to send heartbeats, default =30s|
-|**leaseExpirationDurationInSeconds**|Time the eureka server waits before removing instance, default = 90s|
-|**vipAddress**|Virtual host name, default = hostName + port|
-|**secureVipAddress**|Secure virtual host name, default = hostName + securePort||
-|**metadataMap**|Name/value pairs associated with instance, default=none|
-|**statusPageUrlPath**|Relative status page path for this instance, default=`/Status`|
-|**statusPageUrl**|Absolute status page for this instance, default=computed|
-|**homePageUrlPath**|, default=`/`|
-|**homePageUrl**|Absolute home page for this instance, default=computed|
-|**healthCheckUrlPath**|, default=`/healthcheck`|
-|**healthCheckUrl**|Absolute health check page for this instance, default=computed|
-|**secureHealthCheckUrl**|Secured absolute health check page for this instance, default=computed|
-|**ipAddress**|Ip address to register under, default=computed|
-|**preferIpAddress**|Register using IpAddress instead of hostname, default=false|
-|**registrationMethod**|how to register service on Cloud Foundry, can be `route`, `direct`, or `hostname`, default=`route`|
+|Key|Description|Default|
+|---|---|---|
+|appName|Name of the application to be registered with eureka|'spring:application:name' or 'unknown'|
+|port|Port on which the instance will be registered under|80|
+|hostName|Address on which the instance will be registered under|computed|
+|instanceId|Unique Id (within the scope of the appName) of instance registered with eureka|`computed`|
+|appGroupName|Name of the application group to be registered with eureka|none|
+|instanceEnabledOnInit|Instance should take traffic as soon as it is registered|false|
+|securePort|Secure port on which the instance should receive traffic|443|
+|nonSecurePortEnabled|Non-secure port enabled for traffic|true|
+|securePortEnabled|Secure port enabled for traffic|false|
+|leaseRenewalIntervalInSeconds|How often client needs to send heartbeats|30s|
+|leaseExpirationDurationInSeconds|Time the eureka server waits before removing instance|90s|
+|vipAddress|Virtual host name|hostName + port|
+|secureVipAddress|Secure virtual host name|hostName + securePort||
+|metadataMap|Name/value pairs associated with instance|none|
+|statusPageUrlPath|Relative status page path for this instance|`/Status`|
+|statusPageUrl|Absolute status page for this instance|computed|
+|homePageUrlPath||`/`|
+|homePageUrl|Absolute home page for this instance|computed|
+|healthCheckUrlPath||`/healthcheck`|
+|healthCheckUrl|Absolute health check page for this instance|computed|
+|secureHealthCheckUrl|Secured absolute health check page for this instance|computed|
+|ipAddress|Ip address to register under|computed|
+|preferIpAddress|Register using IpAddress instead of hostname|false|
+|registrationMethod|how to register service on Cloud Foundry, can be `route`, `direct`, or `hostname`|`route`|
 
 Registering using the `direct` setting above should be used when wanting to use Container to Container networking on Cloud Foundry. Using the `hostname` setting on Cloud Foundry should be used when you want the registration to use whatever value is configured or computed as `eureka:instance:hostName`.
 
@@ -405,13 +331,13 @@ The `eureka:client:shouldRegisterWithEureka` instructs the client to NOT registe
       "shouldRegisterWithEureka": false
     }
   }
-  .....
+  ...
 }
 ```
 
->If you are using self-signed certificates on Cloud Foundry, it is possible that you might run into SSL certificate validation issues when pushing apps. A quick way to work around this is to disable certificate validation until a proper solution can be put in place.
+> Note: If you are using self-signed certificates on Cloud Foundry, might run into SSL certificate validation issues when pushing apps. A quick way to work around this is to disable certificate validation until a proper solution can be put in place.
 
-#### 1.2.2.2 Settings to Register
+#### 1.2.2.2 Configure Settings
 
 Below is an example of the clients settings in JSON that are necessary to cause the client to register a service named `fortuneService` with a Eureka Server at address `http://localhost:8761/eureka/`.
 
@@ -433,47 +359,17 @@ The `eureka:instance:port` setting is the port upon which the service will be re
       "port": 5000
     }
   }
-  .....
+  ...
 }
 ```
 
-#### 1.2.2.2 Configure Settings
-
-Once the client settings have been defined and put in a file, then the next step is to get them read in so they can be made available to the client.
-
-Using the code below, you can see that the clients configuration settings from above should be put in `appsettings.json` and then packaged with the application.  Then, by using the .NET provided JSON configuration provider we are able to read in the settings simply by adding the provider to the configuration builder (e.g. `AddJsonFile("appsettings.json")`.
-
-```csharp
-public class Program {
-    ...
-    public static IWebHost BuildWebHost(string[] args)
-    {
-        return new WebHostBuilder()
-            ...
-            .UseCloudFoundryHosting()
-            ...
-            .ConfigureAppConfiguration((builderContext, configBuilder) =>
-            {
-                var env = builderContext.HostingEnvironment;
-                configBuilder.SetBasePath(env.ContentRootPath)
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                    .AddEnvironmentVariables();
-            })
-            .Build();
-    }
-    ...
-```
-
-If you wanted to managed the settings centrally, you can use the Spring Cloud Config Server (i.e. `AddConfigServer()`), instead of a local JSON file (i.e. `AddJsonFile()`), simply by putting the settings in a github repository and configuring the Config server to serve its configuration data from that repository.
+The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
 
 ### 1.2.3 Cloud Foundry
 
 When you want to use a Eureka Server on Cloud Foundry and you have installed [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you can create and bind a instance of the server to the application using the Cloud Foundry CLI as follows:
 
 ```bash
-> cf target -o myorg -s myspace
->
 > # Create eureka server instance named `myDiscoveryService`
 > cf create-service p-service-registry standard myDiscoveryService
 >
@@ -489,11 +385,161 @@ When you want to use a Eureka Server on Cloud Foundry and you have installed [Sp
 
 For more information on using the Eureka Server on Cloud Foundry, see the [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html) documentation.
 
-Once you have bound the service to the application, the Eureka Server settings will become available and be configured in `VCAP_SERVICES`.
+Once the service is bound to your application, the connection properties will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading `VCAP_SERVICES`.
 
-In order for the binding settings to be picked up and put in the configuration, you have to make use of the Cloud Foundry configuration provider.
+### 1.2.4 Add and Use Discovery Client
 
-To do that, simply add a `AddCloudFoundry()` method call to the `ConfigurationBuilder`.  Here is an example:
+The next step is to add the Steeltoe Eureka client to the service container and use it to cause the client to start communicating with the server.
+
+You do these two things in the `ConfigureServices()` and `Configure()` methods of the `Startup` class.
+
+> Note: You will need to add a `using Pivotal.Discovery.Client;` if you are using the `Pivotal.Discovery.ClientCore` package, or a `using Steeltoe.Discovery.Client;` if you are using the `Steeltoe.Discovery.ClientCore`. This is required in order to gain access to the extension methods shown below.
+
+```csharp
+using Pivotal.Discovery.Client;
+// or
+using Steeltoe.Discovery.Client;
+
+public class Startup {
+    ...
+    public IConfiguration Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Add Steeltoe Discovery Client service
+        services.AddDiscoveryClient(Configuration);
+
+        // Add framework services.
+        services.AddMvc();
+        ...
+    }
+    public void Configure(IApplicationBuilder app, ...)
+    {
+        ...
+        app.UseStaticFiles();
+        app.UseMvc();
+
+        // Use the Steeltoe Discovery Client service
+        app.UseDiscoveryClient();
+    }
+    ...
+```
+
+### 1.2.5 Registering Services
+
+If you have configured the clients settings to register services, then once the `UseDiscoveryClient()` method is called in the `Configure()` method, then the service will be automatically registered. You do not need to do anything else to cause service registration.
+
+### 1.2.6 Discovering Services
+
+Once the app has started, the Discovery client will begin to operate in the background; both registering services and periodically fetching the service registry from the server.
+
+The simplest way of using the registry to lookup services is to use the Steeltoe `DiscoveryHttpClientHandler` together with a `HttpClient`. For an example see the sample code below. The `FortuneService` class below is used to retrieve Fortunes from the Fortune micro-service. The micro-service will be registered under the name `fortuneService`.
+
+First, notice that the `FortuneService` constructor takes a `IDiscoveryClient` as a parameter. This is the Steeltoe Discovery Client interface which you can use to lookup services in the service registry.
+
+Upon application startup, the Discovery client interface is registered with the service container using the `AddDiscoveryClient()` method call so it can be easily used in any controller, view or service in the app. Notice that the constructor code for the controller uses the client by creating an instance of the Steeltoe provided `DiscoveryHttpClientHandler`, giving it a reference to the injected `IDiscoveryClient`.
+
+Next, notice that when the `RandomFortuneAsync()` method is called, you see that the `HttpClient` is created with the Steeltoe handler. The handlers role is to intercept any requests made using the `HttpClient` and to evaluate the URL to see if the host portion of the URL can be resolved from the current service registry. In this example, it will attempt to resolve the "fortuneService" name into an actual `host:port` before allowing the request to continue.
+
+If the name can't be resolved, the handler simply ignores the request URL, and allows the request to continue unchanged. But in the case where the the lookup has succeeded, the handler will replace service name with the resolved host and port and then let the request continue processing.
+
+Of course you don't have to use the handler, instead you can make lookup requests directly on the `IDiscoveryClient` interface if you need to.
+
+> Note: When you utilize the Steeltoe handler for discovering services, you automatically get random load balancer client functionality. That is, if there are multiple instances registered under a particular service name, the handler will randomly select one of those instances each time the handler is invoked.
+
+```csharp
+using Pivotal.Discovery.Client;
+// or
+using Steeltoe.Discovery.Client;
+
+...
+public class FortuneService : IFortuneService
+{
+    DiscoveryHttpClientHandler _handler;
+    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+    public FortuneService(IDiscoveryClient client)
+    {
+        _handler = new DiscoveryHttpClientHandler(client);
+    }
+    public async Task<string> RandomFortuneAsync()
+    {
+        var client = GetClient();
+        return await client.GetStringAsync(RANDOM_FORTUNE_URL);
+    }
+    private HttpClient GetClient()
+    {
+        var client = new HttpClient(_handler, false);
+        return client;
+    }
+}
+```
+
+### 1.2.7 Enable Logging
+
+Sometimes its desirable to turn on debug logging in the Discovery client. To do this, you can modify the `appsettings.json` file and turn on Debug level logging for the Steeltoe/Pivotal components.
+
+Here is an example `appsettings.json` file:
+
+```json
+{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Warning",
+      "Pivotal": "Debug",
+      "Steeltoe": "Debug"
+    }
+  },
+  ...
+}
+```
+
+# Common References
+
+## Publish Sample
+
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+
+```bash
+> dotnet restore --configfile nuget.config
+>
+> # Publish for Linux, .NET Core
+> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
+>
+> # Publish for Windows, .NET Core
+> dotnet publish -f netcoreapp2.0 -r win10-x64
+>
+> # Publish for Windows, .NET Framework
+> dotnet publish -f net461 -r win10-x64
+```
+
+## Push Sample
+
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
+
+```bash
+> # Push to Linux cell
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+>
+>  # Push to Windows cell, .NET Core
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+>
+>  # Push to Windows cell, .NET Framework
+> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+```
+
+Manifest file names may vary, some samples use a different manifest for .NET 4 vs .NET Core.
+
+> Note: all sample manifests have been defined to bind their application to their service(s) as created above.
+
+## Reading Configuration Values
+
+Once the settings have been defined, the next step is to read them in so they can be made available to the connector.
+
+The code below reads settings from the file `appsettings.json` with the .NET JSON configuration provider (i.e. `AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`. Both sources are then added to the configuration builder:
 
 ```csharp
 public class Program {
@@ -519,118 +565,10 @@ public class Program {
     ...
 ```
 
-Then when you push the application to Cloud Foundry, the Eureka Server settings that have been provided by the service binding will be merged with the settings that you have provided via other configuration mechanisms (e.g. `appsettings.json`).
+When pushing the application to Cloud Foundry, the settings from service bindings will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
 
-If there are any merge conflicts, then the service binding settings will take precedence and will override all others.
+If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
 
->Note:  If you are using the Spring Cloud Config Server for centralized configuration management, you do not need to add the `AddCloudFoundry()` method call, as it is done automatically for you when using the Config server provider. You simply need to just use the `AddConfigServer()` method.
+To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
-### 1.2.4 Add and Use Discovery Client
-
-The next step is to add the Steeltoe Eureka client to the service container and use it to cause the client to start communicating with the server.
-
-You do these two things in the `ConfigureServices()` and `Configure()` methods of the `Startup` class.
-
-Note: You will need to add a `#using Pivotal.Discovery.Client;` if you are using the `Pivotal.Discovery.ClientCore` package, or a  `#using Steeltoe.Discovery.Client;` if you are using the `Steeltoe.Discovery.ClientCore`.  This is required in order to gain access to the extension methods shown below.
-
-```csharp
-#using Pivotal.Discovery.Client;
-// or
-#using Steeltoe.Discovery.Client;
-
-public class Startup {
-    .....
-    public IConfiguration Configuration { get; private set; }
-    public Startup(...)
-    {
-      .....
-    }
-    public void ConfigureServices(IServiceCollection services)
-    {
-        // Add Steeltoe Discovery Client service
-        services.AddDiscoveryClient(Configuration);
-
-        // Add framework services.
-        services.AddMvc();
-        ...
-    }
-    public void Configure(IApplicationBuilder app, ....)
-    {
-        ....
-        app.UseStaticFiles();
-        app.UseMvc();
-
-        // Use the Steeltoe Discovery Client service
-        app.UseDiscoveryClient();
-    }
-    ....
-```
-
-### 1.2.5 Registering Services
-
-If you have configured the clients settings to register services, then once the `UseDiscoveryClient()` method is called in the `Configure()` method, then the service will be automatically registered.  You do not need to do anything else to cause service registration.
-
-### 1.2.6 Discovering Services
-
-Once the app has started, the Discovery client will begin to operate in the background; both registering services and periodically fetching the service registry from the server.
-
-The simplest way of using the registry to lookup services is to use the Steeltoe `DiscoveryHttpClientHandler` together with a `HttpClient`. For an example see the sample code below. The `FortuneService` class below is used to retrieve Fortunes from the Fortune micro-service. The micro-service will be registered under the name `fortuneService`.
-
-First, notice that the `FortuneService` constructor takes a `IDiscoveryClient` as a parameter. This is the Steeltoe Discovery Client interface which you can use to lookup services in the service registry.
-
-Upon application startup, the Discovery client interface is registered with the service container using the `AddDiscoveryClient()` method call so it can be easily used in any controller, view or service in the app.  Notice that the constructor code for the controller makes use of the client by creating an instance of the Steeltoe provided `DiscoveryHttpClientHandler`, giving it a reference to the injected `IDiscoveryClient`.
-
-Next, notice that when the `RandomFortuneAsync()` method is called, you see that the `HttpClient` is created with the Steeltoe handler. The handlers role is to intercept any requests made using the `HttpClient` and to evaluate the URL to see if the host portion of the URL can be resolved from the current service registry.  In this example, it will attempt to resolve the "fortuneService" name into an actual `host:port` before allowing the request to continue.
-
-If the name can't be resolved, the handler simply ignores the request URL, and allows the request to continue unchanged. But in the case where the the lookup has succeeded, the handler will replace service name with the resolved host and port and then let the request continue processing.
-
-Of course you don't have to use the handler, instead you can make lookup requests directly on the `IDiscoveryClient` interface if you need to.
-
-> Note: When you utilize the Steeltoe handler for discovering services, you automatically get random load balancer client functionality. That is, if there are multiple instances registered under a particular service name, the handler will randomly select one of those instances each time the handler is invoked.
-
-```csharp
-#using Pivotal.Discovery.Client;
-// or
-#using Steeltoe.Discovery.Client;
-
-....
-public class FortuneService : IFortuneService
-{
-    DiscoveryHttpClientHandler _handler;
-    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
-    public FortuneService(IDiscoveryClient client)
-    {
-        _handler = new DiscoveryHttpClientHandler(client);
-    }
-    public async Task<string> RandomFortuneAsync()
-    {
-        var client = GetClient();
-        return await client.GetStringAsync(RANDOM_FORTUNE_URL);
-    }
-    private HttpClient GetClient()
-    {
-        var client = new HttpClient(_handler, false);
-        return client;
-    }
-}
-```
-
-### 1.2.7 Enable Logging
-
-Sometimes its desirable to turn on debug logging in the Discovery client.  To do this, you can modify the `appsettings.json` file and turn on Debug level logging for the Steeltoe/Pivotal components.
-
-Here is an example `appsettings.json` file:
-
-```json
-{
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Warning",
-      "Pivotal": "Debug",
-      "Steeltoe":  "Debug"
-    }
-  },
-  .....
-}
-```
+> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
