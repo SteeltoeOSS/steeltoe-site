@@ -487,7 +487,7 @@ When you want to use a Eureka Server on Cloud Foundry and you have installed [Sp
 > cf restage myApp
 ```
 
-For more information on using the Eureka Server on Cloud Foundry, see the [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-4/common/index.html) documentation.
+For more information on using the Eureka Server on Cloud Foundry, see the [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html) documentation.
 
 Once you have bound the service to the application, the Eureka Server settings will become available and be configured in `VCAP_SERVICES`.
 
