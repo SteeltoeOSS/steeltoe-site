@@ -179,13 +179,21 @@ As shown above, all of these settings should be prefixed with `mysql:client:`
 |username|Username for authentication|not set|
 |password|Password for authentication|not set|
 |database|Schema to connect to|not set|
-|connectionString|Full connection string|built from settings
-|sslMode|SSL usage option, `None`, `Preferred`, `Required`|none|
+|connectionString|Full connection string|built from settings|
+|sslMode|SSL usage option, `None`, `Preferred`, `Required`|`None`|
+|allowPublicKeyRetrieval|RSA public keys should be retrieved from the server|not set|
 |allowUserVariables|`true` indicates that the provider expects user variables in the SQL|not set|
 |connectionTimeout|Seconds to wait for a connection before throwing an error|not set|
+|connectionLifeTime|The maximum length of time a connection to the server can be open|not set|
+|connectionReset|If true, the connection state is reset when it is retrieved from the pool|not set|
+|convertZeroDateTime|True to have MySqlDataReader.GetValue() and MySqlDataReader.GetDateTime() return DateTime.MinValue for date or datetime columns that have disallowed values.|not set|
 |defaultCommandTimeout|Seconds each command can execute before timing out, use zero to disable timeouts|not set|
+|keepalive|TCP Keepalive idle time|not set|
+|maximumPoolsize|Maximum number of connections allowed in the pool|not set|
+|minimumPoolsize|Minimum number of connections to leave in the pool if ConnectionIdleTimeout is reached|not set|
 |oldGuids|Set `true` to use a GUID of data type BINARY(16)|not set|
 |persistSecurityInfo|Set to `true` **_(not recommended)_** to allow the application to access to security-sensitive information, such as the password.|not set|
+|pooling|Enables connection pooling|not set|
 |treatTinyAsBoolean|Set to `false` to return tinyint(1) as sbyte/byte|not set|
 |useAffectedRows|Set to `false` to report found rows instead of changed (affected) rows|not set|
 |useCompression|If `true` (and server-supported), packets sent between client and server are compressed|not set|
