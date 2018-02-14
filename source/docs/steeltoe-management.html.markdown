@@ -5,25 +5,25 @@ date: 2016/4/1
 tags:
 ---
 
-Steeltoe includes a number of optional features you can add to your applications to aid in monitoring and managing it while its running in production. These features are implemented as a number of management endpoints which you can easily add to your application.
+Steeltoe includes a number of optional features you can add to your applications to aid in monitoring and managing it while it runs in production. These features are implemented as a number of management endpoints that you can easily add to your application.
 
-The way the endpoints are exposed and used depends on the type of technology you choose in exposing the functionality of the endpoint. Out of the box, Steeltoe provides an easy way to expose these endpoints using HTTP in an ASP.NET Core application. Of course you have the option to build and use whatever you would like to meet your needs and your situation.
+The way the endpoints are exposed and used depends on the type of technology you choose in exposing the functionality of the endpoint. Out of the box, Steeltoe provides an easy way to expose these endpoints by using HTTP in an ASP.NET Core application. Of course, you can build and use whatever you would like to meet your needs.
 
-When you expose the endpoints over HTTP, you are also able to easily integrate the endpoints with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html). The quick start below, explores this integration in more depth and you're encouraged to read the [Using Actuators with Apps Manager section](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html) of the Pivotal Cloud Foundry documentation for more details.
+When you expose the endpoints over HTTP, you can also integrate the endpoints with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html). The [quick start](#1-1-quick-start), explores this integration in more depth. You should read the [Using Actuators with Apps Manager section](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html) of the Pivotal Cloud Foundry documentation for more details.
 
-> Note: Currently the Steeltoe Management endpoints do not expose the `/mappings` endpoint which can be queried from the Pivotal Apps Manager.
+>NOTE: Currently, the Steeltoe Management endpoints do not expose the `/mappings` endpoint, which can be queried from the Pivotal Apps Manager.
 
 # 0.0 Initialize Dev Environment
 
-All of the Steeltoe sample applications are in the same repository. If you haven't already, use git to clone the repository or download with your browser from GitHub: [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples)
+All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples)repository or download with your browser from GitHub. The following command shows how to use git to get the samples:
 
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
-> Note: all Management samples in the Samples repository have a base path of `Samples/Management/src/`
+>NOTE: All Management samples in the Samples repository have a base path of `Samples/Management/src/`.
 
-Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space:
+Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, as shown in the following listing:
 
 ```bash
 > cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
@@ -33,39 +33,43 @@ or
 
 # 1.0 Management Endpoints
 
-Below is a table of all of the currently available Steeltoe management endpoints. More details on each is provided in upcoming sections.
+The following table describes all of the currently available Steeltoe management endpoints:
 
 |ID|Description|
 |---|---|
 |**health**|Customizable endpoint that reports application health information|
-|**info**|Customizable endpoint that reports arbitrary application information (e.g. Git Build info, etc.)|
+|**info**|Customizable endpoint that reports arbitrary application information (such as Git Build info and other details)|
 |**loggers**|Allows remote access and modification of logging levels in a .NET application|
-|**trace**|Reports a configurable set of trace information (e.g. last 100 HTTP requests)|
+|**trace**|Reports a configurable set of trace information (such as the last 100 HTTP requests)|
 |**dump**|Generates and reports a snapshot of the applications threads (Windows only)|
 |**heapdump**|Generates and downloads a mini-dump of the application (Windows only)|
 |**cloudfoundry**|Enables management endpoint integration with Pivotal Cloud Foundry|
 
+More detail on each endpoint is provided in upcoming sections.
+
 Note that the Steeltoe Management endpoints themselves support the following .NET application types:
 
-* ASP.NET - MVC, WebForm, WebAPI, WCF
+* ASP.NET (MVC, WebForm, WebAPI, WCF)
 * ASP.NET Core
 * Console apps (.NET Framework and .NET Core)
 
-When you use the provided Steeltoe components to expose the endpoints using HTTP, then you will find those components support ASP.NET Core.
+When you use the provided Steeltoe components to expose the endpoints using HTTP, you can see that those components support ASP.NET Core.
 
-In addition to the Quick Start below, there are other Steeltoe sample applications that you can refer to in order to help you understand how to use these endpoints:
+In addition to the [Quick Start](#1-1-quick-start), there are other Steeltoe sample applications that you can refer to in order to help you understand how to use these endpoints, including:
 
-* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore) - a sample app illustrating how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
+* [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore): A sample application showing how to use all of the Steeltoe components together in a ASP.NET Core application. This is a microservices-based application built from the ASP.NET Core MusicStore reference application provided by Microsoft.
 
 ## 1.1 Quick Start
 
-This quick start consists of an ASP.NET Core sample app illustrating how to use all of the above management endpoints on Cloud Foundry and integrating the endpoint information via HTTP with [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html).
+This quick start consists of an ASP.NET Core sample application showing how to use all of the management endpoints on Cloud Foundry and integrating the endpoint information over HTTP with [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html).
 
-For more information on how to use the Apps Manager with the Management endpoints, read the [Using Spring Boot Actuators with Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html) section.
+For more information on how to use the Apps Manager with the Management endpoints, read [Using Spring Boot Actuators with Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html).
 
 > Note: Steeltoe Management is not exclusive to Cloud Foundry
 
 ### 1.1.1 Locate Sample
+
+To get started, change directory to where the samples are stored, as follows:
 
 ```bash
 > cd Samples/Management/src/AspDotNetCore/CloudFoundry
@@ -73,7 +77,7 @@ For more information on how to use the Apps Manager with the Management endpoint
 
 ### 1.1.2 Create Service
 
-You must first create an instance of a MySql service in a org/space. This is necessary in order to illustrate how a custom Health contributor can be created to monitor the health of a connection to a back-end database.
+To show how a custom Health contributor can be created to monitor the health of a connection to a back-end database, you must first create an instance of a MySql service in a org and space, as shown in the following example:
 
 ```bash
 > # Create a MySql service instance on Cloud Foundry
@@ -95,7 +99,7 @@ See [Push Sample](#push-sample) for instructions on how to push this sample to e
 
 To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs actuator`)
 
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
+On a Linux cell, you should see something resembling the following during startup:
 
 ```bash
 2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
@@ -108,64 +112,66 @@ On a Linux cell, you should see something like this during startup. On Windows c
 2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
 ```
 
-### 1.1.6 What to expect
+On Windows cells, you should see something slightly different but with the same information.
 
-At this point the app is up and running.
+### 1.1.6 Accessing Endpoints
 
-You can access the management endpoints exposed by Steeltoe using the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html).
+At this point the app is running.
 
-The Steeltoe Management framework exposes Spring Boot Actuator compatable endpoints which can be used within the Pivotal Apps Manager. By using the Apps Manager, you can view the Apps Health, Build Information (e.g. Git info, etc), and recent Request/Response Traces, as well as manage/change the applications logging levels. In addition, when the application is running on a Windows cell, you will be able to get thread snapshots and generate and download mini-dumps of the application.
+You can access the management endpoints exposed by Steeltoe by using the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html).
 
-Check out the Pivotal Apps Manager, [Using Spring Boot Actuators](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html) for more information on how to use the Apps Manager.
+The Steeltoe Management framework exposes Spring Boot Actuator compatible endpoints that can be used within the Pivotal Apps Manager. By using the Apps Manager, you can view the Apps Health, Build Information (such as Git info and other details), and recent Request/Response Traces. You can also manage the applications logging levels. On a Windows cell, you can also get thread snapshots and generate and download mini-dumps of the application.
+
+Check out the Pivotal Apps Manager documentation section, [Using Spring Boot Actuators](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html), for more information on how to use the Apps Manager.
 
 ### 1.1.7 Understand Sample
 
-The sample was created using the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` )  and then modified to use the Steeltoe frameworks.
+The sample was created using the .NET Core tooling `mvc` template (`dotnet new mvc`)  and then modified to use the Steeltoe frameworks.
 
 To gain an understanding of the Steeltoe related changes to the generated template code,  examine the following files:
 
-* `CloudFoundry.csproj` - Multiple changes as follows:
+* `CloudFoundry.csproj`: Multiple changes as follows:
   * GitInfo `PackageReference` added to gather git build information for the App Info endpoint.
-  * _GitProperties `Target` added to build the `git.properties` file used by the Git App Info contributor.
-  * Added `Steeltoe.Management.CloudFoundry` package reference to bring in all Management endpoints for use on Cloud Foundry
-  * Added various MySql package references to enable use of MySql in the application
-* `Program.cs` - Code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry, to use CloudFoundry hosting and to setup Steeltoe dynamic logging.
-* `Startup.cs` - Multiple changes as follows:
+  * GitProperties `Target` added to build the `git.properties` file used by the Git App Info contributor. {JB - restore the underscore before GitProperties}
+  * Added `Steeltoe.Management.CloudFoundry` a package reference to bring in all Management endpoints for use on Cloud Foundry.
+  * Added various MySQL package references to enable the use of MySQL in the application.
+* `Program.cs`: Added code to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry, to use CloudFoundry hosting and to setup Steeltoe dynamic logging.
+* `Startup.cs`: Multiple changes, as follows:
   * Code added to `ConfigureServices()` to use the Steeltoe MySQL connector.
-  * Code added to `ConfigureServices()` to add a custom health contributor, `MySqlHealthContributor` to the service container.
+  * Code added to `ConfigureServices()` to add a custom health contributor, `MySqlHealthContributor`, to the service container.
   * Code added to `ConfigureServices()` to add all of the Steeltoe Management endpoints to the service container.
   * Code added to `Configure()` to add the Steeltoe Management middleware to the pipeline.
-* `MySqlHealthContributor.cs` - A custom Health contributor that monitors the MySql database.
+* `MySqlHealthContributor.cs`: A custom Health contributor that monitors the MySQL database.
 
 ## 1.2 Usage
 
-You should understand how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the management endpoints. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the endpoints.
+You should understand how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the management endpoints. You need at least a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder to configure the endpoints.
 
-You should also understand how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Specifically pay particular attention to the usage of the `ConfigureServices()`  and `Configure()` methods.
+You should also understand how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Pay particular attention to the usage of the `ConfigureServices()` and `Configure()` methods.
 
-> Note: Currently, code is provided to expose the Management endpoints via HTTP within ASP.NET Core applications. Future support for other application types is in the works.
+>NOTE: Currently, code is provided to expose the Management endpoints over HTTP within ASP.NET Core applications.
 
-As mentioned earlier, the available Steeltoe management endpoints that can be used in an application is shown below.
+The following table describes the available Steeltoe management endpoints that can be used in an application:
 
 |ID|Description|
 |---|---|
 |**health**|Customizable endpoint that gathers application health information|
-|**info**|Customizable endpoint that gathers arbitrary application information (e.g. Git Build info)|
+|**info**|Customizable endpoint that gathers arbitrary application information (such as Git Build info)|
 |**loggers**|Gathers existing loggers and allows modification of logging levels|
-|**trace**|Gathers a configurable set of trace information (e.g. last 100 HTTP requests)|
-|**dump**|Generates and reports a snapshot of the applications threads (Windows only)|
+|**trace**|Gathers a configurable set of trace information (such as the last 100 HTTP requests)|
+|**dump**|Generates and reports a snapshot of the application's threads (Windows only)|
 |**heapdump**|Generates and downloads a mini-dump of the application (Windows only)|
 |**cloudfoundry**|Enables management endpoint integration with Cloud Foundry|
 
-Each endpoint has an associated ID. When you want to expose that endpoint using HTTP, that ID is used in the mapped URL that exposes the endpoint. For example, the `health` endpoint below will be mapped to `/health`.
+Each endpoint has an associated ID. When you want to expose that endpoint over HTTP, that ID is used in the mapped URL that exposes the endpoint. For example, the `health` endpoint below is mapped to `/health`.
 
-> Note: When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you will need to configure the global management path prefix, as described in the [Endpoint Settings](#1-2-2-settings) section below, to be `/cloudfoundryapplication`. Simply add to your configuration: `management:endpoints:path=/cloudfoundryapplication`
+>NOTE: When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you need to configure the global management path prefix, as described in the [Endpoint Settings](#1-2-2-settings) section, to be `/cloudfoundryapplication`. To do so, add `management:endpoints:path=/cloudfoundryapplication` to your configuration.
 
 ### 1.2.1 Add Nuget References
 
-All of the above mentioned endpoints can be found in the `Steeltoe.Management.EndpointBase` package.
+All of the endpoints can be found in the `Steeltoe.Management.EndpointBase` package.
 
-If all you need is access to the functionality of the endpoints, and do *NOT* want to expose them using HTTP (i.e. you want to expose them some other way), then you can simply add the following `PackageReference` to your `.csproj` file:
+If all you need is access to the functionality of the endpoints, and you do *NOT* want to expose them over HTTP (in other words, you want to expose them some other way), then you can add the following `PackageReference` to your `.csproj` file:
 
 ```xml
 <ItemGroup>
@@ -175,7 +181,7 @@ If all you need is access to the functionality of the endpoints, and do *NOT* wa
 </ItemGroup>
 ```
 
-If you want to expose the endpoints using HTTP in an ASP.NET Core application, but do *NOT* want to integrate with the Pivotal Apps Manager, then you should add the following `PackageReference` to your `.csproj` file:
+If you want to expose the endpoints over HTTP in an ASP.NET Core application but do *NOT* want to integrate with the Pivotal Apps Manager, you should add the following `PackageReference` to your `.csproj` file:
 
 ```xml
 <ItemGroup>
@@ -185,9 +191,9 @@ If you want to expose the endpoints using HTTP in an ASP.NET Core application, b
 </ItemGroup>
 ```
 
-But most of the time you will want to expose the endpoints using HTTP in an ASP.NET Core application on Cloud Foundry and integrate with the Pivotal Apps Manager. In that case there is a package, `Steeltoe.Management.CloudFoundryCore` that you can reference which will bring in everything you need.
+However, most of the time, you probably want to expose the endpoints over HTTP in an ASP.NET Core application on Cloud Foundry and integrate with the Pivotal Apps Manager. In that case, you can reference a package called `Steeltoe.Management.CloudFoundryCore`, which will bring in everything you need.
 
-Simply add the following `PackageReference` to your `.csproj` file:
+To do so, add the following `PackageReference` to your `.csproj` file:
 
 ```xml
 <ItemGroup>
@@ -199,43 +205,39 @@ Simply add the following `PackageReference` to your `.csproj` file:
 
 ### 1.2.2 Settings
 
-Endpoints can be configured using the normal .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration). You can configure settings globally that apply to all endpoints, as well as configure settings that are specific to a particular endpoint.
+Endpoints can be configured by using the normal .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration). You can globally configure settings that apply to all endpoints as well as configure settings that are specific to a particular endpoint.
 
 All management settings should be placed under the prefix with the key `management:endpoints`. Any settings found under this prefix apply to all endpoints globally.
 
-Settings that you want to apply to a specific endpoint should be placed under the prefix with the key `management:endpoints` + `:` + ID (e.g. `management:endpoints:health`). Any settings you apply to a specific endpoint will override any settings applied globally.
+Settings that you want to apply to a specific endpoint should be placed under the prefix with the key `management:endpoints` + `:` + ID (for example, `management:endpoints:health`). Any settings you apply to a specific endpoint override any settings applied globally.
 
-Below are the settings that you can apply globally:
+The followinb table describes the settings that you can apply globally:
 
 |Key|Description|Default|
 |---|---|---|
-|enabled|Enable or disable all management endpoints|true|
-|path|Path prefix applied to all endpoints when exposed using HTTP|`/`|
+|enabled|Whether to enable all management endpoints|true|
+|path|The path prefix applied to all endpoints when exposed over HTTP|`/`|
 |sensitive|Currently not used|false|
 
-When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you will need to configure the global management path above, to be `/cloudfoundryapplication`.
+When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you need to configure the global management path to be `/cloudfoundryapplication`.
 
-In the upcoming sections you will find the settings that you can apply to specific endpoints.
+The upcoming sections show the settings that you can apply to specific endpoints.
 
 ### 1.2.3 Health
 
 The Steeltoe Health management endpoint can be used to check the status of your running application. It can often be used by monitoring software to alert someone if a production system goes down.
 
-Health information is collected from all [IHealthContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/IHealthContributor.cs) provided to the [HealthEndpoint](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/HealthEndpoint.cs). Steeltoe includes a few `IHealthContributor` out of the box that you can use, but more importantly you can also write your own.
+Health information is collected from all [IHealthContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/IHealthContributor.cs) implementations provided to the [HealthEndpoint](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/HealthEndpoint.cs). Steeltoe includes a few `IHealthContributor` implementations out of the box that you can use, and, more importantly, you can write your own.
 
-By default, the final application health state is computed by the [IHealthAggregator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/IHealthAggregator.cs) that is provided to the `HealthEndpoint`. The `IHealthAggregator` is responsible for sorting out the all of the returned statuses from each `IHealthContributor` and deriving a overall application health state. The [DefaultHealthAggregator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/DefaultHealthAggregator.cs) simply returns the `worst` status returned from all of the `IHealthContributors`.
+By default, the final application health state is computed by the [IHealthAggregator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/IHealthAggregator.cs) that is provided to the `HealthEndpoint`. The `IHealthAggregator` is responsible for sorting out the all of the returned statuses from each `IHealthContributor` and deriving an overall application health state. The [DefaultHealthAggregator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/DefaultHealthAggregator.cs) returns the `worst` status returned from all of the `IHealthContributors`.
 
 #### 1.2.3.1 Health Contributors
 
-The following are the Steeltoe provided `IHealthContributor` implementations:
-
-|Name|Description|
-|---|---|
-| [DiskSpaceContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/Contributor/DiskSpaceContributor.cs)|Checks for low disk space and you can configure using [DiskSpaceContributorOptions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/Contributor/DiskSpaceContributorOptions.cs)|
+At present, Steeltoe provides a single `IHealthContributor` implementation: `DiskSpaceContributor`. [DiskSpaceContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/Contributor/DiskSpaceContributor.cs) checks for low disk space. You can configure it by using [DiskSpaceContributorOptions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/Contributor/DiskSpaceContributorOptions.cs).
 
 To provide custom health information for your application, create a class that implements the `IHealthContributor` interface and then add that to the `HealthEndpoint`.
 
-Below is an example `IHealthContributor` that simply checks the availability of the back-end database by opening a connection and issuing a `SELECT 1;` against the database.
+The following example `IHealthContributor` checks the availability of the back-end database by opening a connection and issuing a `SELECT 1;` against the database:
 
 ```csharp
 public class MySqlHealthContributor : IHealthContributor
@@ -279,25 +281,27 @@ public class MySqlHealthContributor : IHealthContributor
 
 #### 1.2.3.2 Settings
 
-Below are the settings that you can apply to the Health endpoint. Each setting should be prefixed with `management:endpoints:health`
+The following table describes the settings that you can apply to the Health endpoint.
 
 |Key|Description|Default|
 |---|---|---|
 |id|The ID of the health endpoint|`health`|
-|enabled|Enable or disable health management endpoint|true|
-|path|Path to the health endpoint when exposed using HTTP|ID|
+|enabled|Whether to enable the health management endpoint|true|
+|path|The path to the health endpoint when exposed using HTTP|ID|
 |sensitive|Currently not used|false|
-|requiredPermissions|User permissions required on Cloud Foundry to access endpoint|RESTRICTED|
+|requiredPermissions|The user permissions required on Cloud Foundry to access endpoint|RESTRICTED|
+
+IMPORTANT: Each setting must be prefixed with `management:endpoints:health`.
 
 #### 1.2.3.3 HTTP Access
 
-The default path to the Health endpoint will be `/health`, unless either the global or the health endpoints `path` setting has been changed.
+The default path to the Health endpoint is `/health`, unless either the global or the health endpoints `path` setting has been changed.
 
 Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
 To add the Health actuator to the service container, use any one of the `AddHealthActuator()` extension methods from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Health/EndpointServiceCollectionExtensions.cs).
 
-To add custom `IHealthContributor`s to the service container, add the `IHealthContributor`s to the service container with the Scoped lifetime:
+The following example shows how to add custom `IHealthContributor`s to the service container by addinng the `IHealthContributor`s to the service container with the Scoped lifetime:
 
 ```csharp
 public class Startup
@@ -325,22 +329,22 @@ To add the Health actuator middleware to the ASP.NET Core pipeline, use the `Use
 
 ### 1.2.4 Info
 
-The Steeltoe Info management endpoint exposes various application information collected from all [IInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/IInfoContributor.cs) provided to the [InfoEndpoint](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/InfoEndpoint.cs). Steeltoe includes a few `IInfoContributor`s out of the box that you can use, but most importantly you can also write your own.
+The Steeltoe `Info` management endpoint exposes various application information collected from all [IInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/IInfoContributor.cs) provided to the [InfoEndpoint](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/InfoEndpoint.cs). Steeltoe includes a few `IInfoContributor`s out of the box that you can use, but most importantly you can also write your own.
 
 #### 1.2.4.1 Info Contributors
 
-The following are the Steeltoe provided `IInfoContributor` implementations:
+The following table describes the `IInfoContributor` implementations provided by Steeltoe:
 
 |Name|Description|
 |---|---|
-| [AppSettingsInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/Contributor/AppSettingsInfoContributor.cs)|Exposes any values from your configuration (e.g. `appsettings.json`) found under the key `info`|
-| [GitInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/Contributor/GitInfoContributor.cs)|Exposes git information if a git.properties file is available|
+| [AppSettingsInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/Contributor/AppSettingsInfoContributor.cs)|Exposes any values from your configuration (such as `appsettings.json`) under the key `info`|
+| [GitInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/Contributor/GitInfoContributor.cs)|Exposes git information (if a git.properties file is available)|
 
-> Note: For an example of how to use the `GitInfoContributor` with MSBuild via [GitInfo](https://github.com/kzu/GitInfo), see the [Steeltoe sample](https://github.com/SteeltoeOSS/Samples/tree/master/Management/src/AspDotNetCore/CloudFoundry) and specifically look at [CloudFoundry.csproj](https://github.com/SteeltoeOSS/Samples/blob/master/Management/src/AspDotNetCore/CloudFoundry/CloudFoundry.csproj).
+>NOTE: For an example of how to use the `GitInfoContributor` with MSBuild over [GitInfo](https://github.com/kzu/GitInfo), see the [Steeltoe sample](https://github.com/SteeltoeOSS/Samples/tree/master/Management/src/AspDotNetCore/CloudFoundry) and look at [CloudFoundry.csproj](https://github.com/SteeltoeOSS/Samples/blob/master/Management/src/AspDotNetCore/CloudFoundry/CloudFoundry.csproj).
 
 To provide custom information for your application, create a class that implements the `IInfoContributor` interface and add it to the `InfoEndpoint`.
 
-Below is an example `IInfoContributor` that simply adds `someKey=someValue` to the application's information.
+The following example `IInfoContributor` adds `someKey=someValue` to the application's information:
 
 ```csharp
 public class SampleInfoContributor : IInfoContributor
@@ -356,25 +360,27 @@ public class SampleInfoContributor : IInfoContributor
 
 #### 1.2.4.2 Settings
 
-Below are the settings that you can apply to the Info endpoint. Each setting should be prefixed with `management:endpoints:info`
+The following table describes the settings that you can apply to the `Info` endpoint:
 
 |Key|Description|Default|
 |---|---|---|
 |id|The ID of the info endpoint|`info`|
-|enabled|Enable or disable info management endpoint|true|
-|path|Path to the info endpoint when exposed using HTTP|ID|
+|enabled|Whether to enable info management endpoint|true|
+|path|The path to the info endpoint when exposed using HTTP|ID|
 |sensitive|Currently not used|false|
 |requiredPermissions|User permissions required on Cloud Foundry to access endpoint|RESTRICTED|
 
+>IMPORTANT: Each setting must be prefixed with `management:endpoints:info`.
+
 #### 1.2.4.3 HTTP Access
 
-The default path to the Info endpoint will be `/info`, unless either the global or the health endpoints `path` setting has been changed.
+The default path to the Info endpoint is `/info`, unless either the global or the health endpoints `path` setting has been changed.
 
 Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
-To add the Info actuator to the service container use any one of the `AddInfoActuator()` extension methods from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Info/EndpointServiceCollectionExtensions.cs).
+To add the Info actuator to the service container, you can use any of the `AddInfoActuator()` extension methods from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Info/EndpointServiceCollectionExtensions.cs).
 
-To add custom `IInfoContributor`s to the service container, add the `IInfoContributor`s to the service container with the Singleton lifetime:
+To add custom `IInfoContributor`s to the service container, add the `IInfoContributor`s to the service container with the Singleton lifetime, as shown in the following example:
 
 ```csharp
 public class Startup
@@ -409,7 +415,7 @@ You can view a list of all active loggers in an application and their current co
 
 #### 1.2.5.1 Settings
 
-Below are the settings that you can apply to the Loggers endpoint. Each setting should be prefixed with `management:endpoints:loggers`
+The following table describes the settings that you can apply to the Loggers endpoint.
 
 |Key|Description|Default|
 |---|---|---|
@@ -419,13 +425,15 @@ Below are the settings that you can apply to the Loggers endpoint. Each setting 
 |sensitive|Currently not used|false|
 |requiredPermissions|User permissions required on Cloud Foundry to access endpoint|RESTRICTED|
 
+>IMPORTANT: Each setting must be prefixed with `management:endpoints:loggers`.
+
 #### 1.2.5.2 HTTP Access
 
 The default path to the endpoint is `/loggers`, unless either the global or the health endpoints `path` setting has been changed.
 
 Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
-To add the [Steeltoe Logging provider](https://github.com/SteeltoeOSS/Logging) to the `ILoggerFactory`, update the `Program.cs` class as shown below.
+To add the [Steeltoe Logging provider](https://github.com/SteeltoeOSS/Logging) to the `ILoggerFactory`, update the `Program.cs` class, as shown in the following example:
 
 ```csharp
 using Steeltoe.Extensions.Logging;
@@ -458,7 +466,7 @@ public class Program
 }
 ```
 
-> Note: the Steeltoe logging provider is a wrapper around the [Microsoft Console Logging](https://github.com/aspnet/Logging) provider from Microsoft. This wrapper allows querying defined loggers and modifying the levels dynamically at runtime. For more information see the [Steeltoe Logging documentation](/docs/steeltoe-logging).
+>NOTE: The Steeltoe logging provider is a wrapper around the [Microsoft Console Logging](https://github.com/aspnet/Logging) provider from Microsoft. This wrapper allows querying defined loggers and modifying the levels dynamically at runtime. For more information, see the [Steeltoe Logging documentation](/docs/steeltoe-logging).
 
 To add the Loggers actuator to the service container, use the `AddLoggersActuator()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Loggers/EndpointServiceCollectionExtensions.cs).
 
@@ -466,15 +474,15 @@ To add the Loggers actuator middleware to the ASP.NET Core pipeline, use the `Us
 
 ### 1.2.6 Tracing
 
-The Steeltoe Tracing endpoint enables the ability to view the last several requests made of your application.
+The Steeltoe Tracing endpoint provides the ability to view the last several requests made of your application.
 
-When you activate the Tracing endpoint, a [ITraceRepository](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Trace/ITraceRepository.cs) is configured and created to hold [Trace](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Trace/Trace.cs) information that can be retrieved using the endpoint.
+When you activate the Tracing endpoint, an [ITraceRepository](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Trace/ITraceRepository.cs) implementation is configured and created to hold [Trace](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Trace/Trace.cs) information that can be retrieved using the endpoint.
 
-When the Tracing endpoint is used on an ASP.NET Core application, a [TraceObserver](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Trace/TraceObserver.cs) is used to gather details from each incoming HTTP request. The details that are gathered can be configured using the settings outlined below.
+When the Tracing endpoint is used on an ASP.NET Core application, a [TraceObserver](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Trace/TraceObserver.cs) is used to gather details from each incoming HTTP request. The gathered details can be configured by using the settings described in the next section.
 
 #### 1.2.6.1 Settings
 
-Below are the settings that you can apply to the Trace endpoint. Each setting should be prefixed with `management:endpoints:trace`
+The following table describes the settings that you can apply to the Trace endpoint:
 
 |Key|Description|Default|
 |---|---|---|
@@ -494,9 +502,11 @@ Below are the settings that you can apply to the Trace endpoint. Each setting sh
 |addSessionId|Add in session id|false|
 |addTimeTaken|Add in time take|true|
 
+>IMPORTANT: Each setting must be prefixed with `management:endpoints:trace`.
+
 #### 1.2.6.2 HTTP Access
 
-The default path to the Trace endpoint will be `/trace`, unless either the global or the health endpoints `path` setting has been changed.
+The default path to the Trace endpoint is `/trace`, unless either the global or the health endpoints `path` setting has been changed.
 
 Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
@@ -506,24 +516,26 @@ To add the Trace actuator middleware to the ASP.NET Core pipeline, use the `UseT
 
 ### 1.2.7 Thread Dump
 
-The Steeltoe Thread dump endpoint can be used to generate a snapshot of information about all the threads in your application. That snapshot includes several bits of information for each thread including the threads state, a stack trace, any monitor locks held by the thread, any monitor locks the thread is waiting on, etc.
+The Steeltoe Thread dump endpoint can be used to generate a snapshot of information about all the threads in your application. That snapshot includes several bits of information for each thread, including the thread's state, a stack trace, any monitor locks held by the thread, any monitor locks the thread is waiting on, and other details.
 
-> Note: At this time, thread dumps are only possible on the Windows operating system. When integrating with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you will not have the ability to obtain thread dumps from apps running in Linux cells.
+>NOTE: At this time, thread dumps are only possible on the Windows operating system. When integrating with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you do not have the ability to obtain thread dumps from apps running in Linux cells.
 
 #### 1.2.7.1 Settings
 
-Below are the settings that you can apply to the Thread dump endpoint. Each setting should be prefixed with `management:endpoints:dump`
+The following table describes the settings that you can apply to the Thread dump endpoint.:
 
 |Key|Description|Default|
 |---|---|---|
 |id|The ID of the thread dump endpoint|`dump`|
-|enabled|Enable or disable thread dump management endpoint|true|
-|path|Path to the thread dump endpoint when exposed using HTTP|ID|
+|enabled|Whether to enable the thread dump management endpoint|true|
+|path|The path to the thread dump endpoint when exposed over HTTP|ID|
 |sensitive|Currently not used|false|
+
+>IMPORTANT: Each setting must be prefixed with `management:endpoints:dump`.
 
 #### 1.2.7.2 HTTP Access
 
-The default path to the Thread Dump endpoint will be `/dump`, unless either the global or the thread dump endpoints `path` setting has been changed.
+The default path to the Thread Dump endpoint is `/dump`, unless either the global or the thread dump endpoints `path` setting has been changed.
 
 Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
@@ -535,22 +547,26 @@ To add the Thread dump actuator middleware to the ASP.NET Core pipeline, use the
 
 The Steeltoe Heap dump endpoint can be used to generate and download a mini-dump of your application. The mini-dump can then be read into Visual Studio for analysis.
 
-> Note: At this time, dumps are only possible on the Windows operating system. When integrating with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you will not have the ability to obtain dumps from apps running in Linux cells. Also, the heap dump filename used by the Pivotal Apps Manager will end with the extension `.hprof` instead of the expected `.dmp` extension. This may cause problems when opening the dump with Visual Studio or some other diagnostic tool. This issue will be fixed in a future release of the Apps Manager and as a workaround you can simply rename the file to use the `.dmp` extension.
+>NOTE: At this time, dumps are only possible on the Windows operating system. When integrating with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you do not have the ability to obtain dumps from apps running in Linux cells. Also, the heap dump filename used by the Pivotal Apps Manager ends with the `.hprof` extension instead of the usual `.dmp` extension. This may cause problems when opening the dump with Visual Studio or some other diagnostic tool. As a workaround, you can rename the file to use the `.dmp` extension.
 
 #### 1.2.8.1 Settings
 
-Below are the settings that you can apply to the Heap dump endpoint. Each setting should be prefixed with `management:endpoints:heapdump`
+The following table describes the settings that you can apply to the Heap dump endpoint:
 
 |Key|Description|Default|
 |---|---|---|
 |id|The ID of the heap dump endpoint|`heapdump`|
-|enabled|Enable or disable heap dump management endpoint|true|
-|path|Path to the heap dump endpoint when exposed using HTTP|ID|
+|enabled|Whether to enable the heap dump management endpoint|true|
+|path|The path to the heap dump endpoint when exposed over HTTP|ID|
 |sensitive|Currently not used|false|
+
+[//]: # (TODO The preceding table was clearly copied from earlier. That would be OK, except that the path is the same, which doesn't seem likely.)
+
+>IMPORTANT: Each setting must be prefixed with `management:endpoints:heapdump`.
 
 #### 1.2.8.2 HTTP Access
 
-The default path to the Heap Dump endpoint will be `/heapdump`, unless either the global or the thread dump endpoints `path` setting has been changed.
+The default path to the Heap Dump endpoint is `/heapdump`, unless either the global or the thread dump endpoints `path` setting has been changed.
 
 Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
@@ -560,35 +576,37 @@ To add the Heap dump actuator middleware to the ASP.NET Core pipeline, use the `
 
 ### 1.2.9 Cloud Foundry
 
- The primary purpose of this endpoint is to enable integration with the Pivotal Apps Manager. When used, the Steeltoe Cloud Foundry management endpoint enables the following additional functionality on Cloud Foundry:
+The primary purpose of this endpoint is to enable integration with the Pivotal Apps Manager. When used, the Steeltoe Cloud Foundry management endpoint enables the following additional functionality on Cloud Foundry:
 
-* Exposes an endpoint which can be queried to return the Ids and links to all of the enabled management endpoints in the application.
-* Adds Cloud Foundry security middleware to the request pipeline which secures access to the management endpoints using security tokens acquired from the UAA.
-* Adds extension methods which simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
+* Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
+* Adds Cloud Foundry security middleware to the request pipeline, to secure access to the management endpoints by using security tokens acquired from the UAA.
+* Adds extension methods that simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
 
-The path that you enable for querying enabled management endpoints must be configured in your settings. When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you should configure that to be `/cloudfoundryapplication`. See the section on settings below for details.
+The path that you enable for querying enabled management endpoints must be configured in your settings. When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you should configure the path to be `/cloudfoundryapplication`. See the [Settings section](#1-2-9-1-settings) for details.
 
-When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) will be added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints a valid UAA access token is provided as part of that request. Additionally, the security middleware will use the token to determine whether the authenticated user has the permissions needed to access the management endpoint.
+When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that, when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permission to access the management endpoint.
 
 #### 1.2.9.1 Settings
 
-Typically you will not need to do any additional configuration, but below are the additional settings that you could apply to the Cloud Foundry endpoint. Each setting should be prefixed with `management:endpoints:cloudfoundry`
+Typically, you need not do any additional configuration. However, the following tabl describes the additional settings that you could apply to the Cloud Foundry endpoint:
 
 |Key|Description|Default|
 |---|---|---|
 |id|The ID of the Cloud Foundry endpoint|""|
-|enabled|Enable or disable Cloud Foundry management endpoint|true|
-|path|Path to the Cloud Foundry endpoint when exposed using HTTP|""|
+|enabled|Whether to enable Cloud Foundry management endpoint|true|
+|path|The path to the Cloud Foundry endpoint when exposed using HTTP|""|
 |sensitive|Currently not used|false|
-|validateCertificates|Validate server certificates|true|
+|validateCertificates|Whether to validate server certificates|true|
 |applicationId|The ID of the application used in permissions check|VCAP settings|
 |cloudFoundryApi|The URL of the Cloud Foundry API|VCAP settings|
 
-> Note: When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) you will need to configure the global management path prefix, as described in the [Endpoint Settings](#1-2-2-settings) section above, to be `/cloudfoundryapplication`. Simply add to your configuration: `management:endpoints:path=/cloudfoundryapplication`
+>IMPORTANT: Each setting must be prefixed with `management:endpoints:cloudfoundry`.
+
+>NOTE: When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you need to configure the global management path prefix, as described in the [Endpoint Settings](#1-2-2-settings) section, to be `/cloudfoundryapplication`. To do so, add the following to your configuration: `management:endpoints:path=/cloudfoundryapplication`
 
 #### 1.2.9.2 HTTP Access
 
-The default path to the CloudFoundry Actuator endpoint is "/". Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
+The default path to the CloudFoundry Actuator endpoint is `/`. Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
 To add the CloudFoundry actuator to the service container, you can use the `AddCloudFoundryActuator()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointServiceCollectionExtensions.cs).
 
@@ -598,24 +616,21 @@ To add the Cloud Foundry actuator and security middleware to the ASP.NET Core pi
 
 ## Publish Sample
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
 
 ```bash
 > dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
 ```
+
+Then you can use one of the following commands to publish:
+
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
+* Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
 ## Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry by using the parameters that match what you selected for framework and runtime, as follows:
 
 ```bash
 > # Push to Linux cell
@@ -630,16 +645,16 @@ Use the Cloud Foundry CLI to push the published application to Cloud Foundry usi
 
 ## HTTP Access
 
-There are several steps to expose any of the management endpoints over HTTP:
+To expose any of the management endpoints over HTTP:
 
-* Add a reference to `Steeltoe.Management.EndpointCore` or `Steeltoe.Management.CloudFoundryCore`
-* Configure endpoint settings, as needed
-* `Add` the actuator to the service container (e.g. `AddHealthActuator()`)
-* `Use` the middleware to provide HTTP access ( e.g. `UseInfoActuator()`)
+1. Add a reference to `Steeltoe.Management.EndpointCore` or `Steeltoe.Management.CloudFoundryCore`.
+1. Configure endpoint settings, as needed.
+1. `Add` the actuator to the service container (for example, `AddHealthActuator()`).
+1. `Use` the middleware to provide HTTP access (for example, `UseInfoActuator()`).
 
-> Note: each endpoint will use the same host and port as the application. The default path to each endpoint is specified in its section on this page, along with specific `Add` and `Use` method names.
+>NOTE: Each endpoint uses the same host and port as the application. The default path to each endpoint is specified in its section on this page, along with specific `Add` and `Use` method names.
 
-If you are using all of the Steeltoe endpoints to integrate with Pivotal Apps Manager, use `AddCloudFoundryActuators()` and `UseCloudFoundryActuators()` to add them all at once instead of including individual methods:
+If you use all of the Steeltoe endpoints to integrate with Pivotal Apps Manager, use `AddCloudFoundryActuators()` and `UseCloudFoundryActuators()` to add them all at once instead of including individual methods, as shown in the following example:
 
 ```csharp
 public class Startup

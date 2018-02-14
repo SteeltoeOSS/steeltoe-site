@@ -7,31 +7,31 @@ tags:
 
 Steeltoe provides a number of Security related services that simplify using Cloud Foundry based OAuth2 security services in ASP.NET applications.
 
-These providers enable using the Cloud Foundry (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) for Authentication and Authorization credentials.
+These providers enable using Cloud Foundry security providers (such as [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Sign-on](https://docs.pivotal.io/p-identity/)) for Authentication and Authorization credentials.
 
-There are several providers to choose from when adding Cloud Foundry security integration:
+You can choose from several providers when adding Cloud Foundry security integration:
 
-* [OAuth2 Single Sign-on with Cloud Foundry Security services](#1-0-oauth2-single-sign-on) (ASP.NET Core)
-* [Using JWT tokens issued by Cloud Foundry for securing REST resources/endpoints](#2-0-resource-protection-using-jwt) (ASP.NET Core)
-* `Steeltoe.Security.Authentication.CloudFoundryOwin` for ASP.NET 4.x applications using OWIN
-* `Steeltoe.Security.Authentication.CloudFoundryWcf` for ASP.NET 4.x applications using WCF
+* [OAuth2 Single Sign-on with Cloud Foundry Security services](#1-0-oauth2-single-sign-on) (ASP.NET Core).
+* [Using JWT tokens issued by Cloud Foundry for securing REST resources/endpoints](#2-0-resource-protection-using-jwt) (ASP.NET Core).
+* `Steeltoe.Security.Authentication.CloudFoundryOwin` for ASP.NET 4.x applications using OWIN.
+* `Steeltoe.Security.Authentication.CloudFoundryWcf` for ASP.NET 4.x applications using WCF.
 
-In addition to Authentication/Authorization providers, Steeltoe Security offers:
+In addition to Authentication and Authorization providers, Steeltoe Security offers:
 
-* A security provider for [using Redis on Cloud Foundry with ASP.NET Core Data Protection Key Ring storage](#3-0-redis-key-storage-provider)
+* A security provider for [using Redis on Cloud Foundry with ASP.NET Core Data Protection Key Ring storage](#3-0-redis-key-storage-provider).
 * A [CredHub API Client for .NET applications](#4-0-credhub-api-client) to perform credential storage, retrieval and generation.
 
 # 0.0 Initialize Dev Environment
 
-All of the Steeltoe sample applications are in the same repository. If you haven't already, use git to clone the repository or download with your browser from GitHub: [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples)
+All of the Steeltoe sample applications are in the same repository. If you have not already done so, you can use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download with your browser from GitHub. The following git command clones the repository:
 
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
-> Note: all Security samples in the Samples repository have a base path of `Samples/Security/src/`
+>NOTE: All Security samples in the Samples repository have a base path of `Samples/Security/src/`.
 
-Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space:
+To make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, use the following commands:
 
 ```bash
 > cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
@@ -47,17 +47,19 @@ This provider enables log-in functionality with OAuth 2.0 and credentials provid
 
 Single Sign-on enables you to leverage existing credentials configured in a UAA Server or a Pivotal Single Sign-on service for authentication and authorization.
 
-In addition to the Quick Start, there are other Steeltoe sample applications that you can use to help you understand how to use this provider:
+In addition to the Quick Start, you can use other Steeltoe sample applications to help you understand how to use this provider, including:
 
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot microservices-based sample app illustrating inter-operability between Java and .NET on Cloud Foundry, secured with OAuth2 Security Services and using Spring Cloud Services.
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ): A polyglot microservices-based sample application showing interoperability between Java and .NET on Cloud Foundry, secured with OAuth2 Security Services, and using Spring Cloud Services.
 
 The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Security).
 
 ## 1.1 Quick Start
 
-This quick start uses an ASP.NET Core sample application to illustrate how to use the Steeltoe Cloud Foundry Single Sign-on provider for Authentication and Authorization against a Cloud Foundry UAA Server.
+This quick start uses an ASP.NET Core sample application to show how to use the Steeltoe Cloud Foundry Single Sign-on provider for Authentication and Authorization against a Cloud Foundry UAA Server.
 
 ### 1.1.1 Locate Sample
+
+To get started, change directory to the Cloud Foundry Single Sign-on sample, as follows:
 
 ```bash
 > cd Samples/Security/src/CloudFoundrySingleSignon
@@ -65,9 +67,9 @@ This quick start uses an ASP.NET Core sample application to illustrate how to us
 
 ### 1.1.2 Get UAA CLI
 
-Before creating the OAuth2 service instance, use the UAA command line tool to establish some security credentials for our sample app.
+Before creating the OAuth2 service instance, you can use the UAA command line tool to establish some security credentials for your sample application.
 
-To install the UAA command line tool and target your UAA server, you will first need to [install Ruby on your system](https://www.ruby-lang.org/en/documentation/installation/). Once Ruby is installed, install the UAA CLI using the following command:
+To install the UAA command line tool and target your UAA server, you first need to [install Ruby on your system](https://www.ruby-lang.org/en/documentation/installation/). Once Ruby is installed, you can install the UAA CLI by using the following command:
 
 ```bash
 > gem install cf-uaac
@@ -75,15 +77,15 @@ To install the UAA command line tool and target your UAA server, you will first 
 
 ### 1.1.3 Get Admin Client Token
 
-Next, using the UAA CLI, authenticate and obtain an access token for the `admin client` from the UAA server so that you can add the quick start application and user credentials.
+Next, using the UAA CLI, you can authenticate and obtain an access token for the `admin client` from the UAA server so that you can add the quick start application and user credentials.
 
-You will need the `Admin Client Secret` for your installation of Cloud Foundry in order to accomplish this.
+To accomplish this, you need the `Admin Client Secret` for your installation of Cloud Foundry.
 
-If you are using Pivotal Cloud Foundry (PCF), you can obtain this from the `Ops Manager/Elastic Runtime` credentials page under the `UAA` section.  Look for `Admin Client Credentials` and then use it in the following:
+If you use Pivotal Cloud Foundry (PCF), you can obtain this secret from the `Ops Manager/Elastic Runtime` credentials page under the `UAA` section. Look for `Admin Client Credentials` and then use it in the following commands:
 
 ```bash
 > # Target the UAA on Cloud Foundry
-> uaac target uaa.`YOUR-CLOUDFOUNDRY-SYSTEM-DOMAIN` (e.g. `uaac target uaa.system.testcloud.com`)
+> uaac target uaa.`YOUR-CLOUDFOUNDRY-SYSTEM-DOMAIN` # (for example, `uaac target uaa.system.testcloud.com`)
 >
 > # Obtain an Admin Client Access Token
 > uaac token client get admin -s `ADMIN_CLIENT_SECRET`
@@ -91,9 +93,9 @@ If you are using Pivotal Cloud Foundry (PCF), you can obtain this from the `Ops 
 
 ### 1.1.4 Add User and Group
 
-Next you will need to add a new `user` and `group` to the UAA Server database.
+Next, you need to add a new `user` and `group` to the UAA Server database.
 
-Do *not* change the group name: `testgroup` as that is used for policy based authorization in the quick start sample. Of course you can change the username and password to anything you would like.
+Do *not* change the group name, `testgroup`, as that is used for policy based authorization in the quick start sample. You can change the username and password to anything you like. The following commands show how to add a test group, add a user, add the user to the test group:
 
 ```bash
 > # Add group `testgroup`
@@ -108,7 +110,7 @@ Do *not* change the group name: `testgroup` as that is used for policy based aut
 
 ### 1.1.5 Add Application Client
 
-Next, add the quick start application as a new client for the UAA server to enable it to interact with the UAA server:
+Next, add the quick start application as a new client for the UAA server to enable it to interact with the UAA server, as follows:
 
 ```bash
 > uaac client add myTestApp --scope cloud_controller.read,cloud_controller_service_permissions.read,openid,testgroup \
@@ -125,9 +127,9 @@ Next, add the quick start application as a new client for the UAA server to enab
 
 Finally, create a user-provided service on Cloud Foundry to provide the appropriate UAA server configuration data to the application.
 
-You may either use the provided `credentials.json` file when creating the service or provide the parameters inline, but be sure to replace the `YOUR-CLOUDFOUNDRY-SYSTEM-DOMAIN` with your Cloud Foundry setup domain.
+You may either use the provided `credentials.json` file when creating the service or provide the parameters inline. Either way, you must replace the `YOUR-CLOUDFOUNDRY-SYSTEM-DOMAIN` with your Cloud Foundry setup domain.
 
-Once complete, do the following
+Once you have created a way to provide credentials, use the following commands:
 
 ```bash
 > # Create CUPs service with JSON file:
@@ -136,63 +138,67 @@ Once complete, do the following
 > cf cups myOAuthService -p "{\"client_id\": \"myTestApp\",\"client_secret\": \"myTestApp\",\"uri\": \"uaa://login.<YOUR-CLOUDFOUNDRY-SYSTEM-DOMAIN>\"}"
 ```
 
-> Note: the quote type and escaping for inline JSON will vary based on which terminal you use, please adjust accordingly
+>NOTE: The quote type and escaping for inline JSON varies based on which terminal you use, so you may have to adjust the preceding commands.
 
-### 1.1.7 Publish and Push Sample, observe logs
+### 1.1.7 Publish and Push Sample
 
-See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
 
-### 1.1.8 What to expect
+### 1.1.8 Observe Logs
 
-At this point the app is up and running. You can access it at <http://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/>.
+You can use the `cf logs` command to see log output.
 
-On the apps menu, click on the `Log in` menu item and you should be redirected to the Cloud Foundry login page. Enter dave and Password1!, or whatever name/password you used above, and you should be authenticated and redirected back to the single-signon home page.
+### 1.1.9 Logging in
 
-If you try and access the `About` menu item you should see the `About` page as user `dave` is a member of the group that is authorized to access the end point.
+At this point, the app is running. You can access it at <http://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/>.
 
-If you try and access the `Contact` menu item you should see `Access Denied, Insufficient permissions` as `dave` is not a member of `testgroup1` which is required in order to access the endpoint.
+On the Apps menu, click on the "Log in" menu item. You should be redirected to the Cloud Foundry login page. Enter the user name and password that you created earlier (`dave` and `Password1!` in the example code). You should be authenticated and redirected back to the single-signon home page.
 
-If you access the `InvokeJwtSample` menu item, you will find the app will attempt to invoke a secured endpoint in a second Security sample app; `CloudFoundryJwtAuthentication`. In order for this menu item to be functional, you must complete the [JWT Security Quick Start](#2-0-resource-protection-using-jwt) below.
+If you access the "About" menu item, you should see in the "About" page that user `dave` is a member of the group that is authorized to access the endpoint.
 
-After completing the JWT quick start and `CloudFoundryJwtAuthentication` is running, accessing the `InvokeJwtSample` menu item while logged in should return some `values` from the app. If you are not logged in, you will see a `401 (Unauthorized)` message.
+If you access the `Contact` menu item, you should see "Access Denied, Insufficient permissions" as `dave` is not a member of `testgroup1`, which is required to access the endpoint.
 
-### 1.1.9 Understand Sample
+If you access the `InvokeJwtSample` menu item, the application tries to invoke a secured endpoint in a second Security sample app: `CloudFoundryJwtAuthentication`. For this menu item to be functional, you must complete the [JWT Security Quick Start](#2-0-resource-protection-using-jwt).
 
-The `CloudFoundrySingleSignon` sample was created using the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`) and then modified to add the Steeltoe libraries.
+After completing the JWT quick start and `CloudFoundryJwtAuthentication` is running, accessing the `InvokeJwtSample` menu item while logged in should return some `values` from the app. If you are not logged in, you should see a `401 (Unauthorized)` message.
 
-To gain an understanding of the Steeltoe related changes to generated template code,  examine the following files:
+### 1.1.10 Understand Sample
 
-* `CloudFoundrySingleSignon.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundryCore` and also one for `Steeltoe.Security.Authentication.CloudFoundryCore`
-* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
-* `Startup.cs` - Code added to the `ConfigureServices()` method to `AddCloudFoundryOAuth` as an authentication service. Code was also added to define two authorization policies; one requiring `testgroup` claim, and the other requiring `testgroup1` claim. Additionally, in the `Configure()` method, `.UseAuthentication()` added the ASP.NET Authentication middleware to the request processing pipeline.
-* `HomeController.cs` - Several code changes were made to the controller:
-  * `Login()` and `LogOff()` action methods were added.
-  * `InvokeJwtSample()` added to make REST call to `CloudFoundryJwtAuthentication`.  Code was added here to grab the `access_token` from `HttpContext` and provide it in the request to `CloudFoundryJwtAuthentication`.
+The `CloudFoundrySingleSignon` sample was created by using the .NET Core tooling `mvc` template (`dotnet new mvc`) and then modified to add the Steeltoe libraries.
+
+To gain an understanding of the Steeltoe related changes to generated template code, examine the following files:
+
+* `CloudFoundrySingleSignon.csproj`: Contains the `PackageReference` for the Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundryCore` and one for the `Steeltoe.Security.Authentication.CloudFoundryCore`
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Startup.cs`: Code added to the `ConfigureServices()` method to use `AddCloudFoundryOAuth` as an authentication service. Code was also added to define two authorization policies: one requiring `testgroup` claim and the other requiring `testgroup1` claim. Additionally, in the `Configure()` method, `.UseAuthentication()` was added to the ASP.NET Authentication middleware in the request processing pipeline.
+* `HomeController.cs`: Several code changes were made to the controller:
+  * `Login()` and `LogOff()` had action methods added.
+  * `InvokeJwtSample()` was added to make REST call to `CloudFoundryJwtAuthentication`. Code was added here to grab the `access_token` from `HttpContext` and provide it in the request to `CloudFoundryJwtAuthentication`.
   * `[Authorize(Policy = "testgroup")]` was added to the `About()` action.
   * `[Authorize(Policy = "testgroup1")]` was added to the `Contact()` action.
-  * `Views folder` - Various view added for displaying results from the actions.
+  * `Views folder`: Various views added for displaying results from the actions.
 
 ## 1.2 Usage
 
 This package is built on the OAuth 2 authentication flow and the services provided by ASP.NET Core Security. You should take some time to understand both before proceeding to use this provider.
 
-Many resources are available for understanding OAuth 2; for example, see [Introduction to OAuth 2](https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2) or [Understanding OAuth 2](http://www.bubblecode.net/en/2016/01/22/understanding-oauth2/).
+Many resources are available for understanding OAuth 2. For example, see [Introduction to OAuth 2](https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2) or [Understanding OAuth 2](http://www.bubblecode.net/en/2016/01/22/understanding-oauth2/).
 
 To get a good understanding of ASP.NET Core Security, review the [documentation](https://docs.microsoft.com/en-us/aspnet/core/security) provided by Microsoft. If you are upgrading an application from ASP.NET Core 1.x, you may also want to review [Migrating Auth and Identity to ASP.NET Core 2.0](https://docs.microsoft.com/en-us/aspnet/core/migration/1x-to-2x/identity-2x).
 
-Additionally, you should have a good understanding of how the .NET [Configuration service](http://docs.asp.net/en/latest/fundamentals/configuration.html) works and a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder.
+Additionally, you should know how the .NET [Configuration service](http://docs.asp.net/en/latest/fundamentals/configuration.html) and the `ConfigurationBuilder` work and how to add providers to the builder.
 
-You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and the middleware used in the app. Pay particular attention to the usage of the `Configure()` and `ConfigureService())` methods.
+You should also know how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and how the middleware used in the application. Pay particular attention to the usage of the `Configure()` and `ConfigureService())` methods.
 
-With regard to Cloud Foundry, you should have a good understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)).
+With regard to Cloud Foundry, you should know how Cloud Foundry OAuth2 security services (for example, [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) work.
 
 In order to use the Security provider:
 
-* Create and bind an instance of a Cloud Foundry OAuth2 service to your application.
-* Configure any additional settings the Security provider will need. (Optional)
-* Add the Cloud Foundry configuration provider to the ConfigurationBuilder.
-* Add and Use the security provider in the application.
-* Secure your endpoints
+1. Create an instance of a Cloud Foundry OAuth2 service and bind it to your application.
+1. (Optional) Configure any additional settings the Security provider needs.
+1. Add the Cloud Foundry configuration provider to the `ConfigurationBuilder`.
+1. Add and use the security provider in the application.
+1. Secure your endpoints.
 
 ### 1.2.1 Add NuGet Reference
 
@@ -200,7 +206,7 @@ To use the provider, add a reference to the Steeltoe Cloud Foundry Security NuGe
 
 The provider can be found in the `Steeltoe.Security.Authentication.CloudFoundryCore` package.
 
-Add the provider to your project using the following `PackageReference`:
+You can add the provider to your project by using the following `PackageReference`:
 
 ```xml
 <ItemGroup>
@@ -212,7 +218,7 @@ Add the provider to your project using the following `PackageReference`:
 
 ### 1.2.2 Configure Settings
 
-Configuring additional settings for the provider is not typically required, but when Cloud Foundry is using self-signed certificates you might need to disable certificate validation:
+Configuring additional settings for the provider is not typically required, but, when Cloud Foundry is using self-signed certificates you might need to disable certificate validation, as shown in the following example:
 
 ```json
 {
@@ -235,17 +241,17 @@ Configuring additional settings for the provider is not typically required, but 
 }
 ```
 
-The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
+The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values).
 
 ### 1.2.3 Cloud Foundry
 
-As mentioned above, there are two ways to use OAuth2 services on Cloud Foundry. Rather than go in-depth here, we recommend you read the offical documentation ([UAA Server](https://github.com/cloudfoundry/uaa) and [Pivotal SSO](http://docs.pivotal.io/p-identity/1-5/getting-started.html)) or follow the instructions included in the samples for [UAA Server](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/CloudFoundrySingleSignon/README.md) and [Pivotal SSO](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/CloudFoundrySingleSignon/README-SSO.md) to quickly learn how to create and bind OAuth2 services.
+As mentioned earlier, there are two ways to use OAuth2 services on Cloud Foundry. We recommend you read the offical documentation ([UAA Server](https://github.com/cloudfoundry/uaa) and [Pivotal SSO](http://docs.pivotal.io/p-identity/1-5/getting-started.html)) or follow the instructions included in the samples for [UAA Server](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/CloudFoundrySingleSignon/README.md) and [Pivotal SSO](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/CloudFoundrySingleSignon/README-SSO.md) to quickly learn how to create and bind OAuth2 services.
 
-Regardless of which provider you choose, once the service is bound to your application, the settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading `VCAP_SERVICES`.
+Regardless of which provider you choose, once the service is bound to your application, the settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
 ### 1.2.4 Add Cloud Foundry OAuth
 
-In order to configure the Cloud Foundry OAuth provider in your application, configure and add it to the service container in the `ConfigureServices()` method of the `Startup` class:
+In order to configure the Cloud Foundry OAuth provider in your application, configure and add it to the service container in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
 
 ```csharp
 using Steeltoe.Security.Authentication.CloudFoundry;
@@ -286,7 +292,7 @@ The `AddCloudFoundryOAuth(Configuration)` method call configures and adds the Cl
 
 ### 1.2.5 Securing Endpoints
 
-Once the `Startup` class has been updated, secure endpoints with the standard ASP.NET Core `Authorize` attribute:
+Once the `Startup` class has been updated, you can secure endpoints with the standard ASP.NET Core `Authorize` attribute, as shown in the following example:
 
 ```csharp
 using Microsoft.AspNetCore.Authentication;
@@ -316,30 +322,32 @@ public class HomeController : Controller
 }
 ```
 
-The above example code establishes the following security rules:
+The preceding example code establishes the following security rules:
 
-* If a user attempts to access the `About` action and the user is not authenticated, then the user will be redirected to the OAuth2 server (e.g. UAA Server) to login.
-* If an authenticated user attempts to acces the `Contact` action but does not meet the restrictions established by the policy `testgroup1`, the user will be denied access.
+* If a user attempts to access the `About` action and the user is not authenticated, then the user is redirected to the OAuth2 server (such as a UAA Server) to login.
+* If an authenticated user attempts to access the `Contact` action but does not meet the restrictions established by the policy `testgroup1`, the user is denied access.
 
-> See the Microsoft documentation on [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) for more information.
+>TIP: See the Microsoft documentation on [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction).
 
 # 2.0 Resource Protection using JWT
 
 <span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
-This provider enables you to control access to REST resources by using JWT tokens issued by Cloud Foundry Security services (e.g. UAA or Pivotal Single Signon) in ASP.NET Core.
+This provider lets you control access to REST resources by using JWT tokens issued by Cloud Foundry Security services (such as UAA or Pivotal Single Signon) in ASP.NET Core.
 
-In addition to the Quick Start below there are other Steeltoe sample applications to help you understand how to use this connector:
+In addition to the [Quick Start](#2-1-quick-start), other Steeltoe sample applications can help you understand how to use this connector, including:
 
-* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ) - a polyglot microservices-based sample illustrating inter-operability between Java and .NET on Cloud Foundry, secured with OAuth2 Security Services and using Spring Cloud Services.
+* [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ): A polyglot microservices-based sample showing interoperability between Java and .NET on Cloud Foundry, secured with OAuth2 Security Services, and using Spring Cloud Services.
 
 ## 2.1 Quick Start
 
-This quick start uses an ASP.NET Core application with web api endpoints secured using JWT Bearer tokens issued by the Cloud Foundry UAA server.
+This quick start uses an ASP.NET Core application with web API endpoints secured by JWT Bearer tokens issued by the Cloud Foundry UAA server.
 
-> Note: This application is for use with the quick start application above, `CloudFoundrySingleSignon`. Complete that quick start and leave it running on Cloud Foundry before following these instructions.
+>NOTE: This application is for use with the quick start application above, `CloudFoundrySingleSignon`. Complete that quick start and leave it running on Cloud Foundry before following these instructions.
 
 ### 2.1.1 Locate Sample
+
+To get started, change directory to where the samples are stored, as follows:
 
 ```bash
 > cd Samples/Security/src/CloudFoundryJwtAuthentication
@@ -347,52 +355,56 @@ This quick start uses an ASP.NET Core application with web api endpoints secured
 
 ### 2.1.2 Do OAuth SSO Quick Start
 
-As mentioned above, this application is intended to be used in conjunction with the quick start application `CloudFoundrySingleSignon`. Make sure you have completed that quick start before proceeding.
+This application works in conjunction with the [`CloudFoundrySingleSignon`](#1-0-oauth2-single-sign-on) quick start application. Make sure you have completed that quick start before proceeding.
 
-### 2.1.3  Publish and Push Sample, observe logs
+### 2.1.3  Publish and Push Sample
 
-See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
 
-### 2.1.6 What to expect
+### 2.1.4 Observe Logs
 
-Once the application is up and running, use the quick start application above, `CloudFoundrySingleSignon`, to access it.
+You can use the `cf logs` command to see log output.
 
-### 2.1.7 Understand Sample
+### 2.1.5 Access the Application
 
-The `CloudFoundryJwtAuthentication` sample was created using the .NET Core tooling `webapi` template (i.e. `dotnet new webapi`) and then modified to add the Steeltoe libraries.
+Once the application is running, use the [`CloudFoundrySingleSignon`](#1-0-oauth2-single-sign-on) quick start application to access it.
+
+### 2.1.6 Understand the Sample
+
+The `CloudFoundryJwtAuthentication` sample was created with the .NET Core tooling `webapi` template (`dotnet new webapi`) and then modified to add the Steeltoe libraries.
 
 To understand the Steeltoe related changes to generated template code, examine the following files:
 
-* `CloudFoundryJwtAuthentication.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundryCore` and also one for `Steeltoe.Security.Authentication.CloudFoundryCore`
-* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `CloudFoundryJwtAuthentication` to the service container. Code was also added to define two authorization policies; one requiring a `testgroup` claim, and the other requiring a `testgroup1` claim. Additionally, in the `Configure()` method, `.UseAuthentication()` added the ASP.NET Authentication middleware to the request processing pipeline.
-* `ValuesController.cs` - One code change was made to the controller; `[Authorize(Policy = "testgroup")]` was added to the `Get()` action.
+* `CloudFoundryJwtAuthentication.csproj`: Contains th `PackageReference` for the Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundryCore` and also one for `Steeltoe.Security.Authentication.CloudFoundryCore`.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Startup.cs`: Code was added to the `ConfigureServices()` method to add a `CloudFoundryJwtAuthentication` to the service container. Code was also added to define two authorization policies: one requiring a `testgroup` claim and the other requiring a `testgroup1` claim. Additionally, in the `Configure()` method, `.UseAuthentication()` was added the ASP.NET Authentication middleware in the request processing pipeline.
+* `ValuesController.cs`: `[Authorize(Policy = "testgroup")]` was added to the `Get()` action of the cotroller.
 
 ## 2.2 Usage
 
-This package makes use of JSON Web Tokens (JWT) and builds on JWT Security services provided by ASP.NET Core Security. You should take some time to understand both before proceeding to use this provider.
+This package uses JSON Web Tokens (JWT) and builds on JWT Security services provided by ASP.NET Core Security. You should take some time to understand both before proceeding to use this provider.
 
-Many resources are available for understanding JWT; for example, see [JWT IO](https://jwt.io/) or [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token).
+Many resources are available for understanding JWT (for example, see [JWT IO](https://jwt.io/) or [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token)).
 
 To get a good understanding of ASP.NET Core Security, review the [documentation](https://docs.microsoft.com/en-us/aspnet/core/) provided by Microsoft.
 
-Additionally, you should have a good understanding of how the .NET [Configuration services](http://docs.asp.net/en/latest/fundamentals/configuration.html) works and a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder.
+Additionally, you should know how the .NET [Configuration services](http://docs.asp.net/en/latest/fundamentals/configuration.html) the `ConfigurationBuilder` work and how to add providers to the builder.
 
-You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and the middleware used by the app. Pay particular attention to the usage of the `Configure()` and `ConfigureServices()` methods.
+You should also know how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and how the middleware is used by the app. Pay particular attention to the usage of the `Configure()` and `ConfigureServices()` methods.
 
-With regard to Cloud Foundry, you should have a good understanding of Cloud Foundry OAuth2 security services (e.g. [UAA Server](https://github.com/cloudfoundry/uaa) and/or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) along with an understanding how they use and issue JWT.
+With regard to Cloud Foundry, you should have a good understanding of Cloud Foundry OAuth2 security services (such as [UAA Server](https://github.com/cloudfoundry/uaa) or [Pivotal Single Signon](https://docs.pivotal.io/p-identity/)) along with an understanding how they use and issue JWT.
 
 To use the JWT Security provider:
 
-* Create and bind an instance of a Cloud Foundry OAuth2 service to your application.
-* Configure any additional settings the Security provider will need. (Optional)
-* Add the Cloud Foundry configuration provider to the ConfigurationBuilder.
-* Add and Use the security provider in the application.
-* Secure your endpoints
+1. Create and bind an instance of a Cloud Foundry OAuth2 service to your application.
+1. (Optional) Configure any additional settings the Security provider will need.
+1. Add the Cloud Foundry configuration provider to the ConfigurationBuilder.
+1. Add and Use the security provider in the application.
+1. Secure your endpoints
 
 ### 2.2.1 Add NuGet Reference
 
-To use the provider, add a reference to the Steeltoe Cloud Foundry Security NuGet package: `Steeltoe.Security.Authentication.CloudFoundryCore` with the NuGet package manager or directly to your project file using the following `PackageReference`:
+To use the provider, add a reference to the Steeltoe Cloud Foundry Security NuGet package, `Steeltoe.Security.Authentication.CloudFoundryCore`, with the NuGet package manager or directly to your project file by using the following `PackageReference`:
 
 ```xml
 <ItemGroup>
@@ -404,7 +416,7 @@ To use the provider, add a reference to the Steeltoe Cloud Foundry Security NuGe
 
 ### 2.2.2 Configure Settings
 
-Configuring additional settings for the provider is not typically required, but when Cloud Foundry is using self-signed certificates you might need to disable certificate validation:
+Configuring additional settings for the provider is not typically required, but, when Cloud Foundry uses self-signed certificates, you might need to disable certificate validation, as shown in the following example:
 
 ```json
 {
@@ -427,17 +439,17 @@ Configuring additional settings for the provider is not typically required, but 
 }
 ```
 
-The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
+The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values).
 
 ### 2.2.3 Cloud Foundry
 
-As mentioned earlier there are a couple OAuth2 services (e.g. UAA Server or Pivotal SSO) you can use on Cloud Foundry. Rather than explaining the steps here on how to create and bind OAuth2 services to your app, we recommend you read the documentation provided by each of the service providers.
+As mentioned earlier. you can use a couple of OAuth2 services (such as UAA Server or Pivotal SSO) on Cloud Foundry. Rather than explaining how to create and bind OAuth2 services to your app here, we recommend that you read the documentation provided by each of the service providers.
 
-Regardless of which provider you choose, once the service is bound to your application, the settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
+Regardless of which provider you choose, once the service is bound to your application, the settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
 ### 2.2.4 Add Cloud Foundry JwtAuthentication
 
-To use the provider in your application, add it to your service collection in the `ConfigureServices()` method of the `Startup` class:
+To use the provider in your application, add it to your service collection in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
 
 ```csharp
 using Steeltoe.Security.Authentication.CloudFoundryCore;
@@ -471,15 +483,15 @@ public class Startup {
     ...
 ```
 
-The `AddCloudFoundryJwtBearer(Configuration)` method call configures and adds the Cloud Foundry JWT authentication service to the service container. Once in place, it can be used by the authentication middleware during request processing.
+The `AddCloudFoundryJwtBearer(Configuration)` method call configures and adds the Cloud Foundry JWT authentication service to the service container. Once in place, the authentication middleware can use it during request processing.
 
 ### 2.2.6 Securing Endpoints
 
-Once you have the work done in your `Startup` class you can then you can start to secure endpoints using the standard ASP.NET Core `Authorize` attribute.
+Once you have the work done in your `Startup` class, you can then you can start to secure endpoints by using the standard ASP.NET Core `Authorize` attribute.
 
-See the Microsoft documentation on  [ASP.NET Core Security](https://docs.asp.net/en/latest/security/) for a better understanding of how to use these attributes.
+See the Microsoft documentation on [ASP.NET Core Security](https://docs.asp.net/en/latest/security/) for a better understanding of how to use these attributes.
 
-Here is an example of a controller using the security attributes:
+The following example shows a controller using the security attributes:
 
 ```csharp
 using Microsoft.AspNetCore.Authentication;
@@ -498,19 +510,21 @@ public class ValuesController : Controller
 }
 ```
 
-In the example above, if an incoming REST request is made to the `api/values` endpoint, and the request does not contain a valid JWT bearer token with a `scope` claim equal to `testgroup` the request will be rejected.
+In the preceding example, if an incoming REST request is made to the `api/values` endpoint and the request does not contain a valid JWT bearer token with a `scope` claim equal to `testgroup`, the request is rejected.
 
 # 3.0 Redis Key Storage Provider
 
 <span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
-By default, ASP.NET Core stores the key ring on the local file system. Local file system usage in a Cloud Foundry environment is un-workable and violates the twelve-factor guidelines for developing cloud native applications. Using the Steeltoe Redis Key Storage provider, you can reconfigure the Data Protection service to use Redis on Cloud Foundry for storage.
+By default, ASP.NET Core stores the key ring on the local file system. Local file system usage in a Cloud Foundry environment is unworkable and violates the [twelve-factor guidelines](https://12factor.net/) for developing cloud native applications. By using the Steeltoe Redis Key Storage provider, you can reconfigure the Data Protection service to use Redis on Cloud Foundry for storage.
 
 ## 3.1 Quick Start
 
-This quick start makes use of an ASP.NET Core application to illustrate how to use a Redis cache on Cloud Foundry for storing Data Protection keys.
+This quick start uses an ASP.NET Core application to show how to use a Redis cache on Cloud Foundry for storing Data Protection keys.
 
 ### 3.1.1 Locate Sample
+
+To get started, change directory to where the samples are stored, as follows:
 
 ```bash
 > cd Samples/Security/src/RedisDataProtectionKeyStore
@@ -518,20 +532,23 @@ This quick start makes use of an ASP.NET Core application to illustrate how to u
 
 ### 3.1.2 Create Service
 
-Create an instance of the Redis service in an org/space:
+Create an instance of the Redis service in an org and space, as follows:
 
 ```bash
 > # Create Redis service
 > cf create-service p-redis shared-vm myRedisService
 ```
 
-### 3.1.3 Publish and Push Sample, observe logs
+### 3.1.3 Publish and Push Sample
 
-See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
 
-### 3.1.6 What to expect
+### 3.1.4 Observe Logs
+You can use the `cf logs` command to see log output.
 
-At this point the app is up and running. Bring up the home page of the app and click on the `Protected` link in the menu and you should see something like the following:
+### 3.1.5 Access the Application
+
+At this point, the application is running. Bring up the home page of the application and click on the `Protected` link in the menu. You should see content resembling the following:
 
 ```text
 Protected Data.
@@ -540,43 +557,43 @@ SessionId=989f8693-b43b-d8f0-f48f-187460f2aa02
 ProtectedData=My Protected String - 6f954faa-e06d-41b9-b88c-6e387a921420
 ```
 
-At this point the app has created a new Session with the ProtectedData encrypted and saved in the Session. The `SessionId` assigned to the session is shown along with the data that was created, encrypted and put into the session.
+At this point, the application has created a new Session with the `ProtectedData` encrypted and saved in the `Session`. The `SessionId` assigned to the session is shown along with the data that was created, encrypted, and put into the session.
 
-Next, scale the app to multi-instance (eg. `cf scale keystore -i 2`) and wait for the new instance(s) to startup.
+Next, scale the app to multi-instance (for example, by using `cf scale keystore -i 2`) and wait for the new instances to startup.
 
 Using the same browser session, click on the `Protected` menu item a couple more times. It may take a couple clicks to get routed to the second app instance.
 
-When this happens, you should see the `InstanceId` changing but the `SessionId` and the `ProtectedData` remaining the same.
+When this happens, you should see the `InstanceId` change but the `SessionId` and the `ProtectedData` remain the same.
 
-A couple things to note at this point about this app:
+You should note the following about the application:
 
-* The app is using the Cloud Foundry Redis service to store session data.  As a result, the session data is available to all running instances of the app.
-* The `session handle` that is stored in the Session Cookie sent down to the browser along with the data that is stored in the Session in Redis has been encrypted using keys that are now stored in the key ring which is also stored in the Cloud Foundry Redis service.
-* When you scale the app to multiple instances the same key-ring will be used by all instances of the app and therefore the `session handle` and the Session data can be decrypted by any instance of the application.
+* The app uses the Cloud Foundry Redis service to store session data. As a result, the session data is available to all running instances of the application.
+* The `session handle` that is stored in the Session Cookie sent down to the browser along with the data that is stored in the Session in Redis has been encrypted with keys that are now stored in the key ring, which is also stored in the Cloud Foundry Redis service.
+* When you scale the app to multiple instances, the same key ring is used by all instances of the application. Therefore, the `session handle` and the Session data can be decrypted by any instance of the application.
 
-### 3.1.7 Understand Sample
+### 3.1.6 Understand Sample
 
-The `RedisDataProtectionKeyStore` sample was created using the .NET Core tooling `mvc` template (i.e. `dotnet new mvc`) and then modified to add the Steeltoe libraries.
+The `RedisDataProtectionKeyStore` sample was created by using the .NET Core tooling `mvc` template (`dotnet new mvc`) and then modified to add the Steeltoe libraries.
 
-To understand the Steeltoe related changes to generated template code,  examine the following files:
+To understand the Steeltoe related changes to generated template code, examine the following files:
 
-* `RedisDataProtectionKeyStore.csproj` - Contains `PackageReference`s for Steeltoe NuGets `Steeltoe.Security.DataProtection.Redis`, `Steeltoe.CloudFoundry.Connector.Redis`, and `Steeltoe.Extensions.Configuration.CloudFoundry`.
-* `Program.cs` - added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
-* `HomeController.cs` - Added `Protected` action to encrypt some data using the Data Protection service and to add the data to the Session.
-* `Protected.cshtml` - The view used to display the data returned from the Session.
-* `Startup.cs` - Several changes made:
-  * Modified the `ConfigureServices()` method adding `RedisConnectionMultiplexer` to the service container by using Steeltoe Redis connector.
-  * Configured `DataProtection` to `PersistKeysToRedis` using the Steeltoe Redis Key Storage Provider.
-  * Added a `IDistributedCache` to the service container, configured by Steeltoe Redis connector.  This causes the ASP.NET Core Session service to use this cache for storage.
+* `RedisDataProtectionKeyStore.csproj`: Contains the `PackageReference`s for the Steeltoe NuGet `Steeltoe.Security.DataProtection.Redis`, `Steeltoe.CloudFoundry.Connector.Redis`, and `Steeltoe.Extensions.Configuration.CloudFoundry`.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and added `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `HomeController.cs`: Added `Protected` action to encrypt some data by using the Data Protection service and to add the data to the Session.
+* `Protected.cshtml`: The view used to display the data returned from the Session.
+* `Startup.cs`: Several changes were made:
+  * Modified the `ConfigureServices()` method, adding `RedisConnectionMultiplexer` to the service container by using Steeltoe Redis connector.
+  * Configured `DataProtection` to `PersistKeysToRedis` by using the Steeltoe Redis Key Storage Provider.
+  * Added a `IDistributedCache` to the service container and configured by Steeltoe Redis connector. This causes the ASP.NET Core Session service to use this cache for storage.
 
 ## 3.2 Usage
 
 To use this provider:
 
-* Create and bind a Redis Service instance to your application.
-* Add Steeltoe Cloud Foundry config provider to your ConfigurationBuilder.
-* Add Redis ConnectionMultiplexer to your ServiceCollection.
-* Add DataProtection to your ServiceCollection & configure it to PersistKeysToRedis.
+1. Create a Redis Service instance and bind it to your application.
+1. Add the Steeltoe Cloud Foundry config provider to your `ConfigurationBuilder`.
+1. Add the Redis `ConnectionMultiplexer` to your ServiceCollection.
+1. Add `DataProtection` to your `ServiceCollection` and configure it to `PersistKeysToRedis`.
 
 ### 3.2.1 Add NuGet Reference
 
@@ -584,7 +601,7 @@ To use the provider, add a reference to the Steeltoe DataProtection Redis NuGet.
 
 The provider can be found in the `Steeltoe.Security.DataProtection.RedisCore` package.
 
-Add the provider to your project using the following `PackageReference` in your project file.
+You can add the provider to your project byusing the following `PackageReference` in your project file:
 
 ```xml
 <ItemGroup>
@@ -594,9 +611,9 @@ Add the provider to your project using the following `PackageReference` in your 
 </ItemGroup>
 ```
 
-You will also need the Steeltoe Redis connector. Add the `Steeltoe.CloudFoundry.ConnectorCore` package to get the Redis connector and helpers for setting it up.
+You also need the Steeltoe Redis connector. Add the `Steeltoe.CloudFoundry.ConnectorCore` package to get the Redis connector and helpers for setting it up.
 
-Use the NuGet Package Manager tools or directly add the following package reference to your .csproj file:
+You can use the NuGet Package Manager tools or directly add the following package reference to your .csproj file:
 
 ```xml
 <ItemGroup>
@@ -608,7 +625,7 @@ Use the NuGet Package Manager tools or directly add the following package refere
 
 ### 3.2.2 Cloud Foundry
 
-To use Redis Data Protection key ring provider on Cloud Foundry you have to install a Redis service and create and bind a instance of it to your application using the Cloud Foundry command line:
+To use the Redis Data Protection key ring provider on Cloud Foundry, you have to install a Redis service and create and bind an instance of it to your application by using the Cloud Foundry command line, as shown in the following example:
 
 ```bash
 > # Create Redis service
@@ -621,15 +638,15 @@ To use Redis Data Protection key ring provider on Cloud Foundry you have to inst
 > cf restage myApp
 ```
 
-> Note: The commands above are for the Redis service provided by Pivotal on Cloud Foundry. If you are using a different service you will have to adjust the `create-service` command.
+>NOTE: The preceding commands are for the Redis service provided by Pivotal on Cloud Foundry. If you use a different service, you have to adjust the `create-service` command.
 
-Once the service is bound to your application, the settings will be available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
+Once the service is bound to your application, the settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
 ### 3.2.3 Add Redis IConnectionMultiplexer
 
 The next step is to add the StackExchange Redis `IConnectionMultiplexer` to your service container.
 
-You do this in the `ConfigureServices()` method of the `Startup` class by using the Steeltoe Redis Connector as follows:
+You can do so in the `ConfigureServices()` method of the `Startup` class by using the Steeltoe Redis Connector, as follows:
 
 ```csharp
 using Steeltoe.CloudFoundry.Connector.Redis;
@@ -659,7 +676,7 @@ See the documentation on the [Steeltoe Redis connector](../steeltoe-connectors/#
 
 The last step is to use the provider to configure DataProtection to persist keys to Redis.
 
-Again, you do this in the `ConfigureServices()` method of the `Startup` class:
+You can do so in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
 
 ```csharp
 using Steeltoe.CloudFoundry.Connector.Redis;
@@ -690,31 +707,37 @@ public class Startup {
 
 ### 3.2.5 Use Redis Key Store
 
-Once this has been setup, the keys used by the DataProtection framework will be stored in the bound Redis Cloud Foundry service.  There is nothing more that you need to do.
+Once the Redis Key Store has been set up, the keys used by the `DataProtection` framework are stored in the bound Redis Cloud Foundry service. You need not do more.
 
 # 4.0 CredHub API Client
 
-[CredHub](https://github.com/cloudfoundry-incubator/credhub) manages credentials like passwords, certificates, certificate authorities, ssh keys, rsa keys and arbitrary values. Steeltoe provides the `CredHubBase` library for interacting with the [CredHub API](https://credhub-api.cfapps.io/) and the `CredHubCore` library for making that client library simpler to use in ASP.NET Core applications. Cloud Foundry is not _required_ for the CredHub server or client, but will be used in this documentation as the hosting environment. You may wish to review the documentation for [CredHub on PCF](https://docs.pivotal.io/pivotalcf/2-0/credhub/).
+[CredHub](https://github.com/cloudfoundry-incubator/credhub) manages credentials such as  passwords, certificates, certificate authorities, ssh keys, rsa keys, and other arbitrary values. Steeltoe provides the `CredHubBase` library for interacting with the [CredHub API](https://credhub-api.cfapps.io/) and provides the `CredHubCore` library for making that client library simpler to use in ASP.NET Core applications. Cloud Foundry is not required for the CredHub server or client but is used in this documentation as the hosting environment. You may wish to review the documentation for [CredHub on PCF](https://docs.pivotal.io/pivotalcf/2-0/credhub/).
 
-> WARNING: As of this writing, CredHub is not approved for general use in all applications; you are encouraged to check if your use case is currently supported by CredHub before getting too involved.
+>WARNING: As of this writing, CredHub is not approved for general use in all applications. We encourage you to check whether your use case is currently supported by CredHub before getting too involved.
 
 ## 4.1 Quick Start
 
-This quick start uses an ASP.NET Core application to illustrate how to use CredHub for storing, reading, updating, deleting, generating, regenerating and interpolating credentials. This application assumes that a CredHub server will be accessible at <https://credhub.service.cf.internal:8844>, which is the default address and port for a CredHub server running in Pivotal Cloud Foundry 2.0. This address is not accessible from outside of Cloud Foundry, and can be overridden with [CredHubClient settings](#4-2-2-configure-settings) as needed.
+This quick start uses an ASP.NET Core application to show how to use CredHub for storing, reading, updating, deleting, generating, regenerating, and interpolating credentials. This application assumes that a CredHub server is accessible at <https://credhub.service.cf.internal:8844>, which is the default address and port for a CredHub server running in Pivotal Cloud Foundry 2.0. This address is not accessible from outside of Cloud Foundry and can be overridden with [CredHubClient settings](#4-2-2-configure-settings) as needed.
 
 ### 4.1.1 Locate Sample
+
+To get started, change directory to where the samples are stored, as follows:
 
 ```bash
 > cd Samples/Security/src/CredHubDemo
 ```
 
-### 4.1.2 Publish and Push Sample, observe logs
+### 4.1.2 Publish and Push Sample
 
 See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows. Optionally use the `cf logs` command to see log output.
 
-### 4.1.3 What to expect
+### 4.1.3 Observe Logs
 
-At this point the app is up and running. Bring up the home page of the app and you should see something like the following:
+You can use the `cf logs` command to see log output.
+
+### 4.1.4 View Results
+
+At this point the application is running. Bring up the home page of the application and you should see something resembling the following:
 
 ```text
 Created credential:
@@ -727,50 +750,50 @@ Delete operation results:
 Generated credential was deleted successfully
 ```
 
-This application uses all functionality enabled by the Steeltoe CredHub Client, which is virtually all functionality available via the CredHub API. Use the navigation across the top of the web application to explore, or keep reading to see what else is demonstrated with this application.
+This application uses all the functionality enabled by the Steeltoe CredHub Client, which is virtually all functionality available through the CredHub API. You can either use the navigation across the top of the web application to explore or keep reading to see what else is demonstrated by this application.
 
-### 4.1.4 Understand Sample
+### 4.1.5 Understand the Sample
 
-The `CredHubDemo` sample was created using the Visual Studio ASP.NET Core MVC Web Application template, scaled back to remove some of the bells and whistles and then modified to add the Steeltoe libraries.
+The `CredHubDemo` sample was created by using the Visual Studio ASP.NET Core MVC Web Application template, scaled back to remove some unneeded features, and then modified to add the Steeltoe libraries.
 
 To understand the Steeltoe related changes to generated template code, examine the following files:
 
-* `CredHubDemo.csproj` - Contains `PackageReference`s for Steeltoe NuGets `Steeltoe.Security.DataProtection.CredHubCore`, `Steeltoe.Management.CloudFoundryCore`, and `Steeltoe.Extensions.Configuration.CloudFoundryCore`.
-* `Program.cs` - Several changes made:
-  * Manually sets `VCAP_SERVICES` environment variable with a CredHub reference, simulating a service broker operating with an unassisted flow of CredHub integration
-  * `.UseCloudFoundryHosting()` for dynamic port binding when running on Cloud Foundry
-  * `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
-  * `.UseCredHubInterpolation(new LoggerFactory().AddConsole())` to read `VCAP_SERVICES` environment variable and use CredHub to interpolate credentials (if CredHub tokens are found)
-* `Startup.cs` - Several changes made:
-  * Modified the `ConfigureServices()` method:
+* `CredHubDemo.csproj`: Contains the `PackageReference`s for the Steeltoe NuGets `Steeltoe.Security.DataProtection.CredHubCore`, `Steeltoe.Management.CloudFoundryCore`, and `Steeltoe.Extensions.Configuration.CloudFoundryCore`.
+* `Program.cs`: Several changes were made:
+  * Manually set the `VCAP_SERVICES` environment variable with a CredHub reference, simulating a service broker operating with an unassisted flow of CredHub integration.
+  * `.UseCloudFoundryHosting()` for dynamic port binding when running on Cloud Foundry.
+  * `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+  * `.UseCredHubInterpolation(new LoggerFactory().AddConsole())` to read the `VCAP_SERVICES` environment variable and (if CredHub tokens are found) use CredHub to interpolate credentials.
+* `Startup.cs`: Several changes were made:
+  * Modified the `ConfigureServices()` method as follows:
      * `AddCloudFoundryActuators` to include [Steeltoe Management](../steeltoe-management).
-     * `Configure<CredHubOptions>(Configuration.GetSection("CredHubClient"))` to allow easier access to `CredHubClient` config later
-     * `AddCredHubClient(Configuration, logFactory)` to make the `CredHubClient` available via DI
-  * Modified the `Configure()` method to `.UseCloudFoundryActuators()`
+     * `Configure<CredHubOptions>(Configuration.GetSection("CredHubClient"))` to allow easier access to `CredHubClient` config later.
+     * `AddCredHubClient(Configuration, logFactory)` to make the `CredHubClient` available through dependency injection.
+  * Modified the `Configure()` method to `.UseCloudFoundryActuators()`.
 * `HomeController.cs`:
-  * Constructor uses DI-provided `CredHubOptions` to create its own `CredHubClient` using mTLS authentication (or UAA if you alter the configuration)
-  * `Index` writes a new `Guid` as a `PasswordCredential`, then deletes it and returns the results in a view
-  * `Injected` has CredHub generate a new `PasswordCredential`, then deletes it and returns the results in a view
-  * `Interpolate` writes the `JsonCredential` expected by our manually created `VCAP_SERVICES`, then uses CredHub's Interpolate endpoint to replace the `credhub-ref` with the credentials
-  * `TestItAll` will set, get, delete, generate and regenerate (as supported) all credential types, but does not return detailed results in a view
+  * The constructor uses dependency injection-provided `CredHubOptions` to create its own `CredHubClient` by using mTLS authentication (or UAA if you alter the configuration).
+  * `Index` writes a new `Guid` as a `PasswordCredential` and then deletes it and returns the results in a view.
+  * `Injected` has CredHub generate a new `PasswordCredential`and then deletes it and returns the results in a view.
+  * `Interpolate` writes the `JsonCredential` expected by our manually created `VCAP_SERVICES` and then uses CredHub's Interpolate endpoint to replace the `credhub-ref` with the credentials.
+  * `TestItAll` sets, gets, deletes, generates, and regenerates (if supported) all credential types but does not return detailed results in a view.
 
-> Note: On initial startup, the `.UseCredHubInterpolation` call is expected to fail in the background as the CredHub credential has not been created yet.
+>NOTE: On initial startup, the `.UseCredHubInterpolation` call is expected to fail in the background as the CredHub credential has not been created yet.
 
 ## 4.2 Usage
 
 To use the Steeltoe CredHub Client, you must:
 
-* Have access to a CredHub Server (the client was built against version 1.6.5)
+* Have access to a CredHub Server (the client was built against version 1.6.5).
 * Have credentials for accessing the server with sufficient permissions for your use case:
-  * UAA credentials
-  * mTLS certificate and private key (automatically provided when running on Cloud Foundry and parsed by the library)
-* Use the provided methods and constructors to create, inject or just utilize the client as desired
+  * UAA credentials.
+  * mTLS certificate and private key (automatically provided when running on Cloud Foundry and parsed by the library).
+* Use the provided methods and constructors to create, inject, or utilize the client.
 
 ### 4.2.1 Add NuGet Reference
 
-To use this library with ASP.NET Core, add a NuGet reference to `Steeltoe.Security.DataProtection.CredHubCore`. For other application types use `Steeltoe.Security.DataProtection.CredHubBase`. Most of the functionality resides in `CredHubBase`, the purpose of `CredHubCore` is to provide additional methods for a simpler experience when using ASP.NET Core.
+To use this library with ASP.NET Core, add a NuGet reference to `Steeltoe.Security.DataProtection.CredHubCore`. For other application types, use `Steeltoe.Security.DataProtection.CredHubBase`. Most of the functionality resides in `CredHubBase`. The purpose of `CredHubCore` is to provide additional methods for a simpler experience when using ASP.NET Core.
 
-Use the Nuget package manager tools or directly add the appropriate package to your project using the a `PackageReference`:
+Use the Nuget package manager tools or directly add the appropriate package to your project using the a `PackageReference`, as follows:
 
 ```xml
 <ItemGroup>
@@ -782,7 +805,7 @@ Use the Nuget package manager tools or directly add the appropriate package to y
 
 ### 4.2.2 Configure Settings
 
-Settings for this library are expected to have a prefix of `CredHubClient`, here's what that looks like in JSON:
+Settings for this library are expected to have a prefix of `CredHubClient`. The following example shows what that looks like in JSON:
 
 ```json
 {
@@ -799,25 +822,25 @@ The `CredHubClient` supports four settings:
 |Setting Name|Description|Default|
 |---|---|---|
 |CredHubUrl|The address of the CredHub API|<https://credhub.service.cf.internal:8844/api>|
-|CredHubUser|Username for UAA auth|`null`|
-|CredHubPassword|Password for UAA auth|`null`|
-|ValidateCertificates|Validate certificates for UAA and/or CredHub servers|`true`|
+|CredHubUser|The username for UAA auth|`null`|
+|CredHubPassword|The password for UAA auth|`null`|
+|ValidateCertificates|Whether to validate certificates for UAA and/or CredHub servers|`true`|
 
-The samples and most templates are already setup to read from `appsettings.json`, see [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
+The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values).
 
 ### 4.2.3 On Cloud Foundry
 
-Pivotal Cloud Foundry 2.0 ships with a version of CredHub Server that this client works with. Applications deployed to PCF 2.0 are automatically provided with a client certificate and private key that can be used for mTLS authentication with the included CredHub server. There is no creation or binding of services required.
+Pivotal Cloud Foundry 2.0 ships with a version of CredHub Server with which this client works. Applications deployed to PCF 2.0 are automatically provided with a client certificate and a private key that can be used for mTLS authentication with the included CredHub server. No creation or binding of services is required.
 
-If you wish to use UAA authentication, you will need to create or permission a user with `credhub.read` and/or `credhub.write` claims.
+If you wish to use UAA authentication, you need to give a user with `credhub.read` and/or `credhub.write` claims.
 
 ### 4.2.4 Getting a Client
 
-There are several ways to create a `CredHubClient`, depending on whether you want to directly specify the authentication type or use Microsoft's Dependency Injection. Regardless of the authentication or creation method selected, once the client has been created all functionality is the same.
+There are several ways to create a `CredHubClient`, depending on whether you want to directly specify the authentication type or use Microsoft's dependency injection. Regardless of the authentication or creation method selected, once the client has been created, all functionality is the same.
 
 #### 4.2.4.1 Create and Inject Client
 
-If you are using Microsoft's Dependency injection framework, you can use `IServiceCollection.AddCredHubClient()` to create, configure and inject `CredHubClient`:
+If you use Microsoft's Dependency injection framework, you can use `IServiceCollection.AddCredHubClient()` to create, configure, and inject `CredHubClient`, as shown in the folloowing example:
 
 ```csharp
 using Steeltoe.Security.DataProtection.CredHubCore;
@@ -843,7 +866,7 @@ public class Startup
 
 #### 4.2.4.2 Create mTLS Client
 
-Use `CredHubClient.CreateMTLSClientAsync()` to directly create a CredHub client that will authenticate with a client certificate and key. This method expects the environment variables `CF_INSTANCE_CERT` and `CF_INSTANCE_KEY` to contain paths on disk to certificate and key files (as is automatically configured by a PCF 2.0 environment).
+You can use `CredHubClient.CreateMTLSClientAsync()` to directly create a CredHub client that authenticates with a client certificate and key. This method expects the `CF_INSTANCE_CERT` and `CF_INSTANCE_KEY` environment variables to contain paths on disk to certificate and key files (as is automatically configured by a PCF 2.0 environment). The following listing shows how to do it:
 
 ```csharp
 var credHubClient = await CredHubClient.CreateMTLSClientAsync(new CredHubOptions());
@@ -851,17 +874,17 @@ var credHubClient = await CredHubClient.CreateMTLSClientAsync(new CredHubOptions
 
 #### 4.2.4.3 Create UAA Client
 
-Use `CredHubClient.CreateUAAClientAsync()` to directly create a CredHub client that will authenticate with a username and password that is valid on the UAA server CredHub is configured to trust. This client will call `/info` on the CredHub server to discover the UAA server's address, and will append `/oauth/token` when requesting a token.
+You can use `CredHubClient.CreateUAAClientAsync()` to directly create a CredHub client that authenticates with a username and password that is valid on the UAA server CredHub is configured to trust. This client calls `/info` on the CredHub server to discover the UAA server's address and appends `/oauth/token` when requesting a token. The following listing shows how to do it:
 
 ```csharp
 var credHubClient = await CredHubClient.CreateUAAClientAsync(new CredHubOptions());
 ```
 
-> Note: if you need to override the UAA server address, use the environment variable `UAA_Server_Override`, making sure to include the path to the token endpoint.
+>NOTE: If you need to override the UAA server address, use the `UAA_Server_Override` environment variable, making sure to include the path to the token endpoint.
 
 #### 4.2.4.4 Interpolation-Only
 
-If you wish to use CredHub to interpolate entries in `VCAP_SERVICES`, you can use `WebHostBuilder.UseCredHubInterpolation()`. This method will look for `credhub-ref` in `VCAP_SERVICES`, and use a `CredHubClient` to replace the credential references with credentials stored in CredHub, but does not return the `CredHubClient`.
+If you wish to use CredHub to interpolate entries in `VCAP_SERVICES`, you can use `WebHostBuilder.UseCredHubInterpolation()`. This method looks for `credhub-ref` in `VCAP_SERVICES` and uses a `CredHubClient` to replace the credential references with credentials stored in CredHub but does not return the `CredHubClient`. The following example shows how to do it:
 
 ```csharp
     var host = new WebHostBuilder()
@@ -893,72 +916,72 @@ These are the .NET representations of credentials that can be stored in CredHub.
 
 #### 4.2.5.1 ValueCredential
 
-Any string can be used for a `ValueCredential`. CredHub will allow Get, Set, Delete and Find operations with `ValueCredential`
+Any string can be used for a `ValueCredential`. CredHub allows Get, Set, Delete, and Find operations with `ValueCredential`
 
 #### 4.2.5.2 PasswordCredential
 
-Any string can be used for a `PasswordCredential`. CredHub will allow Get, Set, Delete, Find, Generate and Regenerate operations with `PasswordCredential`
+Any string can be used for a `PasswordCredential`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `PasswordCredential`
 
 #### 4.2.5.3 UserCredential
 
-A `UserCredential` has `string` properties for `Username` and `Password`. CredHub will allow Get, Set, Delete, Find, Generate and Regenerate operations with `UserCredential`. Regenerate operations do not regenerate the username.
+A `UserCredential` has `string` properties for `Username` and `Password`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `UserCredential`. Regenerate operations do not regenerate the username.
 
 #### 4.2.5.4 JsonCredential
 
-Any JSON object can be used for a `JsonCredential`. CredHub will allow Get, Set, Delete and Find operations with `JsonCredential`
+Any JSON object can be used for a `JsonCredential`. CredHub allows Get, Set, Delete, and Find operations with `JsonCredential`.
 
 #### 4.2.5.5 CertificateCredential
 
-A `CertificateCredential` represents a security certificate, specific properties are listed in the table below. CredHub will allow Get, Set, Delete, Find, Generate, Regenerate and Bulk Regenerate operations with `CertificateCredential`.
+A `CertificateCredential` represents a security certificate. CredHub allows Get, Set, Delete, Find, Generate, Regenerate, and Bulk Regenerate operations with `CertificateCredential`. The following table describes specific properties:
 
 |Property|Description|
 |---|---|
-|CertificateAuthority|Certificate of the Certificate Authority|
-|CertificateAuthorityName|Name of CA credential in credhub that has signed this certificate|
-|Certificate|String representation of the certificate|
-|PrivateKey|Private key for the certificate|
+|CertificateAuthority|The certificate of the Certificate Authority|
+|CertificateAuthorityName|The name of the CA credential in credhub that has signed this certificate|
+|Certificate|The string representation of the certificate|
+|PrivateKey|The private key for the certificate|
 
 #### 4.2.5.6 RsaCredential
 
-The `RsaCredential` has string properties for `PublicKey` and `PrivateKey`. CredHub will allow Get, Set, Delete, Find, Generate and Regenerate operations with `RsaCredential`.
+The `RsaCredential` has string properties for `PublicKey` and `PrivateKey`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `RsaCredential`.
 
 #### 4.2.5.7 SshCredential
 
-The `SshCredential` has string properties for `PublicKey`, `PrivateKey` and `PublicKeyFingerprint`. CredHub will allow Get, Set, Delete, Find, Generate and Regenerate operations with `SshCredential`.
+The `SshCredential` has string properties for `PublicKey`, `PrivateKey`, and `PublicKeyFingerprint`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `SshCredential`.
 
 ### 4.2.6 CredHub Read Operations
 
-All `CredHubClient` Read operations operate asynchronously and do not change credentials or permissions stored in CredHub. Refer to the [CredHub documentation](https://credhub-api.cfapps.io/) for more detail. For brevity, the samples below will use `_credHubClient` to reference an instance of `CredHubClient` that has been created previously. See [Getting a Client](#4-2-4-getting-a-client) for instructions on how to create a `CredHubClient`.
+All `CredHubClient` Read operations operate asynchronously and do not change the credentials or permissions stored in CredHub. Refer to the [CredHub documentation](https://credhub-api.cfapps.io/) for more detail. For brevity, the samples shown later in this guide use `_credHubClient` to reference an instance of `CredHubClient` that has been created previously. See [Getting a Client](#4-2-4-getting-a-client) for instructions on how to create a `CredHubClient`.
 
-#### 4.2.6.1 Get by Id
+#### 4.2.6.1 Get by ID
 
-Use `await _credHubClient.GetByIdAsync<CredentialType>(credentialId)` to retrieve a credential by its `Guid`. Only the current credential value will be returned.
+You can use `await _credHubClient.GetByIdAsync<CredentialType>(credentialId)` to retrieve a credential by its `Guid`. Only the current credential value is returned.
 
 #### 4.2.6.2 Get by Name
 
-Use `await _credHubClient.GetByNameAsync<CredentialType>(credentialName)` to retrieve a credential by its `Name`. Only the current credential value will be returned.
+You can use `await _credHubClient.GetByNameAsync<CredentialType>(credentialName)` to retrieve a credential by its `Name`. Only the current credential value is returned.
 
 #### 4.2.6.3 Get by Name with History
 
-Use `await _credHubClient.GetByNameWithHistoryAsync<CredentialType>(credentialName, numEntries)` to retrieve a credential by name with the most recent `numEntries` number of entries.
+You can use `await _credHubClient.GetByNameWithHistoryAsync<CredentialType>(credentialName, numEntries)` to retrieve a credential by name with the most recent `numEntries` holding the number of entries.
 
 #### 4.2.6.4 Find by Name
 
-Use `await _credHubClient.FindByNameAsync(credentialName)` to retrieve a list of `FoundCredential` objects that are either a full or partial match for the name searched. The `FoundCredential` type only includes `Name` and `VersionCreatedAt` properties, so follow-up requests are expected to retieve credential details.
+You can use `await _credHubClient.FindByNameAsync(credentialName)` to retrieve a list of `FoundCredential` objects that are either a full or partial match for the name searched. The `FoundCredential` type includes only the `Name` and `VersionCreatedAt` properties, so follow-up requests are expected to retrieve credential details.
 
 #### 4.2.6.5 Find by Path
 
-Use `await _credHubClient.FindByPathAsync(path)` to retrieve a list of `FoundCredential` objects that are either a full or partial match for the name searched. The `FoundCredential` type only includes `Name` and `VersionCreatedAt` properties, so follow-up requests are expected to retieve credential details. Use the path value `/` to return all accessible credentials.
+You can use `await _credHubClient.FindByPathAsync(path)` to retrieve a list of `FoundCredential` objects that are either a full or partial match for the name searched. The `FoundCredential` type includes only the `Name` and `VersionCreatedAt` properties, so follow-up requests are expected to retrieve credential details. Use the `/` path value to return all accessible credentials.
 
 #### 4.2.6.6 Find All Paths
 
-Use `await _credHub.FindAllPathsAsync()` to retrieve a list of all known credential paths.
+You can use `await _credHub.FindAllPathsAsync()` to retrieve a list of all known credential paths.
 
 #### 4.2.6.7 Interpolate
 
-One of the more powerful features of CredHub is the Interpolate endpoint. With one request, you may retrieve N number of credentials that have been stored in CredHub. To use it from .NET, call `await _credHub.InterpolateServiceDataAsync(serviceData)` where `serviceData` is the string representation of `VCAP_SERVICES`. `CredHubClient` will return the interpolated `VCAP_SERVICES` data as a string. If you wish to have the interpolated data applied to your application configuration, see [the .UseCredHubInterpolation() documentation](#4-2-4-4-interpolation-only)
+One of the more powerful features of CredHub is the `Interpolate` endpoint. With one request, you may retrieve N number of credentials that have been stored in CredHub. To use it from .NET, call `await _credHub.InterpolateServiceDataAsync(serviceData)`, where `serviceData` is the string representation of `VCAP_SERVICES`. `CredHubClient` returns the interpolated `VCAP_SERVICES` data as a string. If you wish to have the interpolated data applied to your application configuration, see [the .UseCredHubInterpolation() documentation](#4-2-4-4-interpolation-only)
 
-Sample request object:
+The following example shows a typical request object for the `Interpolate` endpoint:
 
 ```json
 {
@@ -982,7 +1005,7 @@ Sample request object:
 }
 ```
 
-Sample response object:
+The following example shows a typical response object from the `Interpolate` endpoint:
 
 ```json
 {
@@ -1011,15 +1034,15 @@ Sample response object:
 }
 ```
 
-> Note: At this time, only credential references at `credentials.credhub-ref` will be interpolated. The key `credhub-ref` will be removed and the referenced credential object will be set as the value of credentials.
+>NOTE: At this time, only credential references at `credentials.credhub-ref` are interpolated. The `credhub-ref` key is removed and the referenced credential object is set as the value of the credentials.
 
 ### 4.2.7 CredHub Change Operations
 
-All `CredHubClient` Change operations operate asynchronously and affect stored credentials. Refer to the [CredHub documentation](https://credhub-api.cfapps.io/) for more detail. For brevity, the samples below will use `_credHubClient` to reference an instance of `CredHubClient` that has been created previously. See [Getting a Client](#4-2-4-getting-a-client) for instructions on how to create a `CredHubClient`.
+All `CredHubClient` Change operations operate asynchronously and affect stored credentials. Refer to the [CredHub documentation](https://credhub-api.cfapps.io/) for more detail. For brevity, the samples shown later in this guide use `_credHubClient` to reference an instance of `CredHubClient` that has been created previously. See [Getting a Client](#4-2-4-getting-a-client) for instructions on how to create a `CredHubClient`.
 
 #### 4.2.7.1 Write
 
-If you already have a credential that you want to store in CredHub, use a Write request. `CredHubClient.WriteAsync<T>()` expects a request object that descends from `CredentialSetRequest`. There is a `[Type]SetRequest` class for each credential type (e.g. `ValueSetRequest`, `PasswordSetRequest`, etc). The SetRequest family of classes include optional parameters for overwriting existing values and setting permissions in addition to value properties for the credential. Include the type of credential you are requesting to write to CredHub in the T parameter so the compiler knows the return type.
+If you already have a credential that you want to store in CredHub, use a `Write` request. `CredHubClient.WriteAsync<T>()` expects a request object that descends from `CredentialSetRequest`. There is a `[Type]SetRequest` class for each credential type (`ValueSetRequest`, `PasswordSetRequest`, and so on). The SetRequest family of classes includes optional parameters for overwriting existing values and setting permissions, in addition to value properties for the credential. Include the type of credential you want to write to CredHub in the T parameter so the compiler knows the return type. The following example shows a typical `Write` request:
 
 ```csharp
 var setValueRequest = new ValueSetRequest("sampleValueCredential", "someValue");
@@ -1031,9 +1054,9 @@ setValueRequest.Overwrite = true;
 var setValue2 = await _credHub.WriteAsync<ValueCredential>(setValueRequest);
 ```
 
-> Note: the default behavior on Write requests is to leave existing values alone. If you wish to overwrite a credential, be sure to pass either `OverwriteMode.converge` or `OverwriteMode.overwrite` for the `overwriteMode` parameter on your request object. See [Overwriting Credential Values](https://credhub-api.cfapps.io/#overwriting-credential-values) for more information.
+>NOTE: The default behavior on `Write` requests is to leave existing values alone. If you wish to overwrite a credential, be sure to pass either `OverwriteMode.converge` or `OverwriteMode.overwrite` for the `overwriteMode` parameter on your request object. See [Overwriting Credential Values](https://credhub-api.cfapps.io/#overwriting-credential-values).
 
-Write requests allow the setting of permissions on a credential during generation:
+Write requests allow the setting of permissions on a credential during generation, as shown in the following example:
 
 ```csharp
 var desiredOperations = new List<OperationPermissions>
@@ -1049,7 +1072,7 @@ var setValue = await _credHub.WriteAsync<ValueCredential>(setRequest);
 
 #### 4.2.7.2 Generate
 
-Generate a new credential in CredHub, or overwrite an existing credential with a new generated value. CredHub is able to generate values for the following types: `CertificateCredential`, `PasswordCredential`, `RsaCredential`, `SshCredential`, `UserCredential`. `CredHubClient.GenerateAsync<T>()` expects a request object that descends from `CredHubGenerateRequest`. There is a `[Type]GenerateRequest` class for each supported credential type (e.g. `CertificateGenerationRequest`, `PasswordGenerationRequest`, `RsaGenerationRequest` etc). Most of the GenerateRequest family of classes include a `[Type]GenerationParameters` parameter for specifying criteria for generating the credential.
+You can generate a new credential or overwrite an existing credential with a new generated value. CredHub is able to generate values for the following types: `CertificateCredential`, `PasswordCredential`, `RsaCredential`, `SshCredential`, and `UserCredential`. `CredHubClient.GenerateAsync<T>()` expects a request object that descends from `CredHubGenerateRequest`. There is a `[Type]GenerateRequest` class for each supported credential type (`CertificateGenerationRequest`, `PasswordGenerationRequest`, `RsaGenerationRequest`, and so on). Most of the `GenerateRequest` family of classes include a `[Type]GenerationParameters` parameter for specifying criteria for generating the credential. The following example shows how to generate a credential:
 
 ```csharp
 var genParameters = new PasswordGenerationParameters { Length = 20 };
@@ -1057,7 +1080,7 @@ var genRequest = new PasswordGenerationRequest("generatedPassword", genParameter
 CredHubCredential<PasswordCredential> genPassword = await _credHub.GenerateAsync<PasswordCredential>(genRequest);
 ```
 
-Generate requests allow the setting of permissions on a credential during generation:
+The following example demonstrates that `Generate` requests allow the setting of permissions on a credential during generation:
 
 ```csharp
 var genParams = new PasswordGenerationParameters { Length = 20 };
@@ -1072,13 +1095,15 @@ var genRequest = new PasswordGenerationRequest("generatedPW", genParams, new Lis
 CredHubCredential<PasswordCredential> genPassword = await _credHub.GenerateAsync<PasswordCredential>(genRequest);
 ```
 
-> Note: the default behavior on Generate requests is to leave existing values alone. If you wish to overwrite a credential, be sure to pass either `OverwriteMode.converge` or `OverwriteMode.overwrite` for the `overwriteMode` parameter on your request object. See [Overwriting Credential Values](https://credhub-api.cfapps.io/#overwriting-credential-values) for more information.
+>NOTE: The default behavior on `Generate` requests is to leave existing values alone. If you wish to overwrite a credential, be sure to pass either `OverwriteMode.converge` or `OverwriteMode.overwrite` for the `overwriteMode` parameter on your request object. See [Overwriting Credential Values](https://credhub-api.cfapps.io/#overwriting-credential-values).
 
 #### 4.2.7.3 Regenerate
 
-Regenerate a credential in CredHub.  CredHub is able to generate values for the following types: `CertificateCredential`, `PasswordCredential`, `RsaCredential`, `SshCredential`, `UserCredential`
+You can regenerate a credential in CredHub. CredHub can generate values for the following types: `CertificateCredential`, `PasswordCredential`, `RsaCredential`, `SshCredential`, and `UserCredential`.
 
-> Note: Only credentials that were previously generated by CredHub can be regenerated.
+>NOTE: Only credentials that were previously generated by CredHub can be regenerated.
+
+The following example shows one way to regenerate a credential:
 
 ```csharp
 var regeneratedCert = await _credHub.RegenerateAsync<CertificateCredential>("/MyGeneratedCert");
@@ -1086,7 +1111,7 @@ var regeneratedCert = await _credHub.RegenerateAsync<CertificateCredential>("/My
 
 #### 4.2.7.4 Bulk Regenerate
 
-Regenerate all certificates that were previously generated by CredHub with a given certificate authority. Returns a list of `RegeneratedCertificates` which contains the credential names as a `List<string>` property named RegeneratedCredentials.
+You can regenerate all certificates that were previously generated by CredHub with a given certificate authority. The following example returns a list of `RegeneratedCertificates` which contains the credential names as a `List<string>` property named RegeneratedCredentials:
 
 ```csharp
 RegeneratedCertificates bulkRegenerate = await _credHub.BulkRegenerateAsync("NameThatCA");
@@ -1094,7 +1119,7 @@ RegeneratedCertificates bulkRegenerate = await _credHub.BulkRegenerateAsync("Nam
 
 #### 4.2.7.5 Delete by Name
 
-Delete a credential by its full name. Returns a boolean indicating success or failure.
+You can delete a credential by its full name. The following example returns a boolean indicating success or failure:
 
 ```csharp
 bool deleteCertificate = await _credHub.DeleteByNameAsync("/MyPreviouslyGeneratedCertificate");
@@ -1102,11 +1127,11 @@ bool deleteCertificate = await _credHub.DeleteByNameAsync("/MyPreviouslyGenerate
 
 ### 4.2.8 Permission Operations
 
-CredHub supports permissions management on credential access for UAA users. See the [offical CredHub Permissions documentation](https://credhub-api.cfapps.io/#permissions) for more.
+CredHub supports permissions management on credential access for UAA users. See the [offical CredHub Permissions documentation](https://credhub-api.cfapps.io/#permissions).
 
 #### 4.2.8.1 Get Permissions
 
-Get the permissions associated with a credential.
+You can get the permissions associated with a credential, as shown in the following example:
 
 ```csharp
 List<CredentialPermission> response = await _credHub.GetPermissionsAsync("/example-password");
@@ -1114,7 +1139,7 @@ List<CredentialPermission> response = await _credHub.GetPermissionsAsync("/examp
 
 #### 4.2.8.2 Add Permissions
 
-Add permissions to an existing credential. Returns the updated list of permissions for the specified credential.
+You can add permissions to an existing credential. The following example eturns the updated list of permissions for the specified credential:
 
 ```csharp
 var desiredOps = new List<OperationPermissions> { OperationPermissions.read, OperationPermissions.write };
@@ -1125,7 +1150,7 @@ List<CredentialPermission> response = await _credHub.AddPermissionsAsync("/examp
 
 #### 4.2.8.3 Delete Permissions
 
-Delete a permission associated with a credential. Returns a boolean indicating success or failure.
+You can delete a permission associated with a credential. The following example returns a boolean indicating success or failure:
 
 ```csharp
 bool response = await _credHub.DeletePermissionAsync("/example-password", "uaa-user:credhub_client");
@@ -1135,24 +1160,21 @@ bool response = await _credHub.DeletePermissionAsync("/example-password", "uaa-u
 
 ## Publish Sample
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
 
 ```bash
 > dotnet restore --configfile nuget.config
->
-> # Publish for Linux, .NET Core
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
->
-> # Publish for Windows, .NET Core
-> dotnet publish -f netcoreapp2.0 -r win10-x64
->
-> # Publish for Windows, .NET Framework
-> dotnet publish -f net461 -r win10-x64
 ```
+
+Then you can use one of the following commands to publish:
+
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
+* Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
 ## Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime, as follows:
 
 ```bash
 > # Push to Linux cell
@@ -1165,15 +1187,13 @@ Use the Cloud Foundry CLI to push the published application to Cloud Foundry usi
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-Manifest file names may vary, some samples use a different manifest for .NET 4 vs .NET Core.
-
-> Note: all sample manifests have been defined to bind their application to their service(s) as created above.
+> Note: All sample manifests have been defined to bind their application to their service(s) as created above.
 
 ## Observe Logs
 
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (e.g. `cf logs single-signon`)
+To see the logs as you startup the application, use `cf logs oauth`.
 
-On a Linux cell, you should see something like this during startup. On Windows cells you will see something slightly different.
+On a Linux cell, you should see something resembling the following during startup:
 
 ```bash
 2016-06-01T09:14:14.38-0600 [CELL/0]     OUT Creating container
@@ -1186,11 +1206,13 @@ On a Linux cell, you should see something like this during startup. On Windows c
 2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
 ```
 
+On Windows cells, you should see something slightly different but with the same information.
+
 ## Reading Configuration Values
 
-Once the connector's settings have been defined, the next step is to read them in so they can be made available to the connector.
+Once the connector's settings have been defined, the next step is to read them so that they can be made available to the connector.
 
-The code below reads connector settings from the file `appsettings.json` with the .NET JSON configuration provider (i.e. `AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`. Both sources are then added to the configuration builder:
+The code in the next example reads connector settings from the `appsettings.json` file with the .NET JSON configuration provider (`AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`. Both sources are then added to the configuration builder. The following code shows how to read from both sources:
 
 ```csharp
 public class Program {
@@ -1216,10 +1238,10 @@ public class Program {
     ...
 ```
 
-When pushing the application to Cloud Foundry, the settings from service bindings will merge with the settings from other configuration mechanisms (e.g. `appsettings.json`).
+When pushing the application to Cloud Foundry, the settings from service bindings merge with the settings from other configuration mechanisms (such as `appsettings.json`).
 
-If there are merge conflicts, the last provider added to the Configuration will take precedence and override all others.
+If there are merge conflicts, the last provider added to the Configuration takes precedence and overrides all others.
 
-To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool like [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
+To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool such as [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
-> Note: If you are using the Spring Cloud Config Server, `AddConfigServer()` will automatically call `AddCloudFoundry()` for you
+>NOTE: If you use the Spring Cloud Config Server, `AddConfigServer()` automatically calls `AddCloudFoundry()` for you.
