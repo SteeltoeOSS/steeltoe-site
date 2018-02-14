@@ -1,38 +1,28 @@
 ---
 layout: documentation
 ---
-<h2 class="regular">From Monoliths to Microservices</h2>
-<p class="mt0">
-Microservices represent the latest evolution in modern service-oriented architectures.  The typical monolithic architecture was inflexible:
-<ul>
-<li>it typically only scales up, not out; </li>
-<li>it has a large and complex code base, meaning a long learning curve for new team members; and </li>
-<li>it has tightly coupled dependencies so that everything must be released at once, making even surgical changes difficult and slow.</li>
-</ul>
-</p>
-<p class="mt0">
-Microservices architectures bring tremendous flexibility. Microservices are “simple, and do one thing well” (Sam Newman):
-<ul>
-<li>they allow you to scale separate components independently; </li>
-<li>they typically are easier for new team members to wrap their heads around; and </li>
-<li>they allow you to release independent pieces of your application on independent schedules, enabling the continuous delivery of independent business capabilities. </li>
-</ul>
-</p>
-<p class="mt0">
-But microservices bring with them the challenges of deploying and operating large-scale distributed systems—challenges we didn’t have to face with monolithic architectures.  
-What used to be as simple as a global variable now requires a shared configuration solution. What used to be a simple in-process call to a separate module might now require looking up healthy instances of a dynamically-addressed scaled-out service and load-balancing requests across the instances. And if one of the services you depend on stops responding, how do you fail gracefully and prevent your users from seeing an unfriendly error message?
-</p>
-<p class="mt0">
-Something more is needed!
-</p>
+<h1 class="regular">Overview</h1>
+<p>Steeltoe is an <a href="https://github.com/SteeltoeOSS">open source project</a> aimed at taking the tremendously useful tools from Netflix and others and making them available to the .NET community. It was built to work with .NET Core as well as .NET Framework 4.x.  Additionally, most of these components work stand-alone (e.g., on  your local computer) as well as on Cloud Foundry, the leading multi-cloud application platform.</p>
 
-<h2 class="regular">Netflix OSS and Spring Cloud</h2>
-<p class="mt0">
-The good news is that these problems have already been solved. The developers at Netflix have not only addressed the challenges of building distributed systems at tremendous scale—their video streaming platform at one point accounted for 37% of North America’s Internet traffic [1]—they’ve implemented solutions to them based on well-characterized patterns, and then gifted those solutions to the world as open source.
-</p>
-<p class="mt0">
-The Spring Cloud project makes these solutions accessible to the broader Java community, filling in gaps such as configuration management with original solutions such as the Spring Cloud Config Server.  Until now, however, these solutions were largely focused on Java and not very accessible to .NET developers.  
-</p>
-<p class="mt0">
-With the advent of Steeltoe, that has changed!
-</p>
+<p>Steeltoe builds on Spring Cloud by providing several packages that enable .NET developers to leverage these tools to implement some common patterns (e.g. centralized configuration management, service discovery, circuit breakers, etc. ) found in highly scalable and resilient distributed systems. Using Steeltoe, together with Spring Cloud, developers are able to quickly stand up micro-services and applications that implement these patterns.</p>
+
+<p>Steeltoe provides services that fall broadly into two categories.</p>
+
+<p>Services that simplify using .NET and ASP.NET on Cloud Foundry:</p>
+
+<ul>
+<li>Connectors (e.g. MySql, Redis, Postgres, RabbitMQ, OAuth, etc)</li>
+<li>Configuration providers</li>
+<li>Security providers (OAuth SSO, JWT, Redis Key Ring Storage, etc.)</li>
+<li>Logging providers</li>
+</ul>
+
+<p>And services that enable .NET and ASP.NET developers to leverage Spring Cloud:</p>
+
+<ul>
+<li>Configuration Server client</li>
+<li>Service Discovery client</li>
+<li>Hystrix Circuit Breaker</li>
+<li>Management endpoints</li>
+</ul>
+
