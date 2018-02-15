@@ -1,49 +1,22 @@
-//= require vendor/jquery-3.1.1.slim.min
-//= require vendor/sticky-kit.min
-//= require vendor/smooth-scroll
-//= require vendor/gumshoe
+//= require vendor/tocbot.min
 
 document.addEventListener("DOMContentLoaded", function() {
-	var stickyTOC = $('#toc'),
-			SM_BREAKPOINT = 640,
-			TOClinkSelector = '.toc-link ul li a'
-	
 	init();
 
 	function init() {
-		var windowWidth = window.innerWidth;
-		if (windowWidth > SM_BREAKPOINT) stickyTOC.stick_in_parent();
-		window.onresize = handleStickyNav;
-
-		smoothScroll.init({
-	    selector: TOClinkSelector,
-	    speed: 500,
-	    easing: 'easeInOutCubic',
-	    offset: 0,
+		tocbot.init({
+			// Where to render the table of contents.
+			tocSelector: '.js-toc',
+			// Where to grab the headings to build the table of contents.
+			contentSelector: '.js-toc-content',
+			ignoreSelector: '.js-toc-ignore',
+			// Which headings to grab inside of the contentSelector element.
+			headingSelector: 'h1, h2, h3, h4',
+			positionFixedSelector: '#toc',
+			// Fixed position class to add to make sidebar fixed after scrolling down past the fixedSidebarOffset.
+			positionFixedClass: 'is-position-fixed',
+			// fixedSidebarOffset can be any number but by default is set to auto which sets the fixedSidebarOffset to the sidebar element's offsetTop from the top of the document on init.
+			fixedSidebarOffset: '150',
 		});
-
-		gumshoe.init({
-  		selector: TOClinkSelector,
-  		container: window,
-  		offset: 35,
-  		activeClass: 'active-toc-link',
-  		scrollDelay: false,
-		});
-	}
-
-	function destroyStickyNav() {
-		stickyTOC.trigger("sticky_kit:detach");
-	}
-
-	function handleStickyNav() {
-		var windowWidth = window.innerWidth,
-				stickyTOCExists = stickyTOC.hasClass('is_stuck');
-				stickyTOCDoesntExist = !stickyTOCExists;
-
-		if(windowWidth < SM_BREAKPOINT && stickyTOCExists) {
-			destroyStickyNav();
-		} else if(windowWidth > SM_BREAKPOINT && stickyTOCDoesntExist) {
-			stickyTOC.stick_in_parent();
-		}
 	}
 });

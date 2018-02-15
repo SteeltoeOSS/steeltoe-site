@@ -2,16 +2,17 @@
 
 It is built using [Middleman](https://middlemanapp.com/)
 
-### Install Dependencies
+## Install Dependencies
+
 Uses Gemfile to pull in necessary dependencies.
 
 ***Prerequisite*** Ruby must be installed
 
-```
+```bash
 bundle install
 ```
 
-### Local testing of Steeltoe site
+## Local testing of Steeltoe site
 
 This will build the docs locally.
 
@@ -21,7 +22,7 @@ middleman build
 
 This will spin up development server with a build of the local documentation.
 
-```
+```bash
 middleman serve
 ```
 

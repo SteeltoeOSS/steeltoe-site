@@ -5,19 +5,26 @@
     <%= partial 'shared/nav' %>
     <div class="max-width-4 mx-auto">
       <div class="p2">
-        <h2 class="regular my0 steel-body muted">
-          <i class="fa fa-file-text"></i>
-        </h2>
-        <h1 class="mt0 mb3 steel-heading">Documentation</h1>
         <div class="sm-flex">
           <div class="col-12 sm-col-3 sm-pr3">
+            <h2 class="mt0 steel-heading">
+              <i class="fa fa-file-text muted"></i>
+              Documentation
+              <select onchange="viewV1()" id="docselector" class="iscollapsed">
+                <option>v1.x</option>
+                <option selected>v2.x</option>
+              </select>
+            </h2>
+            <noscript>
+              <a href="<%= current_page.url.sub! 'docs', '1x' %>">View v1.x Docs</a>
+            </noscript>
             <div id="toc">
               <%= partial 'shared/docs-toc' %>
             </div>
           </div>
-          <div class="col-12 sm-col-9">
+          <div class="col-12 sm-col-9 js-toc-content">
             <% if !current_article.nil? %>
-              <h2 class="regular"><%= current_article.metadata[:page][:title] %></h2>
+              <h1 class="js-toc-ignore regular"><%= current_article.metadata[:page][:title] %></h1>
             <% end %>
             <%= yield %>
           </div>
@@ -27,5 +34,11 @@
     <%= partial 'shared/footer' %>
     <%= javascript_include_tag :docs %>
     <%= partial 'shared/ga' %>
+    <script>
+      function viewV1(){
+        window.location.href='<%= current_page.url.sub! 'docs', '1x' %>';
+      }
+      document.getElementById('docselector').style.display = "inline";
+    </script>
   </body>
 </html>
