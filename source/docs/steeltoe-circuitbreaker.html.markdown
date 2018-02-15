@@ -47,7 +47,7 @@ Each command has a built-in configurable circuit breaker that stops all requests
 
 Hystrix also provides a means to measure command successes, failures, timeouts, short-circuits, and thread rejections. Statistics are gathered for all of these and can optionally be reported to a [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) for monitoring in real-time.
 
-The remaining sectios of this chapter describe these features. Also, you should understand that the Steeltoe Hystrix implementation follows the Netflix implementation closely. As a result, its worthwhile to review the [Netflix documentation](https://github.com/Netflix/Hystrix/wiki) in addition to this documentation.
+The remaining sections of this chapter describe these features. Also, you should understand that the Steeltoe Hystrix implementation follows the Netflix implementation closely. As a result, its worthwhile to review the [Netflix documentation](https://github.com/Netflix/Hystrix/wiki) in addition to this documentation.
 
 The Steeltoe Hystrix framework supports the following .NET application types:
 
@@ -75,7 +75,7 @@ The Fortune-Teller-UI has also been configured to gather metrics about command e
 To run Fortune Teller locally, you must do the following:
 
 * [Start a Eureka Server](#1-1-1-1-start-a-eureka-server)
-* [Start a Hystrix Dashboard](#1-1-1-2-start-a-hystrix dashboard)
+* [Start a Hystrix Dashboard](#1-1-1-2-start-a-hystrix-dashboard)
 * [Run Fortune Teller](#1-1-1-3-run-fortune-teller)
 * [Observe Logs](#1-1-1-4-observe-logs)
 * [View Fortunes](#1-1-1-5-view-fortunes)
@@ -175,7 +175,7 @@ To see the Hystrix Dashboard, start a browser and go to <http://localhost:7979>.
 
 ### 1.1.2 Running on Cloud Foundry
 
-To run Fortune Teller locally, you must do the following:
+To run Fortune Teller on Cloud Foundry, you must do the following:
 
 * [Start a Eureka Server](#1-1-2-1-start-a-eureka-server)
 * [Start a Hystrix Dashboard](#1-1-2-2-start-a-hystrix dashboard)
@@ -184,7 +184,7 @@ To run Fortune Teller locally, you must do the following:
 * [Publish Fortune-Teller-UI](#1-1-2-5-publish-fortune-teller-ui)
 * [Push Fortune-Teller-UI](#1-1-2-6-push-fortune-teller-ui)
 * [Observe Logs](#1-1-2-7-observe-logs)
-* [Observe Logs](#1-1-2-8-view-fortunes)
+* [View Fortunes](#1-1-2-8-view-fortunes)
 * [Use a Hystrix Dashboard](#1-1-2-9-use-a-hystrix-dashboard)
 
 #### 1.1.2.1 Start a Eureka Server
@@ -667,7 +667,7 @@ Each setting is prefixed with a key of `metrics`, as shown in the following exam
 
 The most convenient way to configure settings for Hystrix is to put them in a file and then use one of the file-based .NET configuration providers to read them.
 
-The following example showssome Hystrix settings in JSON that configure the `FortuneService` command to use a thread pool with a name of `FortuneServiceTPool`.
+The following example shows some Hystrix settings in JSON that configure the `FortuneService` command to use a thread pool with a name of `FortuneServiceTPool`.
 
 ```json
 {
@@ -1189,7 +1189,7 @@ Use the `dotnet` CLI to build and locally publish the application with your pref
 > dotnet restore --configfile nuget.config
 ```
 
-To publish for Linux with the .NET Core, use the following command:
+To publish for Linux with .NET Core, use the following command:
 
 ```
 > dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
@@ -1267,7 +1267,7 @@ Both sources are then added to the configuration builder.
 
 When pushing the application to Cloud Foundry, the settings from service bindings merge with the settings from other configuration mechanisms (such as `appsettings.json`).
 
-If there are merge conflicts, the last provider added to the Configuration take precedences and overrides all others.
+If there are merge conflicts, the last provider added to the Configuration take precedence and overrides all others.
 
 To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool such as [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config).
 
