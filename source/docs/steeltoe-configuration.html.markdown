@@ -427,7 +427,7 @@ In this step, we use the Cloud Foundry CLI to create a service instance of the S
 > cf services
 ```
 
-These commands create, on Cloud Foundry, a Spring Cloud Config Server instance named `myConfigServer` configured from the contents of the file `config-server.json`.
+These commands create a Spring Cloud Config Server instance on Cloud Foundry named `myConfigServer` configured from the contents of the file `config-server.json`.
 
 #### 2.1.2.2 Publish Sample
 

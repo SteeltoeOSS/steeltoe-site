@@ -833,7 +833,7 @@ The samples and most templates are already set up to read from `appsettings.json
 
 Pivotal Cloud Foundry 2.0 ships with a version of CredHub Server with which this client works. Applications deployed to PCF 2.0 are automatically provided with a client certificate and a private key that can be used for mTLS authentication with the included CredHub server. No creation or binding of services is required.
 
-If you wish to use UAA authentication, you need to give a user with `credhub.read` and/or `credhub.write` claims.
+If you wish to use UAA authentication, you need a user with `credhub.read` and/or `credhub.write` claims.
 
 ### 4.2.4 Getting a Client
 

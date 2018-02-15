@@ -35,9 +35,9 @@ The Service Discovery sample requires a Eureka server. If you intend to run the 
 
 # 1.0 Netflix Eureka
 
-The Steeltoe Eureka client lets applications register services with a Eureka server and discover services registered by other applications. This Steeltoe client is an implementation of the 1.0 version of the Netflix Eureka client.
+Steeltoe's Eureka client implementation lets applications register services with a Eureka server and discover services registered by other applications. This Steeltoe client is an implementation of the 1.0 version of the Netflix Eureka client.
 
-The Steeltoe Eureka client supports the following .NET application types:
+Steeltoe's Eureka client implementation supports the following .NET application types:
 
 * ASP.NET (MVC, WebForm, WebAPI, WCF)
 * ASP.NET Core

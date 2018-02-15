@@ -37,7 +37,7 @@ The CircuitBreaker sample requires a Eureka server and a Hystrix dashboard. We c
 
 # 1.0 Netflix Hystrix
 
-The Steeltoe Hystrix framework lets application developers isolate and manage back-end dependencies so that a single failing dependency does not take down the entire application. This is accomplished by wrapping all calls to external dependencies in a `HystrixCommand`, which runs in its own separate external thread.
+Steeltoe's Hystrix implementation lets application developers isolate and manage back-end dependencies so that a single failing dependency does not take down the entire application. This is accomplished by wrapping all calls to external dependencies in a `HystrixCommand`, which runs in its own separate external thread.
 
 Hystrix maintains its own small fixed-size thread pool from which commands are executed. When the pool becomes exhausted, Hystrix commands are immediately rejected, and, if provided, a fallback mechanism is executed. This prevents any single dependency from using up all of the threads for failing external dependencies.
 
@@ -47,7 +47,7 @@ Each command has a built-in configurable circuit breaker that stops all requests
 
 Hystrix also provides a means to measure command successes, failures, timeouts, short-circuits, and thread rejections. Statistics are gathered for all of these and can optionally be reported to a [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) for monitoring in real-time.
 
-The remaining sections of this chapter describe these features. Also, you should understand that the Steeltoe Hystrix implementation follows the Netflix implementation closely. As a result, its worthwhile to review the [Netflix documentation](https://github.com/Netflix/Hystrix/wiki) in addition to this documentation.
+The remaining sections of this chapter describe these features. Also, you should understand that Steeltoe's Hystrix implementation follows the Netflix implementation closely. As a result, its worthwhile to review the [Netflix documentation](https://github.com/Netflix/Hystrix/wiki) in addition to this documentation.
 
 The Steeltoe Hystrix framework supports the following .NET application types:
 
@@ -179,8 +179,8 @@ To run Fortune Teller on Cloud Foundry, you must do the following:
 
 * [Start a Eureka Server](#1-1-2-1-start-a-eureka-server)
 * [Start a Hystrix Dashboard](#1-1-2-2-start-a-hystrix dashboard)
-* [Publish a Fortune Teller Service](#1-1-2-3-publish-a-fortune-teller-service)
-* [Push a Fortune Teller Service](#1-1-2-4-push-a-fortune-teller-service)
+* [Publish Fortune Teller Service](#1-1-2-3-publish-fortune-teller-service)
+* [Push Fortune Teller Service](#1-1-2-4-push-fortune-teller-service)
 * [Publish Fortune-Teller-UI](#1-1-2-5-publish-fortune-teller-ui)
 * [Push Fortune-Teller-UI](#1-1-2-6-push-fortune-teller-ui)
 * [Observe Logs](#1-1-2-7-observe-logs)
@@ -211,11 +211,11 @@ Now you can use the Cloud Foundry CLI to create a service instance of the Spring
 > cf services
 ```
 
-#### 1.1.2.3 Publish a Fortune-Teller-Service
+#### 1.1.2.3 Publish Fortune-Teller-Service
 
 See [Publish Sample](#publish-sample) for instructions on how to publish this sample to either Linux or Windows.
 
-#### 1.1.2.4 Push a Fortune-Teller-Service
+#### 1.1.2.4 Push Fortune-Teller-Service
 
 See [Push Sample](#push-sample) for instructions on how to push this sample to either Linux or Windows on Cloud Foundry.
 
@@ -1168,7 +1168,7 @@ When you want to use a Hystrix Dashboard on Cloud Foundry, you must have previou
 For more information on using the Hystrix Dashboard on Cloud Foundry, see the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-4/common/) documentation.
 
 Once the service is bound to your application, the settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading configuration values.
-{JB}
+
 Once you have performed the steps described earlier and you have made the changes described in the [Use Metrics](#1-2-11-use-metrics) section, you can use the Spring Cloud Services dashboard by following these instructions:
 
 1. Open a browser and connect to the Pivotal Apps Manager.
@@ -1207,7 +1207,7 @@ To publish for Windows, with .NET Framework, use the following command:
 
 ## Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry by using the parameters that match what you selected for framework and runtime:
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry with the same framework and runtime for which your application was published:
 
 To push to a Linux cell, use the following command:
 

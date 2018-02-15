@@ -53,7 +53,7 @@ Note that the Steeltoe Management endpoints themselves support the following .NE
 * ASP.NET Core
 * Console apps (.NET Framework and .NET Core)
 
-When you use the provided Steeltoe components to expose the endpoints using HTTP, you can see that those components support ASP.NET Core.
+Steeltoe currently includes support for exposing the Management endpoints over HTTP with ASP.NET Core.
 
 In addition to the [Quick Start](#1-1-quick-start), there are other Steeltoe sample applications that you can refer to in order to help you understand how to use these endpoints, including:
 
@@ -559,8 +559,6 @@ The following table describes the settings that you can apply to the Heap dump e
 |enabled|Whether to enable the heap dump management endpoint|true|
 |path|The path to the heap dump endpoint when exposed over HTTP|ID|
 |sensitive|Currently not used|false|
-
-[//]: # (TODO The preceding table was clearly copied from earlier. That would be OK, except that the path is the same, which doesn't seem likely.)
 
 >IMPORTANT: Each setting must be prefixed with `management:endpoints:heapdump`.
 
