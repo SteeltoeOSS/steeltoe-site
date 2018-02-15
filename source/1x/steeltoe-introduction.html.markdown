@@ -4,8 +4,6 @@ order: 10
 date: 2016/6/1
 tags:
 ---
-
-
 # 1.0 Prerequisites
 
 If you plan on developing applications using Steeltoe, you will need to download and install the latest [.NET Core SDK](https://www.microsoft.com/net/download/core).
