@@ -4,7 +4,7 @@ order: 40
 date: 2018/1/22
 tags:
 ---
-<span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
+<span style="display:inline-block;margin:0 20px;">For use with </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
 Steeltoe Connectors simplify the process of connecting and using services on Cloud Foundry. Steeltoe Connectors provide a simple abstraction for .NET based applications running on Cloud Foundry, letting them discover bound services and deployment information at runtime. The connectors also provide support for registering the services as injectable service objects.
 
@@ -29,7 +29,9 @@ Make sure your Cloud Foundry CLI tools are logged in and targeting the correct o
 ```bash
 > cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
 ```
+
 or
+
 ```bash
 > cf target -o <YourOrg> -s <YourSpace>
 ```
@@ -89,9 +91,7 @@ See [Publish Sample](#publish-sample) and the sections that follow for instructi
 
 ### 1.1.4 Observe Logs
 
-To see what appears in the logs, run the following command:
-
-`cf logs`
+Optionally, you can use the `cf logs` command to see log output.
 
 ### 1.1.5 View Data
 
@@ -169,8 +169,6 @@ The following MySQL connector configuration shows how to connect to a database a
 
 The following table describes the available settings for the connector. These settings are not specific to Steeltoe. They are passed through to the underlying data provider. See the [Oracle MySQL Connection String docs](https://dev.mysql.com/doc/connector-net/en/connector-net-connection-options.html) or [open source MySQL Connection String docs](https://mysql-net.github.io/MySqlConnector/connection-options/).
 
-
-
 |Key|Description|Steeltoe Default|
 |---|---|:---:|
 |server|Hostname or IP Address of the server.|localhost|
@@ -229,7 +227,7 @@ using Steeltoe.CloudFoundry.Connector.MySql;
 
 public class Startup {
     ...
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...
@@ -282,13 +280,13 @@ public class HomeController : Controller
 To use Entity Framework, inject and use a `DbContext` in your application (instead of a `MySqlConnection`) by using the `AddDbContext<>()` method, as shown in the following example:
 
 ```csharp
-using Steeltoe.CloudFoundry.Connector.MySql.EFCore
+using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
 // OR
-// using Steeltoe.CloudFoundry.Connector.MySql.EF6;
+using Steeltoe.CloudFoundry.Connector.MySql.EF6;
 
 public class Startup {
     ...
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...
@@ -389,7 +387,6 @@ Depending on your specific interests, pick one of the following samples to work 
 > cd Samples/Connectors/src/AspDotNetCore/PostgreSql
 ```
 
-
 ```bash
 > # Use a Entity Framework Core `DbContext`
 > cd Samples/Connectors/src/AspDotNetCore/PostgreEFCore
@@ -448,6 +445,7 @@ You should know how the new .NET [Configuration service](https://docs.microsoft.
 You should also know how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used to configure the application services for the app. Pay particular attention to the `ConfigureServices()` method.
 
 To use this connector:
+
 1. Create a PostgreSQL Service instance and bind it to your application.
 1. Optionally, configure any PostgreSQL client settings (such as `appsettings.json`).
 1. Add the Steeltoe Cloud Foundry config provider to your `ConfigurationBuilder`.
@@ -538,7 +536,7 @@ To use a `NpgsqlConnection` in your application, add it to the service container
 
  public class Startup {
      ...
-     public IConfigurationRoot Configuration { get; private set; }
+     public IConfiguration Configuration { get; private set; }
      public Startup(...)
      {
        ...
@@ -595,7 +593,7 @@ To use Entity Framework, inject and use a `DbContext` in your application instea
 using Steeltoe.CloudFoundry.Connector.PostgreSql.EFCore;
 
 public class Startup {
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...
@@ -667,6 +665,7 @@ Depending on your specific interests, pick one of the following samples to work 
 > # Use a .NET4/EF6 sample
 > cd Samples/Connectors/src/AspDotNet4/MsSql4
 ```
+
 or
 
 ```bash
@@ -840,7 +839,7 @@ To use Microsoft SQL Server on Cloud Foundry, you need a service instance bound 
 > cf create-service SqlServer sharedVM mySqlServerService
 ```
 
-An alternative to the broker is to use a user-orovided service to explicitly provide connection information to the application, as shown in the following example:
+An alternative to the broker is to use a user-provided service to explicitly provide connection information to the application, as shown in the following example:
 
 ```bash
 > cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
@@ -871,7 +870,7 @@ using Steeltoe.CloudFoundry.Connector.MySql;
 
 public class Startup {
     ...
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...
@@ -932,7 +931,7 @@ using Steeltoe.CloudFoundry.Connector.Sql.EF6;
 
 public class Startup {
     ...
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...
@@ -1045,11 +1044,11 @@ If you use a different service, adjust the `create-service` command to fit your 
 
 See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
 
-### Observe Logs
+### 4.1.4 Observe Logs
 
 You can use the `cf logs` command to see log output.
 
-### 4.1.4 View Data
+### 4.1.5 View Data
 
 At this point, the app is running.
 
@@ -1057,7 +1056,7 @@ To send a message, click "Send" and use the form to send a message over RabbitMQ
 
 Having sent a message, click "Receive" to see those messages.
 
-### 4.1.5 Understand the Sample
+### 4.1.6 Understand the Sample
 
 The sample was created with the .NET Core tooling `mvc` template (`dotnet new mvc`) and then modified to use the Steeltoe framework.
 
@@ -1165,7 +1164,7 @@ using Steeltoe.CloudFoundry.Connector.RabbitMQ;
 
 public class Startup {
     ...
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...
@@ -1241,7 +1240,6 @@ To get started, change directory to where the samples are stored, as follows:
 You can use the Cloud Foundry CLI to create a service instance of Redis on Cloud Foundry.
 
 The following commands assume that you use the Redis service provided by Pivotal on Cloud Foundry:
-
 
 ```bash
 > # Create a Redis service instance on Cloud Foundry
@@ -1387,7 +1385,7 @@ To use Microsoft's `IDistributedCache` in your application, add it to the servic
  ```csharp
 using Steeltoe.CloudFoundry.Connector.Redis;
 public class Startup {
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup()
     {
     }
@@ -1440,7 +1438,7 @@ using Steeltoe.CloudFoundry.Connector.Redis;
 
 public class Startup {
     ...
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...
@@ -1510,7 +1508,7 @@ To get started, change directory to where the samples are stored, as follows:
 
 ### 6.1.2 Create Service
 
-You must first create an instance of a OAuth2 service in an org and a space. In this quick start, we will the UAA Server. (The other choice is Pivotal Single Sign-on.)
+You must first create an instance of an OAuth2 service in an org and a space. In this quick start, we will the UAA Server. (The other choice is Pivotal Single Sign-on.)
 
 To set up UAA, we need to create a user-provided service that provides the appropriate UAA server configuration data to the application.
 
@@ -1560,7 +1558,7 @@ You probably want some understanding of Cloud Foundry OAuth2 security services (
 
 To use this Connector:
 
-1. Create an OAuth service instance and bind  itto your application.
+1. Create an OAuth service instance and bind it to your application.
 1. (Optional) Configure any additional settings the OAuth connector needs.
 1. Add the Steeltoe Cloud Foundry configuration provider to your ConfigurationBuilder.
 1. Add the OAuth connector to your ServiceCollection.
@@ -1598,7 +1596,7 @@ Configuring additional settings for the connector is not typically required, but
 }
 ```
 
-CAUTION: Self-signed certificates are inherently insecure. Never use them for a production environment.
+>CAUTION: Self-signed certificates are inherently insecure. Never use them for a production environment.
 
 The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values).
 
@@ -1619,7 +1617,7 @@ using Steeltoe.CloudFoundry.Connector.OAuth;
 
 public class Startup {
     ...
-    public IConfigurationRoot Configuration { get; private set; }
+    public IConfiguration Configuration { get; private set; }
     public Startup(...)
     {
       ...

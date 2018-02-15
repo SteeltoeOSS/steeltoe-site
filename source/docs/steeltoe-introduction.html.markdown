@@ -12,15 +12,15 @@ Steeltoe builds on Spring Cloud by providing several packages that enable .NET d
 Steeltoe provides services that fall broadly into two categories:
 
 * Services that simplify using .NET and ASP.NET on Cloud Foundry:
- * Connectors (such as MySql, Redis, Postgres, RabbitMQ, OAuth, and others)
- * Configuration providers
- * Security providers (OAuth SSO, JWT, Redis Key Ring Storage, and others)
- * Logging providers
+  * Connectors (such as MySql, Redis, Postgres, RabbitMQ, OAuth, and others)
+  * Configuration providers
+  * Security providers (OAuth SSO, JWT, Redis Key Ring Storage, and others)
+  * Logging providers
 * Services that enable .NET and ASP.NET developers to use Spring Cloud:
- * Configuration Server client
- * Service Discovery client
- * Hystrix Circuit Breaker
- * Management endpoints
+  * Configuration Server client
+  * Service Discovery client
+  * Hystrix Circuit Breaker
+  * Management endpoints
 
 # 1.0 Getting Started
 
@@ -191,6 +191,6 @@ As of version 2.0.0, all of the individual management endpoints have been rolled
 
 ## 2.8 Security
 
-New features for Steeltoe Security 2.0.0 include a client for [CredHub](https://github.com/cloudfoundry-incubator/credhub), support for using CloudFoundry as an authentication provider in .NET Framework 4.x applications, and a JWT Provider for WCF applications.
+New features for Steeltoe Security 2.0.0 include a client for [CredHub](https://github.com/cloudfoundry-incubator/credhub), support for using Cloud Foundry as an authentication provider in .NET Framework 4.x applications, and a JWT Provider for WCF applications.
 [//]: # (this is a hack to prevent the TOC from drifting down into the footer)
 <div style="height:500px"></div>

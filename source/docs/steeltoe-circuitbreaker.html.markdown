@@ -289,7 +289,7 @@ Steeltoe related changes to the template code can be found in the following file
   * Code was added to expose Hystrix metrics to the dashboard by calling `AddHystrixMetricsStream()`.
   * Code was added in the `Configure()` method to cause the Hystrix Metrics stream to start communicating with the Hystrix dashboard (`UseHystrixMetricsStream()`)
   * Code was added in the `Configure()` method to use request-level logging and metrics and to setup a Hystrix request context for each incoming request in the pipeline (`UseHystrixRequestContext()`) .
-* `Program.cs`: Code was added to the `ConfigurationBuilder` to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use CloudFoundry hosting.
+* `Program.cs`: Code was added to the `ConfigurationBuilder` to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use Cloud Foundry hosting.
 
 ## 1.2 Usage
 
@@ -369,6 +369,7 @@ To add this type of NuGet to your project add something like the following:
 ### 1.2.2 Define Commands
 
 There are many ways to define a Hystrix command. The simplest looks like this:
+
 ```csharp
 public class HelloWorldCommand : HystrixCommand<string>
 {
@@ -456,13 +457,12 @@ Each setting is prefixed with a key of `execution`, as shown in the following ex
 
 #### 1.2.3.2 Fallback
 
-The following table describes the settings that control how the HystrixCommand's `RunFallbackAsync()` method runs:  
+The following table describes the settings that control how the HystrixCommand's `RunFallbackAsync()` method runs:
 
 |Key|Description|Default|
 |---|---|---|
 |enabled|Enables or disables `RunFallbackAsync()`|true|
 |isolation:semaphore:maxConcurrentRequests|Maximum requests to `RunFallbackAsync()` method when using the `SEMAPHORE` strategy|10|
-
 
 Each setting is prefixed with a key of `fallback`, as shown in the following example:
 
@@ -470,7 +470,7 @@ Each setting is prefixed with a key of `fallback`, as shown in the following exa
 
 #### 1.2.3.3 Circuit Breaker
 
-The following table describes the settings that control the behavior of the default Circuit Breaker used by Hystrix commands:  
+The following table describes the settings that control the behavior of the default Circuit Breaker used by Hystrix commands:
 
 |Key|Description|Default|
 |---|---|---|
@@ -487,7 +487,7 @@ Each setting is prefixed with a key of `circuitBreaker`, as shown in the followi
 
 #### 1.2.3.4 Metrics
 
-The following table describes the settings that control the behavior of capturing metrics from Hystrix commands:  
+The following table describes the settings that control the behavior of capturing metrics from Hystrix commands:
 
 |Key|Description|Default|
 |---|---|---|
@@ -587,7 +587,7 @@ The following listing shows an example:
 
 #### 1.2.4.2 Metrics
 
-The following table describes the settings that control the behavior of capturing metrics from Hystrix thread pools:  
+The following table describes the settings that control the behavior of capturing metrics from Hystrix thread pools:
 
 |Key|Description|Default|
 |---|---|---|
@@ -631,7 +631,7 @@ The tables that follow specify all of the possible settings.
 
 #### 1.2.5.1 Sizing
 
-The following table describes the settings that control the sizing of various aspects of collapsers:  
+The following table describes the settings that control the sizing of various aspects of collapsers:
 
 |Key|Description|Default|
 |---|---|---|
@@ -647,7 +647,7 @@ The following listing shows an example:
 
 #### 1.2.5.2 Metrics
 
-The following table describes the settings that control the behavior of capturing metrics from Hystrix collapsers.  
+The following table describes the settings that control the behavior of capturing metrics from Hystrix collapsers.
 
 |Key|Description|Default|
 |---|---|---|
@@ -657,7 +657,6 @@ The following table describes the settings that control the behavior of capturin
 |rollingPercentile:timeInMilliseconds|Duration of the rolling window in which execution times are kept to allow for percentile calculations.|60000|
 |rollingPercentile:numBuckets|Number of buckets into which the rollingPercentile window will be divided.|6|
 |rollingPercentile:bucketSize|Maximum number of execution times that are kept per bucket.|100|
-
 
 Each setting is prefixed with a key of `metrics`, as shown in the following example:
 
@@ -730,7 +729,7 @@ public class Startup {
 
 You must follow one important requirement if you wish to use the `AddHystrixCommand()` extension methods: When you define your HystrixCommand, define a public constructor with the first argument a `IHystrixCommandOptions` (that is, `HystrixCommandOptions`).  You need not create or populate the `IHystrixCommandOptions`. The `AddHystrixCommand()` extension method does that for you by using the configuration data you provide in the extension method call.
 
-The following example shows how to define a compatible constructor:  
+The following example shows how to define a compatible constructor:
 
 ```csharp
 public class FortuneServiceCommand : HystrixCommand<Fortune>
@@ -1180,7 +1179,6 @@ Once you have performed the steps described earlier and you have made the change
 
 This section contains snippets of commands that you are likely to use repeatedly for common tasks.
 
-
 ## Publish Sample
 
 Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, use the following command:
@@ -1191,19 +1189,19 @@ Use the `dotnet` CLI to build and locally publish the application with your pref
 
 To publish for Linux with .NET Core, use the following command:
 
-```
+```bash
 > dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
 ```
 
 To publish for Windows with .NET Core, use the following command:
 
-```
+```bash
 > dotnet publish -f netcoreapp2.0 -r win10-x64
 ```
 
 To publish for Windows, with .NET Framework, use the following command:
 
-```
+```bash
 > dotnet publish -f net461 -r win10-x64
 ```
 

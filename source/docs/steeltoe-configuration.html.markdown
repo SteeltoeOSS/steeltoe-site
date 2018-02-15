@@ -59,7 +59,7 @@ Cloud Foundry creates and uses these environment variables to communicate an app
 
 You can read more information on the Cloud Foundry environment variables at the [Cloud Foundry docs](http://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html) website.
 
-The Steeltoe CloudFoundry provider supports the following .NET application types:
+The Steeltoe Cloud Foundry provider supports the following .NET application types:
 
 * ASP.NET (MVC, WebForms, WebAPI, WCF)
 * ASP.NET Core
@@ -124,7 +124,7 @@ The `CloudFoundry` quick start sample was created by using the .NET Core tooling
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
 * `CloudFoundry.csproj`: Contains the `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry`
-* `Program.cs`:  Code was added to the `ConfigurationBuilder` to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use CloudFoundry hosting.
+* `Program.cs`:  Code was added to the `ConfigurationBuilder` to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use Cloud Foundry hosting.
 * `Startup.cs`: Code was added to the `ConfigureCloudFoundryOptions`.
 * `HomeController.cs`: Code was added for Options injection into the Controller. Code was also added to display the Cloud Foundry configuration data.
 * `CloudFoundryViewModel.cs`: Used to communicate config values to `CloudFoundry.cshtml`.
@@ -152,7 +152,7 @@ In order to use the Steeltoe Cloud Foundry provider you need to do the following
 
 ### 1.2.1 Add NuGet Reference
 
-To use the provider, you need to add a reference to the appropriate Steeltoe Cloud Foundry NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any. The following table deescribes the available packages:
+To use the provider, you need to add a reference to the appropriate Steeltoe Cloud Foundry NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any. The following table describes the available packages:
 
 |App Type|Package|Description|
 |---|---|---|
@@ -256,7 +256,7 @@ public void ConfigureServices(IServiceCollection services)
     // Setup Options framework with DI
     services.AddOptions();
 
-    // Add Steeltoe CloudFoundry Options to service container
+    // Add Steeltoe Cloud Foundry Options to service container
     services.ConfigureCloudFoundryOptions(Configuration);
 }
 ```
@@ -367,8 +367,7 @@ You can use the dotnet CLI to run the application. To get started, run the follo
 > dotnet restore --configfile nuget.config
 ```
 
-To run the application on .NET Core, use the following command:
-// TODO Linux, Windows, or both?
+To run the application on .NET Core on Windows, Linux or OSX, use the following command:
 
 ```bash
 > dotnet run -f netcoreapp2.0
@@ -440,7 +439,7 @@ See [Push Sample](#push-sample) for instructions on how to push this sample to e
 
 #### 2.1.2.4 Observe Logs
 
-To see the logs as you start the application, use `cf logs sample`.
+To see the logs as you start the application, use `cf logs foo`.
 
 On a Linux cell, you should see something resembling the following during startup:
 
@@ -460,13 +459,13 @@ On Windows cells, you should see something slightly different but with the same 
 
 #### 2.1.2.5 View Results
 
-The `cf push` command creates an application by the name of `sample` and binds the `myConfigServer` service instance to the application. You can see the application at `http://sample.x.y.z/`.
+The `cf push` command creates an application by the name of `foo` and binds the `myConfigServer` service instance to the application. You can see the application at `http://sample.x.y.z/`.
 
 Use the menu provided by the app to see various output related to Cloud Foundry and the config server:
 
 * `CloudFoundry Settings`: Should show `VCAP_APPLICATION` and `VCAP_SERVICES` settings read as configuration data.
 * `Config Server Settings`: Should show the settings used by the Steeltoe client when communicating to the Config Server. These have been picked up from the service binding.
-* `Config Server Data`: This is the configuration data returned from the Config Server's configured GitHub repository. It includes some of the data from `sample.properties`, `sample-development.properties` and `application.yml` found in the GitHub repository: (<https://github.com/spring-cloud-samples/config-repo>).
+* `Config Server Data`: This is the configuration data returned from the Config Server's configured GitHub repository. It includes some of the data from `foo.properties`, `foo-development.properties` and `application.yml` found in the GitHub repository: (<https://github.com/spring-cloud-samples/config-repo>).
 * `Reload`: Triggers a reload of the configuration data from the Config Server.
 
 Change the Hosting environment setting to `production` (by using `export ASPNETCORE_ENVIRONMENT=production` or  `SET ASPNETCORE_ENVIRONMENT=production` ) and then re-push the application. You should see different configuration data returned for that profile/hosting environment.
@@ -478,7 +477,7 @@ The `SimpleCloudFoundry` sample was created from the .NET Core tooling `mvc` tem
 To gain an understanding of the Steeltoe related changes to generated template code, examine the following files:
 
 * `SimpleCloudFoundry.csproj` - Contains `PackageReference` for Steeltoe NuGet `Pivotal.Extensions.Configuration.ConfigServer`
-* `Program.cs` - Code was added to the `ConfigurationBuilder` in order to add Config Server configuration values to the configuration and to use CloudFoundry hosting.
+* `Program.cs` - Code was added to the `ConfigurationBuilder` in order to add Config Server configuration values to the configuration and to use Cloud Foundry hosting.
 * `appsettings.json` - Contains configuration data needed for the Steeltoe Config Server provider.
 * `ConfigServerData.cs` - Object used to hold the data retrieved from the config server
 * `Startup.cs` - Code added to configure the `ConfigServerData` Options added to the service container.
@@ -587,8 +586,8 @@ The following table describes all the settings that can be used to configure the
 |password|Password for basic authentication|none|
 |failFast|Enable or disable failure at startup|false|
 |token|Hashicorp Vault authentication token|none|
-|tokenTtl|Hashicorp Vault token renewal TTL. Valid on CloudFoundry only|300000ms|
-|tokenRenewRate|Hashicorp Vault token renewal rate. Valid on CloudFoundry only|60000ms|
+|tokenTtl|Hashicorp Vault token renewal TTL. Valid on Cloud Foundry only|300000ms|
+|tokenRenewRate|Hashicorp Vault token renewal rate. Valid on Cloud Foundry only|60000ms|
 |retry:enabled|Enable or disable retry logic|false|
 |retry:maxAttempts|Max retries if retry enabled|6|
 |retry:initialInterval|Starting interval|1000ms|

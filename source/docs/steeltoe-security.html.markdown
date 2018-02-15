@@ -41,7 +41,7 @@ or
 
 # 1.0 OAuth2 Single Sign-on
 
-<span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
+<span style="display:inline-block;margin:0 20px;">For use with </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
 This provider enables log-in functionality with OAuth 2.0 and credentials provided from Cloud Foundry security services in ASP.NET Core applications.
 
@@ -331,7 +331,7 @@ The preceding example code establishes the following security rules:
 
 # 2.0 Resource Protection using JWT
 
-<span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
+<span style="display:inline-block;margin:0 20px;">For use with </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
 This provider lets you control access to REST resources by using JWT tokens issued by Cloud Foundry Security services (such as UAA or Pivotal Single Signon) in ASP.NET Core.
 
@@ -378,7 +378,7 @@ To understand the Steeltoe related changes to generated template code, examine t
 * `CloudFoundryJwtAuthentication.csproj`: Contains th `PackageReference` for the Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundryCore` and also one for `Steeltoe.Security.Authentication.CloudFoundryCore`.
 * `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code was added to the `ConfigureServices()` method to add a `CloudFoundryJwtAuthentication` to the service container. Code was also added to define two authorization policies: one requiring a `testgroup` claim and the other requiring a `testgroup1` claim. Additionally, in the `Configure()` method, `.UseAuthentication()` was added the ASP.NET Authentication middleware in the request processing pipeline.
-* `ValuesController.cs`: `[Authorize(Policy = "testgroup")]` was added to the `Get()` action of the cotroller.
+* `ValuesController.cs`: `[Authorize(Policy = "testgroup")]` was added to the `Get()` action of the controller.
 
 ## 2.2 Usage
 
@@ -514,7 +514,7 @@ In the preceding example, if an incoming REST request is made to the `api/values
 
 # 3.0 Redis Key Storage Provider
 
-<span style="display:inline-block;margin:0 20px;">For use with: </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
+<span style="display:inline-block;margin:0 20px;">For use with </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
 By default, ASP.NET Core stores the key ring on the local file system. Local file system usage in a Cloud Foundry environment is unworkable and violates the [twelve-factor guidelines](https://12factor.net/) for developing cloud native applications. By using the Steeltoe Redis Key Storage provider, you can reconfigure the Data Protection service to use Redis on Cloud Foundry for storage.
 
@@ -544,6 +544,7 @@ Create an instance of the Redis service in an org and space, as follows:
 See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
 
 ### 3.1.4 Observe Logs
+
 You can use the `cf logs` command to see log output.
 
 ### 3.1.5 Access the Application
@@ -601,7 +602,7 @@ To use the provider, add a reference to the Steeltoe DataProtection Redis NuGet.
 
 The provider can be found in the `Steeltoe.Security.DataProtection.RedisCore` package.
 
-You can add the provider to your project byusing the following `PackageReference` in your project file:
+You can add the provider to your project by using the following `PackageReference` in your project file:
 
 ```xml
 <ItemGroup>

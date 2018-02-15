@@ -15,7 +15,7 @@ When you expose the endpoints over HTTP, you can also integrate the endpoints wi
 
 # 0.0 Initialize Dev Environment
 
-All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples)repository or download with your browser from GitHub. The following command shows how to use git to get the samples:
+All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download with your browser from GitHub. The following command shows how to use Git to get the samples:
 
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
@@ -132,10 +132,10 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 * `CloudFoundry.csproj`: Multiple changes as follows:
   * GitInfo `PackageReference` added to gather git build information for the App Info endpoint.
-  * GitProperties `Target` added to build the `git.properties` file used by the Git App Info contributor. {JB - restore the underscore before GitProperties}
+  * _GitProperties `Target` added to build the `git.properties` file used by the Git App Info contributor.
   * Added `Steeltoe.Management.CloudFoundry` a package reference to bring in all Management endpoints for use on Cloud Foundry.
   * Added various MySQL package references to enable the use of MySQL in the application.
-* `Program.cs`: Added code to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry, to use CloudFoundry hosting and to setup Steeltoe dynamic logging.
+* `Program.cs`: Added code to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry, to use Cloud Foundry hosting and to setup Steeltoe dynamic logging.
 * `Startup.cs`: Multiple changes, as follows:
   * Code added to `ConfigureServices()` to use the Steeltoe MySQL connector.
   * Code added to `ConfigureServices()` to add a custom health contributor, `MySqlHealthContributor`, to the service container.
@@ -211,7 +211,7 @@ All management settings should be placed under the prefix with the key `manageme
 
 Settings that you want to apply to a specific endpoint should be placed under the prefix with the key `management:endpoints` + `:` + ID (for example, `management:endpoints:health`). Any settings you apply to a specific endpoint override any settings applied globally.
 
-The followinb table describes the settings that you can apply globally:
+The following table describes the settings that you can apply globally:
 
 |Key|Description|Default|
 |---|---|---|
@@ -588,7 +588,7 @@ When adding this management endpoint to your application, the [Cloud Foundry sec
 
 #### 1.2.9.1 Settings
 
-Typically, you need not do any additional configuration. However, the following tabl describes the additional settings that you could apply to the Cloud Foundry endpoint:
+Typically, you need not do any additional configuration. However, the following table describes the additional settings that you could apply to the Cloud Foundry endpoint:
 
 |Key|Description|Default|
 |---|---|---|
@@ -606,9 +606,9 @@ Typically, you need not do any additional configuration. However, the following 
 
 #### 1.2.9.2 HTTP Access
 
-The default path to the CloudFoundry Actuator endpoint is `/`. Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
+The default path to the Cloud Foundry Actuator endpoint is `/`. Refer to the common [enable HTTP Access](#http-access) section for details on enabling HTTP Access.
 
-To add the CloudFoundry actuator to the service container, you can use the `AddCloudFoundryActuator()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointServiceCollectionExtensions.cs).
+To add the Cloud Foundry actuator to the service container, you can use the `AddCloudFoundryActuator()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointServiceCollectionExtensions.cs).
 
 To add the Cloud Foundry actuator and security middleware to the ASP.NET Core pipeline, use the `UseCloudFoundryActuator()` and `UseCloudFoundrySecurity()` extension methods from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointApplicationBuilderExtensions.cs).
 
