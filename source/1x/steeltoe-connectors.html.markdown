@@ -474,9 +474,9 @@ public class HomeController : Controller
 
 ```
 
-# 2.0 Postgres
+# 2.0 PostgreSQL
 
-This connector simplifies using Postgres ADO.NET providers in an application running on Cloud Foundry.
+This connector simplifies using PostgreSQL ADO.NET providers in an application running on Cloud Foundry.
 
 Currently the connector supports the following providers:
 
@@ -486,7 +486,7 @@ The source code for this connector can be found [here](https://github.com/Steelt
 
 ## 2.1 Quick Start
 
-This quick start consists of using several ASP.NET Core sample applications to illustrate how to use the Steeltoe Postgres Connector for connecting to a Postgres service on Cloud Foundry.
+This quick start consists of using several ASP.NET Core sample applications to illustrate how to use the Steeltoe PostgreSQL Connector for connecting to a PostgreSQL service on Cloud Foundry.
 
 There are two sample applications you can choose from for this quick start:
 
@@ -509,9 +509,9 @@ Depending on your specific interests, pick one of the following samples to work 
 
 ### 2.1.2 Create Service
 
-In this step, you will create a service instance of Postgres on Cloud Foundry.
+In this step, you will create a service instance of PostgreSQL on Cloud Foundry.
 
-The commands below assume you are using the EDB Postgres service on Cloud Foundry.
+The commands below assume you are using the EDB PostgreSQL service on Cloud Foundry.
 
 If you are using a different service then you will have to adjust the `create-service` command below to fit your setup.
 
@@ -519,7 +519,7 @@ If you are using a different service then you will have to adjust the `create-se
 > # Target and org and space in Cloud Foundry
 > cf target -o myorg -s development
 >
-> # Create a Postgres service instance on Cloud Foundry
+> # Create a PostgreSQL service instance on Cloud Foundry
 > cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
 >
 > # Make sure the service is ready
@@ -583,7 +583,7 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 2.1.6 What to expect
 
-At this point the app is up and running. Upon startup it inserts a couple rows into the bound Postgres database.
+At this point the app is up and running. Upon startup it inserts a couple rows into the bound PostgreSQL database.
 
 To display those rows click on the `Postgres Data`` link in the top menu and you should see the row data displayed.
 
@@ -595,9 +595,9 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 * `PostgreSql.csproj`, `PostgreEFCore.csproj` - Contains `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry` and also one for `Steeltoe.CloudFoundry.Connector.PostgreSql`
 * `Program.cs` - Code added to read the `--server.urls` command line.
-* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry Postgres configuration values when pushed to Cloud Foundry.
+* `Startup.cs` - Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext` to the service container. Additionally, code was added to the `ConfigurationBuilder` in order to pick up Cloud Foundry PostgreSQL configuration values when pushed to Cloud Foundry.
 * `HomeController.cs` - Code added for injection of a `NpgsqlConnection` or `DbContext` into the Controller.  These are used to obtain data from the database and then to display the data.
-* `PostgresData.cshtml` - The view used to display the Postgres data values.
+* `PostgresData.cshtml` - The view used to display the PostgreSQL data values.
 * `Models folder` - contains code to initialize the database and also the `DbContext` for PostgreEFCore sample.
 
 ## 2.2 Usage
@@ -608,8 +608,8 @@ You should also have a good understanding of how the ASP.NET Core [Startup](http
 
 To use this connector you need to do the following:
 
-* Create and bind a Postgres Service instance to your application.
-* Optionally, configure any Postgres client settings (e.g. `appsettings.json`)
+* Create and bind a PostgreSQL Service instance to your application.
+* Optionally, configure any PostgreSQL client settings (e.g. `appsettings.json`)
 * Add Steeltoe Cloud Foundry config provider to your `ConfigurationBuilder`.
 * Add `NpgsqlConnection` or `DbContext` to your `IServiceCollection`.
 
@@ -635,7 +635,7 @@ Likewise if you are using the Entity Framework providers.
 
 ### 2.2.2 Configure Settings
 
-Optionally you can configure the settings the connector will use when setting up the `NpgsqlConnection` to a database. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of Postgres database running elsewhere.
+Optionally you can configure the settings the connector will use when setting up the `NpgsqlConnection` to a database. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of PostgreSQL database running elsewhere.
 
 Here is an example Postgres connector configuration in JSON that shows how to setup a connection to a database at `myserver:5432`:
 
@@ -694,12 +694,12 @@ If you wanted to managed the settings centrally, you can also use the Spring Clo
 
 ### 2.2.3 Cloud Foundry
 
-When you want to use Postgres on Cloud Foundry and you have installed a Postgres service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
+When you want to use PostgreSQL on Cloud Foundry and you have installed a PostgreSQL service, you can create and bind an instance of it to your application using the Cloud Foundry CLI as follows:
 
 ```bash
 > cf target -o myorg -s myspace
 >
-> # Create Postgres service
+> # Create PostgreSQL service
 > cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
 >
 > # Bind service to `myApp`
@@ -709,7 +709,7 @@ When you want to use Postgres on Cloud Foundry and you have installed a Postgres
 > cf restage myApp
 ```
 
-Note: The commands above assume you are using the Postgres service provided by EDB on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
+Note: The commands above assume you are using the PostgreSQL service provided by EDB on Cloud Foundry. If you are using a different service then you will have to adjust the `create-service` command to fit your setup.
 
 Once you have bound the service to your application, the connectors settings will become available and be setup in `VCAP_SERVICES`.
 
@@ -832,7 +832,7 @@ public class Startup {
     public void ConfigureServices(IServiceCollection services)
     {
 
-        // Add EFCore TestContext configured with a Postgres configuration
+        // Add EFCore TestContext configured with a PostgreSQL configuration
         services.AddDbContext<TestContext>(options => options.UseNpgsql(Configuration));
 
         // Add framework services.

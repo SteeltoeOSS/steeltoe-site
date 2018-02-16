@@ -108,11 +108,11 @@ Additionally, as it relates to Entity Framework support, the connector has been 
 
 For more detail on how to use these, see the MySql connector documentation. Note: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the MySql/Entity framework code you wish to use in your application.
 
-### Postgres Connector
+### PostgreSQL Connector
 
-Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source Npgsql package has been removed.  This has allowed the connector to become more flexible in what Postgres ADO.NET providers and versions it supports.
+Starting with version 1.0.1 of Steeltoe, the direct dependency on the open source Npgsql package has been removed.  This has allowed the connector to become more flexible in what PostgreSQL ADO.NET providers and versions it supports.
 
-For more detail on how to use the connector see the Postgres connectors documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the Postgres/Entity framework code wish to use in your application.
+For more detail on how to use the connector see the PostgreSQL connector's documentation. NOTE: This is a BREAKING change, as it now requires that you MUST explicitly include the packages and versions of the PostgreSQL/Entity framework code wish to use in your application.
 
 ### Rabbit Connector
 
