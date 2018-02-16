@@ -44,17 +44,21 @@ There are three sample applications you can choose from for this quick start:
 
 Depending on your specific interests, pick one of the following samples to work with going forward.
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
+> cd Samples
+> git checkout v1.x
 >
 > # Use a `MySqlConnection` sample
-> cd Samples/Connectors/src/AspDotNetCore/MySql
+> cd Connectors/src/AspDotNetCore/MySql
 >
 > # Use a Entity Framework 6 `DbContext` sample
-> cd Samples/Connectors/src/AspDotNetCore/MySqlEF6
+> cd Connectors/src/AspDotNetCore/MySqlEF6
 >
 > # Use a Entity Framework Core `DbContext` sample
-> cd Samples/Connectors/src/AspDotNetCore/MySqlEFCore
+> cd Connectors/src/AspDotNetCore/MySqlEFCore
 ```
 
 ### 1.1.2 Create Service
@@ -497,14 +501,18 @@ There are two sample applications you can choose from for this quick start:
 
 Depending on your specific interests, pick one of the following samples to work with going forward.
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
+> cd Samples
+> git checkout v1.x
 >
 > # Use a `NpgsqlConnection`
-> cd Samples/Connectors/src/AspDotNetCore/PostgreSql
+> cd Connectors/src/AspDotNetCore/PostgreSql
 >
 > # Use a Entity Framework Core `DbContext`
-> cd Samples/Connectors/src/AspDotNetCore/PostgreEFCore
+> cd Connectors/src/AspDotNetCore/PostgreEFCore
 ```
 
 ### 2.1.2 Create Service
@@ -902,9 +910,13 @@ Specifically it shows how to use a `RabbitMQ.Client` to send and receive message
 
 ### 3.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Connectors/src/AspDotNetCore/Rabbit
+> cd Samples
+> git checkout v1.x
+> cd Connectors/src/AspDotNetCore/Rabbit
 ```
 
 ### 3.1.2 Create Service
@@ -1236,9 +1248,13 @@ This quick start consists of using a ASP.NET Core sample application to illustra
 
 ### 4.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Connectors/src/AspDotNetCore/Redis
+> cd Samples
+> git checkout v1.x
+> cd Connectors/src/AspDotNetCore/Redis
 ```
 
 ### 4.1.2 Create Service
@@ -1618,9 +1634,13 @@ This quick start consists of an ASP.NET Core sample app illustrating how to use 
 
 ### 5.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Connectors/src/AspDotNetCore/OAuth
+> cd Samples
+> git checkout v1.x
+> cd Connectors/src/AspDotNetCore/OAuth
 ```
 
 ### 5.1.2 Create Service

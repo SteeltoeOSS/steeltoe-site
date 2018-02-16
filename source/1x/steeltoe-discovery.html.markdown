@@ -48,8 +48,12 @@ In this step, we will fetch a repository from which we can start up a Netflix Eu
 
 ### 1.1.2 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
+> cd Samples
+> git checkout v1.x
 ```
 
 ### 1.1.3 Run Fortune-Teller-Service

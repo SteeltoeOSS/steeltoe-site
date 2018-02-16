@@ -49,9 +49,13 @@ You will need access to a Cloud Foundry runtime environment in order to complete
 
 ### 1.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Configuration/src/AspDotNetCore/CloudFoundry
+> cd Samples
+> git checkout v1.x
+> cd Configuration/src/AspDotNetCore/CloudFoundry
 ```
 
 ### 1.1.2 Publish Sample
@@ -315,9 +319,13 @@ To do that you must modify `configserver/src/main/resources/application.yml` to 
 
 ### 2.1.2 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Configuration/src/AspDotNetCore/SimpleCloudFoundry
+> cd Samples
+> git checkout v1.x
+> cd Configuration/src/AspDotNetCore/SimpleCloudFoundry
 ```
 
 ### 2.1.3 Run Sample

@@ -39,9 +39,13 @@ This quick start consists of an ASP.NET Core sample app illustrating how to use 
 
 ### 1.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Management/src/AspDotNetCore/CloudFoundry
+> cd Samples
+> git checkout v1.x
+> cd Management/src/AspDotNetCore/CloudFoundry
 ```
 
 ### 1.1.2 Create Service

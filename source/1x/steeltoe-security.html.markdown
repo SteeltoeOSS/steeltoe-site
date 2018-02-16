@@ -34,9 +34,13 @@ This quick start makes use of a ASP.NET Core sample application to illustrate ho
 
 ### 1.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Security/src/CloudFoundrySingleSignon
+> cd Samples
+> git checkout v1.x
+> cd Security/src/CloudFoundrySingleSignon
 ```
 
 ### 1.1.2 Get UAA CLI
@@ -427,10 +431,13 @@ Note: This application is intended to be used in conjunction with the quick star
 
 ### 2.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
->
-> cd Samples/Security/src/CloudFoundryJwtAuthentication
+> cd Samples
+> git checkout v1.x
+> cd Security/src/CloudFoundryJwtAuthentication
 ```
 
 ### 2.1.2 Do OAuth SSO Quick Start
@@ -723,9 +730,13 @@ This quick start makes use of a ASP.NET Core sample application to illustrate ho
 
 ### 3.1.1 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
-> cd Samples/Security/src/RedisDataProtectionKeyStore
+> cd Samples
+> git checkout v1.x
+> cd Security/src/RedisDataProtectionKeyStore
 ```
 
 ### 3.1.2 Create Service

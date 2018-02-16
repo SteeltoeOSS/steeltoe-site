@@ -71,8 +71,12 @@ In this step, we will fetch a repository from which we use to start up a Netflix
 
 ### 1.1.3 Get Sample
 
+To locate the sample you will need clone the repository from GitHub and checkout the v1.x branch.
+
 ```bash
 > git clone https://github.com/SteeltoeOSS/Samples.git
+> cd Samples
+> git checkout v1.x
 ```
 
 ### 1.1.4 Run Fortune-Teller-Service
