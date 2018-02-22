@@ -38,7 +38,7 @@ or
 
 # 1.0 MySQL
 
-This connector simplifies using MySql ADO.NET providers in an application running on Cloud Foundry.
+This connector simplifies using MySQL ADO.NET providers in an application running on Cloud Foundry.
 
 Currently, the connector supports the following providers:
 
@@ -55,7 +55,7 @@ The source code for this connector can be found [here](https://github.com/Steelt
 
 ## 1.1 Quick Start
 
-This quick start consists of using several ASP.NET Core sample applications that show how to use the Steeltoe MySql Connector for connecting to a MySql service on Cloud Foundry.
+This quick start consists of using several ASP.NET Core sample applications that show how to use the Steeltoe MySQL Connector for connecting to a MySQL service on Cloud Foundry.
 
 There are three sample applications you can choose from for this quick start:
 
@@ -73,12 +73,12 @@ Depending on your specific interests, pick one of the following samples to work 
 
 ### 1.1.2 Create Service
 
-In this step, we use the Cloud Foundry CLI to create a service instance of MySql on Cloud Foundry.
+In this step, we use the Cloud Foundry CLI to create a service instance of MySQL on Cloud Foundry.
 
-The commands in this section assume you are using the MySql service provided by Pivotal on Cloud Foundry. If you are using a different service, adjust the `create-service` command below to fit your environment.
+The commands in this section assume you are using the MySQL service provided by Pivotal on Cloud Foundry. If you are using a different service, adjust the `create-service` command below to fit your environment.
 
 ```bash
-> # Create a MySql service instance on Cloud Foundry
+> # Create a MySQL service instance on Cloud Foundry
 > cf create-service p-mysql 100mb myMySqlService
 >
 > # Make sure the service is ready
@@ -105,7 +105,7 @@ Each of the samples were created by using the .NET Core tooling `mvc` template (
 
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
-* `*.csproj` files: Contain the `PackageReference` for the Steeltoe NuGet Connector and the Configuration packages. Also, a `PackageReference` for Oracle's MySql provider, `MySql.Data`, has been added. If Entity Framework has been used, you see references to those packages as well.
+* `*.csproj` files: Contain the `PackageReference` for the Steeltoe NuGet Connector and the Configuration packages. Also, a `PackageReference` for Oracle's MySQL provider, `MySql.Data`, has been added. If Entity Framework has been used, you see references to those packages as well.
 * `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs`: Code added for injection of a `MySqlConnection` or `DbContext` into the Controller. These are used to obtain data from the database and then to display the data.
@@ -121,36 +121,17 @@ You should also know how the ASP.NET Core [Startup](https://docs.microsoft.com/e
 To use this connector:
 
 1. Create a MySQL Service instance and bind it to your application.
-1. Optionally, configure any MySql client settings (such as `appsettings.json`) you need.
+1. Optionally, configure any MySQL client settings (such as `appsettings.json`) you need.
 1. Add the Steeltoe Cloud Foundry configuration provider to your `ConfigurationBuilder`.
 1. Add `MySqlConnection` or `DbContext` to your `IServiceCollection`.
 
 ### 1.2.1 Add NuGet Reference
 
-To use this connector, add a reference to one of the Steeltoe connector NuGet packages. The following table describes the available packages:
-
-|App Type|ORM|Package|
-|---|---|---|
-|ASP.NET Core|Entity Framework 6|`Steeltoe.CloudFoundry.Connector.EF6Core`|
-|ASP.NET Core|Entity Framework Core|`Steeltoe.CloudFoundry.Connector.EFCore`|
-|ASP.NET Core|Other|`Steeltoe.CloudFoundry.ConnectorCore`|
-|Other|Other|`Steeltoe.CloudFoundry.ConnectorBase`|
-
-Use the Nuget package manager tools or directly add the appropriate package to your project by using the a `PackageReference`, as shown in the following listing:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
-...
-</ItemGroup>
-```
-
-In addition to the `packageReference`, you need a MySql-specific package: `MySql.Data`, `MySqlConnector`, or `Pomelo.EntityFrameworkCore.MySql`.
+To use the MySQL connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and your choice of MySQL-specific package between [MySql.Data](https://www.nuget.org/packages/MySql.Data), [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/), and [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/).
 
 ### 1.2.2 Configure Settings
 
-The MySql connector supports a variety of configuration options. You can use these settings to develop or test an application locally and override them during deployment.
+The connector supports a variety of configuration options. You can use these settings to develop or test an application locally and override them during deployment.
 
 The following MySQL connector configuration shows how to connect to a database at `myserver:3306`:
 
@@ -201,10 +182,10 @@ The samples and most templates are already set up to read from `appsettings.json
 
 ### 1.2.3 Cloud Foundry
 
-To use MySQL on Cloud Foundry, you can create and bind an instance of MySql to your application by using the Cloud Foundry CLI, as follows:
+To use MySQL on Cloud Foundry, you can create and bind an instance of MySQL to your application by using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create MySql service
+> # Create MySQL service
 > cf create-service p-mysql 100mb myMySqlService
 >
 > # Bind service to `myApp`
@@ -214,7 +195,7 @@ To use MySQL on Cloud Foundry, you can create and bind an instance of MySql to y
 > cf restage myApp
 ```
 
->NOTE: The preceding commands assume you use [MySql for PCF](https://network.pivotal.io/products/p-mysql), provided by Pivotal on Cloud Foundry. If you use a different service, you must adjust the `create-service` command to fit your environment.
+>NOTE: The preceding commands assume you use [MySQL for PCF](https://network.pivotal.io/products/p-mysql), provided by Pivotal on Cloud Foundry. If you use a different service, you must adjust the `create-service` command to fit your environment.
 
 Once the service is bound to your application, the connector's settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
@@ -378,6 +359,8 @@ You can choose from two sample applications:
 * PostgreSql: Shows how to use a `NpgsqlConnection` to issue commands to the bound database.
 * PostgreEFCore: Shows how to use an Entity Framework Core `DbContext` to access the bound database.
 
+In addition to this quick start, there is an ASP.NET4 sample that was built with Autofac in [Samples/Connectors/src/AspDotNet4/PostgreSql4](https://github.com/SteeltoeOSS/Samples/tree/dev/Connectors/src/AspDotNet4/PostgreSql4).
+
 ### 2.1.1 Locate Sample
 
 Depending on your specific interests, pick one of the following samples to work with going forward:
@@ -453,26 +436,7 @@ To use this connector:
 
 ### 2.2.1 Add NuGet Reference
 
-To use this connector, add a reference to one of the Steeltoe connector NuGet packages. The following table describes the NuGet packages:
-
-|App Type | ORM | Package |
-|--- | --- | --- |
-|ASP.NET Core | Entity Framework 6 | `Steeltoe.CloudFoundry.Connector.EF6Core` |
-|ASP.NET Core | Entity Framework Core | `Steeltoe.CloudFoundry.Connector.EFCore` |
-|ASP.NET Core | Other | `Steeltoe.CloudFoundry.ConnectorCore`
-|Other | Other | `Steeltoe.CloudFoundry.ConnectorBase`
-
-Use the Nuget package manager tools or directly add the appropriate package to your project by using the a `PackageReference`, as follows:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
-...
-</ItemGroup>
-```
-
-In addition to the preceding package, you also need to add a PostgreSQL package reference to your application, as you would if you were not using Cloud Foundry (for example, `Npgsql` or `Npgsql.EntityFrameworkCore.PostgreSQL`).
+To use the PostgreSQL connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and your choice of PostgreSQL package between [Npgsql](https://www.nuget.org/packages/Npgsql/) and [Npgsql.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/Npgsql.EntityFrameworkCore.PostgreSQL/).
 
 ### 2.2.2 Configure Settings
 
@@ -777,16 +741,17 @@ To use this connector:
 
 ### 3.2.1 Add NuGet Reference
 
-To use this connector, add a reference to one of the Steeltoe connector NuGet packages. The following table describes the packages:
+To use the Microsoft SQL Server connector, you need to add references to both the appropriate Steeltoe Connector NuGet package and a SqlServer or Entity Framework package. The following table describes the packages:
 
 |App Type|ORM|Steeltoe Package|SQL Server Package|
 |---|---|---|---|
 |ASP.NET Core|Entity Framework 6|`Steeltoe.CloudFoundry.Connector.EF6Core`|`EntityFramework`|
 |ASP.NET Core|Entity Framework Core|`Steeltoe.CloudFoundry.Connector.EFCore`|`Microsoft.EntityFrameworkCore.SqlServer`|
 |ASP.NET Core|Other|`Steeltoe.CloudFoundry.ConnectorCore`|`System.Data.SqlClient`|
+|ASP.NET 4.x with Autofac|Other|`Steeltoe.CloudFoundry.ConnectorAutofac`|`System.Data.SqlClient`|
 |Other|Other|`Steeltoe.CloudFoundry.ConnectorBase`|`System.Data.SqlClient`|
 
-Use the Nuget package manager tools or directly add the appropriate packages to your project by using a `PackageReference`, as shown in the following example:
+Use the Nuget package manager tools or (with .NET Core applications only) directly add the appropriate packages to your project by using a `PackageReference`, as shown in the following example:
 
 ```xml
 <ItemGroup>
@@ -1016,6 +981,8 @@ This quick start uses an ASP.NET Core sample application and the Steeltoe Rabbit
 
 Specifically, it shows how to use a `RabbitMQ.Client` to send and receive messages on the bound RabbitMQ service.
 
+In addition to this quick start, there is an ASP.NET4 sample that was built with Autofac in [Samples/Connectors/src/AspDotNet4/RabbitMQ4](https://github.com/SteeltoeOSS/Samples/tree/dev/Connectors/src/AspDotNet4/RabbitMQ4).
+
 ### 4.1.1 Locate Sample
 
 To get started, change directory to where the samples are stored, as follows:
@@ -1086,20 +1053,7 @@ To use this Connector:
 
 ### 4.2.1 Add NuGet Reference
 
-To use the connector, you need to add a reference to the appropriate Steeltoe Connector NuGet package.
-
-If your application uses Microsoft's Dependency Injection, use the `Steeltoe.CloudFoundry.ConnectorCore` package. If you do not use Microsoft's Dependency Injection, use `Steeltoe.CloudFoundry.ConnectorBase`.
-
-You can use the NuGetPackage manager or directly add the following package references to your .csproj file to add the desired connector package and `RabbitMQ.Client`:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0"/>
-    <PackageReference Include="RabbitMQ.Client" Version= "x.y.z"/>
-...
-</ItemGroup>
-```
+To use the RabbitMQ connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and `RabbitMQ.Client`.
 
 ### 4.2.2 Configure Settings
 
@@ -1218,6 +1172,7 @@ using RabbitMQ.Client;
 
 In addition to the [Quick Start](#5-1-quick-start), other Steeltoe sample applications are available to help you understand how to use this connector:
 
+* [AspDotNet4/Redis4](https://github.com/SteeltoeOSS/Samples/tree/dev/Connectors/src/AspDotNet4/Redis4): Same as the next Quick Start but built for ASP.NET 4.x.
 * [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore): A sample application showing how to use the Steeltoe DataProtection Key Storage Provider for Redis.
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore): A sample application showing how to use all of the Steeltoe components together in an ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
 
@@ -1251,7 +1206,7 @@ The following commands assume that you use the Redis service provided by Pivotal
 
 If you use a different service, you have to adjust the `create-service` command to fit your environment.
 
-### 5.1.3 Publish and Push Sample, observe logs
+### 5.1.3 Publish and Push Sample
 
 See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
 
@@ -1298,22 +1253,9 @@ To use this connector:
 
 ### 5.2.1 Add NuGet Reference
 
-To use the connector, you need to add a reference to the appropriate Steeltoe Connector NuGet package and a reference to `Microsoft.Extensions.Caching.Redis`, `StackExchange.Redis`, or `StackExchange.Redis.StrongName`.
+To use the Redis connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and a reference to `Microsoft.Extensions.Caching.Redis`, `StackExchange.Redis`, or `StackExchange.Redis.StrongName`.
 
->NOTE: This requirement is a change for version 2.x - version 1.x packages do not require a direct Redis package reference.
-
-If your application uses Microsoft's Dependency Injection, use the `Steeltoe.CloudFoundry.ConnectorCore` package. If you do not use Microsoft's Dependency Injection, use `Steeltoe.CloudFoundry.ConnectorBase`.
-
-To include the Steeltoe connector and Redis libraries, use the NuGet Package Manager tools or directly add the following package references to your .csproj file, as shown in the following example:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0"/>
-    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version= "x.y.z"/>
-...
-</ItemGroup>
-```
+>NOTE: The requirement to add a direct Redis package reference is new as of version 2.0.0.
 
 >NOTE: Because `Microsoft.Extensions.Caching.Redis` depends on `StackExchange.Redis.StrongName`, adding a reference to the Microsoft library also enables access to the StackExchange classes, as seen in the sample application.
 
@@ -1498,6 +1440,8 @@ This connector simplifies using Cloud Foundry OAuth2 security services (for exam
 
 This quick start consists of an ASP.NET Core sample application showing how to use the OAuth Connector to expose the binding information provided by the Cloud Foundry UAA Server.
 
+In addition to this quick start, there is an ASP.NET4 sample that was built with Autofac in [Samples/Connectors/src/AspDotNet4/OAuth4](https://github.com/SteeltoeOSS/Samples/tree/dev/Connectors/src/AspDotNet4/OAuth4).
+
 ### 6.1.1 Locate Sample
 
 To get started, change directory to where the samples are stored, as follows:
@@ -1566,17 +1510,7 @@ To use this Connector:
 
 ### 6.2.1 Add NuGet Reference
 
-To use the connector, you need to add a reference to the appropriate Steeltoe Connector NuGet package. If your application uses Microsoft's Dependency Injection, use the `Steeltoe.CloudFoundry.ConnectorCore` package. If you do not use Microsoft's Dependency Injection, use `Steeltoe.CloudFoundry.ConnectorBase`.
-
-To include the Steeltoe connector library, use the NuGet Package Manager tools or directly add the following package references to your .csproj file, as shown in the following listing:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.0.0"/>
-...
-</ItemGroup>
-```
+To use the OAuth connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
 
 ### 6.2.2 Configure Settings
 
@@ -1758,3 +1692,25 @@ If there are merge conflicts, the last provider added to the Configuration takes
 To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool such as [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config)
 
 >NOTE: If you use the Spring Cloud Config Server, `AddConfigServer()` automatically calls `AddCloudFoundry()` for you.
+
+## Steeltoe Connector Reference
+
+To use Steeltoe Connectors, you need to add a reference to the appropriate NuGet package based on the type of the application you are building and what dependency injector you have chosen, if any. The following table describes the available packages:
+
+|App Type|Package|Description|
+|---|---|---|
+|Console/ASP.NET 4.x|`Steeltoe.CloudFoundry.ConnectorBase`|Base functionality. No dependency injection.|
+|ASP.NET 4.x with Autofac|`Steeltoe.CloudFoundry.ConnectorAutofac`|Includes base. Adds Autofac dependency injection.|
+|ASP.NET Core|`Steeltoe.CloudFoundry.ConnectorCore`|Includes base. Adds Microsoft Dependency Injection.|
+|ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EF6Core`|Includes base. Adds Entity Framework 6 with Microsoft Dependency Injection.|
+|ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EFCore`|Includes base. Adds Entity Framework Core with Microsoft Dependency Injection|
+
+To add any NuGet package, use the Nuget package manager tools or (with .NET Core applications only) directly add the appropriate package to your project by using the a `PackageReference`, as shown in the following listing:
+
+```xml
+<ItemGroup>
+...
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
+...
+</ItemGroup>
+```
