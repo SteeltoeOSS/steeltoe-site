@@ -127,7 +127,7 @@ To use this connector:
 
 ### 1.2.1 Add NuGet Reference
 
-To use the MySQL connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and your choice of MySQL-specific package between [MySql.Data](https://www.nuget.org/packages/MySql.Data), [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/), and [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/).
+To use the MySQL connector, add your choice of MySQL-specific package(s) between [MySql.Data](https://www.nuget.org/packages/MySql.Data)/[MySql.Data.Entity](https://www.nuget.org/packages/MySql.Data.Entity), [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/), and [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
 
 ### 1.2.2 Configure Settings
 
@@ -436,7 +436,9 @@ To use this connector:
 
 ### 2.2.1 Add NuGet Reference
 
-To use the PostgreSQL connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and your choice of PostgreSQL package between [Npgsql](https://www.nuget.org/packages/Npgsql/) and [Npgsql.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/Npgsql.EntityFrameworkCore.PostgreSQL/).
+To use the PostgreSQL connector, add your choice of PostgreSQL package between [Npgsql](https://www.nuget.org/packages/Npgsql/) and [Npgsql.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/Npgsql.EntityFrameworkCore.PostgreSQL/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+
+>NOTE: Steeltoe does not currently include direct support for PostgreSQL with Entity Framework 6
 
 ### 2.2.2 Configure Settings
 
@@ -741,26 +743,7 @@ To use this connector:
 
 ### 3.2.1 Add NuGet Reference
 
-To use the Microsoft SQL Server connector, you need to add references to both the appropriate Steeltoe Connector NuGet package and a SqlServer or Entity Framework package. The following table describes the packages:
-
-|App Type|ORM|Steeltoe Package|SQL Server Package|
-|---|---|---|---|
-|ASP.NET Core|Entity Framework 6|`Steeltoe.CloudFoundry.Connector.EF6Core`|`EntityFramework`|
-|ASP.NET Core|Entity Framework Core|`Steeltoe.CloudFoundry.Connector.EFCore`|`Microsoft.EntityFrameworkCore.SqlServer`|
-|ASP.NET Core|Other|`Steeltoe.CloudFoundry.ConnectorCore`|`System.Data.SqlClient`|
-|ASP.NET 4.x with Autofac|Other|`Steeltoe.CloudFoundry.ConnectorAutofac`|`System.Data.SqlClient`|
-|Other|Other|`Steeltoe.CloudFoundry.ConnectorBase`|`System.Data.SqlClient`|
-
-Use the Nuget package manager tools or (with .NET Core applications only) directly add the appropriate packages to your project by using a `PackageReference`, as shown in the following example:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
-    <PackageReference Include="System.Data.SqlClient" Version= "4.4.0"/>
-...
-</ItemGroup>
-```
+To use the Microsoft SQL Server connector, add your choice of Microsoft SQL Server package between [System.Data.SqlClient](https://www.nuget.org/packages/System.Data.SqlClient/), [Entity Framework](https://www.nuget.org/packages/EntityFramework/) and [Microsoft.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/), as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
 
 ### 3.2.2 Configure Settings
 
