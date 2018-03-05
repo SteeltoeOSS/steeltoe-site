@@ -33,7 +33,6 @@
     </div>
     <%= partial 'shared/footer' %>
     <%= javascript_include_tag :docs %>
-    <%= partial 'shared/ga' %>
     <script>
       function viewV1(){
         window.location.href='<%= current_page.url.sub! 'docs', '1x' %>';
