@@ -133,7 +133,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 * `CloudFoundry.csproj`: Multiple changes as follows:
   * GitInfo `PackageReference` added to gather git build information for the App Info endpoint.
   * _GitProperties `Target` added to build the `git.properties` file used by the Git App Info contributor.
-  * Added `Steeltoe.Management.CloudFoundryCore` a package reference to bring in all Management endpoints for use on Cloud Foundry.
+  * Added `Steeltoe.Management.CloudFoundryCore` package reference to bring in all Management endpoints for use on Cloud Foundry.
   * Added various MySQL package references to enable the use of MySQL in the application.
 * `Program.cs`: Added code to the `ConfigurationBuilder` in order to pick up Cloud Foundry configuration values when pushed to Cloud Foundry, to use Cloud Foundry hosting and to setup Steeltoe dynamic logging.
 * `Startup.cs`: Multiple changes, as follows:
