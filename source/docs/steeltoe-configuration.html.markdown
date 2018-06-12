@@ -581,7 +581,7 @@ The following table describes all the settings that can be used to configure the
 |env|Environment or profile used in the server request|`IHostingEnvironment.EnvironmentName`|
 |validateCertificates|Enable or disable certificate validation|true|
 |label|Comma-separated list of labels to request|master|
-|timeout|Time to wait for response from server, in milliseconds|6s|
+|timeout|Time to wait for response from server, in milliseconds|6000|
 |username|Username for basic authentication|none|
 |password|Password for basic authentication|none|
 |failFast|Enable or disable failure at startup|false|
