@@ -62,7 +62,7 @@ The application consists of two components: a Fortune-Teller-Service that regist
 
 To run the fortune teller service and the fortune teller UI on your local machine and observe the results, work through the following sections:
 
-* [Start Eureka Server](1-1-1-1-start-eureka-server#)
+* [Start Eureka Server](#1-1-1-1-start-eureka-server)
 * [Locate Sample](#1-1-1-2-locate-sample)
 * [Run Fortune Teller](#1-1-1-3-run-fortune-teller)
 * [Observe Logs](#1-1-1-4-observe-logs)
