@@ -307,7 +307,44 @@ body.docs {
     }
   }
 }
-
+.js-toc-content {
+  h1, h2, h3, h4, h5, h6 {
+    &::before {
+      display: block;
+      content: " ";
+      visibility: hidden;
+    }
+  }
+  h1,h2 {
+    &::before {
+      height: 220px;
+      margin-top: -220px;
+    }
+  }
+  h3, h4, h5, h6 {
+    &::before {
+      height: 340px;
+      margin-top: -340px;
+    }
+  }
+}
+@media(max-width: 40em) {
+  #toc.is-position-fixed {
+    background: white;
+    max-height: 400px;
+    max-width:100%;
+    .pl1 {
+      padding-top:.1em;
+      padding-bottom:.1em;
+    }
+    >h5, >.docs-nav-link:not(.active) { display: none; }
+    a.toc-link {
+      line-height: 1.2;
+      &.node-name--H1 { font-size: .8rem }
+      &.node-name--H2,&.node-name--H3,&.node-name--H4 { font-size: .75rem }
+    }
+  }
+}
 table {
   border:#ccc 1px solid;
   border-radius:3px;
