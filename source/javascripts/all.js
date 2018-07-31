@@ -3,7 +3,7 @@
 //= require vendor/svg-injector.min
 
 document.addEventListener("DOMContentLoaded", function() {
-  var codeSnippets = document.querySelectorAll('.code-snippet code');
+  var codeSnippets = document.querySelectorAll('pre code');
   var SVGillustrations = document.querySelectorAll('img.svg-illustration');
 
   function injectSVgs() {
