@@ -641,7 +641,7 @@ or
 
 ### 3.1.2 Create Service
 
-If the [Microsoft SQL Server broker](https://github.com/cf-platform-eng/mssql-server-broker) is installed in your Cloud Foundry instance, you can use it to create a new service instance, as follows:
+If the [Microsoft SQL Server broker](https://github.com/cloudfoundry-incubator/mssql-server-broker) is installed in your Cloud Foundry instance, you can use it to create a new service instance, as follows:
 
 ```bash
 > cf create-service SqlServer sharedVM mySqlServerService
