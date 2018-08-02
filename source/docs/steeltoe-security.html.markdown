@@ -712,13 +712,15 @@ Once the Redis Key Store has been set up, the keys used by the `DataProtection` 
 
 # 4.0 CredHub API Client
 
-[CredHub](https://github.com/cloudfoundry-incubator/credhub) manages credentials such as  passwords, certificates, certificate authorities, ssh keys, rsa keys, and other arbitrary values. Steeltoe provides the `CredHubBase` library for interacting with the [CredHub API](https://credhub-api.cfapps.io/) and provides the `CredHubCore` library for making that client library simpler to use in ASP.NET Core applications. Cloud Foundry is not required for the CredHub server or client but is used in this documentation as the hosting environment. You may wish to review the documentation for [CredHub on PCF](https://docs.pivotal.io/pivotalcf/2-0/credhub/).
+[CredHub](https://github.com/cloudfoundry-incubator/credhub) manages credentials such as  passwords, certificates, certificate authorities, ssh keys, rsa keys, and other arbitrary values. Steeltoe provides the `CredHubBase` library for interacting with the [CredHub API](https://credhub-api.cfapps.io/) and provides the `CredHubCore` library for making that client library simpler to use in ASP.NET Core applications. Cloud Foundry is not required for the CredHub server or client but is used in this documentation as the hosting environment. You may wish to review the documentation for [CredHub on PCF](https://docs.pivotal.io/pivotalcf/2-0/credhub/). If you do not already have a UAA user to use for this test, you will need to use the UAA command line tool to establish some security credentials for the sample app. Choose one of the provided `credhub-setup` scripts in the folder `samples/Security/scripts` to target your Cloud Foundry environment and create a UAA client with permissions to read and write in CredHub.
+
+>NOTE: If you choose to change the values for UAA_CLIENT_ID or UAA_CLIENT_SECRET, be sure to update the credentials in appsettings.json
 
 >WARNING: As of this writing, CredHub is not approved for general use in all applications. We encourage you to check whether your use case is currently supported by CredHub before getting too involved.
 
 ## 4.1 Quick Start
 
-This quick start uses an ASP.NET Core application to show how to use CredHub for storing, reading, updating, deleting, generating, regenerating, and interpolating credentials. This application assumes that a CredHub server is accessible at <https://credhub.service.cf.internal:8844>, which is the default address and port for a CredHub server running in Pivotal Cloud Foundry 2.0. This address is not accessible from outside of Cloud Foundry and can be overridden with [CredHubClient settings](#4-2-2-configure-settings) as needed.
+This quick start uses an ASP.NET Core application to show how to use CredHub for storing, reading, updating, deleting, generating, regenerating, and interpolating credentials. This application assumes that a CredHub server is accessible at <https://credhub.service.cf.internal:8844>, which is the default address and port for a CredHub server running in Pivotal Cloud Foundry 2.0+. This address is not accessible from outside of Cloud Foundry and can be overridden with [CredHubClient settings](#4-2-2-configure-settings) as needed.
 
 ### 4.1.1 Locate Sample
 
@@ -772,7 +774,7 @@ To understand the Steeltoe related changes to generated template code, examine t
      * `AddCredHubClient(Configuration, logFactory)` to make the `CredHubClient` available through dependency injection.
   * Modified the `Configure()` method to `.UseCloudFoundryActuators()`.
 * `HomeController.cs`:
-  * The constructor uses dependency injection-provided `CredHubOptions` to create its own `CredHubClient` by using mTLS authentication (or UAA if you alter the configuration).
+  * The constructor uses dependency injection-provided `CredHubOptions` to create its own `CredHubClient`.
   * `Index` writes a new `Guid` as a `PasswordCredential` and then deletes it and returns the results in a view.
   * `Injected` has CredHub generate a new `PasswordCredential`and then deletes it and returns the results in a view.
   * `Interpolate` writes the `JsonCredential` expected by our manually created `VCAP_SERVICES` and then uses CredHub's Interpolate endpoint to replace the `credhub-ref` with the credentials.
@@ -785,9 +787,7 @@ To understand the Steeltoe related changes to generated template code, examine t
 To use the Steeltoe CredHub Client, you must:
 
 * Have access to a CredHub Server (the client was built against version 1.6.5).
-* Have credentials for accessing the server with sufficient permissions for your use case:
-  * UAA credentials.
-  * mTLS certificate and private key (automatically provided when running on Cloud Foundry and parsed by the library).
+* Have UAA credentials for accessing the server with sufficient permissions for your use case
 * Use the provided methods and constructors to create, inject, or utilize the client.
 
 ### 4.2.1 Add NuGet Reference
@@ -799,7 +799,7 @@ Use the Nuget package manager tools or directly add the appropriate package to y
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.DataProtection.CredHubCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Security.DataProtection.CredHubCore" Version= "2.1.0-rc1"/>
 ...
 </ItemGroup>
 ```
@@ -831,13 +831,11 @@ The samples and most templates are already set up to read from `appsettings.json
 
 ### 4.2.3 On Cloud Foundry
 
-Pivotal Cloud Foundry 2.0 ships with a version of CredHub Server with which this client works. Applications deployed to PCF 2.0 are automatically provided with a client certificate and a private key that can be used for mTLS authentication with the included CredHub server. No creation or binding of services is required.
-
-If you wish to use UAA authentication, you need a user with `credhub.read` and/or `credhub.write` claims.
+Pivotal Cloud Foundry (in versions 2.0 and up) ships with a version of CredHub Server with which this client works. To use UAA authentication, you will need a user with `credhub.read` and/or `credhub.write` claims.
 
 ### 4.2.4 Getting a Client
 
-There are several ways to create a `CredHubClient`, depending on whether you want to directly specify the authentication type or use Microsoft's dependency injection. Regardless of the authentication or creation method selected, once the client has been created, all functionality is the same.
+There are several ways to create a `CredHubClient`, depending on whether you want to use Microsoft's dependency injection. Regardless of the creation method selected, once the client has been created, all functionality is the same.
 
 #### 4.2.4.1 Create and Inject Client
 
@@ -865,15 +863,7 @@ public class Startup
 ...
 ```
 
-#### 4.2.4.2 Create mTLS Client
-
-You can use `CredHubClient.CreateMTLSClientAsync()` to directly create a CredHub client that authenticates with a client certificate and key. This method expects the `CF_INSTANCE_CERT` and `CF_INSTANCE_KEY` environment variables to contain paths on disk to certificate and key files (as is automatically configured by a PCF 2.0 environment). The following listing shows how to do it:
-
-```csharp
-var credHubClient = await CredHubClient.CreateMTLSClientAsync(new CredHubOptions());
-```
-
-#### 4.2.4.3 Create UAA Client
+#### 4.2.4.2 Create UAA Client
 
 You can use `CredHubClient.CreateUAAClientAsync()` to directly create a CredHub client that authenticates with a username and password that is valid on the UAA server CredHub is configured to trust. This client calls `/info` on the CredHub server to discover the UAA server's address and appends `/oauth/token` when requesting a token. The following listing shows how to do it:
 
@@ -883,7 +873,7 @@ var credHubClient = await CredHubClient.CreateUAAClientAsync(new CredHubOptions(
 
 >NOTE: If you need to override the UAA server address, use the `UAA_Server_Override` environment variable, making sure to include the path to the token endpoint.
 
-#### 4.2.4.4 Interpolation-Only
+#### 4.2.4.3 Interpolation-Only
 
 If you wish to use CredHub to interpolate entries in `VCAP_SERVICES`, you can use `WebHostBuilder.UseCredHubInterpolation()`. This method looks for `credhub-ref` in `VCAP_SERVICES` and uses a `CredHubClient` to replace the credential references with credentials stored in CredHub but does not return the `CredHubClient`. The following example shows how to do it:
 
@@ -911,27 +901,27 @@ If you wish to use CredHub to interpolate entries in `VCAP_SERVICES`, you can us
         .Build();
 ```
 
-### 4.2.5 Credential Types
+### 4.2.4 Credential Types
 
 These are the .NET representations of credentials that can be stored in CredHub. Refer to the [CredHub documentation](https://credhub-api.cfapps.io/) for more detail.
 
-#### 4.2.5.1 ValueCredential
+#### 4.2.4.1 ValueCredential
 
 Any string can be used for a `ValueCredential`. CredHub allows Get, Set, Delete, and Find operations with `ValueCredential`
 
-#### 4.2.5.2 PasswordCredential
+#### 4.2.4.2 PasswordCredential
 
 Any string can be used for a `PasswordCredential`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `PasswordCredential`
 
-#### 4.2.5.3 UserCredential
+#### 4.2.4.3 UserCredential
 
 A `UserCredential` has `string` properties for `Username` and `Password`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `UserCredential`. Regenerate operations do not regenerate the username.
 
-#### 4.2.5.4 JsonCredential
+#### 4.2.4.4 JsonCredential
 
 Any JSON object can be used for a `JsonCredential`. CredHub allows Get, Set, Delete, and Find operations with `JsonCredential`.
 
-#### 4.2.5.5 CertificateCredential
+#### 4.2.4.5 CertificateCredential
 
 A `CertificateCredential` represents a security certificate. CredHub allows Get, Set, Delete, Find, Generate, Regenerate, and Bulk Regenerate operations with `CertificateCredential`. The following table describes specific properties:
 
@@ -942,43 +932,43 @@ A `CertificateCredential` represents a security certificate. CredHub allows Get,
 |Certificate|The string representation of the certificate|
 |PrivateKey|The private key for the certificate|
 
-#### 4.2.5.6 RsaCredential
+#### 4.2.4.6 RsaCredential
 
 The `RsaCredential` has string properties for `PublicKey` and `PrivateKey`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `RsaCredential`.
 
-#### 4.2.5.7 SshCredential
+#### 4.2.4.7 SshCredential
 
 The `SshCredential` has string properties for `PublicKey`, `PrivateKey`, and `PublicKeyFingerprint`. CredHub allows Get, Set, Delete, Find, Generate, and Regenerate operations with `SshCredential`.
 
-### 4.2.6 CredHub Read Operations
+### 4.2.5 CredHub Read Operations
 
 All `CredHubClient` Read operations operate asynchronously and do not change the credentials or permissions stored in CredHub. Refer to the [CredHub documentation](https://credhub-api.cfapps.io/) for more detail. For brevity, the samples shown later in this guide use `_credHubClient` to reference an instance of `CredHubClient` that has been created previously. See [Getting a Client](#4-2-4-getting-a-client) for instructions on how to create a `CredHubClient`.
 
-#### 4.2.6.1 Get by ID
+#### 4.2.5.1 Get by ID
 
 You can use `await _credHubClient.GetByIdAsync<CredentialType>(credentialId)` to retrieve a credential by its `Guid`. Only the current credential value is returned.
 
-#### 4.2.6.2 Get by Name
+#### 4.2.5.2 Get by Name
 
 You can use `await _credHubClient.GetByNameAsync<CredentialType>(credentialName)` to retrieve a credential by its `Name`. Only the current credential value is returned.
 
-#### 4.2.6.3 Get by Name with History
+#### 4.2.5.3 Get by Name with History
 
 You can use `await _credHubClient.GetByNameWithHistoryAsync<CredentialType>(credentialName, numEntries)` to retrieve a credential by name with the most recent `numEntries` holding the number of entries.
 
-#### 4.2.6.4 Find by Name
+#### 4.2.5.4 Find by Name
 
 You can use `await _credHubClient.FindByNameAsync(credentialName)` to retrieve a list of `FoundCredential` objects that are either a full or partial match for the name searched. The `FoundCredential` type includes only the `Name` and `VersionCreatedAt` properties, so follow-up requests are expected to retrieve credential details.
 
-#### 4.2.6.5 Find by Path
+#### 4.2.5.5 Find by Path
 
 You can use `await _credHubClient.FindByPathAsync(path)` to retrieve a list of `FoundCredential` objects that are either a full or partial match for the name searched. The `FoundCredential` type includes only the `Name` and `VersionCreatedAt` properties, so follow-up requests are expected to retrieve credential details. Use the `/` path value to return all accessible credentials.
 
-#### 4.2.6.6 Find All Paths
+#### 4.2.5.6 Find All Paths
 
 You can use `await _credHub.FindAllPathsAsync()` to retrieve a list of all known credential paths.
 
-#### 4.2.6.7 Interpolate
+#### 4.2.5.7 Interpolate
 
 One of the more powerful features of CredHub is the `Interpolate` endpoint. With one request, you may retrieve N number of credentials that have been stored in CredHub. To use it from .NET, call `await _credHub.InterpolateServiceDataAsync(serviceData)`, where `serviceData` is the string representation of `VCAP_SERVICES`. `CredHubClient` returns the interpolated `VCAP_SERVICES` data as a string. If you wish to have the interpolated data applied to your application configuration, see [the .UseCredHubInterpolation() documentation](#4-2-4-4-interpolation-only)
 
@@ -1037,11 +1027,11 @@ The following example shows a typical response object from the `Interpolate` end
 
 >NOTE: At this time, only credential references at `credentials.credhub-ref` are interpolated. The `credhub-ref` key is removed and the referenced credential object is set as the value of the credentials.
 
-### 4.2.7 CredHub Change Operations
+### 4.2.6 CredHub Change Operations
 
 All `CredHubClient` Change operations operate asynchronously and affect stored credentials. Refer to the [CredHub documentation](https://credhub-api.cfapps.io/) for more detail. For brevity, the samples shown later in this guide use `_credHubClient` to reference an instance of `CredHubClient` that has been created previously. See [Getting a Client](#4-2-4-getting-a-client) for instructions on how to create a `CredHubClient`.
 
-#### 4.2.7.1 Write
+#### 4.2.6.1 Write
 
 If you already have a credential that you want to store in CredHub, use a `Write` request. `CredHubClient.WriteAsync<T>()` expects a request object that descends from `CredentialSetRequest`. There is a `[Type]SetRequest` class for each credential type (`ValueSetRequest`, `PasswordSetRequest`, and so on). The SetRequest family of classes includes optional parameters for overwriting existing values and setting permissions, in addition to value properties for the credential. Include the type of credential you want to write to CredHub in the T parameter so the compiler knows the return type. The following example shows a typical `Write` request:
 
@@ -1098,7 +1088,7 @@ CredHubCredential<PasswordCredential> genPassword = await _credHub.GenerateAsync
 
 >NOTE: The default behavior on `Generate` requests is to leave existing values alone. If you wish to overwrite a credential, be sure to pass either `OverwriteMode.converge` or `OverwriteMode.overwrite` for the `overwriteMode` parameter on your request object. See [Overwriting Credential Values](https://credhub-api.cfapps.io/#overwriting-credential-values).
 
-#### 4.2.7.3 Regenerate
+#### 4.2.6.3 Regenerate
 
 You can regenerate a credential in CredHub. CredHub can generate values for the following types: `CertificateCredential`, `PasswordCredential`, `RsaCredential`, `SshCredential`, and `UserCredential`.
 
@@ -1110,7 +1100,7 @@ The following example shows one way to regenerate a credential:
 var regeneratedCert = await _credHub.RegenerateAsync<CertificateCredential>("/MyGeneratedCert");
 ```
 
-#### 4.2.7.4 Bulk Regenerate
+#### 4.2.6.4 Bulk Regenerate
 
 You can regenerate all certificates that were previously generated by CredHub with a given certificate authority. The following example returns a list of `RegeneratedCertificates` which contains the credential names as a `List<string>` property named RegeneratedCredentials:
 
@@ -1118,7 +1108,7 @@ You can regenerate all certificates that were previously generated by CredHub wi
 RegeneratedCertificates bulkRegenerate = await _credHub.BulkRegenerateAsync("NameThatCA");
 ```
 
-#### 4.2.7.5 Delete by Name
+#### 4.2.6.5 Delete by Name
 
 You can delete a credential by its full name. The following example returns a boolean indicating success or failure:
 
@@ -1126,11 +1116,11 @@ You can delete a credential by its full name. The following example returns a bo
 bool deleteCertificate = await _credHub.DeleteByNameAsync("/MyPreviouslyGeneratedCertificate");
 ```
 
-### 4.2.8 Permission Operations
+### 4.2.7 Permission Operations
 
 CredHub supports permissions management on credential access for UAA users. See the [offical CredHub Permissions documentation](https://credhub-api.cfapps.io/#permissions).
 
-#### 4.2.8.1 Get Permissions
+#### 4.2.7.1 Get Permissions
 
 You can get the permissions associated with a credential, as shown in the following example:
 
@@ -1138,7 +1128,7 @@ You can get the permissions associated with a credential, as shown in the follow
 List<CredentialPermission> response = await _credHub.GetPermissionsAsync("/example-password");
 ```
 
-#### 4.2.8.2 Add Permissions
+#### 4.2.7.2 Add Permissions
 
 You can add permissions to an existing credential. The following example eturns the updated list of permissions for the specified credential:
 
@@ -1149,7 +1139,7 @@ var newPerms = new List<CredentialPermission> { newActorPermissions };
 List<CredentialPermission> response = await _credHub.AddPermissionsAsync("/example-password", newPerms);
 ```
 
-#### 4.2.8.3 Delete Permissions
+#### 4.2.7.3 Delete Permissions
 
 You can delete a permission associated with a credential. The following example returns a boolean indicating success or failure:
 
@@ -1169,8 +1159,8 @@ You can use the `dotnet` CLI to build and locally publish the application with y
 
 Then you can use one of the following commands to publish:
 
-* Linux with .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
-* Windows with .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
 ## Push Sample
@@ -1179,10 +1169,10 @@ Use the Cloud Foundry CLI to push the published application to Cloud Foundry usi
 
 ```bash
 > # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 >
 >  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 >
 >  # Push to Windows cell, .NET Framework
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
