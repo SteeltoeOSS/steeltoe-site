@@ -176,7 +176,7 @@ If all you need is access to the functionality of the endpoints, and you do *NOT
 ```xml
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Management.EndpointBase" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Management.EndpointBase" Version= "2.1.0-rc1"/>
 ...
 </ItemGroup>
 ```
@@ -186,7 +186,7 @@ If you want to expose the endpoints over HTTP in an ASP.NET Core application but
 ```xml
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Management.EndpointCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Management.EndpointCore" Version= "2.1.0-rc1"/>
 ...
 </ItemGroup>
 ```
@@ -198,7 +198,7 @@ To do so, add the following `PackageReference` to your `.csproj` file:
 ```xml
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version= "2.1.0-rc1"/>
 ...
 </ItemGroup>
 ```
@@ -316,7 +316,7 @@ public class Startup
       // Add custom health check contributor
       services.AddScoped<IHealthContributor, MySqlHealthContributor>();
 
-      // Add all management endpoint services
+      // Add all management endpoint services used by Cloud Foundry
       services.AddCloudFoundryActuators(Configuration);
 
       // Add framework services.
@@ -584,6 +584,8 @@ The path that you enable for querying enabled management endpoints must be confi
 
 When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that, when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permission to access the management endpoint.
 
+> NOTE: The Cloud Foundry security middleware requires the vcap:application settings from your Cloud Foundry environment to be present in your application's configuration. To include these settings in your configuration, either directly include the [Cloud Foundry Configuration Provider](../steeltoe-configuration/#1-2-usage) or include the Pivotal version of the [Config Server Configuration Provider] (../steeltoe-configuration/#2-2-usage)
+
 #### 1.2.9.1 Settings
 
 Typically, you need not do any additional configuration. However, the following table describes the additional settings that you could apply to the Cloud Foundry endpoint:
@@ -622,8 +624,8 @@ You can use the `dotnet` CLI to build and locally publish the application with y
 
 Then you can use one of the following commands to publish:
 
-* Linux with .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
-* Windows with .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
 ## Push Sample
@@ -632,10 +634,10 @@ Use the Cloud Foundry CLI to push the published application to Cloud Foundry by 
 
 ```bash
 > # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 >
 >  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 >
 >  # Push to Windows cell, .NET Framework
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
