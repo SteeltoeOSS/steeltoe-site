@@ -669,8 +669,8 @@ For example, the Entity Framework 6 DbContext sample can run only on Windows and
 
 Then run one of the following commands:
 
-* Publish for Linux, .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
-* Publish for Windows, .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
+* Publish for Linux, .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Publish for Windows, .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Publish for Windows, .NET Framework: `dotnet publish -f net461 -r win10-x64`
 
 #### 3.1.3.2 Publish ASP.NET 4.x
@@ -1598,8 +1598,8 @@ You can use the `dotnet` CLI to build and locally publish the application with y
 
 Then you can use one of the following commands to publish:
 
-* Linux with .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
-* Windows with .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
 ## Push Sample
@@ -1608,10 +1608,10 @@ Use the Cloud Foundry CLI to push the published application to Cloud Foundry usi
 
 ```bash
 > # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 >
 >  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 >
 >  # Push to Windows cell, .NET Framework
 > cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish

@@ -370,7 +370,7 @@ You can use the dotnet CLI to run the application. To get started, run the follo
 To run the application on .NET Core on Windows, Linux or OSX, use the following command:
 
 ```bash
-> dotnet run -f netcoreapp2.0
+> dotnet run -f netcoreapp2.1
 ```
 
 To run the application on .NET Framework on Windows, use the following command:
@@ -384,7 +384,7 @@ To run the application on .NET Framework on Windows, use the following command:
 When you startup the application, you should see output similar to the following:
 
 ```bash
-> dotnet run -f netcoreapp2.0
+> dotnet run -f netcoreapp2.1
 Hosting environment: Production
 Now listening on: http://localhost:5000
 Application started. Press Ctrl+C to shut down.
@@ -789,13 +789,13 @@ Then run only one of the next three commands.
 To publish for Linux with .NET Core, run the following command:
 
 ```bash
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
+> dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64
 ```
 
 To publish for Windows with .NET Core, run the following command:
 
 ```bash
-> dotnet publish -f netcoreapp2.0 -r win10-x64
+> dotnet publish -f netcoreapp2.1 -r win10-x64
 ```
 
 To publish for Linux with .NET Framework, run the following command:
@@ -812,14 +812,14 @@ To push to a Linux cell, run the following command:
 
 ```bash
 > # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 ```
 
 To push to a Windows cell with .NET Core, run the following command:
 
 ```bash
 >  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 ```
 
 To push to a Windows cell with .NET Framework, run the following command:

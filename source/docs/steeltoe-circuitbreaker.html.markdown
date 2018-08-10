@@ -124,7 +124,7 @@ We recommend running this application is with the dotnet CLI. We have provided s
 # Make sure you're in the correct directory
 > cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller
 >
-# Use the helper scripts, passing in either net461 or netcoreapp2.0
+# Use the helper scripts, passing in either net461 or netcoreapp2.1
 > .\RunFortuneTeller net461
 ```
 
@@ -133,13 +133,13 @@ You can also run the commands directly yourself, by running the following comman
 ```bash
 # Run the service in one window:
 > cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller/Fortune-Teller-Service
-> dotnet run -f netcoreapp2.0 --force
+> dotnet run -f netcoreapp2.1 --force
 
 # And the UI in another:
 > cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller/Fortune-Teller-UI
 > # Use one of these commands to set BUILD environment variable to `LOCAL`:
 > SET BUILD=LOCAL or export BUILD=LOCAL
-> dotnet run -f netcoreapp2.0 --force
+> dotnet run -f netcoreapp2.1 --force
 ```
 
 > NOTE: Fortune-Teller-UI includes different libraries based on the value of the BUILD environment variable. If it is not set correctly at build time, you may see many errors relating to RabbitMQ in the application's output.
@@ -149,7 +149,7 @@ You can also run the commands directly yourself, by running the following comman
 Each of the samples should produce logs resembling the following:
 
 ```bash
-> dotnet run -f netcoreapp2.0
+> dotnet run -f netcoreapp2.1
 info: Microsoft.Data.Entity.Storage.Internal.InMemoryStore[1]
       Saved 50 entities to in-memory store.
 Hosting environment: Production
@@ -1190,13 +1190,13 @@ Use the `dotnet` CLI to build and locally publish the application with your pref
 To publish for Linux with .NET Core, use the following command:
 
 ```bash
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
+> dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64
 ```
 
 To publish for Windows with .NET Core, use the following command:
 
 ```bash
-> dotnet publish -f netcoreapp2.0 -r win10-x64
+> dotnet publish -f netcoreapp2.1 -r win10-x64
 ```
 
 To publish for Windows, with .NET Framework, use the following command:
@@ -1212,13 +1212,13 @@ Use the Cloud Foundry CLI to push the published application to Cloud Foundry wit
 To push to a Linux cell, use the following command:
 
 ```bash
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 ```
 
 To push to a Windows cell with .NET Core, use the following command:
 
 ```bash
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 ```
 
 To push to a Windows cell with .NET Framework, use the following command:

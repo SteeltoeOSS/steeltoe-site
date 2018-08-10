@@ -91,7 +91,7 @@ Now that you have the service running, you need to change directory to where the
 We recommended running this application is with the dotnet CLI. Scripts are provided to start both the service and the UI with a single command, as follows:
 
 ```bash
-# Use the helper scripts, passing in either net461 or netcoreapp2.0
+# Use the helper scripts, passing in net461, netcoreapp2.0 or netcoreapp2.1
 > .\RunFortuneTeller net461
 ```
 
@@ -100,11 +100,11 @@ You can also run the commands directly yourself, as follows:
 ```bash
 # Run the service in one window:
 > cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-Service
-> dotnet run -f netcoreapp2.0 --force
+> dotnet run -f netcoreapp2.1 --force
 
 # And the UI in another:
 > cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
-> dotnet run -f netcoreapp2.0 --force
+> dotnet run -f netcoreapp2.1 --force
 ```
 
 #### 1.1.1.4 Observe Logs
@@ -112,7 +112,7 @@ You can also run the commands directly yourself, as follows:
 Each of the samples should produce logs resembling the following:
 
 ```bash
-> dotnet run -f netcoreapp2.0
+> dotnet run -f netcoreapp2.1
 info: Microsoft.Data.Entity.Storage.Internal.InMemoryStore[1]
       Saved 50 entities to in-memory store.
 Hosting environment: Production
@@ -542,13 +542,13 @@ Then run only one of the next three commands.
 To publish for Linux with .NET Core, run the following command:
 
 ```bash
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
+> dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64
 ```
 
 To publish for Windows with .NET Core, run the following command:
 
 ```bash
-> dotnet publish -f netcoreapp2.0 -r win10-x64
+> dotnet publish -f netcoreapp2.1 -r win10-x64
 ```
 
 To publish for Linux with .NET Framework, run the following command:
@@ -565,14 +565,14 @@ To push to a Linux cell, run the following command:
 
 ```bash
 > # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
+> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 ```
 
 To push to a Windows cell with .NET Core, run the following command:
 
 ```bash
 >  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
+> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 ```
 
 To push to a Windows cell with .NET Framework, run the following command:
