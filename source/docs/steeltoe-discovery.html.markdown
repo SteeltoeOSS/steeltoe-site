@@ -88,7 +88,7 @@ Now that you have the service running, you need to change directory to where the
 
 #### 1.1.1.3 Run Fortune Teller
 
-We recommended running this application is with the dotnet CLI. Scripts are provided to start both the service and the UI with a single command, as follows:
+We recommend running this application with the dotnet CLI. Scripts are provided to start both the service and the UI with a single command, as follows:
 
 ```bash
 # Use the helper scripts, passing in net461, netcoreapp2.0 or netcoreapp2.1
@@ -130,7 +130,7 @@ Start a browser and visit <http://localhost:5555>. You should see your fortune d
 
 To run the fortune teller service and the fortune teller UI on Cloud Foundry and observe the results, work through the following sections:
 
-* [Start Eureka Server](1-1-2-1-start-eureka-server#)
+* [Start Eureka Server](#1-1-2-1-start-eureka-server)
 * [Publish Both Applications](#1-1-2-2-publish-both-applications)
 * [Push Both Applications](#1-1-2-3-push-both-applications)
 * [Observe Logs](#1-1-2-4-observe-logs)
@@ -226,7 +226,7 @@ In order to use the Steeltoe Discovery client, you need to do the following:
 
 >NOTE: Most of the example code in the following sections is based on using Discovery in a ASP.NET Core application. If you are developing a ASP.NET 4.x application or a console-based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery) for example code you can use.
 
-### 1.2.1 Add NuGet Reference
+### 1.2.1 Add NuGet References
 
 You can choose from two Eureka Server client NuGets, depending on your needs.
 
