@@ -505,6 +505,56 @@ public class FortuneService : IFortuneService
 }
 ```
 
+#### 1.2.6.1 Using HttpClientFactory
+
+In addition to the `DiscoveryHttpClientHandler` mentioned above, you also have the option to use the .NET provided `HttpClientFactory` together with the Steeltoe provided `DiscoveryHttpMessageHandler` to do service lookup.
+
+`DiscoveryHttpMessageHandler` is a `DelegatingHandler` that be used, much like the `DiscoveryHttpClientHandler`, to intercept requests and to evaluate the URL to see if the host portion of the URL can be resolved from the current service registry.  The handler will do this for any `HttpClient`s created by the factory.
+
+Here is just one example of how you can make use of it in your application:
+
+```csharp
+public class Startup
+{
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; set; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+      services.AddDiscoveryClient(Configuration);
+
+      // Add Steeltoe handler to container
+      services.AddTransient<DiscoveryHttpMessageHandler>();
+
+      // Configure a HttpClient
+      services.AddHttpClient("fortunes", c =>
+      {
+              c.BaseAddress = new Uri("http://fortuneService/api/fortunes/");
+      })
+      .AddHttpMessageHandler<DiscoveryHttpMessageHandler>()
+      .AddTypedClient<IFortuneService, FortuneService>();
+
+      // Add framework services.
+      services.AddMvc();
+    }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+    {
+      ....
+
+      // Start discovery background thread
+      app.UseDiscoveryClient();
+    }
+}
+```
+
+Check out the Microsoft documentation on [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-2.1) to see all the various ways you can make use of the Steeltoe message handler.
+
 ### 1.2.7 Enable Logging
 
 Sometimes, it is desirable to turn on debug logging in the Discovery client. To do so, you can modify the `appsettings.json` file and turn on Debug level logging for the Steeltoe/Pivotal components, as shown in the following example:
