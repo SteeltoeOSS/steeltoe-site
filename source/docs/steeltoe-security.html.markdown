@@ -211,7 +211,7 @@ You can add the provider to your project by using the following `PackageReferenc
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -409,7 +409,7 @@ To use the provider, add a reference to the Steeltoe Cloud Foundry Security NuGe
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -607,7 +607,7 @@ You can add the provider to your project by using the following `PackageReferenc
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -619,7 +619,7 @@ You can use the NuGet Package Manager tools or directly add the following packag
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "1.1.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -1147,7 +1147,7 @@ You can delete a permission associated with a credential. The following example 
 bool response = await _credHub.DeletePermissionAsync("/example-password", "uaa-user:credhub_client");
 ```
 
-# Common References
+# Common Steps
 
 ## Publish Sample
 

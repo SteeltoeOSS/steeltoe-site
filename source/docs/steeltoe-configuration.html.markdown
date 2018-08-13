@@ -165,7 +165,7 @@ To add this type of NuGet to your project, add a `PackageReference` resembling t
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundryCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundryCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -524,7 +524,7 @@ To add this type of NuGet to your project, add a `PackageReference` that resembl
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -542,7 +542,7 @@ To add this type of NuGet to your project add a `PackageReference` similar to th
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServerCore" Version= "2.0.0"/>
+    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServerCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -772,7 +772,7 @@ using Steeltoe.Extensions.Configuration;
 ...
 ```
 
-# Common References
+# Common Steps
 
 This section describes tasks that are common to many of the processes described in this guide.
 

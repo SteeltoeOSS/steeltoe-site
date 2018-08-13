@@ -243,7 +243,7 @@ To add this type of NuGet to your project, add an element resembling the followi
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -261,7 +261,7 @@ To add this type of NuGet to your project add an element resembling the followin
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Pivotal.Discovery.ClientCore" Version= "2.0.0"/>
+    <PackageReference Include="Pivotal.Discovery.ClientCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -291,9 +291,9 @@ All of these settings should start with `eureka:client:`
 |shouldDisableDelta|Whether to disable fetching of delta and, instead, get the full registry|false |
 |registryRefreshSingleVipAddress|Whether to be interested in only the registry information for a single VIP|none |
 |shouldOnDemandUpdateStatusChange|Whether status updates are trigger on-demand register/update|true|
-|accessTokenUri|URI to use to obtain OAUTH access token|true|
-|clientSecret|Secret to use to obtain OAUTH access token|true|
-|clientId|Client ID to use to obtain OAUTH access token|true|
+|accessTokenUri|URI to use to obtain OAUTH access token|none|
+|clientSecret|Secret to use to obtain OAUTH access token|none|
+|clientId|Client ID to use to obtain OAUTH access token|none|
 |eurekaServer:proxyHost|Proxy host to Eureka Server|none|
 |eurekaServer:proxyPort|Proxy port to Eureka Server|none|
 |eurekaServer:proxyUserName|Proxy user name to Eureka Server|none|
@@ -301,7 +301,7 @@ All of these settings should start with `eureka:client:`
 |eurekaServer:shouldGZipContent|Whether to compress content|true|
 |eurekaServer:connectTimeoutSeconds|Connection timeout|5s|
 
->NOTE: Some settings affect registering as a service as well.
+**NOTE**: **Some settings above affect registering as a service as well.**
 
 The following table describes the settings you can use to configure the behavior of the client as it relates to registering services:
 
@@ -525,7 +525,7 @@ Here is an example `appsettings.json` file:
 }
 ```
 
-# Common References
+# Common Steps
 
 This section describes tasks that are common to many of the processes described in this guide.
 

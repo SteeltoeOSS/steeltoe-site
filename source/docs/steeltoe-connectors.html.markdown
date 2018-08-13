@@ -684,7 +684,7 @@ To publish ASP.NET 4.x applications, you can use the Visual Studio publishing to
 
 ### 3.1.4 Push Samples
 
-See [Common References](#push-sample) for instructions on how to push this sample to either Linux or Windows.
+See [Common Steps](#push-sample) for instructions on how to push this sample to either Linux or Windows.
 
 ### 3.1.5 Observe Logs
 
@@ -1586,7 +1586,7 @@ Finally, you can inject and use the configured `OAuthServiceOptions` into a cont
  }
  ```
 
-# Common References
+# Common Steps
 
 ## Publish Sample
 
@@ -1693,7 +1693,7 @@ To add any NuGet package, use the Nuget package manager tools or (with .NET Core
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```

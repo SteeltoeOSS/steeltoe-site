@@ -38,7 +38,7 @@ You can add the provider to your project by using the following `PackageReferenc
 ```xml
 <ItemGroup>
 ....
-    <PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```

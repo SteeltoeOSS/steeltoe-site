@@ -329,7 +329,7 @@ To add this type of NuGet to your project add something like the following `Pack
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -341,7 +341,7 @@ To do this include the following `PackageReference` in your application:
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -360,7 +360,7 @@ To add this type of NuGet to your project add something like the following:
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version= "2.1.0"/>
     <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
 ...
 </ItemGroup>
@@ -1175,7 +1175,7 @@ Once you have performed the steps described earlier and you have made the change
 1. Follow [these instructions](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix Dashboard service.
 1. Use your application and see the metrics begin to flow.
 
-# Common References
+# Common Steps
 
 This section contains snippets of commands that you are likely to use repeatedly for common tasks.
 
