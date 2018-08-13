@@ -1676,7 +1676,7 @@ To manage application settings centrally instead of with individual files, use [
 
 >NOTE: If you use the Spring Cloud Config Server, `AddConfigServer()` automatically calls `AddCloudFoundry()` for you.
 
-## Steeltoe Connector Reference
+## Add NuGet References
 
 To use Steeltoe Connectors, you need to add a reference to the appropriate NuGet package based on the type of the application you are building and what dependency injector you have chosen, if any. The following table describes the available packages:
 
@@ -1697,3 +1697,49 @@ To add any NuGet package, use the Nuget package manager tools or (with .NET Core
 ...
 </ItemGroup>
 ```
+
+## Using Health Contributors
+
+At present, Steeltoe provides the following `IHealthContributor` implementations you can choose from:
+
+|Name|Description|
+|---|---|
+|[RabbitMQHealthContributor](https://github.com/SteeltoeOSS/Connectors/blob/master/src/Steeltoe.CloudFoundry.ConnectorBase/Queue/RabbitMQHealthContributor.cs)|checks RabbitMQ connection health|
+|[RedisHealthContributor](https://github.com/SteeltoeOSS/Connectors/blob/master/src/Steeltoe.CloudFoundry.ConnectorBase/Cache/RedisHealthContributor.cs)|checks Redis cache connection health|
+|[RelationalHealthContributor](https://github.com/SteeltoeOSS/Connectors/blob/master/src/Steeltoe.CloudFoundry.ConnectorBase/Relational/RelationalHealthContributor.cs)|checks relational database connection health (MySql, Postgres, SqlServer)|
+
+Each of these contributors are located in the `Steeltoe.CloudFoundry.ConnectorBase` package and are made available to your application when you reference the connector package.
+
+If you want to use any one of the `IHealthContributor`s above in an ASP.NET Core application, simply make use of the corresponding connector as you would normally. By doing so, the contributor is automatically added to the service container for you and is automatically discovered and used by the Health endpoint.
+
+If you want to make use of any of the contributors in an ASP.NET 4.x application, where no service container exists, you must construct an instance of it using a factory method contained in the contributor and then provide it to the Health endpoint.
+
+For example, to create an instance of a MySql health contributor you can use the `GetMySqlContributor()` method in the `RelationalHealthContributor` as shown below and supply it to the endpoint actuator.
+
+```csharp
+public class ManagementConfig
+{
+    public static void ConfigureManagementActuators(IConfiguration configuration, ILoggerFactory loggerFactory = null)
+    {
+        ...
+        ActuatorConfigurator.UseHealthActuator(
+            configuration, 
+            new DefaultHealthAggregator(), 
+            GetHealthContributors(configuration), 
+            loggerFactory);
+        ...
+
+    }
+
+    private static IEnumerable<IHealthContributor> GetHealthContributors(IConfiguration configuration)
+    {
+        var healthContributors = new List<IHealthContributor>
+        {
+            new DiskSpaceContributor(),
+            RelationalHealthContributor.GetMySqlContributor(configuration)
+        };
+
+        return healthContributors;
+    }
+```
+

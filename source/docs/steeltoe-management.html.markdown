@@ -353,7 +353,7 @@ public class Startup
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x application.
 
-To add the Health actuator endpoint, use the `UseHealthActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a custom `IIHealthAggregator` and a list of `IHealthContributor`'s should you want to customize the actuator endpoint.  If none are provided any, defaults will be provided.
+To add the Health actuator endpoint, use the `UseHealthActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a custom `IIHealthAggregator` and a list of `IHealthContributor`'s should you want to customize the actuator endpoint.  If none are provided, defaults will be provided.
 
 The following example shows how enable the Health endpoint and use the default `IIHealthAggregator` together with two `IHealthContributor`'s.
 
@@ -363,7 +363,11 @@ public class ManagementConfig
     public static void ConfigureManagementActuators(IConfiguration configuration, ILoggerFactory loggerFactory = null)
     {
         ...
-        ActuatorConfigurator.UseHealthActuator(configuration, new DefaultHealthAggregator(), GetHealthContributors(configuration), loggerFactory);
+        ActuatorConfigurator.UseHealthActuator(
+            configuration, 
+            new DefaultHealthAggregator(), 
+            GetHealthContributors(configuration), 
+            loggerFactory);
         ...
 
     }
@@ -513,7 +517,7 @@ public class Startup
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
 
-To add the Info actuator endpoint, use the `UseInfoActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a list of `IInfoContributor`'s should you want to customize the actuator endpoint.  If none are provided any, defaults will be provided.
+To add the Info actuator endpoint, use the `UseInfoActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a list of `IInfoContributor`'s should you want to customize the actuator endpoint.  If none are provided, defaults will be provided.
 
 The following example shows how enable the Info endpoint and use the `GitInfoContributor` and `AppSettingsInfoContributor` as `IInfoContributor`s.
 
