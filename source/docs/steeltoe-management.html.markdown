@@ -1546,7 +1546,7 @@ All settings should be placed under the prefix with the key `management:tracing:
 |neverSample|enable the OpenCensus NeverSampler|OpenCensus ProbabilitySampler|
 |useShortTraceIds|truncate the ids for usage with PCF Metrics log correlation|false|
 
-### 2.2.3 Enable Log Correlation
+### 2.2.3 Enabling Log Correlation
 
 If you want to use distributed tracing together with log correlation, then you must utilize the [Steeltoe Logging provider](https://github.com/SteeltoeOSS/Logging) in your application.
 
@@ -1556,7 +1556,13 @@ Once that is done, then whenever your application issues any log statements, the
 
 * `[app name, trace id, span id, trace flags]`  (e.g. `[service1,2485ec27856c56f4,2485ec27856c56f4,true]`)
 
-### 2.2.4 Add Distributed Tracing
+### 2.2.4 Propagating Trace Context
+
+When working with distributed tracing systems you will find that a trace context (i.e. trace state information) must get propagated to all child processes to ensure that child spans originating from a root trace get collected and correlated into a single trace in the end.  The current trace and span IDs are just one piece of the required information that must get propagated.
+
+Steeltoe distributed tracing handles this for you by default when using the .NET HttpClient. When a downstream HTTP call is made, the current trace context is encoded as request headers and sent along with the request automatically.  Currently, Steeltoe encodes the context using [Zipkin B3 Propagation](https://github.com/openzipkin/b3-propagation) encodings. As a result, you will find that Steeltoe tracing is interoperable with several other instrumentation libraries such as [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-sleuth/2.0.x/single/spring-cloud-sleuth.html).
+
+### 2.2.5 Add Distributed Tracing
 
 To enable distributed tracing all you need to to do is add the service to the container. To do this use the `AddDistributedTracing()` extension method from [TracingServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.TracingCore/TracingServiceCollectionExtensions.cs).
 
