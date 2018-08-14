@@ -877,7 +877,7 @@ The primary purpose of this endpoint is to enable integration with the Pivotal A
 
 When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permissions to access the management endpoint.
 
->Note: The Cloud Foundry security middleware is automatically disabled when you run your application is not running on Cloud Foundry (e.g. running locally on your desktop).
+>Note: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (e.g. running locally on your desktop).
 
 #### 1.2.9.1 Configure Settings
 
@@ -1055,18 +1055,20 @@ You must provide a reference to the `IApiExplorer` obtained from `GlobalConfigur
 
 ### 1.2.13 Metrics
 
-The Steeltoe Metrics endpoint configures application metrics collection using OpenCensus. It automatically configures built-in instrumentation of various aspects of the application and exposes the collected metrics via the endpoint.
+The Steeltoe Metrics endpoint configures application metrics collection using the open source [OpenCensus](https://opencensus.io/) project. It automatically configures built-in instrumentation of various aspects of the application and exposes the collected metrics via the endpoint.
 
 The following instrumentation is automatically configured:
 
-* CLR metrics
+* CLR Metrics
   * Heap memory, Garbage collections, Thread utilization
-* Http Client metrics
-  * Request timings, Request counts
-* Http Server metrics
-  * Request timings, Request counts
+* HTTP Client Metrics
+  * Request timings & counts
+* HTTP Server Metrics
+  * Request timings & counts
 
-All of the above metrics are tagged with values specific to the requests being processed thereby giving multi-dimensional views of the collected values.
+All of the above metrics are tagged with values specific to the requests being processed; thereby giving multi-dimensional views of the collected metrics.
+
+>Note: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the metrics collection functionality will move to using it, instead of the Steeltoe version.
 
 #### 1.2.13.1 Configure Settings
 
@@ -1238,7 +1240,10 @@ public class ManagementConfig
     public static void UseCloudFoundryMetricsExporter(IConfiguration configuration, ILoggerFactory loggerFactory = null)
     {
         var options = new CloudFoundryForwarderOptions(configuration);
-        MetricsExporter = new CloudFoundryForwarderExporter(options, OpenCensusStats.Instance, loggerFactory != null ? loggerFactory.CreateLogger<CloudFoundryForwarderExporter>() : null);
+        MetricsExporter = new CloudFoundryForwarderExporter(
+            options,
+            OpenCensusStats.Instance,
+            loggerFactory != null ? loggerFactory.CreateLogger<CloudFoundryForwarderExporter>() : null);
     }
 
     public static void Start()
@@ -1263,7 +1268,9 @@ public class ManagementConfig
 
 # 2.0 Distributed Tracing
 
-Steeltoe distributed tracing implements a solution for .NET applications based on the open source [OpenCensus](https://opencensus.io/) project. For most users implementing and using distributed tracing should be invisible, and many of the interactions with external systems should be instrumented automatically. You can capture trace data simply in logs, or by sending it to a remote collector service.
+Steeltoe distributed tracing implements a solution for .NET applications based on the open source [OpenCensus](https://opencensus.io/) project. For most users implementing and using distributed tracing should be invisible, and many of the interactions with external systems should be instrumented automatically. You can capture trace data in logs, or by sending it to a remote collector service.
+
+>Note: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the distributed tracing functionality will move to using it, instead of the Steeltoe version.
 
 A Span is the basic unit of work. For example, sending an RPC is a new span, as is sending a response to an RPC. Span’s are identified by a unique 64-bit ID for the span and another 64-bit ID for the trace the span is a part of. Spans also have other data, such as descriptions, key-value annotations, the ID of the span that caused them, and process ID’s (normally IP address). Spans are started and stopped, and they keep track of their timing information. Once you create a span, you must stop it at some point in the future. A set of spans forming a tree-like structure called a Trace. For example, if you are running a distributed big-data store, a trace might be formed by a put request.
 
@@ -1274,7 +1281,8 @@ Features:
 * Automatically instruments common ingress and egress points from .NET applications (e.g MVC Controllers, Views, Http clients).
 * Optionally generate, collect and export Zipkin-compatible traces via HTTP.
 
->Note: Currently, distributed tracing is only supported on ASP.NET Core.
+>Note: Currently, distributed tracing is only supported in ASP.NET Core applications.
+
 
 ## 2.1 Quick Start
 
@@ -1487,6 +1495,17 @@ To understand the Steeltoe related changes to the generated template code, exami
 You should understand how the .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the management endpoints. You need at least a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder to configure the endpoints.
 
 When developing ASP.NET Core applications, you should also understand how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Pay particular attention to the usage of the `ConfigureServices()` and `Configure()` methods.
+
+Steeltoe distributed tracing automatically applies instrumentation at key ingress and egress points in your ASP.NET Core application so that you are able to get meaningful traces without having to do any instrumentation yourself. These points include:
+
+* HTTP Server
+  * Request Start & Finish
+  * Unhandled and Handled exceptions
+  * MVC Action Start & Finish
+  * MVC View Start & Finish
+* HTTP Client (Desktop and Core)
+  * Outgoing Request Start & Finish
+  * Unhandled and Handled exceptions
 
 ### 2.2.1 Add Nuget References
 
@@ -1750,7 +1769,12 @@ public class ManagementConfig
 {
     public static IMetricsExporter MetricsExporter { get; set; }
 
-    public static void ConfigureActuators(IConfiguration config, ILoggerProvider logger, IEnumerable<IHealthContributor> contrib, IApiExplorer api, ILoggerFactory factory = null)
+    public static void ConfigureActuators(
+        IConfiguration config,
+        ILoggerProvider logger,
+         IEnumerable<IHealthContributor> contrib,
+         IApiExplorer api,
+         ILoggerFactory factory = null)
     {
         ActuatorConfigurator.UseCloudFoundryActuators(config, logger, contrib, api, factory);
     }
