@@ -51,6 +51,8 @@ In addition to the [Quick Start](#1-1-quick-start), you can refer to several oth
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore): A sample app showing how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
 * [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ): A polyglot (Java and .NET) micro-services based sample application showing interoperability between Java and .NET based micro-services running on Cloud Foundry, secured with OAuth2 Security Services, and using Spring Cloud Services.
 
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
+
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 1.1 Quick Start
@@ -348,6 +350,8 @@ This connector simplifies using PostgreSQL in an application running on Cloud Fo
 
 Currently, the connector supports the [Npgsql](http://www.npgsql.org/) provider.
 
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
+
 You can find the source code for this connector [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 2.1 Quick Start
@@ -611,6 +615,8 @@ public class HomeController : Controller
 # 3.0 Microsoft SQL Server
 
 This connector simplifies using Microsoft SQL Server in an application running on Cloud Foundry. The connector is built to work with `System.Data.SqlClient` and provides additional extension methods for using Entity Framework.
+
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -954,7 +960,9 @@ public class HomeController : Controller
 
 # 4.0 RabbitMQ
 
-This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on Cloud Foundry. We recommend following that tutorial, because you need to know how to use it before preceeding to use the connector.
+This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on Cloud Foundry. We recommend following that tutorial, because you need to know how to use it before proceeding to use the connector.
+
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -1158,6 +1166,8 @@ In addition to the [Quick Start](#5-1-quick-start), other Steeltoe sample applic
 * [AspDotNet4/Redis4](https://github.com/SteeltoeOSS/Samples/tree/dev/Connectors/src/AspDotNet4/Redis4): Same as the next Quick Start but built for ASP.NET 4.x.
 * [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore): A sample application showing how to use the Steeltoe DataProtection Key Storage Provider for Redis.
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore): A sample application showing how to use all of the Steeltoe components together in an ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
+
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
