@@ -178,54 +178,36 @@ Each endpoint has an associated ID. When you want to expose that endpoint over H
 
 >NOTE: When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you need to configure the global management path prefix, as described in the [Endpoint Settings](#1-2-2-settings) section, to be `/cloudfoundryapplication`. To do so, add `management:endpoints:path=/cloudfoundryapplication` to your configuration.
 
-### 1.2.1 Add Nuget References
+### 1.2.1 Add NuGet References
 
-All of the endpoints can be found in the `Steeltoe.Management.EndpointBase` package.
+To use the management endpoints, you need to add a reference to the appropriate Steeltoe NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any.
 
-If all you need is access to the functionality of the endpoints, and you do *NOT* want to expose them over HTTP (in other words, you want to expose them some other way), then you can add the following `PackageReference` to your `.csproj` file:
+The following table describes the available packages:
+
+|App Type|Package|Description|
+|---|---|---|
+|All|`Steeltoe.Management.EndpointBase`|Base functionality, no dependency injection, no HTTP middleware.|
+|ASP.NET Core|`Steeltoe.Management.EndpointCore`|Includes `EndpointBase`, adds ASP.NET Core DI, includes HTTP middleware,  no Pivotal Apps Manager integration. |
+|ASP.NET Core|`Steeltoe.Management.CloudFoundryCore`|Includes `EndpointCore`, enables Pivotal Apps Manager integration. |
+|ASP.NET 4.x|`Steeltoe.Management.EndpointWeb`|Includes `EndpointBase`, enables Pivotal Apps Manager integration.|
+|ASP.NET 4.x OWIN|`Steeltoe.Management.EndpointOwin`|Includes `EndpointBase`, enables Pivotal Apps Manager integration.|
+|ASP.NET 4.x OWIN with Autofac|`Steeltoe.Management.EndpointAutofac`|Includes `EndpointOwin`, adds Autofac DI, enables Pivotal Apps Manager integration.|
+
+To add this type of NuGet to your project, add a `PackageReference` resembling the following:
 
 ```xml
 <ItemGroup>
-....
-    <PackageReference Include="Steeltoe.Management.EndpointBase" Version= "2.1.0"/>
 ...
-</ItemGroup>
-```
-
-If you want to expose the endpoints over HTTP in an ASP.NET Core application but do *NOT* want to integrate with the Pivotal Apps Manager, you should add the following `PackageReference` to your `.csproj` file:
-
-```xml
-<ItemGroup>
-....
     <PackageReference Include="Steeltoe.Management.EndpointCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
 
-If you want to expose the endpoints over HTTP in an ASP.NET Core application on Cloud Foundry *AND* integrate with the Pivotal Apps Manager, you should add the following
-`PackageReference` to your `.csproj` file:
-
-```xml
-<ItemGroup>
-....
-    <PackageReference Include="Steeltoe.Management.CloudFoundryCore" Version= "2.1.0"/>
-...
-</ItemGroup>
-```
-
-If you want to expose the endpoints over HTTP in an ASP.NET 4.x application and you are *NOT* using OWIN, you should add the following package reference to your application:
+or
 
 ```powershell
 PM>Install-Package  Steeltoe.Management.EndpointWeb -Version 2.1.0
 ```
-
-If you want to expose the endpoints over HTTP in an ASP.NET 4.x application and you are using OWIN, you should add the following package reference to your application:
-
-```powershell
-PM>Install-Package  Steeltoe.Management.EndpointOwin -Version 2.1.0
-```
-
-> Note: If you are using Autofac in your OWIN based application, we also provide `Steeltoe.Management.EndpointAutofac` which provides extension methods which simplify endpoint integration in Autofac based applications.
 
 ### 1.2.2 Configure Global Settings
 
@@ -364,9 +346,9 @@ public class ManagementConfig
     {
         ...
         ActuatorConfigurator.UseHealthActuator(
-            configuration, 
-            new DefaultHealthAggregator(), 
-            GetHealthContributors(configuration), 
+            configuration,
+            new DefaultHealthAggregator(),
+            GetHealthContributors(configuration),
             loggerFactory);
         ...
 
@@ -1116,31 +1098,22 @@ By default when you enable metrics collection in your application you do *NOT* a
 
 The coding steps you take to enable metrics exporting differs depending on what backend system you are targeting and the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the backend systems and supported application types.
 
-##### 1.2.13.3.1 Add Nuget References
+##### 1.2.13.3.1 Add NuGet References
 
-All of the exporters can be found in the `Steeltoe.Management.ExporterBase` package.
+To use the metrics exporters, you need to add a reference to the appropriate Steeltoe NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any.
 
-If you want to use the functionality of the exporters in any application type other than an ASP.NET Core application, then you can add the following `PackageReference` to your `.csproj` file:
+The following table describes the available packages:
+
+|App Type|Package|Description|
+|---|---|---|
+|All|`Steeltoe.Management.ExporterBase`|Base functionality, no dependency injection|
+|ASP.NET Core|`Steeltoe.Management.ExporterCore`|Includes `ExporterBase`, adds ASP.NET Core DI|
+
+To add this type of NuGet to your project, add a `PackageReference` resembling the following:
 
 ```xml
 <ItemGroup>
-....
-    <PackageReference Include="Steeltoe.Management.ExporterBase" Version= "2.1.0"/>
 ...
-</ItemGroup>
-```
-
-or
-
-```powershell
-PM>Install-Package  Steeltoe.Management.ExporterBase -Version 2.1.0
-```
-
-If you want to use the functionality of the exporters in a ASP.NET Core application, then you can add the following `PackageReference` to your `.csproj` file:
-
-```xml
-<ItemGroup>
-....
     <PackageReference Include="Steeltoe.Management.ExporterCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
@@ -1282,7 +1255,6 @@ Features:
 * Optionally generate, collect and export Zipkin-compatible traces via HTTP.
 
 >Note: Currently, distributed tracing is only supported in ASP.NET Core applications.
-
 
 ## 2.1 Quick Start
 
@@ -1507,16 +1479,23 @@ Steeltoe distributed tracing automatically applies instrumentation at key ingres
   * Outgoing Request Start & Finish
   * Unhandled and Handled exceptions
 
-### 2.2.1 Add Nuget References
+### 2.2.1 Add NuGet References
 
-The base distributed tracing functionality can be found in the `Steeltoe.Management.TracingBase` and in `Steeltoe.Management.OpenCensus`.
+To use the distributed tracing exporters, you need to add a reference to the appropriate Steeltoe NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any.
 
-To use the tracing functionality in a ASP.NET Core application, then add the following `PackageReference` to your `.csproj` file. This will bring in the base functionality as well as components needed to automatically instrument ingress and egress points in an ASP.NET Core application.
+The following table describes the available packages:
+
+|App Type|Package|Description|
+|---|---|---|
+|All|`Steeltoe.Management.ExporterBase`|Base functionality, no dependency injection|
+|ASP.NET Core|`Steeltoe.Management.ExporterCore`|Includes `ExporterBase`, adds ASP.NET Core DI|
+
+To add this type of NuGet to your project, add a `PackageReference` resembling the following:
 
 ```xml
 <ItemGroup>
-....
-    <PackageReference Include="Steeltoe.Management.TracingCore" Version= "2.1.0"/>
+...
+    <PackageReference Include="Steeltoe.Management.ExporterCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -1524,7 +1503,7 @@ To use the tracing functionality in a ASP.NET Core application, then add the fol
 or
 
 ```powershell
-PM>Install-Package  Steeltoe.Management.TracingCore -Version 2.1.0
+PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.1.0
 ```
 
 ### 2.2.2 Configure Settings
@@ -1598,7 +1577,7 @@ public class Startup
 
 ## 2.3 Exporting
 
-By default when you enable distributed tracing in your application you do *NOT* automatically enable exporting of those traces to a backend system. Currently, Steeltoe supports exporting traces to a backend Zipkin server. 
+By default when you enable distributed tracing in your application you do *NOT* automatically enable exporting of those traces to a backend system. Currently, Steeltoe supports exporting traces to a backend Zipkin server.
 
 To enable exporting you will need to do the following:
 
@@ -1606,7 +1585,7 @@ To enable exporting you will need to do the following:
 * Configure the settings the exporter will use during export.
 * Add and Use the exporter service in the application
 
-### 2.3.1 Add Nuget References
+### 2.3.1 Add NuGet References
 
 All of the exporters can be found in the `Steeltoe.Management.ExporterBase` and in `Steeltoe.Management.OpenCensus`.
 

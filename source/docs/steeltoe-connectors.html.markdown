@@ -1698,7 +1698,7 @@ To use Steeltoe Connectors, you need to add a reference to the appropriate NuGet
 |ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EF6Core`|Includes base. Adds Entity Framework 6 with Microsoft Dependency Injection.|
 |ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EFCore`|Includes base. Adds Entity Framework Core with Microsoft Dependency Injection|
 
-To add any NuGet package, use the Nuget package manager tools or (with .NET Core applications only) directly add the appropriate package to your project by using the a `PackageReference`, as shown in the following listing:
+To add any NuGet package, use the package manager tools or (with .NET Core applications only) directly add the appropriate package to your project by using the a `PackageReference`, as shown in the following listing:
 
 ```xml
 <ItemGroup>

@@ -794,7 +794,7 @@ To use the Steeltoe CredHub Client, you must:
 
 To use this library with ASP.NET Core, add a NuGet reference to `Steeltoe.Security.DataProtection.CredHubCore`. For other application types, use `Steeltoe.Security.DataProtection.CredHubBase`. Most of the functionality resides in `CredHubBase`. The purpose of `CredHubCore` is to provide additional methods for a simpler experience when using ASP.NET Core.
 
-Use the Nuget package manager tools or directly add the appropriate package to your project using the a `PackageReference`, as follows:
+Use the NuGet package manager tools or directly add the appropriate package to your project using the a `PackageReference`, as follows:
 
 ```xml
 <ItemGroup>
