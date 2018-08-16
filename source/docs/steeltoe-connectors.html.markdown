@@ -129,7 +129,7 @@ To use this connector:
 
 ### 1.2.1 Add NuGet Reference
 
-To use the MySQL connector, add your choice of MySQL-specific package(s) between [MySql.Data](https://www.nuget.org/packages/MySql.Data)/[MySql.Data.Entity](https://www.nuget.org/packages/MySql.Data.Entity), [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/), and [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the MySQL connector, add your choice of MySQL-specific package(s) between [MySql.Data](https://www.nuget.org/packages/MySql.Data)/[MySql.Data.Entity](https://www.nuget.org/packages/MySql.Data.Entity), [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/), and [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 ### 1.2.2 Configure Settings
 
@@ -440,7 +440,7 @@ To use this connector:
 
 ### 2.2.1 Add NuGet Reference
 
-To use the PostgreSQL connector, add your choice of PostgreSQL package between [Npgsql](https://www.nuget.org/packages/Npgsql/) and [Npgsql.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/Npgsql.EntityFrameworkCore.PostgreSQL/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the PostgreSQL connector, add your choice of PostgreSQL package between [Npgsql](https://www.nuget.org/packages/Npgsql/) and [Npgsql.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/Npgsql.EntityFrameworkCore.PostgreSQL/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 >NOTE: Steeltoe does not currently include direct support for PostgreSQL with Entity Framework 6
 
@@ -749,7 +749,7 @@ To use this connector:
 
 ### 3.2.1 Add NuGet Reference
 
-To use the Microsoft SQL Server connector, add your choice of Microsoft SQL Server package between [System.Data.SqlClient](https://www.nuget.org/packages/System.Data.SqlClient/), [Entity Framework](https://www.nuget.org/packages/EntityFramework/) and [Microsoft.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/), as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the Microsoft SQL Server connector, add your choice of Microsoft SQL Server package between [System.Data.SqlClient](https://www.nuget.org/packages/System.Data.SqlClient/), [Entity Framework](https://www.nuget.org/packages/EntityFramework/) and [Microsoft.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/), as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 ### 3.2.2 Configure Settings
 
@@ -1044,7 +1044,7 @@ To use this Connector:
 
 ### 4.2.1 Add NuGet Reference
 
-To use the RabbitMQ connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and `RabbitMQ.Client`.
+To use the RabbitMQ connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references) and `RabbitMQ.Client`.
 
 ### 4.2.2 Configure Settings
 
@@ -1246,7 +1246,7 @@ To use this connector:
 
 ### 5.2.1 Add NuGet Reference
 
-To use the Redis connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and a reference to `Microsoft.Extensions.Caching.Redis`, `StackExchange.Redis`, or `StackExchange.Redis.StrongName`.
+To use the Redis connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references) and a reference to `Microsoft.Extensions.Caching.Redis`, `StackExchange.Redis`, or `StackExchange.Redis.StrongName`.
 
 >NOTE: The requirement to add a direct Redis package reference is new as of version 2.0.0.
 
@@ -1503,7 +1503,7 @@ To use this Connector:
 
 ### 6.2.1 Add NuGet Reference
 
-To use the OAuth connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the OAuth connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 ### 6.2.2 Configure Settings
 
@@ -1600,10 +1600,12 @@ Finally, you can inject and use the configured `OAuthServiceOptions` into a cont
 
 ## Publish Sample
 
+### ASP.NET Core
+
 You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
 
 ```bash
-> dotnet restore --configfile nuget.config
+dotnet restore --configfile nuget.config
 ```
 
 Then you can use one of the following commands to publish:
@@ -1612,19 +1614,25 @@ Then you can use one of the following commands to publish:
 * Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
+### ASP.NET 4.x
+
+1. Open the solution for the sample in Visual Studio
+1. Right click on the project, select "Publish"
+1. Use the included `FolderProfile` to publish to `bin/Debug/net461/win10-x64/publish`
+
 ## Push Sample
 
 Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+# Push to Linux cell
+cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
+
+# Push to Windows cell, .NET Core
+cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
+
+# Push to Windows cell, .NET Framework
+cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
 > Note: all sample manifests have been defined to bind their application to their service(s) as created above.

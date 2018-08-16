@@ -154,7 +154,7 @@ You should understand how the .NET [Configuration service](https://docs.microsof
 
 When developing ASP.NET Core applications, you should also understand how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Pay particular attention to the usage of the `ConfigureServices()` and `Configure()` methods.
 
-When developing ASP.NET 4.x applications, you should be familiar with `Global.cs` and how it is used in initializing and configuring your application.
+When developing ASP.NET 4.x applications, you should be familiar with `Global.asax.cs` and how it is used in initializing and configuring your application.
 
 When developing ASP.NET OWIN applications, you should be familiar with how the Startup class is used in configuring application middleware.
 
@@ -1665,6 +1665,8 @@ public class Startup
 
 ## Publish Sample
 
+### ASP.NET Core
+
 You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
 
 ```bash
@@ -1676,6 +1678,12 @@ Then you can use one of the following commands to publish:
 * Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
 * Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
+
+### ASP.NET 4.x
+
+1. Open the solution for the sample in Visual Studio
+1. Right click on the project, select "Publish"
+1. Use the included `FolderProfile` to publish to `bin/Debug/net461/win10-x64/publish`
 
 ## Push Sample
 
@@ -1784,7 +1792,7 @@ public class ManagementConfig
 }
 ```
 
-The above static methods should be called in `Global.cs`.  In the `Application_Start()` method call `ConfigureActuators()`and `Start()` and in `Application_Stop()` call `Stop()`.  See the [Steeltoe Samples repository](https://github.com/SteeltoeOSS/Samples/tree/dev/Management/src/AspDotNet4) for more details.
+The above static methods should be called in `Global.asax.cs`.  In the `Application_Start()` method call `ConfigureActuators()`and `Start()` and in `Application_Stop()` call `Stop()`.  See the [Steeltoe Samples repository](https://github.com/SteeltoeOSS/Samples/tree/dev/Management/src/AspDotNet4) for more details.
 
 ## HTTP Access ASP.NET OWIN
 

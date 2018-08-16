@@ -1181,50 +1181,39 @@ This section contains snippets of commands that you are likely to use repeatedly
 
 ## Publish Sample
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, use the following command:
+### ASP.NET Core
+
+You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
 
 ```bash
 > dotnet restore --configfile nuget.config
 ```
 
-To publish for Linux with .NET Core, use the following command:
+Then you can use one of the following commands to publish:
 
-```bash
-> dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64
-```
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
+* Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
-To publish for Windows with .NET Core, use the following command:
+### ASP.NET 4.x
 
-```bash
-> dotnet publish -f netcoreapp2.1 -r win10-x64
-```
-
-To publish for Windows, with .NET Framework, use the following command:
-
-```bash
-> dotnet publish -f net461 -r win10-x64
-```
+1. Open the solution for the sample in Visual Studio
+1. Right click on the project, select "Publish"
+1. Use the included `FolderProfile` to publish to `bin/Debug/net461/win10-x64/publish`
 
 ## Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry with the same framework and runtime for which your application was published:
-
-To push to a Linux cell, use the following command:
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
-```
+# Push to Linux cell
+cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 
-To push to a Windows cell with .NET Core, use the following command:
+# Push to Windows cell, .NET Core
+cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 
-```bash
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
-```
-
-To push to a Windows cell with .NET Framework, use the following command:
-
-```bash
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+# Push to Windows cell, .NET Framework
+cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
 Manifest file names may vary, some samples use a different manifest for .NET 4 vs .NET Core.
@@ -1233,9 +1222,9 @@ Manifest file names may vary, some samples use a different manifest for .NET 4 v
 
 ## Reading Configuration Values
 
-Once the connector's settings have been defined, the next step is to read them so that they can be made available to the connector.
+Once settings have been defined, the next step is to read them so that they can be made available.
 
-The following code reads connector settings from the `appsettings.json` file with the .NET JSON configuration provider (`AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`:
+The following code reads settings from the `appsettings.json` file with the .NET JSON configuration provider (`AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`:
 
 ```csharp
 public class Program {

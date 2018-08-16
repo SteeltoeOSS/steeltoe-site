@@ -778,55 +778,39 @@ This section describes tasks that are common to many of the processes described 
 
 ## Publish Sample
 
-To use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime, run the following command:
+### ASP.NET Core
+
+You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
 
 ```bash
-> dotnet restore --configfile nuget.config
+dotnet restore --configfile nuget.config
 ```
 
-Then run only one of the next three commands.
+Then you can use one of the following commands to publish:
 
-To publish for Linux with .NET Core, run the following command:
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
+* Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
-```bash
-> dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64
-```
+### ASP.NET 4.x
 
-To publish for Windows with .NET Core, run the following command:
-
-```bash
-> dotnet publish -f netcoreapp2.1 -r win10-x64
-```
-
-To publish for Linux with .NET Framework, run the following command:
-
-```bash
-> dotnet publish -f net461 -r win10-x64
-```
+1. Open the solution for the sample in Visual Studio
+1. Right click on the project, select "Publish"
+1. Use the included `FolderProfile` to publish to `bin/Debug/net461/win10-x64/publish`
 
 ## Push Sample
 
-To use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime, run only one of the next three commands.
-
-To push to a Linux cell, run the following command:
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
-```
+# Push to Linux cell
+cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 
-To push to a Windows cell with .NET Core, run the following command:
+# Push to Windows cell, .NET Core
+cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 
-```bash
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
-```
-
-To push to a Windows cell with .NET Framework, run the following command:
-
-```bash
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+# Push to Windows cell, .NET Framework
+cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
 >NOTE: Manifest file names may vary. Some samples use a different manifest for .NET 4 vs .NET Core.
