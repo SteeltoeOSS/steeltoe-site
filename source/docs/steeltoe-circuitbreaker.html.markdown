@@ -906,7 +906,7 @@ As with Hystrix commands, you must follow an important requirement if you wish t
 The following example shows how to define a compatible constructor:
 
 ```csharp
-public class FortuneServiceCommand  : HystrixCollapser<List<Fortune>, Fortune, int>,
+public class FortuneServiceCollapser  : HystrixCollapser<List<Fortune>, Fortune, int>,
 {
     ILogger<FortuneServiceCollapser> _logger;
     ILoggerFactory _loggerFactory;
