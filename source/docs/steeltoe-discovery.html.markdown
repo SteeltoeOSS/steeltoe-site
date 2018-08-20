@@ -14,21 +14,21 @@ There are several options to choose from when implementing the Service Discovery
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. The following example shows how to clone it with git:
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
+git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
->Note: All Service Discovery samples in the Samples repository have a base path of `Samples/Discovery/src/`.
+>NOTE: All Service Discovery samples in the Samples repository have a base path of `Samples/Discovery/src/`.
 
 Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, as follows:
 
 ```bash
-> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
 ```
 
 Alternatively, you can use the following command:
 
 ```bash
-> cf target -o <YourOrg> -s <YourSpace>
+cf target -o <YourOrg> -s <YourSpace>
 ```
 
 The Service Discovery sample requires a Eureka server. If you intend to run the samples locally, install the Java 8 JDK and Maven 3.x now.
@@ -73,9 +73,9 @@ To run the fortune teller service and the fortune teller UI on your local machin
 In this step, we fetch a GitHub repository from which we can start up a Netflix Eureka Server locally on the desktop. This server has been pre-configured to listen for service registrations and discovery requests at <http://localhost:8761/eureka>. The following script shows how to get the sample from GitHub and start the service:
 
 ```bash
-> git clone https://github.com/spring-cloud-samples/eureka.git
-> cd eureka
-> mvnw spring-boot:run
+git clone https://github.com/spring-cloud-samples/eureka.git
+cd eureka
+mvnw spring-boot:run
 ```
 
 #### 1.1.1.2 Locate Sample
@@ -83,7 +83,7 @@ In this step, we fetch a GitHub repository from which we can start up a Netflix 
 Now that you have the service running, you need to change directory to where the sample is:
 
 ```bash
-> cd Samples/Discovery/src/AspDotNetCore
+cd Samples/Discovery/src/AspDotNetCore
 ```
 
 #### 1.1.1.3 Run Fortune Teller
@@ -92,27 +92,26 @@ We recommend running this application with the dotnet CLI. Scripts are provided 
 
 ```bash
 # Use the helper scripts, passing in net461, netcoreapp2.0 or netcoreapp2.1
-> .\RunFortuneTeller net461
+.\RunFortuneTeller net461
 ```
 
 You can also run the commands directly yourself, as follows:
 
 ```bash
 # Run the service in one window:
-> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-Service
-> dotnet run -f netcoreapp2.1 --force
+cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-Service
+dotnet run -f netcoreapp2.1 --force
 
 # And the UI in another:
-> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
-> dotnet run -f netcoreapp2.1 --force
+cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
+dotnet run -f netcoreapp2.1 --force
 ```
 
 #### 1.1.1.4 Observe Logs
 
-Each of the samples should produce logs resembling the following:
+The `dotnet run` command should produce output similar to the following:
 
 ```bash
-> dotnet run -f netcoreapp2.1
 info: Microsoft.Data.Entity.Storage.Internal.InMemoryStore[1]
       Saved 50 entities to in-memory store.
 Hosting environment: Production
@@ -142,10 +141,10 @@ Use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eurek
 
 ```bash
 # Create a Eureka Server instance on Cloud Foundry
-> cf create-service p-service-registry standard myDiscoveryService
->
+cf create-service p-service-registry standard myDiscoveryService
+
 # Wait for the service to be ready
-> cf services
+cf services
 ```
 
 #### 1.1.2.2 Publish Both Applications
@@ -396,17 +395,17 @@ The samples and most templates are already set up to read from `appsettings.json
 When you want to use a Eureka Server on Cloud Foundry and you have installed [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you can create and bind a instance of the server to the application by using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create eureka server instance named `myDiscoveryService`
-> cf create-service p-service-registry standard myDiscoveryService
->
-> # Wait for service to become ready
-> cf services
->
-> # Bind the service to `myApp`
-> cf bind-service myApp myDiscoveryService
->
-> # Restage the app to pick up change
-> cf restage myApp
+# Create eureka server instance named `myDiscoveryService`
+cf create-service p-service-registry standard myDiscoveryService
+
+# Wait for service to become ready
+cf services
+
+# Bind the service to `myApp`
+cf bind-service myApp myDiscoveryService
+
+# Restage the app to pick up change
+cf restage myApp
 ```
 
 For more information on using the Eureka Server on Cloud Foundry, see the [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html) documentation.
@@ -583,17 +582,13 @@ This section describes tasks that are common to many of the processes described 
 
 ### ASP.NET Core
 
-You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
-
-```bash
-dotnet restore --configfile nuget.config
-```
-
-Then you can use one of the following commands to publish:
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
 * Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
 * Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
+
+>NOTE: Starting with .NET Core 2.0, the `dotnet publish` command will automatically restore dependencies for you. Running `dotnet restore` explicitly is not generally required.
 
 ### ASP.NET 4.x
 

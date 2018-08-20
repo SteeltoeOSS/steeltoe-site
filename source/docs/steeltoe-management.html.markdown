@@ -16,15 +16,15 @@ When you expose the endpoints over HTTP, you can also integrate the endpoints wi
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download with your browser from GitHub. The following command shows how to use Git to get the samples:
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
+git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
 Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, as shown in the following listing:
 
 ```bash
-> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
-or
-> cf target -o <YourOrg> -s <YourSpace>
+cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+# or
+cf target -o <YourOrg> -s <YourSpace>
 ```
 
 >NOTE: All Management ASP.NET Core samples have a base path of `Samples/Management/src/AspDotNetCore` and samples that are built on ASP.NET 4.x can be found in `Samples/Management/src/AspDotNet4`.
@@ -64,18 +64,18 @@ In addition to the [Quick Start](#1-1-quick-start), there are other Steeltoe sam
 
 This quick start consists of an ASP.NET Core sample application showing how to use all of the management endpoints on Cloud Foundry and integrating the endpoint information over HTTP with [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html).
 
-> Note: There are additional [samples](https://github.com/SteeltoeOSS/Samples/tree/dev/Management/src/AspDotNet4) illustrating usage in ASP.NET 4.x applications.
+>NOTE: There are additional [samples](https://github.com/SteeltoeOSS/Samples/tree/dev/Management/src/AspDotNet4) illustrating usage in ASP.NET 4.x applications.
 
 For more information on how to use the Apps Manager with the Management endpoints, read [Using Spring Boot Actuators with Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html).
 
-> Note: Steeltoe Management endpoints are not exclusive to Cloud Foundry.
+>NOTE: Steeltoe Management endpoints are not exclusive to Cloud Foundry.
 
 ### 1.1.1 Locate Sample
 
 To get started, change directory to where the samples are stored, as follows:
 
 ```bash
-> cd Samples/Management/src/AspDotNetCore/CloudFoundry
+cd Samples/Management/src/AspDotNetCore/CloudFoundry
 ```
 
 ### 1.1.2 Create Service
@@ -83,11 +83,11 @@ To get started, change directory to where the samples are stored, as follows:
 To show how the out-of-the-box MySql Health contributor can be used to monitor the health of a connection to a back-end database, you must first create an instance of a MySql service in a org and space, as shown in the following example:
 
 ```bash
-> # Create a MySql service instance on Cloud Foundry
-> cf create-service p-mysql 100mb myMySqlService
->
-> # Make sure the service is ready
-> cf services
+# Create a MySql service instance on Cloud Foundry
+cf create-service p-mysql 100mb myMySqlService
+
+# Make sure the service is ready
+cf services
 ```
 
 ### 1.1.3 Publish Sample
@@ -329,7 +329,7 @@ public class Startup
 }
 ```
 
->Note: When you use any of the Steeltoe Connectors in your application we automatically add the corresponding health contributors to the service container.
+>NOTE: When you use any of the Steeltoe Connectors in your application we automatically add the corresponding health contributors to the service container.
 
 ##### 1.2.3.3.2 ASP.NET 4.x App
 
@@ -859,7 +859,7 @@ The primary purpose of this endpoint is to enable integration with the Pivotal A
 
 When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permissions to access the management endpoint.
 
->Note: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (e.g. running locally on your desktop).
+>NOTE: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (e.g. running locally on your desktop).
 
 #### 1.2.9.1 Configure Settings
 
@@ -1050,7 +1050,7 @@ The following instrumentation is automatically configured:
 
 All of the above metrics are tagged with values specific to the requests being processed; thereby giving multi-dimensional views of the collected metrics.
 
->Note: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the metrics collection functionality will move to using it, instead of the Steeltoe version.
+>NOTE: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the metrics collection functionality will move to using it, instead of the Steeltoe version.
 
 #### 1.2.13.1 Configure Settings
 
@@ -1243,7 +1243,7 @@ public class ManagementConfig
 
 Steeltoe distributed tracing implements a solution for .NET applications based on the open source [OpenCensus](https://opencensus.io/) project. For most users implementing and using distributed tracing should be invisible, and many of the interactions with external systems should be instrumented automatically. You can capture trace data in logs, or by sending it to a remote collector service.
 
->Note: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the distributed tracing functionality will move to using it, instead of the Steeltoe version.
+>NOTE: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the distributed tracing functionality will move to using it, instead of the Steeltoe version.
 
 A Span is the basic unit of work. For example, sending an RPC is a new span, as is sending a response to an RPC. Span’s are identified by a unique 64-bit ID for the span and another 64-bit ID for the trace the span is a part of. Spans also have other data, such as descriptions, key-value annotations, the ID of the span that caused them, and process ID’s (normally IP address). Spans are started and stopped, and they keep track of their timing information. Once you create a span, you must stop it at some point in the future. A set of spans forming a tree-like structure called a Trace. For example, if you are running a distributed big-data store, a trace might be formed by a put request.
 
@@ -1254,7 +1254,7 @@ Features:
 * Automatically instruments common ingress and egress points from .NET applications (e.g MVC Controllers, Views, Http clients).
 * Optionally generate, collect and export Zipkin-compatible traces via HTTP.
 
->Note: Currently, distributed tracing is only supported in ASP.NET Core applications.
+>NOTE: Currently, distributed tracing is only supported in ASP.NET Core applications.
 
 ## 2.1 Quick Start
 
@@ -1278,15 +1278,15 @@ To run the fortune teller service and the fortune teller UI on your local machin
 In this step, we fetch a GitHub repository from which we can start up a Netflix Eureka Server locally on the desktop. This server has been pre-configured to listen for service registrations and discovery requests at <http://localhost:8761/eureka>. The following script shows how to get the sample from GitHub and start the service:
 
 ```bash
-> git clone https://github.com/spring-cloud-samples/eureka.git
-> cd eureka
-> mvnw spring-boot:run
+git clone https://github.com/spring-cloud-samples/eureka.git
+cd eureka
+mvnw spring-boot:run
 ```
 
 Alternately, if you have a running docker environment installed on your system, then you should be able to:
 
 ```bash
-> docker run -d -p:8761:8761 steeltoeoss/eurekaserver
+docker run -d -p:8761:8761 steeltoeoss/eurekaserver
 ```
 
 #### 2.1.1.2 Start Zipkin Server
@@ -1296,7 +1296,7 @@ Follow the instructions in the [Zipkin Quickstart](https://zipkin.io/pages/quick
 Alternately, if you have a running docker environment installed on your system, then you should be able to:
 
 ```bash
-> docker run -d -p 9411:9411 openzipkin/zipkin
+docker run -d -p 9411:9411 openzipkin/zipkin
 ```
 
 #### 2.1.1.3 Locate Sample
@@ -1304,7 +1304,7 @@ Alternately, if you have a running docker environment installed on your system, 
 Now that you have the service running, you need to change directory to where the sample is:
 
 ```bash
-> cd Samples/Management/src/AspDotNetCore/Tracing
+cd Samples/Management/src/AspDotNetCore/Tracing
 ```
 
 #### 2.1.1.4 Run Fortune Teller
@@ -1313,27 +1313,26 @@ We recommend running this application with the dotnet CLI. Scripts are provided 
 
 ```bash
 # Use the helper scripts, passing in net461, netcoreapp2.0 or netcoreapp2.1
-> .\RunFortuneTeller net461
+.\RunFortuneTeller net461
 ```
 
 You can also run the commands directly yourself, as follows:
 
 ```bash
 # Run the service in one window:
-> cd Samples/Management/src/AspDotNetCore/Tracing/Fortune-Teller-Service
-> dotnet run -f netcoreapp2.1 --force
+cd Samples/Management/src/AspDotNetCore/Tracing/Fortune-Teller-Service
+dotnet run -f netcoreapp2.1 --force
 
 # And the UI in another:
-> cd Samples/Management/src/AspDotNetCore/Tracing/Fortune-Teller-UI
-> dotnet run -f netcoreapp2.1 --force
+cd Samples/Management/src/AspDotNetCore/Tracing/Fortune-Teller-UI
+dotnet run -f netcoreapp2.1 --force
 ```
 
 #### 2.1.1.5 Observe Logs
 
-Each of the samples should produce logs resembling the following:
+The `dotnet run` command in each sample should produce output similar to the following:
 
 ```bash
-> dotnet run -f netcoreapp2.1
 info: Microsoft.Data.Entity.Storage.Internal.InMemoryStore[1]
       Saved 50 entities to in-memory store.
 Hosting environment: Production
@@ -1375,10 +1374,10 @@ Use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eurek
 
 ```bash
 # Create a Eureka Server instance on Cloud Foundry
-> cf create-service p-service-registry standard myDiscoveryService
->
+cf create-service p-service-registry standard myDiscoveryService
+
 # Wait for the service to be ready
-> cf services
+cf services
 ```
 
 #### 2.1.2.2 Start Zipkin Server
@@ -1389,7 +1388,7 @@ Use the Cloud Foundry CLI to start an instance of the Zipkin server on Cloud Fou
 
 ```bash
 # Start a Zipkin server instance on Cloud Foundry
-> cf push zipkin-server -p ./zipkin-server-2.8.4-exec.jar
+cf push zipkin-server -p ./zipkin-server-2.8.4-exec.jar
 ```
 
 Verify the server is up and running by opening a browser to the Zipkin server UI: (e.g. <http://zipkin-server.cfapps.io/> ).
@@ -1667,17 +1666,13 @@ public class Startup
 
 ### ASP.NET Core
 
-You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
-
-```bash
-> dotnet restore --configfile nuget.config
-```
-
-Then you can use one of the following commands to publish:
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
 * Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
 * Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
+
+>NOTE: Starting with .NET Core 2.0, the `dotnet publish` command will automatically restore dependencies for you. Running `dotnet restore` explicitly is not generally required.
 
 ### ASP.NET 4.x
 
@@ -1690,14 +1685,14 @@ Then you can use one of the following commands to publish:
 Use the Cloud Foundry CLI to push the published application to Cloud Foundry by using the parameters that match what you selected for framework and runtime, as follows:
 
 ```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+# Push to Linux cell
+cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
+
+ # Push to Windows cell, .NET Core
+cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
+
+ # Push to Windows cell, .NET Framework
+cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
 ## HTTP Access ASP.NET Core

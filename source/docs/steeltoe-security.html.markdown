@@ -119,7 +119,7 @@ uaac client add myTestApp --scope cloud_controller.read,cloud_controller_service
         --secret myTestApp
 ```
 
-> NOTE: Replace `YOUR-CLOUDFOUNDRY-APP-DOMAIN` with your Cloud Foundry setup domain! 
+>NOTE: Replace `YOUR-CLOUDFOUNDRY-APP-DOMAIN` with your Cloud Foundry setup domain! 
 
 ### 1.1.6 Create Service
 
@@ -162,7 +162,7 @@ If you access the `InvokeJwtSample` menu item, the application tries to invoke a
 
 After completing the JWT quick start and `CloudFoundryJwtAuthentication` is running, accessing the `InvokeJwtSample` menu item while logged in should return some `values` from the app. If you are not logged in, you should see a `401 (Unauthorized)` message.
 
-> NOTE: The traditional ASP.NET Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service built with WCF instead of WebAPI.
+>NOTE: The traditional ASP.NET Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service built with WCF instead of WebAPI.
 
 ### 1.1.11 Understand Sample
 
@@ -870,7 +870,7 @@ public class Global : System.Web.HttpApplication
 }
 ```
 
-> NOTE: The above is not the only way to configure the JwtAuthorizationManager. WCF can be configured many ways, which are beyond the scope of this documentation.
+>NOTE: The above is not the only way to configure the JwtAuthorizationManager. WCF can be configured many ways, which are beyond the scope of this documentation.
 
 ### 2.4.5 Securing Endpoints
 
@@ -951,7 +951,7 @@ This quick start uses an ASP.NET Core application to show how to use a Redis cac
 To get started, change directory to where the samples are stored, as follows:
 
 ```bash
-> cd Samples/Security/src/AspDotNetCore/RedisDataProtectionKeyStore
+cd Samples/Security/src/AspDotNetCore/RedisDataProtectionKeyStore
 ```
 
 ### 3.1.2 Create Service
@@ -1577,17 +1577,13 @@ bool response = await _credHub.DeletePermissionAsync("/example-password", "uaa-u
 
 ### ASP.NET Core
 
-You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
-
-```bash
-dotnet restore --configfile nuget.config
-```
-
-Then you can use one of the following commands to publish:
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
 * Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
 * Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
+
+>NOTE: Starting with .NET Core 2.0, the `dotnet publish` command will automatically restore dependencies for you. Running `dotnet restore` explicitly is not generally required.
 
 ### ASP.NET 4.x
 
@@ -1610,7 +1606,7 @@ cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-> Note: All sample manifests have been defined to bind their application to their service(s) as created above.
+>NOTE: All sample manifests have been defined to bind their application to their service(s) as created above.
 
 ## Observe Logs
 

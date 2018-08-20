@@ -30,7 +30,7 @@ The following sections provide more more detail on each of these new providers.
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. The following git command shows how to clone the repository from the command line:
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
+git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
 >NOTE: All Configuration samples in the Samples repository have a base path of `Samples/Configuration/src/`.
@@ -38,13 +38,13 @@ All of the Steeltoe sample applications are in the same repository. If you have 
 Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, as follows:
 
 ```bash
-> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
 ```
 
 or
 
 ```bash
-> cf target -o <YourOrg> -s <YourSpace>
+cf target -o <YourOrg> -s <YourSpace>
 ```
 
 The Configuration sample requires a Config server. If you intend to run the samples locally, install the Java 8 JDK and Maven 3.x now.
@@ -78,7 +78,7 @@ You need access to a Cloud Foundry runtime environment in order to complete the 
 First, you must navigate to the correct directory, as follows:
 
 ```bash
-> cd Samples/Configuration/src/AspDotNetCore/CloudFoundry
+cd Samples/Configuration/src/AspDotNetCore/CloudFoundry
 ```
 
 ### 1.1.2 Publish Sample
@@ -238,7 +238,7 @@ var uri = config["vcap:services:service-name:0:credentials:uri"]
 
 A list of all `VCAP_SERVICES` keys is available in the [VCAP_SERVICES](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES) topic of the Cloud Foundry documentation.
 
-Note: This provider uses the built-in .NET [JSON Configuration Parser](https://github.com/aspnet/Configuration/tree/dev/src/Microsoft.Extensions.Configuration.Json) when parsing the JSON provided in the `VCAP_*` environment variables. As a result, you can expect the exact same key names and behavior as you see when parsing JSON configuration files (such as `appsettings.json`) in your application.
+>NOTE: This provider uses the built-in .NET [JSON Configuration Parser](https://github.com/aspnet/Configuration/tree/dev/src/Microsoft.Extensions.Configuration.Json) when parsing the JSON provided in the `VCAP_*` environment variables. As a result, you can expect the exact same key names and behavior as you see when parsing JSON configuration files (such as `appsettings.json`) in your application.
 
 ### 1.2.4 Access Configuration Data as Options
 
@@ -346,9 +346,9 @@ In this step, we fetch a GitHub repository from which we can start up a Spring C
 You can use this same GitHub repository for your own future development work. If you do so, at some point, you will want to change the location from which the server fetches its configuration data. To do so, you must modify `configserver/src/main/resources/application.yml` to point to a new GitHub repository. Once that is done, you need to run `mvnw clean` followed by `mvnw spring-boot:run` to make sure your server picks up the changes, as shown in the following example:
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/configserver.git
-> cd configserver
-> mvnw spring-boot:run
+git clone https://github.com/SteeltoeOSS/configserver.git
+cd configserver
+mvnw spring-boot:run
 ```
 
 #### 2.1.1.2 Locate Sample
@@ -356,35 +356,28 @@ You can use this same GitHub repository for your own future development work. If
 To find the sample, change the current directory as follows:
 
 ```bash
-> cd Samples/Configuration/src/AspDotNetCore/SimpleCloudFoundry
+cd Samples/Configuration/src/AspDotNetCore/SimpleCloudFoundry
 ```
 
 #### 2.1.1.3 Run Sample
 
-You can use the dotnet CLI to run the application. To get started, run the following command:
-
-```bash
-> dotnet restore --configfile nuget.config
-```
-
 To run the application on .NET Core on Windows, Linux or OSX, use the following command:
 
 ```bash
-> dotnet run -f netcoreapp2.1
+dotnet run -f netcoreapp2.1
 ```
 
 To run the application on .NET Framework on Windows, use the following command:
 
 ```bash
-> dotnet run -f net461
+dotnet run -f net461
 ```
 
 #### 2.1.1.4 Observe Logs
 
-When you startup the application, you should see output similar to the following:
+The `dotnet run` command should produce output similar to the following:
 
 ```bash
-> dotnet run -f netcoreapp2.1
 Hosting environment: Production
 Now listening on: http://localhost:5000
 Application started. Press Ctrl+C to shut down.
@@ -417,14 +410,14 @@ The following sections describe how to use the Spring Cloud Config Server config
 In this step, we use the Cloud Foundry CLI to create a service instance of the Spring Cloud Config Server on Cloud Foundry. In the `config-server.json` file, you can see that we have set the config server's github repository to `https://github.com/spring-cloud-samples/config-repo`. To do so, run the following commands:
 
 ```bash
-> # Make sure you are in the samples directory
-> cd Samples/Configuration/src/AspDotNetCore/SimpleCloudFoundry
->
-> # Create a Config Server instance on Cloud Foundry, using config-server.json settings
-> cf create-service p-config-server standard myConfigServer -c ./config-server.json
->
-> # Wait for the service to become ready
-> cf services
+# Make sure you are in the samples directory
+cd Samples/Configuration/src/AspDotNetCore/SimpleCloudFoundry
+
+# Create a Config Server instance on Cloud Foundry, using config-server.json settings
+cf create-service p-config-server standard myConfigServer -c ./config-server.json
+
+# Wait for the service to become ready
+cf services
 ```
 
 These commands create a Spring Cloud Config Server instance on Cloud Foundry named `myConfigServer` configured from the contents of the file `config-server.json`.
@@ -452,7 +445,6 @@ On a Linux cell, you should see something resembling the following during startu
 2016-06-01T09:14:21.04-0600 [APP/0]      OUT Now listening on: http://*:8080
 2016-06-01T09:14:21.04-0600 [APP/0]      OUT Application started. Press Ctrl+C to shut down.
 2016-06-01T09:14:21.41-0600 [CELL/0]     OUT Container became healthy
-
 ```
 
 On Windows cells, you should see something slightly different but with the same content.
@@ -652,17 +644,17 @@ public class Program
 When you want to use a Config Server on Cloud Foundry and you have installed [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you can create and bind an instance of it to your application by using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create config server instance named `myConfigServer`
-> cf create-service p-config-server standard myConfigServer
->
-> # Wait for service to become ready
-> cf services
->
-> # Bind the service to `myApp`
-> cf bind-service myApp myMySqlService
->
-> # Restage the app to pick up change
-> cf restage myApp
+# Create config server instance named `myConfigServer`
+cf create-service p-config-server standard myConfigServer
+
+# Wait for service to become ready
+cf services
+
+# Bind the service to `myApp`
+cf bind-service myApp myMySqlService
+
+# Restage the app to pick up change
+cf restage myApp
 ```
 
 Once the service is bound to the application, the config server settings are available and can be setup in `VCAP_SERVICES`.
@@ -780,17 +772,13 @@ This section describes tasks that are common to many of the processes described 
 
 ### ASP.NET Core
 
-You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
-
-```bash
-dotnet restore --configfile nuget.config
-```
-
-Then you can use one of the following commands to publish:
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
 * Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
 * Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
+
+>NOTE: Starting with .NET Core 2.0, the `dotnet publish` command will automatically restore dependencies for you. Running `dotnet restore` explicitly is not generally required.
 
 ### ASP.NET 4.x
 
