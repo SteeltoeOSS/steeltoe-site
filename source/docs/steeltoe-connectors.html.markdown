@@ -19,7 +19,7 @@ For more information on `VCAP_SERVICES`, see the Cloud Foundry [documentation](h
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. You can run the following git command to clone the repository from the command line:
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
+git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
 >NOTE: All connector samples in that repository have a base path of `Samples/Connectors/src/`
@@ -27,13 +27,13 @@ All of the Steeltoe sample applications are in the same repository. If you have 
 Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, as follows:
 
 ```bash
-> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
 ```
 
 or
 
 ```bash
-> cf target -o <YourOrg> -s <YourSpace>
+cf target -o <YourOrg> -s <YourSpace>
 ```
 
 # 1.0 MySQL
@@ -50,6 +50,8 @@ In addition to the [Quick Start](#1-1-quick-start), you can refer to several oth
 * [AspDotNet4/MySql4](https://github.com/SteeltoeOSS/Samples/tree/master/Connectors/src/AspDotNet4/MySql4): Same as the next Quick Start but built for ASP.NET 4.x.
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore): A sample app showing how to use all of the Steeltoe components together in a ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core MusicStore reference app provided by Microsoft.
 * [FreddysBBQ](https://github.com/SteeltoeOSS/Samples/tree/master/FreddysBBQ): A polyglot (Java and .NET) micro-services based sample application showing interoperability between Java and .NET based micro-services running on Cloud Foundry, secured with OAuth2 Security Services, and using Spring Cloud Services.
+
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -78,11 +80,11 @@ In this step, we use the Cloud Foundry CLI to create a service instance of MySQL
 The commands in this section assume you are using the MySQL service provided by Pivotal on Cloud Foundry. If you are using a different service, adjust the `create-service` command below to fit your environment.
 
 ```bash
-> # Create a MySQL service instance on Cloud Foundry
-> cf create-service p-mysql 100mb myMySqlService
->
-> # Make sure the service is ready
-> cf services
+# Create a MySQL service instance on Cloud Foundry
+cf create-service p-mysql 100mb myMySqlService
+
+# Make sure the service is ready
+cf services
 ```
 
 ### 1.1.3 Publish and Push the Sample
@@ -127,7 +129,7 @@ To use this connector:
 
 ### 1.2.1 Add NuGet Reference
 
-To use the MySQL connector, add your choice of MySQL-specific package(s) between [MySql.Data](https://www.nuget.org/packages/MySql.Data)/[MySql.Data.Entity](https://www.nuget.org/packages/MySql.Data.Entity), [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/), and [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the MySQL connector, add your choice of MySQL-specific package(s) between [MySql.Data](https://www.nuget.org/packages/MySql.Data)/[MySql.Data.Entity](https://www.nuget.org/packages/MySql.Data.Entity), [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/), and [Pomelo.EntityFrameworkCore.MySql](https://www.nuget.org/packages/Pomelo.EntityFrameworkCore.MySql/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 ### 1.2.2 Configure Settings
 
@@ -185,14 +187,14 @@ The samples and most templates are already set up to read from `appsettings.json
 To use MySQL on Cloud Foundry, you can create and bind an instance of MySQL to your application by using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create MySQL service
-> cf create-service p-mysql 100mb myMySqlService
->
-> # Bind service to `myApp`
-> cf bind-service myApp myMySqlService
->
-> # Restage the app to pick up change
-> cf restage myApp
+# Create MySQL service
+cf create-service p-mysql 100mb myMySqlService
+
+# Bind service to `myApp`
+cf bind-service myApp myMySqlService
+
+# Restage the app to pick up change
+cf restage myApp
 ```
 
 >NOTE: The preceding commands assume you use [MySQL for PCF](https://network.pivotal.io/products/p-mysql), provided by Pivotal on Cloud Foundry. If you use a different service, you must adjust the `create-service` command to fit your environment.
@@ -348,6 +350,8 @@ This connector simplifies using PostgreSQL in an application running on Cloud Fo
 
 Currently, the connector supports the [Npgsql](http://www.npgsql.org/) provider.
 
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
+
 You can find the source code for this connector [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 2.1 Quick Start
@@ -366,13 +370,11 @@ In addition to this quick start, there is an ASP.NET4 sample that was built with
 Depending on your specific interests, pick one of the following samples to work with going forward:
 
 ```bash
-> # Use a `NpgsqlConnection`
-> cd Samples/Connectors/src/AspDotNetCore/PostgreSql
-```
+# Use a `NpgsqlConnection`
+cd Samples/Connectors/src/AspDotNetCore/PostgreSql
 
-```bash
-> # Use a Entity Framework Core `DbContext`
-> cd Samples/Connectors/src/AspDotNetCore/PostgreEFCore
+# Use a Entity Framework Core `DbContext`
+cd Samples/Connectors/src/AspDotNetCore/PostgreEFCore
 ```
 
 ### 2.1.2 Create Service
@@ -386,11 +388,11 @@ If you use a different service, adjust the `create-service` command to fit envir
 To create the service and ensure that it is ready, use the following commands:
 
 ```bash
-> # Create a PostgreSQL service instance on Cloud Foundry
-> cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
->
-> # Make sure the service is ready
-> cf services
+# Create a PostgreSQL service instance on Cloud Foundry
+cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
+
+# Make sure the service is ready
+cf services
 ```
 
 ### 2.1.3 Publish and Push Sample
@@ -436,7 +438,7 @@ To use this connector:
 
 ### 2.2.1 Add NuGet Reference
 
-To use the PostgreSQL connector, add your choice of PostgreSQL package between [Npgsql](https://www.nuget.org/packages/Npgsql/) and [Npgsql.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/Npgsql.EntityFrameworkCore.PostgreSQL/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the PostgreSQL connector, add your choice of PostgreSQL package between [Npgsql](https://www.nuget.org/packages/Npgsql/) and [Npgsql.EntityFrameworkCore.PostgreSQL](https://www.nuget.org/packages/Npgsql.EntityFrameworkCore.PostgreSQL/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 >NOTE: Steeltoe does not currently include direct support for PostgreSQL with Entity Framework 6
 
@@ -479,14 +481,14 @@ The samples and most templates are already set up to read from `appsettings.json
 To use PostgreSQL on Cloud Foundry, after a PostgreSQL service is installed, you can create and bind an instance of it to your application by using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create PostgreSQL service
-> cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
->
-> # Bind service to `myApp`
-> cf bind-service myApp myPostgres
->
-> # Restage the app to pick up change
-> cf restage myApp
+# Create PostgreSQL service
+cf create-service EDB-Shared-PostgreSQL "Basic PostgreSQL Plan" myPostgres
+
+# Bind service to `myApp`
+cf bind-service myApp myPostgres
+
+# Restage the app to pick up change
+cf restage myApp
 ```
 
 >NOTE: The preceding commands work for the PostgreSQL service provided by EDB on Cloud Foundry. For another service, adjust the `create-service` command to fit your environment.
@@ -612,6 +614,8 @@ public class HomeController : Controller
 
 This connector simplifies using Microsoft SQL Server in an application running on Cloud Foundry. The connector is built to work with `System.Data.SqlClient` and provides additional extension methods for using Entity Framework.
 
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
+
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 3.1 Quick Start
@@ -628,15 +632,13 @@ There are two sample applications to choose from:
 Depending on your specific interests, pick one of the following samples to work with going forward:
 
 ```bash
-> # Use a .NET4/EF6 sample
-> cd Samples/Connectors/src/AspDotNet4/MsSql4
-```
+# Use a .NET4/EF6 sample
+cd Samples/Connectors/src/AspDotNet4/MsSql4
 
-or
+# or
 
-```bash
-> # Use a .NETCORE/EFCore sample
-> cd Samples/Connectors/src/AspDotNetCore/SqlServerEFCore
+# Use an ASP.NET Core/EFCore sample
+cd Samples/Connectors/src/AspDotNetCore/SqlServerEFCore
 ```
 
 ### 3.1.2 Create Service
@@ -644,66 +646,37 @@ or
 If the [Microsoft SQL Server broker](https://github.com/cloudfoundry-incubator/mssql-server-broker) is installed in your Cloud Foundry instance, you can use it to create a new service instance, as follows:
 
 ```bash
-> cf create-service SqlServer sharedVM mySqlServerService
+cf create-service SqlServer sharedVM mySqlServerService
 ```
 
 An alternative to the broker is to use a user-provided service to explicitly provide connection information to the application, as follows:
 
 ```bash
-> cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
+cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
 ```
 
-### 3.1.3 Publish Sample
+### 3.1.3 Publish and Push Sample
 
-#### 3.1.3.1 Publish ASP.NET Core
+See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
 
-You can use the `dotnet` CLI to build and publish the application.
-
->NOTE: Not all quick start samples can be built to run on all frameworks and run-times.
-
-For example, the Entity Framework 6 DbContext sample can run only on Windows and on the .NET Framework, and the Entity Framework Core DbContext sample can run only on .NET Core. To get started, run the following command:
-
-```bash
-> dotnet restore --configfile nuget.config
-```
-
-Then run one of the following commands:
-
-* Publish for Linux, .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
-* Publish for Windows, .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
-* Publish for Windows, .NET Framework: `dotnet publish -f net461 -r win10-x64`
-
-#### 3.1.3.2 Publish ASP.NET 4.x
-
-To publish ASP.NET 4.x applications, you can use the Visual Studio publishing tools, as follows:
-
-1. Select MsSql4 project in the Solution Explorer.
-1. Right click and select Publish.
-1. Select the `FolderProfile` profile (if this profile is missing, create a profile that publishes to a local folder: `bin/Debug/net461/win10-x64/publish`).
-1. Click Publish.
-
-### 3.1.4 Push Samples
-
-See [Common References](#push-sample) for instructions on how to push this sample to either Linux or Windows.
-
-### 3.1.5 Observe Logs
+### 3.1.4 Observe Logs
 
 You can use the `cf logs` command to see log output.
 
-### 3.1.6 View Data
+### 3.1.5 View Data
 
 At this point, the application is up and running. On startup, it inserts two rows into the bound Microsoft SQL database.
 
 Loading the home page of the application shows those rows.
 
-### 3.1.7 Understand Samples
+### 3.1.6 Understand Samples
 
 The [Steeltoe samples](https://github.com/SteeltoeOSS/Samples) include two samples for Microsoft SQL Server:
 
 * [An ASP.NET Core sample](#3-1-7-1-asp.net-core-sample)
 * [An ASP.NET 4.x sample](#3-1-7-2-asp.net-4.x-sample)
 
-#### 3.1.7.1 ASP.NET Core Sample
+#### 3.1.6.1 ASP.NET Core Sample
 
 This sample was created from the .NET Core tooling mvc template (`dotnet new mvc`) and then modified to include the Steeltoe framework.
 
@@ -716,7 +689,7 @@ To understand the Steeltoe related changes to the generated template code, exami
 * `Index.cshtml`: The view used to display the data values from SQL Server.
 * `Models folder`: Contains code to initialize the database and also the definition of the `DbContext` class.
 
-#### 3.1.7.2 ASP.NET 4.x Sample
+#### 3.1.6.2 ASP.NET 4.x Sample
 
 This sample was created with the standard Visual Studio template (File -> New Project) and then modified to add the Steeltoe framework.
 
@@ -743,7 +716,7 @@ To use this connector:
 
 ### 3.2.1 Add NuGet Reference
 
-To use the Microsoft SQL Server connector, add your choice of Microsoft SQL Server package between [System.Data.SqlClient](https://www.nuget.org/packages/System.Data.SqlClient/), [Entity Framework](https://www.nuget.org/packages/EntityFramework/) and [Microsoft.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/), as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the Microsoft SQL Server connector, add your choice of Microsoft SQL Server package between [System.Data.SqlClient](https://www.nuget.org/packages/System.Data.SqlClient/), [Entity Framework](https://www.nuget.org/packages/EntityFramework/) and [Microsoft.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.SqlServer/), as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 ### 3.2.2 Configure Settings
 
@@ -784,23 +757,23 @@ The samples and most templates are already set up to read from `appsettings.json
 To use Microsoft SQL Server on Cloud Foundry, you need a service instance bound to your application. If the [Microsoft SQL Server broker](https://github.com/cf-platform-eng/mssql-server-broker) is installed in your Cloud Foundry instance, use it to create a new service instance, as follows:
 
 ```bash
-> cf create-service SqlServer sharedVM mySqlServerService
+cf create-service SqlServer sharedVM mySqlServerService
 ```
 
 An alternative to the broker is to use a user-provided service to explicitly provide connection information to the application, as shown in the following example:
 
 ```bash
-> cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
+cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
 ```
 
 If you are creating a service for an application that has already been deployed, you need to bind the service and restart or restage the application with the following commands:
 
 ```bash
-> # Bind service to `myApp`
-> cf bind-service myApp mySqlServerService
->
-> # Restage the app to pick up change
-> cf restage myApp
+# Bind service to `myApp`
+cf bind-service myApp mySqlServerService
+
+# Restage the app to pick up change
+cf restage myApp
 ```
 
 If you have not already deployed the application, a reference in the `manifest.yml` file can take care of the binding for you.
@@ -954,7 +927,9 @@ public class HomeController : Controller
 
 # 4.0 RabbitMQ
 
-This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on Cloud Foundry. We recommend following that tutorial, because you need to know how to use it before preceeding to use the connector.
+This connector simplifies using the [RabbitMQ Client](https://www.rabbitmq.com/tutorials/tutorial-one-dotnet.html) in an application running on Cloud Foundry. We recommend following that tutorial, because you need to know how to use it before proceeding to use the connector.
+
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -971,7 +946,7 @@ In addition to this quick start, there is an ASP.NET4 sample that was built with
 To get started, change directory to where the samples are stored, as follows:
 
 ```bash
-> cd Samples/Connectors/src/AspDotNetCore/RabbitMQ
+cd Samples/Connectors/src/AspDotNetCore/RabbitMQ
 ```
 
 ### 4.1.2 Create Service
@@ -981,11 +956,11 @@ You can use the Cloud Foundry CLI to create a service instance of RabbitMQ on Cl
 The following commands assume that you use the RabbitMQ service provided by Pivotal on Cloud Foundry:
 
 ```bash
-> # Create a RabbitMQ service instance on Cloud Foundry
-> cf create-service p-rabbitmq standard myRabbitMQService
->
-> # Make sure the service is ready
-> cf services
+# Create a RabbitMQ service instance on Cloud Foundry
+cf create-service p-rabbitmq standard myRabbitMQService
+
+# Make sure the service is ready
+cf services
 ```
 
 If you use a different service, adjust the `create-service` command to fit your environment.
@@ -1036,7 +1011,7 @@ To use this Connector:
 
 ### 4.2.1 Add NuGet Reference
 
-To use the RabbitMQ connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and `RabbitMQ.Client`.
+To use the RabbitMQ connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references) and `RabbitMQ.Client`.
 
 ### 4.2.2 Configure Settings
 
@@ -1078,14 +1053,14 @@ The samples and most templates are already set up to read from `appsettings.json
 To use RabbitMQ on Cloud Foundry, you can create and bind an instance to your application using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create RabbitMQ service
->cf create-service p-rabbitmq standard myRabbitMQService
->
-> # Bind the service to `myApp`
-> cf bind-service myApp myRabbitMQService
->
-> # Restage the app to pick up changes
-> cf restage myApp
+# Create RabbitMQ service
+cf create-service p-rabbitmq standard myRabbitMQService
+
+# Bind the service to `myApp`
+cf bind-service myApp myRabbitMQService
+
+# Restage the app to pick up changes
+cf restage myApp
 ```
 
 >NOTE: The preceding commands assume you use the RabbitMQ service provided by Pivotal on Cloud Foundry. If you use a different service, adjust the `create-service` command to fit your environment.
@@ -1159,6 +1134,8 @@ In addition to the [Quick Start](#5-1-quick-start), other Steeltoe sample applic
 * [DataProtection](https://github.com/SteeltoeOSS/Samples/tree/master/Security/src/RedisDataProtectionKeyStore): A sample application showing how to use the Steeltoe DataProtection Key Storage Provider for Redis.
 * [MusicStore](https://github.com/SteeltoeOSS/Samples/tree/master/MusicStore): A sample application showing how to use all of the Steeltoe components together in an ASP.NET Core application. This is a micro-services based application built from the ASP.NET Core reference app MusicStore provided by Microsoft.
 
+This connector provides a `IHealthContributor` which you can use in conjunction with the [Steeltoe Management Health](http://steeltoe.io/docs/steeltoe-management/#1-2-3-health) check endpoint.  See the [Using Health Contributors](#using-health-contributors) section for details on how to make use of it.
+
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
 ## 5.1 Quick Start
@@ -1170,7 +1147,7 @@ This quick start consists of using a ASP.NET Core sample application to show how
 To get started, change directory to where the samples are stored, as follows:
 
 ```bash
-> cd Samples/Connectors/src/AspDotNetCore/Redis
+cd Samples/Connectors/src/AspDotNetCore/Redis
 ```
 
 ### 5.1.2 Create Service
@@ -1180,11 +1157,11 @@ You can use the Cloud Foundry CLI to create a service instance of Redis on Cloud
 The following commands assume that you use the Redis service provided by Pivotal on Cloud Foundry:
 
 ```bash
-> # Create a Redis service instance on Cloud Foundry
-> cf create-service p-redis shared-vm myRedisService
->
-> # Make sure the service is ready
-> cf services
+# Create a Redis service instance on Cloud Foundry
+cf create-service p-redis shared-vm myRedisService
+
+# Make sure the service is ready
+cf services
 ```
 
 If you use a different service, you have to adjust the `create-service` command to fit your environment.
@@ -1236,7 +1213,7 @@ To use this connector:
 
 ### 5.2.1 Add NuGet Reference
 
-To use the Redis connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference) and a reference to `Microsoft.Extensions.Caching.Redis`, `StackExchange.Redis`, or `StackExchange.Redis.StrongName`.
+To use the Redis connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references) and a reference to `Microsoft.Extensions.Caching.Redis`, `StackExchange.Redis`, or `StackExchange.Redis.StrongName`.
 
 >NOTE: The requirement to add a direct Redis package reference is new as of version 2.0.0.
 
@@ -1289,14 +1266,14 @@ The samples and most templates are already set up to read from `appsettings.json
 To use Redis on Cloud Foundry, create and bind an instance to your application by using the Cloud Foundry CLI, as shown in the following example:
 
 ```bash
-> # Create Redis service
-> cf create-service p-redis shared-vm myRedisCache
->
-> # Bind service to `myApp`
-> cf bind-service myApp myRedisCache
->
-> # Restage the app to pick up change
-> cf restage myApp
+# Create Redis service
+cf create-service p-redis shared-vm myRedisCache
+
+# Bind service to `myApp`
+cf bind-service myApp myRedisCache
+
+# Restage the app to pick up change
+cf restage myApp
 ```
 
 >NOTE: The preceding commands assume you use the Redis service provided by Pivotal on Cloud Foundry. If you use a different service, you have to adjust the `create-service` command to fit your environment.
@@ -1430,7 +1407,7 @@ In addition to this quick start, there is an ASP.NET4 sample that was built with
 To get started, change directory to where the samples are stored, as follows:
 
 ```bash
-> cd Samples/Connectors/src/AspDotNetCore/OAuth
+cd Samples/Connectors/src/AspDotNetCore/OAuth
 ```
 
 ### 6.1.2 Create Service
@@ -1440,11 +1417,11 @@ You must first create an instance of an OAuth2 service in an org and a space. In
 To set up UAA, we need to create a user-provided service that provides the appropriate UAA server configuration data to the application.
 
 ```bash
-> # Create a OAuth service instance on Cloud Foundry
-> cf cups myOAuthService -p oauth.json
->
-> # Make sure the service is ready
-> cf services
+# Create a OAuth service instance on Cloud Foundry
+cf cups myOAuthService -p oauth.json
+
+# Make sure the service is ready
+cf services
 ```
 
 >NOTE: The contents of `oauth.json` must be modified to match your Cloud Foundry configuration.
@@ -1493,7 +1470,7 @@ To use this Connector:
 
 ### 6.2.1 Add NuGet Reference
 
-To use the OAuth connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#steeltoe-connector-reference).
+To use the OAuth connector, you need to add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
 
 ### 6.2.2 Configure Settings
 
@@ -1586,38 +1563,42 @@ Finally, you can inject and use the configured `OAuthServiceOptions` into a cont
  }
  ```
 
-# Common References
+# Common Steps
 
 ## Publish Sample
 
-You can use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, run the following command:
+### ASP.NET Core
 
-```bash
-> dotnet restore --configfile nuget.config
-```
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
-Then you can use one of the following commands to publish:
-
-* Linux with .NET Core: `dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64`
-* Windows with .NET Core: `dotnet publish -f netcoreapp2.0 -r win10-x64`
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
 * Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
+
+>NOTE: Starting with .NET Core 2.0, the `dotnet publish` command will automatically restore dependencies for you. Running `dotnet restore` explicitly is not generally required.
+
+### ASP.NET 4.x
+
+1. Open the solution for the sample in Visual Studio
+1. Right click on the project, select "Publish"
+1. Use the included `FolderProfile` to publish to `bin/Debug/net461/win10-x64/publish`
 
 ## Push Sample
 
 Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
->
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
->
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+# Push to Linux cell
+cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
+
+# Push to Windows cell, .NET Core
+cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
+
+# Push to Windows cell, .NET Framework
+cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
-> Note: all sample manifests have been defined to bind their application to their service(s) as created above.
+>NOTE: all sample manifests have been defined to bind their application to their service(s) as created above.
 
 ## Observe Logs
 
@@ -1676,7 +1657,7 @@ To manage application settings centrally instead of with individual files, use [
 
 >NOTE: If you use the Spring Cloud Config Server, `AddConfigServer()` automatically calls `AddCloudFoundry()` for you.
 
-## Steeltoe Connector Reference
+## Add NuGet References
 
 To use Steeltoe Connectors, you need to add a reference to the appropriate NuGet package based on the type of the application you are building and what dependency injector you have chosen, if any. The following table describes the available packages:
 
@@ -1688,12 +1669,58 @@ To use Steeltoe Connectors, you need to add a reference to the appropriate NuGet
 |ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EF6Core`|Includes base. Adds Entity Framework 6 with Microsoft Dependency Injection.|
 |ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EFCore`|Includes base. Adds Entity Framework Core with Microsoft Dependency Injection|
 
-To add any NuGet package, use the Nuget package manager tools or (with .NET Core applications only) directly add the appropriate package to your project by using the a `PackageReference`, as shown in the following listing:
+To add any NuGet package, use the package manager tools or (with .NET Core applications only) directly add the appropriate package to your project by using the a `PackageReference`, as shown in the following listing:
 
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
+
+## Using Health Contributors
+
+At present, Steeltoe provides the following `IHealthContributor` implementations you can choose from:
+
+|Name|Description|
+|---|---|
+|[RabbitMQHealthContributor](https://github.com/SteeltoeOSS/Connectors/blob/master/src/Steeltoe.CloudFoundry.ConnectorBase/Queue/RabbitMQHealthContributor.cs)|checks RabbitMQ connection health|
+|[RedisHealthContributor](https://github.com/SteeltoeOSS/Connectors/blob/master/src/Steeltoe.CloudFoundry.ConnectorBase/Cache/RedisHealthContributor.cs)|checks Redis cache connection health|
+|[RelationalHealthContributor](https://github.com/SteeltoeOSS/Connectors/blob/master/src/Steeltoe.CloudFoundry.ConnectorBase/Relational/RelationalHealthContributor.cs)|checks relational database connection health (MySql, Postgres, SqlServer)|
+
+Each of these contributors are located in the `Steeltoe.CloudFoundry.ConnectorBase` package and are made available to your application when you reference the connector package.
+
+If you want to use any one of the `IHealthContributor`s above in an ASP.NET Core application, simply make use of the corresponding connector as you would normally. By doing so, the contributor is automatically added to the service container for you and is automatically discovered and used by the Health endpoint.
+
+If you want to make use of any of the contributors in an ASP.NET 4.x application, where no service container exists, you must construct an instance of it using a factory method contained in the contributor and then provide it to the Health endpoint.
+
+For example, to create an instance of a MySql health contributor you can use the `GetMySqlContributor()` method in the `RelationalHealthContributor` as shown below and supply it to the endpoint actuator.
+
+```csharp
+public class ManagementConfig
+{
+    public static void ConfigureManagementActuators(IConfiguration configuration, ILoggerFactory loggerFactory = null)
+    {
+        ...
+        ActuatorConfigurator.UseHealthActuator(
+            configuration, 
+            new DefaultHealthAggregator(), 
+            GetHealthContributors(configuration), 
+            loggerFactory);
+        ...
+
+    }
+
+    private static IEnumerable<IHealthContributor> GetHealthContributors(IConfiguration configuration)
+    {
+        var healthContributors = new List<IHealthContributor>
+        {
+            new DiskSpaceContributor(),
+            RelationalHealthContributor.GetMySqlContributor(configuration)
+        };
+
+        return healthContributors;
+    }
+```
+

@@ -14,21 +14,21 @@ There are several options to choose from when implementing the Service Discovery
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. The following example shows how to clone it with git:
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
+git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
->Note: All Service Discovery samples in the Samples repository have a base path of `Samples/Discovery/src/`.
+>NOTE: All Service Discovery samples in the Samples repository have a base path of `Samples/Discovery/src/`.
 
 Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, as follows:
 
 ```bash
-> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
 ```
 
 Alternatively, you can use the following command:
 
 ```bash
-> cf target -o <YourOrg> -s <YourSpace>
+cf target -o <YourOrg> -s <YourSpace>
 ```
 
 The Service Discovery sample requires a Eureka server. If you intend to run the samples locally, install the Java 8 JDK and Maven 3.x now.
@@ -73,9 +73,9 @@ To run the fortune teller service and the fortune teller UI on your local machin
 In this step, we fetch a GitHub repository from which we can start up a Netflix Eureka Server locally on the desktop. This server has been pre-configured to listen for service registrations and discovery requests at <http://localhost:8761/eureka>. The following script shows how to get the sample from GitHub and start the service:
 
 ```bash
-> git clone https://github.com/spring-cloud-samples/eureka.git
-> cd eureka
-> mvnw spring-boot:run
+git clone https://github.com/spring-cloud-samples/eureka.git
+cd eureka
+mvnw spring-boot:run
 ```
 
 #### 1.1.1.2 Locate Sample
@@ -83,36 +83,35 @@ In this step, we fetch a GitHub repository from which we can start up a Netflix 
 Now that you have the service running, you need to change directory to where the sample is:
 
 ```bash
-> cd Samples/Discovery/src/AspDotNetCore
+cd Samples/Discovery/src/AspDotNetCore
 ```
 
 #### 1.1.1.3 Run Fortune Teller
 
-We recommended running this application is with the dotnet CLI. Scripts are provided to start both the service and the UI with a single command, as follows:
+We recommend running this application with the dotnet CLI. Scripts are provided to start both the service and the UI with a single command, as follows:
 
 ```bash
-# Use the helper scripts, passing in either net461 or netcoreapp2.0
-> .\RunFortuneTeller net461
+# Use the helper scripts, passing in net461, netcoreapp2.0 or netcoreapp2.1
+.\RunFortuneTeller net461
 ```
 
 You can also run the commands directly yourself, as follows:
 
 ```bash
 # Run the service in one window:
-> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-Service
-> dotnet run -f netcoreapp2.0 --force
+cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-Service
+dotnet run -f netcoreapp2.1 --force
 
 # And the UI in another:
-> cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
-> dotnet run -f netcoreapp2.0 --force
+cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
+dotnet run -f netcoreapp2.1 --force
 ```
 
 #### 1.1.1.4 Observe Logs
 
-Each of the samples should produce logs resembling the following:
+The `dotnet run` command should produce output similar to the following:
 
 ```bash
-> dotnet run -f netcoreapp2.0
 info: Microsoft.Data.Entity.Storage.Internal.InMemoryStore[1]
       Saved 50 entities to in-memory store.
 Hosting environment: Production
@@ -130,7 +129,7 @@ Start a browser and visit <http://localhost:5555>. You should see your fortune d
 
 To run the fortune teller service and the fortune teller UI on Cloud Foundry and observe the results, work through the following sections:
 
-* [Start Eureka Server](1-1-2-1-start-eureka-server#)
+* [Start Eureka Server](#1-1-2-1-start-eureka-server)
 * [Publish Both Applications](#1-1-2-2-publish-both-applications)
 * [Push Both Applications](#1-1-2-3-push-both-applications)
 * [Observe Logs](#1-1-2-4-observe-logs)
@@ -142,10 +141,10 @@ Use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eurek
 
 ```bash
 # Create a Eureka Server instance on Cloud Foundry
-> cf create-service p-service-registry standard myDiscoveryService
->
+cf create-service p-service-registry standard myDiscoveryService
+
 # Wait for the service to be ready
-> cf services
+cf services
 ```
 
 #### 1.1.2.2 Publish Both Applications
@@ -226,7 +225,7 @@ In order to use the Steeltoe Discovery client, you need to do the following:
 
 >NOTE: Most of the example code in the following sections is based on using Discovery in a ASP.NET Core application. If you are developing a ASP.NET 4.x application or a console-based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery) for example code you can use.
 
-### 1.2.1 Add NuGet Reference
+### 1.2.1 Add NuGet References
 
 You can choose from two Eureka Server client NuGets, depending on your needs.
 
@@ -243,7 +242,7 @@ To add this type of NuGet to your project, add an element resembling the followi
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -261,7 +260,7 @@ To add this type of NuGet to your project add an element resembling the followin
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Pivotal.Discovery.ClientCore" Version= "2.0.0"/>
+    <PackageReference Include="Pivotal.Discovery.ClientCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -291,9 +290,9 @@ All of these settings should start with `eureka:client:`
 |shouldDisableDelta|Whether to disable fetching of delta and, instead, get the full registry|false |
 |registryRefreshSingleVipAddress|Whether to be interested in only the registry information for a single VIP|none |
 |shouldOnDemandUpdateStatusChange|Whether status updates are trigger on-demand register/update|true|
-|accessTokenUri|URI to use to obtain OAUTH access token|true|
-|clientSecret|Secret to use to obtain OAUTH access token|true|
-|clientId|Client ID to use to obtain OAUTH access token|true|
+|accessTokenUri|URI to use to obtain OAUTH access token|none|
+|clientSecret|Secret to use to obtain OAUTH access token|none|
+|clientId|Client ID to use to obtain OAUTH access token|none|
 |eurekaServer:proxyHost|Proxy host to Eureka Server|none|
 |eurekaServer:proxyPort|Proxy port to Eureka Server|none|
 |eurekaServer:proxyUserName|Proxy user name to Eureka Server|none|
@@ -301,7 +300,7 @@ All of these settings should start with `eureka:client:`
 |eurekaServer:shouldGZipContent|Whether to compress content|true|
 |eurekaServer:connectTimeoutSeconds|Connection timeout|5s|
 
->NOTE: Some settings affect registering as a service as well.
+**NOTE**: **Some settings above affect registering as a service as well.**
 
 The following table describes the settings you can use to configure the behavior of the client as it relates to registering services:
 
@@ -396,17 +395,17 @@ The samples and most templates are already set up to read from `appsettings.json
 When you want to use a Eureka Server on Cloud Foundry and you have installed [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you can create and bind a instance of the server to the application by using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create eureka server instance named `myDiscoveryService`
-> cf create-service p-service-registry standard myDiscoveryService
->
-> # Wait for service to become ready
-> cf services
->
-> # Bind the service to `myApp`
-> cf bind-service myApp myDiscoveryService
->
-> # Restage the app to pick up change
-> cf restage myApp
+# Create eureka server instance named `myDiscoveryService`
+cf create-service p-service-registry standard myDiscoveryService
+
+# Wait for service to become ready
+cf services
+
+# Bind the service to `myApp`
+cf bind-service myApp myDiscoveryService
+
+# Restage the app to pick up change
+cf restage myApp
 ```
 
 For more information on using the Eureka Server on Cloud Foundry, see the [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html) documentation.
@@ -505,6 +504,56 @@ public class FortuneService : IFortuneService
 }
 ```
 
+#### 1.2.6.1 Using HttpClientFactory
+
+In addition to the `DiscoveryHttpClientHandler` mentioned above, you also have the option to use the .NET provided `HttpClientFactory` together with the Steeltoe provided `DiscoveryHttpMessageHandler` to do service lookup.
+
+`DiscoveryHttpMessageHandler` is a `DelegatingHandler` that be used, much like the `DiscoveryHttpClientHandler`, to intercept requests and to evaluate the URL to see if the host portion of the URL can be resolved from the current service registry.  The handler will do this for any `HttpClient`s created by the factory.
+
+Here is just one example of how you can make use of it in your application:
+
+```csharp
+public class Startup
+{
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; set; }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+      services.AddDiscoveryClient(Configuration);
+
+      // Add Steeltoe handler to container
+      services.AddTransient<DiscoveryHttpMessageHandler>();
+
+      // Configure a HttpClient
+      services.AddHttpClient("fortunes", c =>
+      {
+              c.BaseAddress = new Uri("http://fortuneService/api/fortunes/");
+      })
+      .AddHttpMessageHandler<DiscoveryHttpMessageHandler>()
+      .AddTypedClient<IFortuneService, FortuneService>();
+
+      // Add framework services.
+      services.AddMvc();
+    }
+
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+    {
+      ....
+
+      // Start discovery background thread
+      app.UseDiscoveryClient();
+    }
+}
+```
+
+Check out the Microsoft documentation on [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-2.1) to see all the various ways you can make use of the Steeltoe message handler.
+
 ### 1.2.7 Enable Logging
 
 Sometimes, it is desirable to turn on debug logging in the Discovery client. To do so, you can modify the `appsettings.json` file and turn on Debug level logging for the Steeltoe/Pivotal components, as shown in the following example:
@@ -525,61 +574,41 @@ Here is an example `appsettings.json` file:
 }
 ```
 
-# Common References
+# Common Steps
 
 This section describes tasks that are common to many of the processes described in this guide.
 
 ## Publish Sample
 
-To use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime, run the following command:
+### ASP.NET Core
 
-```bash
-> dotnet restore --configfile nuget.config
-```
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
-Then run only one of the next three commands.
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
+* Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
-To publish for Linux with .NET Core, run the following command:
+>NOTE: Starting with .NET Core 2.0, the `dotnet publish` command will automatically restore dependencies for you. Running `dotnet restore` explicitly is not generally required.
 
-```bash
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
-```
+### ASP.NET 4.x
 
-To publish for Windows with .NET Core, run the following command:
-
-```bash
-> dotnet publish -f netcoreapp2.0 -r win10-x64
-```
-
-To publish for Linux with .NET Framework, run the following command:
-
-```bash
-> dotnet publish -f net461 -r win10-x64
-```
+1. Open the solution for the sample in Visual Studio
+1. Right click on the project, select "Publish"
+1. Use the included `FolderProfile` to publish to `bin/Debug/net461/win10-x64/publish`
 
 ## Push Sample
 
-To use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime, run only one of the next three commands.
-
-To push to a Linux cell, run the following command:
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
-> # Push to Linux cell
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
-```
+# Push to Linux cell
+cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 
-To push to a Windows cell with .NET Core, run the following command:
+# Push to Windows cell, .NET Core
+cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 
-```bash
->  # Push to Windows cell, .NET Core
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
-```
-
-To push to a Windows cell with .NET Framework, run the following command:
-
-```bash
->  # Push to Windows cell, .NET Framework
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+# Push to Windows cell, .NET Framework
+cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
 >NOTE: Manifest file names may vary. Some samples use a different manifest for .NET 4 vs .NET Core.

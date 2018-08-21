@@ -307,27 +307,15 @@ body.docs {
     }
   }
 }
-.js-toc-content {
-  h1, h2, h3, h4, h5, h6 {
-    &::before {
-      display: block;
-      content: " ";
-      visibility: hidden;
-    }
-  }
-  h1,h2 {
-    &::before {
-      height: 220px;
-      margin-top: -220px;
-    }
-  }
-  h3, h4, h5, h6 {
-    &::before {
-      height: 340px;
-      margin-top: -340px;
-    }
-  }
+
+.repo-link {
+  display: block;
+  border: 1px solid;
+  font-weight: bold;
+  margin: 20px 10px;
+  padding: 10px 20px;
 }
+
 @media(max-width: 40em) {
   #toc.is-position-fixed {
     background: white;
@@ -342,6 +330,27 @@ body.docs {
       line-height: 1.2;
       &.node-name--H1 { font-size: .8rem }
       &.node-name--H2,&.node-name--H3,&.node-name--H4 { font-size: .75rem }
+    }
+  }
+  .js-toc-content {
+    h1, h2, h3, h4, h5, h6 {
+      &::before {
+        display: block;
+        content: " ";
+        visibility: hidden;
+      }
+    }
+    h1,h2 {
+      &::before {
+        height: 220px;
+        margin-top: -220px;
+      }
+    }
+    h3, h4, h5, h6 {
+      &::before {
+        height: 340px;
+        margin-top: -340px;
+      }
     }
   }
 }

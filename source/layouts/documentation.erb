@@ -27,6 +27,7 @@
               <h1 class="js-toc-ignore regular"><%= current_article.metadata[:page][:title] %></h1>
             <% end %>
             <%= yield %>
+            <a class="repo-link" href="https://github.com/steeltoeoss/steeltoe-site/tree/dev/source/<%= current_resource.file_descriptor.relative_path %>">Create a pull request or raise an issue on the source for this page in GitHub</a>
           </div>
         </div>
       </div>

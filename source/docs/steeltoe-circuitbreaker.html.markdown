@@ -18,19 +18,19 @@ There are several options to choose from when implementing the Circuit Breaker p
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use Git to clone the repository, as follows:
 
 ```bash
-> git clone https://github.com/SteeltoeOSS/Samples.git
+git clone https://github.com/SteeltoeOSS/Samples.git
 ```
 
 Alternatively, you can download it with your browser from GitHub at [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples).
 
-> Note: all Circuit Breaker samples in the Samples repository have a base path of `Samples/CircuitBreaker/src/`.
+>NOTE: all Circuit Breaker samples in the Samples repository have a base path of `Samples/CircuitBreaker/src/`.
 
 Make sure your Cloud Foundry CLI tools are logged in and targeting the correct org and space, as follows:
 
 ```bash
-> cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
-or
-> cf target -o <YourOrg> -s <YourSpace>
+cf login [-a API_URL] [-u USERNAME] [-p PASSWORD] [-o ORG] [-s SPACE] [--skip-ssl-validation]
+# or
+cf target -o <YourOrg> -s <YourSpace>
 ```
 
 The CircuitBreaker sample requires a Eureka server and a Hystrix dashboard. We cover how to run those later. If you intend to run the samples locally, install the [Java 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and [Maven 3.x](https://maven.apache.org/download.cgi) now.
@@ -88,14 +88,14 @@ To run a Netflix Eureka Server locally, you must fetch the Spring Cloud Eureka s
 To fetch the repository, run the following `git` command:
 
 ```bash
-> git clone https://github.com/spring-cloud-samples/eureka.git
+git clone https://github.com/spring-cloud-samples/eureka.git
 ```
 
 You can the start the Eureka server by running the following commands:
 
 ```bash
-> cd eureka
-> ./mvnw spring-boot:run
+cd eureka
+./mvnw spring-boot:run
 ```
 
 #### 1.1.1.2  Start a Hystrix Dashboard
@@ -106,14 +106,14 @@ To fetch the repository that contains our Hystrix dashboard, run the following c
 [//]: # (If the reader has followed directions, their current directory is the eureka directory. Should this command be run there or should we tell them to cd to the top of their working directory tree?)
 
 ```bash
-> git clone https://github.com/spring-cloud-samples/hystrix-dashboard.git
+git clone https://github.com/spring-cloud-samples/hystrix-dashboard.git
 ```
 
 To start the Hystrix dashboard, run the following commands:
 
 ```bash
-> mvn install
-> java -jar target/hystrix-dashboard-0.0.1.BUILD-SNAPSHOT.jar
+mvn install
+java -jar target/hystrix-dashboard-0.0.1.BUILD-SNAPSHOT.jar
 ```
 
 #### 1.1.1.3 Run Fortune Teller
@@ -122,34 +122,33 @@ We recommend running this application is with the dotnet CLI. We have provided s
 
 ```bash
 # Make sure you're in the correct directory
-> cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller
->
-# Use the helper scripts, passing in either net461 or netcoreapp2.0
-> .\RunFortuneTeller net461
+cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller
+
+# Use the helper scripts, passing in either net461 or netcoreapp2.1
+.\RunFortuneTeller net461
 ```
 
 You can also run the commands directly yourself, by running the following commands:
 
 ```bash
 # Run the service in one window:
-> cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller/Fortune-Teller-Service
-> dotnet run -f netcoreapp2.0 --force
+cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller/Fortune-Teller-Service
+dotnet run -f netcoreapp2.1 --force
 
 # And the UI in another:
-> cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller/Fortune-Teller-UI
-> # Use one of these commands to set BUILD environment variable to `LOCAL`:
-> SET BUILD=LOCAL or export BUILD=LOCAL
-> dotnet run -f netcoreapp2.0 --force
+cd Samples/CircuitBreaker/src/AspDotNetCore/Fortune-Teller/Fortune-Teller-UI
+# Use one of these commands to set BUILD environment variable to `LOCAL`:
+SET BUILD=LOCAL or export BUILD=LOCAL
+dotnet run -f netcoreapp2.1 --force
 ```
 
-> NOTE: Fortune-Teller-UI includes different libraries based on the value of the BUILD environment variable. If it is not set correctly at build time, you may see many errors relating to RabbitMQ in the application's output.
+>NOTE: Fortune-Teller-UI includes different libraries based on the value of the BUILD environment variable. If it is not set correctly at build time, you may see many errors relating to RabbitMQ in the application's output.
 
 #### 1.1.1.4 Observe Logs
 
-Each of the samples should produce logs resembling the following:
+The `dotnet run` command in each sample should produce output similar to the following:
 
 ```bash
-> dotnet run -f netcoreapp2.0
 info: Microsoft.Data.Entity.Storage.Internal.InMemoryStore[1]
       Saved 50 entities to in-memory store.
 Hosting environment: Production
@@ -193,10 +192,10 @@ To use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eu
 
 ```bash
 # Create a Eureka Server instance on Cloud Foundry
-> cf create-service p-service-registry standard myDiscoveryService
->
+cf create-service p-service-registry standard myDiscoveryService
+
 # Wait for the service to become ready
-> cf services
+cf services
 ```
 
 #### 1.1.2.2 Start a Hystrix Dashboard
@@ -205,10 +204,10 @@ Now you can use the Cloud Foundry CLI to create a service instance of the Spring
 
 ```bash
 # Create a Hystrix Dashboard instance on Cloud Foundry
-> cf create-service p-circuit-breaker-dashboard standard myHystrixService
->
+cf create-service p-circuit-breaker-dashboard standard myHystrixService
+
 # Wait for the service to become ready
-> cf services
+cf services
 ```
 
 #### 1.1.2.3 Publish Fortune-Teller-Service
@@ -224,8 +223,8 @@ See [Push Sample](#push-sample) for instructions on how to push this sample to e
 If you did not use the provided helper scripts, make sure the `BUILD` environment variable you set earlier is not set to `LOCAL` before you publish the Fortune-Teller-UI. The scripts take care of resetting this variable for you. The following command unsets a the `BUILD` variable:
 
 ```bash
-> # Remove previously set BUILD environment variable
-> SET BUILD= # or unset BUILD
+# Remove previously set BUILD environment variable
+SET BUILD= # or unset BUILD
 ```
 
 See [Publish Sample](#publish-sample) for instructions on how to publish this sample to either Linux or Windows.
@@ -310,7 +309,7 @@ To use the Steeltoe framework:
 * Use Hystrix Command(s) and/or Collapser(s) to invoke dependent services
 * Add and Use the Hystrix metrics stream service
 
-> Note: Most of the code in the following sections is based on using Hystrix in an ASP.NET Core application. If you are developing an ASP.NET 4.x application or a Console based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/CircuitBreaker) for example code you can use.
+>NOTE: Most of the code in the following sections is based on using Hystrix in an ASP.NET Core application. If you are developing an ASP.NET 4.x application or a Console based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/CircuitBreaker) for example code you can use.
 
 ### 1.2.1 Add NuGet References
 
@@ -329,7 +328,7 @@ To add this type of NuGet to your project add something like the following `Pack
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -341,7 +340,7 @@ To do this include the following `PackageReference` in your application:
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -360,7 +359,7 @@ To add this type of NuGet to your project add something like the following:
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version= "2.0.0"/>
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version= "2.1.0"/>
     <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
 ...
 </ItemGroup>
@@ -438,7 +437,7 @@ All configured command-specific settings, as described earlier in #4, should be 
 
 The following set of tables specifies all of the possible settings by category.
 
-> NOTE: The settings provided below follow the Netflix Hystrix implementation closely. Consequently, you should read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki for more detail on each setting and how it affects Hystrix command operations.
+>NOTE: The settings provided below follow the Netflix Hystrix implementation closely. Consequently, you should read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki for more detail on each setting and how it affects Hystrix command operations.
 
 #### 1.2.3.1 Execution
 
@@ -566,7 +565,7 @@ All configured pool-specific settings, as described in #4 above, should be place
 
 The tables in the following sections specify all of the possible settings.
 
-> Note: the settings provided below follow the Netflix Hystrix implementation closely. Consequently, you should read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki for more detail on each setting and how it affects Hystrix thread pool operations.
+>NOTE: the settings provided below follow the Netflix Hystrix implementation closely. Consequently, you should read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki for more detail on each setting and how it affects Hystrix thread pool operations.
 
 #### 1.2.4.1 Sizing
 
@@ -619,7 +618,7 @@ If you wish to configure the settings for a collapser in code, you must use the 
 
 All configured collapser specific settings, as described in #4 above, should be placed under a  prefix of `hystrix:collapser:HYSTRIX_COLLAPSER_KEY:`, where `HYSTRIX_COLLAPSER_KEY` is the "name" of the collapser.
 
-> Note: The default name of the collapser, if not specified, is the type name of the collapser.
+>NOTE: The default name of the collapser, if not specified, is the type name of the collapser.
 
 The following example configures the number of milliseconds after which a batch of requests that have been created by the collapser with a name of `sample` triggers and runs all of the requests:
 
@@ -627,7 +626,7 @@ The following example configures the number of milliseconds after which a batch 
 
 The tables that follow specify all of the possible settings.
 
-> NOTE: The settings provided in the tables follow the Netflix Hystrix implementation closely. Consequently, you should read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki for more detail on each setting and how it affects Hystrix collapser operations.
+>NOTE: The settings provided in the tables follow the Netflix Hystrix implementation closely. Consequently, you should read the [Configuration section](https://github.com/Netflix/Hystrix/wiki/Configuration) on the Netflix Hystrix wiki for more detail on each setting and how it affects Hystrix collapser operations.
 
 #### 1.2.5.1 Sizing
 
@@ -698,7 +697,7 @@ The samples and most templates are already set up to read from `appsettings.json
 
 Once you have read in your configuration data, you are ready to add the Hystrix commands to the dependency injection container, thereby making them available for injection in your application. There are several Steeltoe extension methods available to help.
 
-> Note: Adding your commands to the container is not required. You can create them at any point in your application.
+>NOTE: Adding your commands to the container is not required. You can create them at any point in your application.
 
 To make your Hystrix commands injectable, use the `AddHystrixCommand()` extension methods provided by Steeltoe in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
 
@@ -871,7 +870,7 @@ There are two styles of request-collapsing supported by Hystrix: `request-scoped
 
 As with Hystrix commands, you can also add a Hystrix collapsers to the service container, making them available for injection in your application. You can use several Steeltoe extension methods to help you accomplish this.
 
-> NOTE: Adding collapsers to the container is not required. You can create them in your application at any point.
+>NOTE: Adding collapsers to the container is not required. You can create them in your application at any point.
 
 If you do want to have them injected, then use the `AddHystrixCollapser()` extension methods provided by the Steeltoe package in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
 
@@ -906,7 +905,7 @@ As with Hystrix commands, you must follow an important requirement if you wish t
 The following example shows how to define a compatible constructor:
 
 ```csharp
-public class FortuneServiceCommand  : HystrixCollapser<List<Fortune>, Fortune, int>,
+public class FortuneServiceCollapser  : HystrixCollapser<List<Fortune>, Fortune, int>,
 {
     ILogger<FortuneServiceCollapser> _logger;
     ILoggerFactory _loggerFactory;
@@ -1158,11 +1157,11 @@ Once you have made the changes described earlier, you can then use the Netflix H
 When you want to use a Hystrix Dashboard on Cloud Foundry, you must have previously installed Spring Cloud Services. If that has been done, you can create and bind a instance of the dashboard to the application by using the Cloud Foundry CLI, as follows:
 
 ```bash
-> # Create Hystrix dashboard instance named `myHystrixService`
-> cf create-service p-circuit-breaker-dashboard standard myHystrixService
->
-> # Wait for service to become ready
-> cf services
+# Create Hystrix dashboard instance named `myHystrixService`
+cf create-service p-circuit-breaker-dashboard standard myHystrixService
+
+# Wait for service to become ready
+cf services
 ```
 
 For more information on using the Hystrix Dashboard on Cloud Foundry, see the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-4/common/) documentation.
@@ -1175,67 +1174,52 @@ Once you have performed the steps described earlier and you have made the change
 1. Follow [these instructions](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix Dashboard service.
 1. Use your application and see the metrics begin to flow.
 
-# Common References
+# Common Steps
 
 This section contains snippets of commands that you are likely to use repeatedly for common tasks.
 
 ## Publish Sample
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime. To get started, use the following command:
+### ASP.NET Core
 
-```bash
-> dotnet restore --configfile nuget.config
-```
+Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
 
-To publish for Linux with .NET Core, use the following command:
+* Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
+* Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
+* Windows with .NET Platform: `dotnet publish -f net461 -r win10-x64`
 
-```bash
-> dotnet publish -f netcoreapp2.0 -r ubuntu.14.04-x64
-```
+>NOTE: Starting with .NET Core 2.0, the `dotnet publish` command will automatically restore dependencies for you. Running `dotnet restore` explicitly is not generally required.
 
-To publish for Windows with .NET Core, use the following command:
+### ASP.NET 4.x
 
-```bash
-> dotnet publish -f netcoreapp2.0 -r win10-x64
-```
-
-To publish for Windows, with .NET Framework, use the following command:
-
-```bash
-> dotnet publish -f net461 -r win10-x64
-```
+1. Open the solution for the sample in Visual Studio
+1. Right click on the project, select "Publish"
+1. Use the included `FolderProfile` to publish to `bin/Debug/net461/win10-x64/publish`
 
 ## Push Sample
 
-Use the Cloud Foundry CLI to push the published application to Cloud Foundry with the same framework and runtime for which your application was published:
-
-To push to a Linux cell, use the following command:
+Use the Cloud Foundry CLI to push the published application to Cloud Foundry using the parameters that match what you selected for framework and runtime:
 
 ```bash
-> cf push -f manifest.yml -p bin/Debug/netcoreapp2.0/ubuntu.14.04-x64/publish
-```
+# Push to Linux cell
+cf push -f manifest.yml -p bin/Debug/netcoreapp2.1/ubuntu.14.04-x64/publish
 
-To push to a Windows cell with .NET Core, use the following command:
+# Push to Windows cell, .NET Core
+cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.1/win10-x64/publish
 
-```bash
-> cf push -f manifest-windows.yml -p bin/Debug/netcoreapp2.0/win10-x64/publish
-```
-
-To push to a Windows cell with .NET Framework, use the following command:
-
-```bash
-> cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
+# Push to Windows cell, .NET Framework
+cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 ```
 
 Manifest file names may vary, some samples use a different manifest for .NET 4 vs .NET Core.
 
-> NOTE: All sample manifests have been defined to bind their application to their services, as created earlier.
+>NOTE: All sample manifests have been defined to bind their application to their services, as created earlier.
 
 ## Reading Configuration Values
 
-Once the connector's settings have been defined, the next step is to read them so that they can be made available to the connector.
+Once settings have been defined, the next step is to read them so that they can be made available.
 
-The following code reads connector settings from the `appsettings.json` file with the .NET JSON configuration provider (`AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`:
+The following code reads settings from the `appsettings.json` file with the .NET JSON configuration provider (`AddJsonFile("appsettings.json"))` and from `VCAP_SERVICES` with `AddCloudFoundry()`:
 
 ```csharp
 public class Program {
@@ -1269,4 +1253,4 @@ If there are merge conflicts, the last provider added to the Configuration take 
 
 To manage application settings centrally instead of with individual files, use [Steeltoe Configuration](/docs/steeltoe-configuration) and a tool such as [Spring Cloud Config Server](https://github.com/spring-cloud/spring-cloud-config).
 
-> Note: If you use the Spring Cloud Config Server, `AddConfigServer()` automatically calls `AddCloudFoundry()` for you.
+>NOTE: If you use the Spring Cloud Config Server, `AddConfigServer()` automatically calls `AddCloudFoundry()` for you.
