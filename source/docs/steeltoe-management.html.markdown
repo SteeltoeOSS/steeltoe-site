@@ -7,7 +7,7 @@ tags:
 
 Steeltoe includes a number of optional features you can add to your applications to aid in monitoring and managing it while it runs in production. These features are implemented as a number of management endpoints that you can easily add to your application.
 
-The way the endpoints are exposed and used depends on the type of technology you choose in exposing the functionality of the endpoint. Out of the box, Steeltoe provides an easy way to expose these endpoints by using HTTP in an ASP.NET application. Of course, you can build and use whatever you would like to meet your needs.
+The way the endpoints are exposed and used depends on the type of technology you choose in exposing the functionality of the endpoint. Out of the box, Steeltoe provides several easy ways to expose these endpoints over HTTP in .NET applications. Of course, you can build and use whatever you would like to meet your needs.
 
 When you expose the endpoints over HTTP, you can also integrate the endpoints with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html). The [quick start](#1-1-quick-start), explores this integration in more depth. You should read the [Using Actuators with Apps Manager section](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html) of the Pivotal Cloud Foundry documentation for more details.
 
@@ -150,13 +150,15 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 ## 1.2 Usage
 
-You should understand how the .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the management endpoints. You need at least a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder to configure the endpoints.
+Steeltoe provides a base set of endpoint functionality, along with several implementations for exposing the endpoints over HTTP. HTTP implementations are provided with ASP.NET Core middleware, OWIN middleware and HTTP Modules. Should you wish to expose the core endpoint functionality over some protocol other than HTTPS, you are free to provide your own implementation.
+
+Regardless of the endpoint exposure method you select, you should understand how the .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the management endpoints. You need at least a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder to configure the endpoints.
 
 When developing ASP.NET Core applications, you should also understand how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services for the app. Pay particular attention to the usage of the `ConfigureServices()` and `Configure()` methods.
 
-When developing ASP.NET 4.x applications, you should be familiar with `Global.asax.cs` and how it is used in initializing and configuring your application.
+When adding Steeltoe Management endpoints to your ASP.NET 4.x applications, you can choose between using HTTP modules and OWIN middleware. If you select HTTP modules, you should be familiar with `Global.asax.cs` and how it is used in initializing and configuring your application. If you select the OWIN middleware approach, you should be familiar with how the Startup class is used in configuring application middleware. The rest of this document will refer to the HTTP Module implementation simply as ASP.NET 4.x, and the OWIN implementation as ASP.NET OWIN.
 
-When developing ASP.NET OWIN applications, you should be familiar with how the Startup class is used in configuring application middleware.
+>NOTE: You may wish to select the OWIN implementation for your ASP.NET 4.x application when you don't want to depend on `System.Web` or you also plan to use [Steeltoe security providers](../steeltoe-security) for authentication/authorization on Cloud Foundry.
 
 The following table describes the available Steeltoe management endpoints that can be used in an application:
 
@@ -215,7 +217,7 @@ Endpoints can be configured by using the normal .NET [Configuration service](htt
 
 All management endpoint settings should be placed under the prefix with the key `management:endpoints`. Any settings found under this prefix apply to all endpoints globally.
 
-Settings that you want to apply to specific endpoints should be placed under the prefix with the key `management:endpoints:` + ID (e.g. `management:endpoints:health`). Any settings you apply to a specific endpoint override any settings applied globally.
+Settings that you want to apply to specific endpoints should be placed under the prefix with the key `management:endpoints:` + ID (for example, `management:endpoints:health`). Any settings you apply to a specific endpoint override any settings applied globally.
 
 The following table describes the settings that you can apply globally:
 
@@ -304,11 +306,9 @@ The following example shows how enable the Health endpoint and to add a custom `
 ```csharp
 public class Startup
 {
-  .....
-
+    ...
     public void ConfigureServices(IServiceCollection services)
     {
-
         // Add your own IHealthContributor, registered with the interface
         services.AddSingleton<IHealthContributor, CustomHealthContributor>();
 
@@ -318,7 +318,6 @@ public class Startup
         // Add framework services.
         services.AddMvc();
     }
-
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
     {
         app.UseStaticFiles();
@@ -335,9 +334,9 @@ public class Startup
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x application.
 
-To add the Health actuator endpoint, use the `UseHealthActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a custom `IIHealthAggregator` and a list of `IHealthContributor`'s should you want to customize the actuator endpoint.  If none are provided, defaults will be provided.
+To add the Health actuator endpoint, use the `UseHealthActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a custom `IIHealthAggregator` and a list of `IHealthContributor`s should you want to customize the actuator endpoint.  If none are provided, defaults will be provided.
 
-The following example shows how enable the Health endpoint and use the default `IIHealthAggregator` together with two `IHealthContributor`'s.
+The following example shows how enable the Health endpoint and use the default `IIHealthAggregator` together with two `IHealthContributor`s.
 
 ```csharp
 public class ManagementConfig
@@ -351,9 +350,7 @@ public class ManagementConfig
             GetHealthContributors(configuration),
             loggerFactory);
         ...
-
     }
-
     private static IEnumerable<IHealthContributor> GetHealthContributors(IConfiguration configuration)
     {
         var healthContributors = new List<IHealthContributor>
@@ -361,7 +358,6 @@ public class ManagementConfig
             new DiskSpaceContributor(),
             RelationalHealthContributor.GetMySqlContributor(configuration)
         };
-
         return healthContributors;
     }
 ```
@@ -372,13 +368,12 @@ Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below
 
 To add the Health actuator middleware to the ASP.NET OWIN pipeline, use the `UseHealthActuator()` extension method from [HealthEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/Health/HealthEndpointAppBuilderExtensions.cs).
 
-The following example shows how enable the Health endpoint and use the default `IIHealthAggregator` together with two `IHealthContributor`'s.
+The following example shows how enable the Health endpoint and use the default `IIHealthAggregator` together with two `IHealthContributor`s.
 
 ```csharp
 public class Startup
 {
-  .....
-
+    ...
     public void Configuration(IAppBuilder app)
     {
         ...
@@ -387,12 +382,8 @@ public class Startup
             new DefaultHealthAggregator(),
             GetHealthContributors(ApplicationConfig.Configuration),
             LoggingConfig.LoggerFactory);
-
         ...
-
-        Start();
     }
-
     private static IEnumerable<IHealthContributor> GetHealthContributors(IConfiguration configuration)
     {
         var healthContributors = new List<IHealthContributor>
@@ -400,7 +391,6 @@ public class Startup
             new DiskSpaceContributor(),
             RelationalHealthContributor.GetMySqlContributor(configuration)
         };
-
         return healthContributors;
     }
 }
@@ -418,7 +408,7 @@ The following table describes the `IInfoContributor` implementations provided by
 
 |Name|Description|
 |---|---|
-| [AppSettingsInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/Contributor/AppSettingsInfoContributor.cs)|Exposes any values under the key `info` (e.g. `info:foo:bar=foobar`) that is in your apps configuration (e.g. `appsettings.json`)|
+| [AppSettingsInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/Contributor/AppSettingsInfoContributor.cs)|Exposes any values under the key `info` (for example, `info:foo:bar=foobar`) that is in your apps configuration (for example, `appsettings.json`)|
 | [GitInfoContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Info/Contributor/GitInfoContributor.cs)|Exposes git information (if a git.properties file is available)|
 
 For an example of how to use the above `GitInfoContributor` within MSBuild using [GitInfo](https://github.com/kzu/GitInfo), see the [Steeltoe management sample](https://github.com/SteeltoeOSS/Samples/tree/master/Management/src/AspDotNetCore/CloudFoundry) and the [CloudFoundry.csproj](https://github.com/SteeltoeOSS/Samples/blob/master/Management/src/AspDotNetCore/CloudFoundry/CloudFoundry.csproj) file.
@@ -470,11 +460,9 @@ The following example shows how enable the Info endpoint and to add a custom `II
 ```csharp
 public class Startup
 {
-  .....
-
+    ...
     public void ConfigureServices(IServiceCollection services)
     {
-
         // Add custom info contributor
         services.AddSingleton<IInfoContributor, ArbitraryInfoContributor>();
 
@@ -484,7 +472,6 @@ public class Startup
         // Add framework services.
         services.AddMvc();
     }
-
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
     {
         app.UseStaticFiles();
@@ -499,7 +486,7 @@ public class Startup
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
 
-To add the Info actuator endpoint, use the `UseInfoActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a list of `IInfoContributor`'s should you want to customize the actuator endpoint.  If none are provided, defaults will be provided.
+To add the Info actuator endpoint, use the `UseInfoActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs). Optionally you can provide a list of `IInfoContributor`s should you want to customize the actuator endpoint.  If none are provided, defaults will be provided.
 
 The following example shows how enable the Info endpoint and use the `GitInfoContributor` and `AppSettingsInfoContributor` as `IInfoContributor`s.
 
@@ -511,9 +498,7 @@ public class ManagementConfig
         ...
         ActuatorConfigurator.UseInfoActuator(configuration, GetInfoContributors(configuration), loggerFactory);
         ...
-
     }
-
     private static IEnumerable<IInfoContributor> GetInfoContributors(IConfiguration configuration)
     {
         var contributors = new List<IInfoContributor>() { new GitInfoContributor(), new AppSettingsInfoContributor(configuration) }
@@ -532,8 +517,7 @@ The following example shows how to enable the Info endpoint and use the `GitInfo
 ```csharp
 public class Startup
 {
-  .....
-
+    ...
     public void Configuration(IAppBuilder app)
     {
         ...
@@ -541,11 +525,7 @@ public class Startup
             ApplicationConfig.Configuration,
             GetInfoContributors(ApplicationConfig.Configuration),
             LoggingConfig.LoggerFactory);
-
         ...
-
-        Start();
-
     }
     private static IEnumerable<IInfoContributor> GetInfoContributors(IConfiguration configuration)
     {
@@ -670,8 +650,7 @@ The following example shows how enable the Loggers endpoint and configure it wit
 ```csharp
 public class Startup
 {
-  .....
-
+    ...
     public void Configuration(IAppBuilder app)
     {
         ...
@@ -679,12 +658,8 @@ public class Startup
             ApplicationConfig.Configuration,
             LoggingConfig.LoggerProvider,
             LoggingConfig.LoggerFactory);
-
         ...
-
-        Start();
     }
-
 }
 ```
 
@@ -859,7 +834,7 @@ The primary purpose of this endpoint is to enable integration with the Pivotal A
 
 When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permissions to access the management endpoint.
 
->NOTE: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (e.g. running locally on your desktop).
+>NOTE: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (for example, running locally on your desktop).
 
 #### 1.2.9.1 Configure Settings
 
@@ -1178,12 +1153,10 @@ public class Startup
 
         // Export metrics to Cloud Foundry forwarder
         services.AddMetricsForwarderExporter(Configuration);
-  
-    ....
+        ...
     }
     public void Configure(IApplicationBuilder app)
     {
-
         app.UseStaticFiles();
 
         // Expose Metrics endpoint
@@ -1193,7 +1166,6 @@ public class Startup
 
         // Start up metrics exporter
         app.UseMetricsExporter();
-
     }
 }
 ```
@@ -1218,7 +1190,6 @@ public class ManagementConfig
             OpenCensusStats.Instance,
             loggerFactory != null ? loggerFactory.CreateLogger<CloudFoundryForwarderExporter>() : null);
     }
-
     public static void Start()
     {
         DiagnosticsManager.Instance.Start();
@@ -1227,7 +1198,6 @@ public class ManagementConfig
             MetricsExporter.Start();
         }
     }
-
     public static void Stop()
     {
         DiagnosticsManager.Instance.Stop();
@@ -1382,7 +1352,7 @@ cf services
 
 #### 2.1.2.2 Start Zipkin Server
 
-Download the latest Zipkin server jar from [here](https://dl.bintray.com/openzipkin/maven/io/zipkin/java/zipkin-server/) (e.g. zipkin-server-2.8.4-exec.jar).
+Download the latest Zipkin server jar from [here](https://dl.bintray.com/openzipkin/maven/io/zipkin/java/zipkin-server/) (for example, zipkin-server-2.8.4-exec.jar).
 
 Use the Cloud Foundry CLI to start an instance of the Zipkin server on Cloud Foundry as follows:
 
@@ -1391,11 +1361,11 @@ Use the Cloud Foundry CLI to start an instance of the Zipkin server on Cloud Fou
 cf push zipkin-server -p ./zipkin-server-2.8.4-exec.jar
 ```
 
-Verify the server is up and running by opening a browser to the Zipkin server UI: (e.g. <http://zipkin-server.cfapps.io/> ).
+Verify the server is up and running by opening a browser to the Zipkin server UI: (for example, <http://zipkin-server.cfapps.io/> ).
 
 #### 2.1.2.3 Configure Settings
 
-Open `appsettings.json` and modify the `management:tracing:exporter:zipkin:endpoint` configuration setting to match the endpoint of the Zipkin server deployed to Cloud Foundry above. (e.g. <http://zipkin-server.cfapps.io/api/v2/spans>).
+Open `appsettings.json` and modify the `management:tracing:exporter:zipkin:endpoint` configuration setting to match the endpoint of the Zipkin server deployed to Cloud Foundry above. (for example, <http://zipkin-server.cfapps.io/api/v2/spans>).
 
 You need to make this modification in both Fortune-Teller-Service and Fortune-Teller-UI.
 
@@ -1532,7 +1502,7 @@ Follow these [instructions](http://steeltoe.io/docs/steeltoe-logging/#1-0-dynami
 
 Once that is done, then whenever your application issues any log statements, the Steeltoe logger will add additional trace information to each log message if there is an active trace context. The format of that information is of the form:
 
-* `[app name, trace id, span id, trace flags]`  (e.g. `[service1,2485ec27856c56f4,2485ec27856c56f4,true]`)
+* `[app name, trace id, span id, trace flags]`  (for example, `[service1,2485ec27856c56f4,2485ec27856c56f4,true]`)
 
 ### 2.2.4 Propagating Trace Context
 
@@ -1556,8 +1526,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        ....
-
+        ...
         // Add Distributed tracing
         services.AddDistributedTracing(Configuration);
 
@@ -1566,7 +1535,6 @@ public class Startup
     }
     public void Configure(IApplicationBuilder app)
     {
-
         app.UseStaticFiles();
 
         app.UseMvc();
@@ -1592,7 +1560,7 @@ To use an exporter in a ASP.NET Core application, then add the following `Packag
 
 ```xml
 <ItemGroup>
-....
+...
     <PackageReference Include="Steeltoe.Management.ExporterCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
@@ -1643,19 +1611,15 @@ public class Startup
 
         // Export traces to Zipkin
         services.AddZipkinExporter(Configuration);
-  
-    ....
+        ...
     }
     public void Configure(IApplicationBuilder app)
     {
-
         app.UseStaticFiles();
-
         app.UseMvc();
 
         // Start up trace exporter
         app.UseTracingExporter();
-
     }
 }
 ```
@@ -1700,10 +1664,10 @@ cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 To expose any of the management endpoints over HTTP in an ASP.NET Core application:
 
 1. Add a reference to `Steeltoe.Management.EndpointCore` or `Steeltoe.Management.CloudFoundryCore`.
-1. Configure endpoint settings, as needed (e.g. `appsettings.json`).
-1. Add any additional "contributors" to the service container. (e.g. `AddSingleton<IHealthContributor, CustomHealthContributor>()`)
-1. `Add` the actuator endpoint to the service container (e.g. `AddHealthActuator()`).
-1. `Use` the actuator middleware to provide HTTP access (e.g. `UseInfoActuator()`).
+1. Configure endpoint settings, as needed (for example, `appsettings.json`).
+1. Add any additional "contributors" to the service container. (for example, `AddSingleton<IHealthContributor, CustomHealthContributor>()`)
+1. `Add` the actuator endpoint to the service container (for example, `AddHealthActuator()`).
+1. `Use` the actuator middleware to provide HTTP access (for example, `UseInfoActuator()`).
 
 >NOTE: Each endpoint uses the same host and port as the application. The default path to each endpoint is specified in its section on this page, along with specific `Add` and `Use` method names.
 
@@ -1744,9 +1708,9 @@ public class Startup
 To expose any of the management endpoints over HTTP in an ASP.NET 4.x application:
 
 1. Add a reference to `Steeltoe.Management.EndpointWeb`.
-1. Configure endpoint settings, as needed (e.g. `appsettings.json`).
-1. `Use` the middleware to provide HTTP access (e.g., `UseInfoActuator()`).
-1. If using Metrics, start/stop Diagnostics and MetricsExporting (e.g. `DiagnosticsManager.Instance.Start()`)
+1. Configure endpoint settings, as needed (for example, `appsettings.json`).
+1. `Use` the middleware to provide HTTP access (for example,, `UseInfoActuator()`).
+1. If using Metrics, start/stop Diagnostics and MetricsExporting (for example, `DiagnosticsManager.Instance.Start()`)
 
 >NOTE: Each endpoint uses the same host and port as the application. The default path to each endpoint is specified in its section on this page, along with specific `Use` method name.
 
@@ -1794,9 +1758,9 @@ The above static methods should be called in `Global.asax.cs`.  In the `Applicat
 To expose any of the management endpoints over HTTP in an ASP.NET 4.x application:
 
 1. Add a reference to `Steeltoe.Management.EndpointOwin`.
-1. Configure endpoint settings, as needed (e.g. `appsettings.json`).
+1. Configure endpoint settings, as needed (for example, `appsettings.json`).
 1. `Use` the middleware to provide HTTP access (for example, `UseInfoActuator()`).
-1. If using Metrics, start/stop Diagnostics and MetricsExporting (e.g. `DiagnosticsManager.Instance.Start()`)
+1. If using Metrics, start/stop Diagnostics and MetricsExporting (for example, `DiagnosticsManager.Instance.Start()`)
 
 >NOTE: Each endpoint uses the same host and port as the application. The default path to each endpoint is specified in its section on this page, along with specific `Use` method name.
 
@@ -1818,7 +1782,7 @@ public class Startup
             LoggingConfig.LoggerProvider,
             LoggingConfig.LoggerFactory);
 
-            Start();
+        Start();
     }
 
     private void Start()
@@ -1839,7 +1803,6 @@ public class Startup
         }
     }
 }
-
 ```
 
 See the [Steeltoe Samples repository](https://github.com/SteeltoeOSS/Samples/tree/dev/Management/src/AspDotNet4) for more details.

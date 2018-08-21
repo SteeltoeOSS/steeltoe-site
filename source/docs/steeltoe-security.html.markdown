@@ -41,7 +41,7 @@ cf target -o <YourOrg> -s <YourSpace>
 
 <span style="display:inline-block;margin:0 20px;">For use with </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
-This provider enables log-in functionality with OAuth 2.0 and credentials provided from Cloud Foundry security services in traditional ASP.NET (via OWIN middleware) and ASP.NET Core applications.
+This provider enables log-in functionality with OAuth 2.0 and credentials provided from Cloud Foundry security services in ASP.NET 4.x (via OWIN middleware) and ASP.NET Core applications.
 
 Single Sign-on enables you to leverage existing credentials configured in a UAA Server or a Pivotal Single Sign-on service for authentication and authorization.
 
@@ -53,7 +53,7 @@ The source code for this provider can be found [here](https://github.com/Steelto
 
 ## 1.1 Quick Start
 
-This quick start focuses on an ASP.NET Core sample application to show how to use the Steeltoe Cloud Foundry Single Sign-on provider for Authentication and Authorization against a Cloud Foundry UAA Server. There is a complementary sample using traditional ASP.NET in the Samples folder `Security/src/AspDotNet4`. Instances where that example deviates significantly from this quick start are noted below.
+This quick start focuses on an ASP.NET Core sample application to show how to use the Steeltoe Cloud Foundry Single Sign-on provider for Authentication and Authorization against a Cloud Foundry UAA Server. There is a complementary sample using ASP.NET 4.x in the Samples folder `Security/src/AspDotNet4`. Instances where that example deviates significantly from this quick start are noted below.
 
 ### 1.1.1 Locate Sample
 
@@ -162,7 +162,7 @@ If you access the `InvokeJwtSample` menu item, the application tries to invoke a
 
 After completing the JWT quick start and `CloudFoundryJwtAuthentication` is running, accessing the `InvokeJwtSample` menu item while logged in should return some `values` from the app. If you are not logged in, you should see a `401 (Unauthorized)` message.
 
->NOTE: The traditional ASP.NET Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service built with WCF instead of WebAPI.
+>NOTE: The ASP.NET 4.x Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service built with WCF instead of WebAPI.
 
 ### 1.1.11 Understand Sample
 
@@ -182,7 +182,7 @@ To gain an understanding of the Steeltoe related changes to generated template c
   * `[Authorize(Policy = "testgroup1")]` was added to the `Contact()` action.
   * `Views folder`: Various views added for displaying results from the actions.
 
-#### 1.1.11.2 Traditional ASP.NET
+#### 1.1.11.2 ASP.NET 4.x
 
 The `CloudFoundrySingleSignon` sample was created by using the Visual Studio template for an empty web application with MVC and then modified to add the Steeltoe libraries.
 
@@ -356,7 +356,7 @@ The preceding example code establishes the following security rules:
 
 >TIP: See the Microsoft documentation on [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction).
 
-## 1.3 Usage in Traditional ASP.NET
+## 1.3 Usage in ASP.NET 4.x
 
 This package is built on OpenID Connect and OWIN Middleware. You should take some time to understand both before proceeding to use this provider.
 
@@ -488,7 +488,7 @@ public ActionResult TestGroupV2()
 
 <span style="display:inline-block;margin:0 20px;">For use with </span><span style="display:inline-block;vertical-align:top;width:40%"> ![alt text](/images/CFF_Logo_rgb.png "Cloud Foundry")</span>
 
-This provider lets you control access to REST resources by using JWT tokens issued by Cloud Foundry Security services (such as UAA or Pivotal Single Signon) in ASP.NET Core, traditional ASP.NET WebAPI and WCF.
+This provider lets you control access to REST resources by using JWT tokens issued by Cloud Foundry Security services (such as UAA or Pivotal Single Signon) in ASP.NET Core, ASP.NET WebAPI and WCF.
 
 In addition to the [Quick Start](#2-1-quick-start), other Steeltoe sample applications can help you understand how to use this tool, including:
 
@@ -496,7 +496,7 @@ In addition to the [Quick Start](#2-1-quick-start), other Steeltoe sample applic
 
 ## 2.1 Quick Start
 
-This quick start focuses on an ASP.NET Core application with web API endpoints secured by JWT Bearer tokens issued by the Cloud Foundry UAA server. There are complementary samples for traditional ASP.NET WebAPI and WCF in the Samples folder `Security/src/AspDotNet4`. Instances where those examples deviate significantly from this quick start are noted below. 
+This quick start focuses on an ASP.NET Core application with web API endpoints secured by JWT Bearer tokens issued by the Cloud Foundry UAA server. There are complementary samples for ASP.NET WebAPI and WCF in the Samples folder `Security/src/AspDotNet4`. Instances where those examples deviate significantly from this quick start are noted below. 
 
 >NOTE: This application is for use with the quick start application above, `CloudFoundrySingleSignon`. Complete that quick start and leave it running on Cloud Foundry before following these instructions.
 
@@ -539,7 +539,7 @@ To understand the Steeltoe related changes to generated template code, examine t
 * `Startup.cs`: Code was added to the `ConfigureServices()` method to add a `CloudFoundryJwtAuthentication` to the service container. Code was also added to define two authorization policies: one requiring a `testgroup` claim and the other requiring a `testgroup1` claim. Additionally, in the `Configure()` method, `.UseAuthentication()` was added the ASP.NET Authentication middleware in the request processing pipeline.
 * `ValuesController.cs`: `[Authorize(Policy = "testgroup")]` was added to the `Get()` action of the controller.
 
-#### 2.1.6.2 Traditional ASP.NET WebAPI
+#### 2.1.6.2 ASP.NET WebAPI
 
 The `CloudFoundryJwtAuthentication` sample was created by using the Visual Studio template for an empty web application with WebAPI and then modified to add the Steeltoe libraries.
 
@@ -553,7 +553,7 @@ To understand the Steeltoe related changes to generated template code, examine t
 * `CustomClaimsAuthorizeAttribute.cs`: This attribute applies authorization rules to an endpoint by checking the user's claims against any required
 * `ValuesController.cs`: `[CustomClaimsAuthorize("testgroup")]` was added to the `Get()` action of the controller.
 
-#### 2.1.6.3 Traditional ASP.NET WCF
+#### 2.1.6.3 WCF Service
 
 The `CloudFoundryWcf` sample was created by using the Visual Studio template for a WCF application then modified to add the Steeltoe libraries.
 

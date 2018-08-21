@@ -92,7 +92,7 @@ And, like with the previous 2.0 endpoints, you can view what’s returned by man
 
 ##### Out-of-box Health Contributors
 
-One of the key Spring Boot-compatible Management endpoints provided in 2.0 was ‘/health’. But, in 2.0 we provided a limited number of out-of-the-box contributors to run health checks. While it was fairly easy to write your own, you still had to do the coding yourself.
+One of the key Spring Boot-compatible Management endpoints provided in Steeltoe 2.0 was ‘/health’. But, in 2.0 we provided a limited number of out-of-the-box contributors to run health checks. While it was fairly easy to write your own, you still had to do the coding yourself.
 
 So in 2.1 we now include several new contributors which you can easily reference. They include:
 
@@ -106,7 +106,7 @@ Each of these new contributors has been added to the Steeltoe Connectors package
 
 ##### Application Metrics
 
-Support for app metrics collection is completely new this release.  Here's the functionality implemented so far:
+Support for collecting application metrics is completely new this release.  Here's the functionality implemented so far:
 
 * We’ve implemented the OpenCensus Stats APIs for instrumentation. You can also use those APIs in your code to collect your own custom metrics.
 * We’ve implemented the OpenCensus Tags APIs for tagging metrics and adding multi-dimensionality to the metrics collected.
@@ -114,7 +114,7 @@ Support for app metrics collection is completely new this release.  Here's the f
 * Automatically collect ASP.NET metrics, like request counts,  response times, and others. There’s more to come here as well.
 * Automatically collect HttpClient metrics, i.e., request counts, response times, etc.
 * Expose metrics via the Spring Boot compatible REST endpoint  ‘/metrics’ (mentioned earlier.)
-* For Cloud Foundry users, you can export collected metrics to the Loggregator Firehose using Metrics Forwarder. Just as with Java Spring apps, developers can send their .NET apps metrics to any one of several backend services for collection and reporting, e.g., PCF Metrics.
+* For Cloud Foundry users, you can export collected metrics to the Loggregator Firehose using Metrics Forwarder. Just as with Java Spring apps, developers can send their .NET apps metrics to any one of several backend services for collection and reporting, for example, PCF Metrics.
 
 ##### Distributed Tracing
 
@@ -139,9 +139,9 @@ With Steeltoe 2.1, we extended that same security functionality to 4.x applicati
 
 #### 2.1.3 .NET Core 2.1
 
-In addition to supporting .NET Core 2.0, ASP.NET Core 2.0, and .NET 4.6.1+, we are also adding support for .NET Core 2.1 and ASP.NET Core 2.1. We have also preserved compatibility with .NET Core/ASP.NET core 2.0. So, if you drop the Steeltoe 2.1 release into a .NET/ASP.NET Core 2.0 app, you should see only a few  `Microsoft.Extensions` packages (e.g., `Logging`, `Options`, `Configuration`) that will update to 2.1. Your ASP.NET Core dependencies should not be impacted.
+In addition to supporting .NET Core 2.0, ASP.NET Core 2.0, and .NET 4.6.1+, we are also adding support for .NET Core 2.1 and ASP.NET Core 2.1. Compatibility with .NET Core/ASP.NET core 2.0 in general has been preserved, though you will see a few  `Microsoft.Extensions` packages (for example: `Logging`, `Options`, `Configuration`) that will update to 2.1. Your ASP.NET Core dependencies should not be impacted.
 
-One additional new feature that we added in Steeltoe 2.1, which is dependent on Core 2.1, is support for the new `HttpClientFactory`. We have added a new `DelegatingHandler` that will carry out service discovery lookups and random load balancing when used with an `HttpClient`. This functionality is similar to what we already offered in 2.0, but is now also available when using the `HttpClientFactory`.
+One new feature added in Steeltoe 2.1 is dependent on Core 2.1: support for the new `HttpClientFactory`. We have added a new `DelegatingHandler` that will carry out service discovery lookups and random load balancing when used with an `HttpClient`. This functionality is similar to what we already offered in 2.0, but now provides a seamless experience when using the `HttpClientFactory`.
 
 ### 2.2 Version 2.0
 
