@@ -162,7 +162,7 @@ If you access the `InvokeJwtSample` menu item, the application tries to invoke a
 
 After completing the JWT quick start and `CloudFoundryJwtAuthentication` is running, accessing the `InvokeJwtSample` menu item while logged in should return some `values` from the app. If you are not logged in, you should see a `401 (Unauthorized)` message.
 
->NOTE: The ASP.NET 4.x Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service built with WCF instead of WebAPI.
+>NOTE: The ASP.NET 4.x Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service is built with WCF instead of WebAPI.
 
 ### 1.1.11 Understand Sample
 
@@ -380,13 +380,30 @@ In order to use the Security provider:
 
 To use the provider, use the NuGet package manager to add a reference to the `Steeltoe.Security.Authentication.CloudFoundryOwin` package.
 
-### 1.3.2 Cloud Foundry
+### 1.3.2 Configure Settings
+
+Methods to read settings for the OWIN provider from .NET Configuration have not been implemented yet, so you will need to provide an `OpenIDConnectOptions` object directly (shown in [1.3.4 Configure OWIN Startup](#1-3-4-configure-owin-startup)). The following settings are available on the options class: 
+
+|Name|Description|Default|
+|---|---|---|
+|AdditionalScopes|Scopes to request for tokens in addition to `openid`|`string.Empty`|
+|AppHost|Hostname the app listens on (for generating redirect urls)|`null`|
+|AppPort|Port the app listens on - only required if non-standard|0|
+|AuthDomain|Location of the OAuth2 server *|`null`|
+|CallbackPath|Path the user is redirected back to after authentication|/signin-oidc|
+|ClientID|App credentials with auth server *|`null`|
+|ClientSecret|App credentials with auth server *|`null`|
+|ValidateCertificates|Validate OAuth2 server certificate|`true`|
+
+Items with an asterisk (*) can be retrieved from service bindings - see  [1.3.4 Configure OWIN Startup](#1-3-4-configure-owin-startup) for an example.
+
+### 1.3.3 Cloud Foundry
 
 As mentioned earlier, there are two ways to use OAuth2 services on Cloud Foundry. We recommend you read the offical documentation ([UAA Server](https://github.com/cloudfoundry/uaa) and [Pivotal SSO](http://docs.pivotal.io/p-identity/1-5/getting-started.html)) or follow the instructions included in the samples for [UAA Server](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/AspDotNet4/CloudFoundrySingleSignon/README.md) and [Pivotal SSO](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/AspDotNet4/CloudFoundrySingleSignon/README-SSO.md) to quickly learn how to create and bind OAuth2 services.
 
 Regardless of which provider you choose, once the service is bound to your application, the settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
-### 1.3.3 Configure OWIN Startup
+### 1.3.4 Configure OWIN Startup
 
 In order to configure the Cloud Foundry OWIN OAuth provider in your application, you will need an [OWIN Startup class](https://docs.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/owin-startup-class-detection) if you do not already have one.
 
@@ -441,7 +458,7 @@ The `app.UseOpenIDConnect` method call adds an authentication middleware that ha
 
 >TIP: This code is commonly refactored into a separate class (for example `Startup.Auth.cs`), particularly when there is additional configuration on the OWIN pipeline.
 
-### 1.3.4 Securing Endpoints
+### 1.3.5 Securing Endpoints
 
 Once the `Startup` class is in place and the middleware is configured, you can use the standard ASP.NET `Authorize` attribute to require authentication, as shown in the following example:
 
