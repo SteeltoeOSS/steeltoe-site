@@ -787,7 +787,7 @@ Once the service is bound to your application, the connector's settings are avai
 To use a `SqlConnection` in your application, add it to the service container in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
 
 ```csharp
-using Steeltoe.CloudFoundry.Connector.MySql;
+using Steeltoe.CloudFoundry.Connector.SqlServer;
 
 public class Startup {
     ...
