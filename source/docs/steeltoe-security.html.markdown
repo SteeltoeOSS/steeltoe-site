@@ -119,7 +119,7 @@ uaac client add myTestApp --scope cloud_controller.read,cloud_controller_service
         --secret myTestApp
 ```
 
->NOTE: Replace `YOUR-CLOUDFOUNDRY-APP-DOMAIN` with your Cloud Foundry setup domain! 
+>NOTE: Replace `YOUR-CLOUDFOUNDRY-APP-DOMAIN` with your Cloud Foundry setup domain!
 
 ### 1.1.6 Create Service
 
@@ -162,7 +162,7 @@ If you access the `InvokeJwtSample` menu item, the application tries to invoke a
 
 After completing the JWT quick start and `CloudFoundryJwtAuthentication` is running, accessing the `InvokeJwtSample` menu item while logged in should return some `values` from the app. If you are not logged in, you should see a `401 (Unauthorized)` message.
 
->NOTE: The ASP.NET 4.x Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service built with WCF instead of WebAPI.
+>NOTE: The ASP.NET 4.x Sample is more obvious about what is tested on each page. You should see links for `testgroup`, `testgroup1`, `JWT Sample` and `WCF Sample`. The WCF Sample is conceptually identical to the JWT sample, with the difference being that the backing service is built with WCF instead of WebAPI.
 
 ### 1.1.11 Understand Sample
 
@@ -192,7 +192,7 @@ To gain an understanding of the Steeltoe related changes to generated template c
 * `Global.asax.cs`: Added a call to `ApplicationConfig.RegisterConfig("development");`
 * `ApplicationConfig.cs`: Added code to configure .NET Configuration
 * `Startup.cs`: Added an OWIN startup class to initialize the OWIN pipeline and call `ConfigureAuth`
-* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures cookie authentication and OpenID Connect with the configuration from `VCAP_SERVICES` 
+* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures cookie authentication and OpenID Connect with the configuration from `VCAP_SERVICES`
 * `CustomClaimsAuthorizeAttribute.cs`: This filter redirects unauthorized requests to an Access Denied page instead of the login page
 * `AuthorizationManager.cs`: based on `ClaimsAuthorizationManager`, wired up in `web.config`
 * `AccountController.cs`: Handles redirecting to the SSO provider, AccessDenied requests and session sign-out
@@ -278,7 +278,10 @@ Regardless of which provider you choose, once the service is bound to your appli
 
 ### 1.2.4 Add Cloud Foundry OAuth
 
-In order to configure the Cloud Foundry OAuth provider in your application, configure and add it to the service container in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
+As with other ASP.NET Core middleware, in order to configure the Cloud Foundry OAuth provider in your application,
+first add and configure it in the `ConfigureServices()` method of the `Startup` class, then use it in the `Configure()`
+method of the `Startup` class. The Cloud Foundry OAuth provider is built on top of ASP.NET Core Authentication services
+and is configured with an extension method on the `AuthenticationBuilder`, as seen in the following example:
 
 ```csharp
 using Steeltoe.Security.Authentication.CloudFoundry;
@@ -309,6 +312,13 @@ public class Startup {
     public void Configure(IApplicationBuilder app, ...)
     {
         ...
+        // Use the protocol from the original request when generating redirect uris
+        // (eg: when TLS termination is handled by an appliance in front of the app)
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedProto
+        });
+
         // Add authentication middleware to pipeline
         app.UseAuthentication();
     }
@@ -316,6 +326,8 @@ public class Startup {
 ```
 
 The `AddCloudFoundryOAuth(Configuration)` method call configures and adds the Cloud Foundry OAuth2 authentication service to the service container. Once in place, it can be used by the authentication middleware during request processing.
+
+>NOTE: When running behind a reverse-proxy (like Gorouter or HAProxy) that handles TLS termination for your app, use `app.UseForwardedHeaders` to generate the correct redirect URI so that the user is not sent back over HTTP instead of HTTPS after authenticating.
 
 ### 1.2.5 Securing Endpoints
 
@@ -380,13 +392,30 @@ In order to use the Security provider:
 
 To use the provider, use the NuGet package manager to add a reference to the `Steeltoe.Security.Authentication.CloudFoundryOwin` package.
 
-### 1.3.2 Cloud Foundry
+### 1.3.2 Configure Settings
+
+Methods to read settings for the OWIN provider from .NET Configuration have not been implemented yet, so you will need to provide an `OpenIDConnectOptions` object directly (shown in [1.3.4 Configure OWIN Startup](#1-3-4-configure-owin-startup)). The following settings are available on the options class:
+
+|Name|Description|Default|
+|---|---|---|
+|AdditionalScopes|Scopes to request for tokens in addition to `openid`|`string.Empty`|
+|AppHost|Hostname the app listens on (for generating redirect urls)|`null`|
+|AppPort|Port the app listens on - only required if non-standard|0|
+|AuthDomain|Location of the OAuth2 server *|`null`|
+|CallbackPath|Path the user is redirected back to after authentication|/signin-oidc|
+|ClientID|App credentials with auth server *|`null`|
+|ClientSecret|App credentials with auth server *|`null`|
+|ValidateCertificates|Validate OAuth2 server certificate|`true`|
+
+Items with an asterisk (*) can be retrieved from service bindings - see  [1.3.4 Configure OWIN Startup](#1-3-4-configure-owin-startup) for an example.
+
+### 1.3.3 Cloud Foundry
 
 As mentioned earlier, there are two ways to use OAuth2 services on Cloud Foundry. We recommend you read the offical documentation ([UAA Server](https://github.com/cloudfoundry/uaa) and [Pivotal SSO](http://docs.pivotal.io/p-identity/1-5/getting-started.html)) or follow the instructions included in the samples for [UAA Server](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/AspDotNet4/CloudFoundrySingleSignon/README.md) and [Pivotal SSO](https://github.com/SteeltoeOSS/Samples/blob/master/Security/src/AspDotNet4/CloudFoundrySingleSignon/README-SSO.md) to quickly learn how to create and bind OAuth2 services.
 
 Regardless of which provider you choose, once the service is bound to your application, the settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
-### 1.3.3 Configure OWIN Startup
+### 1.3.4 Configure OWIN Startup
 
 In order to configure the Cloud Foundry OWIN OAuth provider in your application, you will need an [OWIN Startup class](https://docs.microsoft.com/en-us/aspnet/aspnet/overview/owin-and-katana/owin-startup-class-detection) if you do not already have one.
 
@@ -441,7 +470,7 @@ The `app.UseOpenIDConnect` method call adds an authentication middleware that ha
 
 >TIP: This code is commonly refactored into a separate class (for example `Startup.Auth.cs`), particularly when there is additional configuration on the OWIN pipeline.
 
-### 1.3.4 Securing Endpoints
+### 1.3.5 Securing Endpoints
 
 Once the `Startup` class is in place and the middleware is configured, you can use the standard ASP.NET `Authorize` attribute to require authentication, as shown in the following example:
 
@@ -496,7 +525,7 @@ In addition to the [Quick Start](#2-1-quick-start), other Steeltoe sample applic
 
 ## 2.1 Quick Start
 
-This quick start focuses on an ASP.NET Core application with web API endpoints secured by JWT Bearer tokens issued by the Cloud Foundry UAA server. There are complementary samples for ASP.NET WebAPI and WCF in the Samples folder `Security/src/AspDotNet4`. Instances where those examples deviate significantly from this quick start are noted below. 
+This quick start focuses on an ASP.NET Core application with web API endpoints secured by JWT Bearer tokens issued by the Cloud Foundry UAA server. There are complementary samples for ASP.NET WebAPI and WCF in the Samples folder `Security/src/AspDotNet4`. Instances where those examples deviate significantly from this quick start are noted below.
 
 >NOTE: This application is for use with the quick start application above, `CloudFoundrySingleSignon`. Complete that quick start and leave it running on Cloud Foundry before following these instructions.
 
@@ -549,7 +578,7 @@ To understand the Steeltoe related changes to generated template code, examine t
 * `Global.asax.cs`: Added a call to `ApplicationConfig.RegisterConfig("development");`
 * `ApplicationConfig.cs`: Added code to configure .NET Configuration
 * `Startup.cs`: Added an OWIN startup class to initialize the OWIN pipeline and call `ConfigureAuth`
-* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures JWT Bearer authentication using 
+* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures JWT Bearer authentication using
 * `CustomClaimsAuthorizeAttribute.cs`: This attribute applies authorization rules to an endpoint by checking the user's claims against any required
 * `ValuesController.cs`: `[CustomClaimsAuthorize("testgroup")]` was added to the `Get()` action of the controller.
 
@@ -916,7 +945,7 @@ Regardless of the method chosen for instantiating the `CloudFoundryOptions`, the
 ```csharp
     // create an instance of the WCF client
     var sRef = new ValueService.ValueServiceClient();
-    
+
     // apply the behavior, expecting it to manage and pass the token for the application
     sRef.Endpoint.EndpointBehaviors.Add(new JwtHeaderEndpointBehavior(new CloudFoundryOptions(configuration)));
     string serviceResponse = await sRef.GetDataAsync();
@@ -927,10 +956,10 @@ To pass a user's token (instead of the application's) to the backing service, fi
 ```csharp
     // retrieve the user's token
     var token = Request.GetOwinContext().Authentication.User.Claims.First(c => c.Type == ClaimTypes.Authentication)?.Value;
-    
+
     // create an instance of the WCF client
     var sRef = new ValueService.ValueServiceClient(binding, address);
-    
+
     // apply the behavior, including the user's token
     sRef.Endpoint.EndpointBehaviors.Add(new JwtHeaderEndpointBehavior(new CloudFoundryOptions(ApplicationConfig.Configuration), token));
     string serviceResponse = await sRef.GetDataAsync();
@@ -1138,7 +1167,7 @@ Once the Redis Key Store has been set up, the keys used by the `DataProtection` 
 
 [CredHub](https://github.com/cloudfoundry-incubator/credhub) manages credentials such as  passwords, certificates, certificate authorities, ssh keys, rsa keys, and other arbitrary values. Steeltoe provides the `CredHubBase` library for interacting with the [CredHub API](https://credhub-api.cfapps.io/) and provides the `CredHubCore` library for making that client library simpler to use in ASP.NET Core applications. Cloud Foundry is not required for the CredHub server or client but is used in this documentation as the hosting environment. You may wish to review the documentation for [CredHub on PCF](https://docs.pivotal.io/pivotalcf/2-0/credhub/). If you do not already have a UAA user to use for this test, you will need to use the UAA command line tool to establish some security credentials for the sample app. Choose one of the provided `credhub-setup` scripts in the folder `samples/Security/scripts` to target your Cloud Foundry environment and create a UAA client with permissions to read and write in CredHub.
 
->NOTE: If you choose to change the values for UAA_CLIENT_ID or UAA_CLIENT_SECRET, be sure to update the credentials in appsettings.json
+>NOTE: If you choose to change the values for `UAA_CLIENT_ID` or `UAA_CLIENT_SECRET`, be sure to update the credentials in appsettings.json
 
 >WARNING: As of this writing, CredHub is not approved for general use in all applications. We encourage you to check whether your use case is currently supported by CredHub before getting too involved.
 
