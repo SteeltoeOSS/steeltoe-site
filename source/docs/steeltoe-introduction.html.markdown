@@ -120,7 +120,7 @@ Support for collecting application metrics is completely new this release.  Here
 
 Also completely new in 2.1 is distributed tracing support. Here's what we're delivering in 2.1:
 
-* Implemented OpenCensus Trace APIs for instrumenting your code. 
+* Implemented OpenCensus Trace APIs for instrumenting your code.
 * Instrumented ASP.NET Core so that spans are automatically started, stopped, or joined at common ingress and egress points.
 * Instrumented HttpClient such that traces and spans are joined with already existing spans.
 * Add trace and span IDs to the log messages produced by your app so you can use log correlation by trace ID when diagnosing problems.

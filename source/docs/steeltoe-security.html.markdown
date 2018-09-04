@@ -119,7 +119,7 @@ uaac client add myTestApp --scope cloud_controller.read,cloud_controller_service
         --secret myTestApp
 ```
 
->NOTE: Replace `YOUR-CLOUDFOUNDRY-APP-DOMAIN` with your Cloud Foundry setup domain! 
+>NOTE: Replace `YOUR-CLOUDFOUNDRY-APP-DOMAIN` with your Cloud Foundry setup domain!
 
 ### 1.1.6 Create Service
 
@@ -192,7 +192,7 @@ To gain an understanding of the Steeltoe related changes to generated template c
 * `Global.asax.cs`: Added a call to `ApplicationConfig.RegisterConfig("development");`
 * `ApplicationConfig.cs`: Added code to configure .NET Configuration
 * `Startup.cs`: Added an OWIN startup class to initialize the OWIN pipeline and call `ConfigureAuth`
-* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures cookie authentication and OpenID Connect with the configuration from `VCAP_SERVICES` 
+* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures cookie authentication and OpenID Connect with the configuration from `VCAP_SERVICES`
 * `CustomClaimsAuthorizeAttribute.cs`: This filter redirects unauthorized requests to an Access Denied page instead of the login page
 * `AuthorizationManager.cs`: based on `ClaimsAuthorizationManager`, wired up in `web.config`
 * `AccountController.cs`: Handles redirecting to the SSO provider, AccessDenied requests and session sign-out
@@ -278,7 +278,10 @@ Regardless of which provider you choose, once the service is bound to your appli
 
 ### 1.2.4 Add Cloud Foundry OAuth
 
-In order to configure the Cloud Foundry OAuth provider in your application, configure and add it to the service container in the `ConfigureServices()` method of the `Startup` class, as shown in the following example:
+As with other ASP.NET Core middleware, in order to configure the Cloud Foundry OAuth provider in your application,
+first add and configure it in the `ConfigureServices()` method of the `Startup` class, then use it in the `Configure()`
+method of the `Startup` class. The Cloud Foundry OAuth provider is built on top of ASP.NET Core Authentication services
+and is configured with an extension method on the `AuthenticationBuilder`, as seen in the following example:
 
 ```csharp
 using Steeltoe.Security.Authentication.CloudFoundry;
@@ -309,6 +312,13 @@ public class Startup {
     public void Configure(IApplicationBuilder app, ...)
     {
         ...
+        // Use the protocol from the original request when generating redirect uris
+        // (eg: when TLS termination is handled by an appliance in front of the app)
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedProto
+        });
+
         // Add authentication middleware to pipeline
         app.UseAuthentication();
     }
@@ -316,6 +326,8 @@ public class Startup {
 ```
 
 The `AddCloudFoundryOAuth(Configuration)` method call configures and adds the Cloud Foundry OAuth2 authentication service to the service container. Once in place, it can be used by the authentication middleware during request processing.
+
+>NOTE: When running behind a reverse-proxy (like Gorouter or HAProxy) that handles TLS termination for your app, use `app.UseForwardedHeaders` to generate the correct redirect URI so that the user is not sent back over HTTP instead of HTTPS after authenticating.
 
 ### 1.2.5 Securing Endpoints
 
@@ -382,7 +394,7 @@ To use the provider, use the NuGet package manager to add a reference to the `St
 
 ### 1.3.2 Configure Settings
 
-Methods to read settings for the OWIN provider from .NET Configuration have not been implemented yet, so you will need to provide an `OpenIDConnectOptions` object directly (shown in [1.3.4 Configure OWIN Startup](#1-3-4-configure-owin-startup)). The following settings are available on the options class: 
+Methods to read settings for the OWIN provider from .NET Configuration have not been implemented yet, so you will need to provide an `OpenIDConnectOptions` object directly (shown in [1.3.4 Configure OWIN Startup](#1-3-4-configure-owin-startup)). The following settings are available on the options class:
 
 |Name|Description|Default|
 |---|---|---|
@@ -513,7 +525,7 @@ In addition to the [Quick Start](#2-1-quick-start), other Steeltoe sample applic
 
 ## 2.1 Quick Start
 
-This quick start focuses on an ASP.NET Core application with web API endpoints secured by JWT Bearer tokens issued by the Cloud Foundry UAA server. There are complementary samples for ASP.NET WebAPI and WCF in the Samples folder `Security/src/AspDotNet4`. Instances where those examples deviate significantly from this quick start are noted below. 
+This quick start focuses on an ASP.NET Core application with web API endpoints secured by JWT Bearer tokens issued by the Cloud Foundry UAA server. There are complementary samples for ASP.NET WebAPI and WCF in the Samples folder `Security/src/AspDotNet4`. Instances where those examples deviate significantly from this quick start are noted below.
 
 >NOTE: This application is for use with the quick start application above, `CloudFoundrySingleSignon`. Complete that quick start and leave it running on Cloud Foundry before following these instructions.
 
@@ -566,7 +578,7 @@ To understand the Steeltoe related changes to generated template code, examine t
 * `Global.asax.cs`: Added a call to `ApplicationConfig.RegisterConfig("development");`
 * `ApplicationConfig.cs`: Added code to configure .NET Configuration
 * `Startup.cs`: Added an OWIN startup class to initialize the OWIN pipeline and call `ConfigureAuth`
-* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures JWT Bearer authentication using 
+* `Startup.Auth.cs`: `ConfigureAuth` method adds authentication and authorization configurations to the OWIN pipeline. Configures JWT Bearer authentication using
 * `CustomClaimsAuthorizeAttribute.cs`: This attribute applies authorization rules to an endpoint by checking the user's claims against any required
 * `ValuesController.cs`: `[CustomClaimsAuthorize("testgroup")]` was added to the `Get()` action of the controller.
 
@@ -933,7 +945,7 @@ Regardless of the method chosen for instantiating the `CloudFoundryOptions`, the
 ```csharp
     // create an instance of the WCF client
     var sRef = new ValueService.ValueServiceClient();
-    
+
     // apply the behavior, expecting it to manage and pass the token for the application
     sRef.Endpoint.EndpointBehaviors.Add(new JwtHeaderEndpointBehavior(new CloudFoundryOptions(configuration)));
     string serviceResponse = await sRef.GetDataAsync();
@@ -944,10 +956,10 @@ To pass a user's token (instead of the application's) to the backing service, fi
 ```csharp
     // retrieve the user's token
     var token = Request.GetOwinContext().Authentication.User.Claims.First(c => c.Type == ClaimTypes.Authentication)?.Value;
-    
+
     // create an instance of the WCF client
     var sRef = new ValueService.ValueServiceClient(binding, address);
-    
+
     // apply the behavior, including the user's token
     sRef.Endpoint.EndpointBehaviors.Add(new JwtHeaderEndpointBehavior(new CloudFoundryOptions(ApplicationConfig.Configuration), token));
     string serviceResponse = await sRef.GetDataAsync();

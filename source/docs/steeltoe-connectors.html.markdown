@@ -1704,9 +1704,9 @@ public class ManagementConfig
     {
         ...
         ActuatorConfigurator.UseHealthActuator(
-            configuration, 
-            new DefaultHealthAggregator(), 
-            GetHealthContributors(configuration), 
+            configuration,
+            new DefaultHealthAggregator(),
+            GetHealthContributors(configuration),
             loggerFactory);
         ...
 
@@ -1723,4 +1723,3 @@ public class ManagementConfig
         return healthContributors;
     }
 ```
-
