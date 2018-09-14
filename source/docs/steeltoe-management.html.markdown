@@ -1456,15 +1456,15 @@ The following table describes the available packages:
 
 |App Type|Package|Description|
 |---|---|---|
-|All|`Steeltoe.Management.ExporterBase`|Base functionality, no dependency injection|
-|ASP.NET Core|`Steeltoe.Management.ExporterCore`|Includes `ExporterBase`, adds ASP.NET Core DI|
+|All|`Steeltoe.Management.TracingBase`|Base functionality, no dependency injection|
+|ASP.NET Core|`Steeltoe.Management.TracingCore`|Includes `TracingBase`, adds ASP.NET Core DI|
 
 To add this type of NuGet to your project, add a `PackageReference` resembling the following:
 
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Management.ExporterCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Management.TracingCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -1472,7 +1472,7 @@ To add this type of NuGet to your project, add a `PackageReference` resembling t
 or
 
 ```powershell
-PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.1.0
+PM>Install-Package  Steeltoe.Management.TracingCore -Version 2.1.0
 ```
 
 ### 2.2.2 Configure Settings
@@ -1569,7 +1569,7 @@ To use an exporter in a ASP.NET Core application, then add the following `Packag
 or
 
 ```powershell
-PM>Install-Package  Steeltoe.Management.TracingCore -Version 2.1.0
+PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.1.0
 ```
 
 ### 2.3.2 Zipkin Server
