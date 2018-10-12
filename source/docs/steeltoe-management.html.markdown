@@ -193,7 +193,7 @@ The following table describes the available packages:
 |ASP.NET Core|`Steeltoe.Management.CloudFoundryCore`|Includes `EndpointCore`, enables Pivotal Apps Manager integration. |
 |ASP.NET 4.x|`Steeltoe.Management.EndpointWeb`|Includes `EndpointBase`, enables Pivotal Apps Manager integration.|
 |ASP.NET 4.x OWIN|`Steeltoe.Management.EndpointOwin`|Includes `EndpointBase`, enables Pivotal Apps Manager integration.|
-|ASP.NET 4.x OWIN with Autofac|`Steeltoe.Management.EndpointAutofac`|Includes `EndpointOwin`, adds Autofac DI, enables Pivotal Apps Manager integration.|
+|ASP.NET 4.x OWIN with Autofac|`Steeltoe.Management.EndpointOwin.Autofac`|Includes `EndpointOwin`, adds Autofac DI, enables Pivotal Apps Manager integration.|
 
 To add this type of NuGet to your project, add a `PackageReference` resembling the following:
 
@@ -1711,6 +1711,21 @@ To expose any of the management endpoints over HTTP in an ASP.NET 4.x applicatio
 1. Configure endpoint settings, as needed (for example, `appsettings.json`).
 1. `Use` the middleware to provide HTTP access (for example,, `UseInfoActuator()`).
 1. If using Metrics, start/stop Diagnostics and MetricsExporting (for example, `DiagnosticsManager.Instance.Start()`)
+1. Update web.config to allow extensionless requests to reach the actuators
+
+```xml
+<system.webServer>
+    <handlers>
+        <!--  This example is overly broad, it does not need to be used exactly as-is  -->
+        <!-- Allow at least GET, POST and OPTIONS requests to go past IIS to actuators -->
+        <add name="ExtensionlessUrlHandler-Integrated-4.0"
+                path="*."
+                verb="*"
+                type="System.Web.Handlers.TransferRequestHandler"
+                preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers>
+</system.webServer>
+```
 
 >NOTE: Each endpoint uses the same host and port as the application. The default path to each endpoint is specified in its section on this page, along with specific `Use` method name.
 
@@ -1761,6 +1776,21 @@ To expose any of the management endpoints over HTTP in an ASP.NET 4.x applicatio
 1. Configure endpoint settings, as needed (for example, `appsettings.json`).
 1. `Use` the middleware to provide HTTP access (for example, `UseInfoActuator()`).
 1. If using Metrics, start/stop Diagnostics and MetricsExporting (for example, `DiagnosticsManager.Instance.Start()`)
+1. If not self-hosting, add/update web.config entries to allow requests to reach the actuators
+
+```xml
+    <system.webServer>
+        <handlers>
+            <!-- Allow GET, POST and OPTIONS requests to go past IIS to actuators -->
+            <!-- Adjust the path value if you are not using Pivotal Apps Manager -->
+            <add name="ApiURIs-ISAPI-Integrated-4.0"
+                    path="cloudfoundryapplication/*"
+                    verb="GET,POST,OPTIONS"
+                    type="System.Web.Handlers.TransferRequestHandler"
+                    preCondition="integratedMode,runtimeVersionv4.0" />
+        </handlers>
+    </system.webServer>
+```
 
 >NOTE: Each endpoint uses the same host and port as the application. The default path to each endpoint is specified in its section on this page, along with specific `Use` method name.
 
