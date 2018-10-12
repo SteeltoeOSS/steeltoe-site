@@ -177,6 +177,7 @@ The following table describes the available settings for the connector. These se
 |treatTinyAsBoolean|Whether to return tinyint(1) as a boolean. Set to `false` to return tinyint(1) as sbyte/byte.|not set|
 |useAffectedRows|Set to `false` to report found rows instead of changed (affected) rows.|not set|
 |useCompression|If `true` (and server-supported), packets sent between client and server are compressed|not set|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of the settings described in the preceding table should be prefixed with `mysql:client:`.
 
@@ -198,6 +199,8 @@ cf restage myApp
 ```
 
 >NOTE: The preceding commands assume you use [MySQL for PCF](https://network.pivotal.io/products/p-mysql), provided by Pivotal on Cloud Foundry. If you use a different service, you must adjust the `create-service` command to fit your environment.
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `mysql:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 Once the service is bound to your application, the connector's settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
@@ -471,6 +474,7 @@ The following table describes all of the possible settings for the connector:
 |password|Password for authentication|not set|
 |database|Schema to which to connect|not set|
 |connectionString|Full connection string|built from settings
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of these settings should be prefixed with `postgres:client:`.
 
@@ -492,6 +496,8 @@ cf restage myApp
 ```
 
 >NOTE: The preceding commands work for the PostgreSQL service provided by EDB on Cloud Foundry. For another service, adjust the `create-service` command to fit your environment.
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `postgres:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 Once the service is bound to your application, the connector's settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
@@ -655,6 +661,8 @@ An alternative to the broker is to use a user-provided service to explicitly pro
 cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
 ```
 
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `sqlServer:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
+
 ### 3.1.3 Publish and Push Sample
 
 See [Publish Sample](#publish-sample) and the sections that follow for instructions on how to publish and push this sample to either Linux or Windows.
@@ -747,6 +755,7 @@ The following table shows the available settings for the connector:
 |database|Schema to which to connect|not set|
 |connectionString|Full connection string|built from settings|
 |integratedSecurity|Enable Windows Authentication (For local use only)|not set|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of the settings shown in the preceding table should be prefixed with `sqlserver:credentials:`.
 
@@ -765,6 +774,8 @@ An alternative to the broker is to use a user-provided service to explicitly pro
 ```bash
 cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
 ```
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `sqlServer:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 If you are creating a service for an application that has already been deployed, you need to bind the service and restart or restage the application with the following commands:
 
@@ -1043,6 +1054,7 @@ The following table describes all the possible settings for the connector:
 |sslEnabled|Should SSL be enabled|false|
 |sslPort|SSL Port number of server|5671|
 |uri|Full connection string|built from settings|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of these settings should be prefixed with `rabbitmq:client:`.
 
@@ -1256,6 +1268,7 @@ The following table table describes all possible settings for the connector
 |writeBuffer|Size of the output buffer.|4096|
 |connectionString|Connection string to use instead of values shown earlier.|not set|
 |instanceId|Cache ID. Used only with `IDistributedCache`.|not set|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of these settings should be prefixed with `redis:client:`.
 
@@ -1277,6 +1290,8 @@ cf restage myApp
 ```
 
 >NOTE: The preceding commands assume you use the Redis service provided by Pivotal on Cloud Foundry. If you use a different service, you have to adjust the `create-service` command to fit your environment.
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `redis:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 Once the service is bound to your application, the connector's settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
