@@ -19,6 +19,8 @@ In addition to Authentication and Authorization providers, Steeltoe Security off
 * A security provider for [using Redis on Cloud Foundry with ASP.NET Core Data Protection Key Ring storage](#3-0-redis-key-storage-provider).
 * A [CredHub API Client for .NET applications](#4-0-credhub-api-client) to perform credential storage, retrieval and generation.
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, you can use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download with your browser from GitHub. The following git command clones the repository:

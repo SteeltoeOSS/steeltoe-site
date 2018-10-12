@@ -14,6 +14,8 @@ All connectors use configuration information from Cloud Foundry's `VCAP_SERVICES
 
 For more information on `VCAP_SERVICES`, see the Cloud Foundry [documentation](https://docs.cloudfoundry.org/).
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. You can run the following git command to clone the repository from the command line:

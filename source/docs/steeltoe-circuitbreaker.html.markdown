@@ -13,6 +13,8 @@ When applied to a service, a circuit breaker watches for failing calls to the se
 
 There are several options to choose from when implementing the Circuit Breaker pattern. Steeltoe has initially chosen to support one based on Hystrix, Netflix's Latency and Fault Tolerance library for distributed systems. For more information about Hystrix, see the [Netflix/Hystrix Wiki](https://github.com/Netflix/Hystrix/wiki) and the [Spring Cloud Netflix](http://projects.spring.io/spring-cloud/) documentation.
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use Git to clone the repository, as follows:

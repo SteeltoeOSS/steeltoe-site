@@ -9,6 +9,8 @@ A service registry provides a database that applications can use to implement th
 
 There are several options to choose from when implementing the Service Discovery pattern. Steeltoe has initially chosen to support one based on Eureka and using Netflix's Service Discovery server and client. For more information about Eureka, see the [Netflix/Eureka Wiki](https://github.com/Netflix/eureka/wiki) and the [Spring Cloud Netflix](http://projects.spring.io/spring-cloud/) documentation.
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. The following example shows how to clone it with git:
