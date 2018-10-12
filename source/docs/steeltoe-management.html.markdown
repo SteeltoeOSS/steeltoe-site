@@ -127,6 +127,8 @@ The Steeltoe Management framework exposes Spring Boot Actuator compatible endpoi
 
 Check out the Pivotal Apps Manager documentation section, [Using Spring Boot Actuators](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html), for more information on how to use the Apps Manager.
 
+>NOTE: In order too access the endpoints from Apps Manager, you must have the `Space Developer` permission in the space where your application is deployed.
+
 ### 1.1.7 Understand Sample
 
 The sample was created using the .NET Core tooling `mvc` template (`dotnet new mvc`)  and then modified to use the Steeltoe frameworks.
