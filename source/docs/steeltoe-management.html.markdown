@@ -1780,9 +1780,12 @@ To expose any of the management endpoints over HTTP in an ASP.NET 4.x applicatio
 1. Configure endpoint settings, as needed (for example, `appsettings.json`).
 1. `Use` the middleware to provide HTTP access (for example, `UseInfoActuator()`).
 1. If using Metrics, start/stop Diagnostics and MetricsExporting (for example, `DiagnosticsManager.Instance.Start()`)
-1. If not self-hosting, add/update web.config entries to allow requests to reach the actuators
+1. If not self-hosting, add/update web.config entries to ensure OWIN startup and allow requests to reach the actuators
 
 ```xml
+    <appSettings>
+        <add key="owin:AutomaticAppStartup" value="true" />
+    </appSettings>
     <system.webServer>
         <handlers>
             <!-- Allow GET, POST and OPTIONS requests to go past IIS to actuators -->
