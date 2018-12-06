@@ -265,11 +265,11 @@ public class HomeController : Controller
 
 ### 1.2.6 Add DbContext
 
-To use Entity Framework, inject and use a `DbContext` in your application (instead of a `MySqlConnection`) by using the `AddDbContext<>()` method, as shown in the following example:
+#### 1.2.6.1 Entity Framework 6
+
+To use the MySQL connector with Entity Framework 6, inject a `DbContext` into your application using the `AddDbContext<>()` method (provided by Steeltoe) that takes an `IConfiguration` as a parameter, as shown in the following example:
 
 ```csharp
-using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
-// OR
 using Steeltoe.CloudFoundry.Connector.MySql.EF6;
 
 public class Startup {
@@ -281,27 +281,18 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // If using EF6
+        ...
         services.AddDbContext<TestContext>(Configuration);
-
-        // If using EFCore
-        services.AddDbContext<TestContext>(options => options.UseMySql(Configuration));
-
-        // Add framework services.
-        services.AddMvc();
         ...
     }
     ...
 ```
 
-The `AddDbContext<TestContext>(..)` method call configures `TestContext` by using the configuration built earlier and then adds the DbContext (called `TestContext`) to the service container.
+The `AddDbContext<TestContext>(..)` method call configures `TestContext` using the configuration built earlier and then adds the DbContext (called `TestContext`) to the service container.
 
-You can define your `DbContext` differently, depending on whether you use Entity Framework 6 or Entity Framework Core.
-
-The following example uses Entity Framework 6:
+Your `DbContext` does not need to be modified from a standard EF6 `DbContext` to work with Steeltoe:
 
 ```csharp
-// ------- EF6 DbContext ---------
 using MySql.Data.Entity;
 using System.Data.Entity;
 ...
@@ -316,10 +307,32 @@ public class TestContext : DbContext
 }
 ```
 
-The following example uses Entity Framework Core:
+#### 1.2.6.2 Entity Framework Core
+
+To use the MySQL connector with Entity Framework Core, inject a `DbContext` into your application with the standard `AddDbContext<>()` method, substituting Steeltoe's `UseMySql` method that takes an `IConfiguration` as a parameter in the options configuration for the standard `UseMySql` method. This example demonstrates the basic usage:
 
 ```csharp
-// ------- EFCore DbContext ------
+using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
+
+public class Startup {
+    ...
+    public IConfiguration Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+        services.AddDbContext<TestContext>(options => options.UseMySql(Configuration));
+        ...
+    }
+    ...
+```
+
+Your `DbContext` does not need to be modified from a standard `DbContext` to work with Steeltoe:
+
+```csharp
 using Microsoft.EntityFrameworkCore;
 ...
 
@@ -332,6 +345,23 @@ public class TestContext : DbContext
     public DbSet<TestData> TestData { get; set; }
 }
 
+```
+
+If you need to set additional properties for the `DbContext` like `MigrationsAssembly` or connection retry settings, create an `Action<MySqlDbContextOptionsBuilder>` like this:
+
+```csharp
+Action<MySqlDbContextOptionsBuilder> mySqlOptionsAction = (o) =>
+{
+  o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+};
+```
+
+Pass your new options action into the AddDbContext method:
+
+```csharp
+services.AddDbContext<TestContext>(options => options.UseMySql(Configuration, mySqlOptionsAction));
 ```
 
 ### 1.2.7 Use DbContext
@@ -602,6 +632,23 @@ public class TestContext : DbContext
 }
 ```
 
+If you need to set additional properties for the `DbContext` like `MigrationsAssembly` or connection retry settings, create an `Action<NpgsqlDbContextOptionsBuilder>` like this:
+
+```csharp
+Action<NpgsqlDbContextOptionsBuilder> npgsqlOptionsAction = (o) =>
+{
+  o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+};
+```
+
+Pass your new options action into the AddDbContext method:
+
+```csharp
+services.AddDbContext<TestContext>(options => options.UseNpgsql(Configuration, npgsqlOptionsAction));
+```
+
 ### 2.2.7 Use DbContext
 
 Once you have configured and added the context to the service container, you can inject and use it in a controller or a view, as shown in the following example:
@@ -856,12 +903,12 @@ public class HomeController : Controller
 
 ### 3.2.6 Add DbContext
 
-To use Entity Framework, inject and use a `DbContext` in your application (instead of a `SqlConnection`) by using the `AddDbContext<>()` method, as shown in the following example:
+#### 3.2.6.1 Entity Framework 6
+
+To use the Microsoft SQL connector with Entity Framework 6, inject a DbContext into your application using the AddDbContext<>() method (provided by Steeltoe) that takes an IConfiguration as a parameter, as shown in the following example:
 
 ```csharp
-using Steeltoe.CloudFoundry.Connector.Sql.EFCore
-// OR
-using Steeltoe.CloudFoundry.Connector.Sql.EF6;
+using Steeltoe.CloudFoundry.Connector.SqlServer.EF6;
 
 public class Startup {
     ...
@@ -872,14 +919,8 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // If using EF6
+        ...
         services.AddDbContext<TestContext>(Configuration);
-
-        // If using EFCore
-        services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration));
-
-        // Add framework services.
-        services.AddMvc();
         ...
     }
     ...
@@ -887,12 +928,9 @@ public class Startup {
 
 The `AddDbContext<TestContext>(..)` method call configures `TestContext` by using the configuration built earlier and then adds the `DbContext` (`TestContext`) to the service container.
 
-You can define your `DbContext` differently, depending on whether you use Entity Framework 6 or Entity Framework Core.
-
-The following example uses Entity Framework 6:
+Your `DbContext` does not need to be modified from a standard EF6 `DbContext` to work with Steeltoe:
 
 ```csharp
-// ------- EF6 DbContext ---------
 using System.Data.Entity;
 ...
 
@@ -905,10 +943,32 @@ public class TestContext : DbContext
 }
 ```
 
-The following example uses Entity Framework Core:
+#### 3.2.6.2 Entity Framework Core
+
+To use the Microsoft SQL Server connector with Entity Framework Core, inject a `DbContext` into your application with the standard `AddDbContext<>()` method, substituting Steeltoe’s `UseSqlServer` method that takes an `IConfiguration` as a parameter in the options configuration for the standard `UseSqlServer` method. This example demonstrates the basic usage:
 
 ```csharp
-// ------- EFCore DbContext ------
+using Steeltoe.CloudFoundry.Connector.SqlServer.EFCore;
+
+public class Startup {
+    ...
+    public IConfiguration Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+        services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration));
+        ...
+    }
+    ...
+```
+
+Your `DbContext` does not need to be modified from a standard `DbContext` to work with Steeltoe:
+
+```csharp
 using Microsoft.EntityFrameworkCore;
 ...
 
@@ -921,6 +981,23 @@ public class TestContext : DbContext
     public DbSet<TestData> TestData { get; set; }
 }
 
+```
+
+If you need to set additional properties for the `DbContext` like `MigrationsAssembly` or connection retry settings, create an `Action<SqlServerDbContextOptionsBuilder>` like this:
+
+```csharp
+Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = (o) =>
+{
+  o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+};
+```
+
+Pass your new options action into the AddDbContext method:
+
+```csharp
+services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration, sqlServerOptionsAction));
 ```
 
 ### 3.2.7 Use DbContext
