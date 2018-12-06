@@ -684,6 +684,20 @@ public static class LoggingConfig
 }
 ```
 
+#### 1.2.5.3 Interacting with the Loggers Actuator
+
+To retrieve the loggers that can be configured and the log levels that are allowed, send an HTTP GET request to `/{LoggersActuatorPath}`.
+
+Log levels can be changed at namespace or class levels with an HTTP POST request to `/{LoggersActuatorPath}/{NamespaceOrClassName}` and a JSON request body that defines the minimum level you wish to log:
+
+```json
+{
+  "configuredLevel":"INFO"
+}
+```
+
+> NOTE: The Pivotal Apps Manager integration involves sending the fully-qualified logger name over HTTP. Avoid using colons in the name of a logger to prevent invalid HTTP Requests.
+
 ### 1.2.6 Tracing
 
 The Steeltoe Tracing endpoint provides the ability to view the last several requests made of your application.
@@ -1130,7 +1144,7 @@ The following table describes the settings that you can apply to the exporter:
 |timeoutSeconds|timeout used in seconds for each POST request|3|
 |applicationId|cloud foundry application ID the POST applies to|null|
 |instanceId|cloud foundry application instance ID the POST applies to|null|
-|instanceIndex|cloud foundry application instance index the POSt applies to|null|
+|instanceIndex|cloud foundry application instance index the POST applies to|null|
 |micrometerMetricWriter|emit metrics using Spring Boot 2.x format |false|
 
 **Note**: **The `endpoint`, `accessToken`,`applicationId`, `instanceId` and `instanceIndex` settings above will be automatically picked up from the Metrics Forwarder service binding found for your application.**
