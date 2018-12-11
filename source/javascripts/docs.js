@@ -1,5 +1,5 @@
 //= require vendor/tocbot.min
-
+//= require vendor/highlight.min
 
 document.addEventListener("DOMContentLoaded", function() {
 	var codeSnippets = document.querySelectorAll('pre code');

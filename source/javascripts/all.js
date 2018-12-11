@@ -1,4 +1,3 @@
-//= require vendor/highlight.min
 //= require vendor/particles.min
 //= require vendor/svg-injector.min
 
