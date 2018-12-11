@@ -34,7 +34,9 @@
     </div>
     <%= partial 'shared/footer' %>
     <%= javascript_include_tag :all %>
+    <% if is_docs_but_not_overview() %>
     <%= javascript_include_tag :docs %>
+    <% end %>
     <script>
       function viewV1(){
         window.location.href='<%= current_page.url.sub! 'docs', '1x' %>';

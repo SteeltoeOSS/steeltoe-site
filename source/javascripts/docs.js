@@ -1,9 +1,13 @@
 //= require vendor/tocbot.min
 
-document.addEventListener("DOMContentLoaded", function() {
-	init();
 
-	function init() {
+document.addEventListener("DOMContentLoaded", function() {
+	var codeSnippets = document.querySelectorAll('pre code');
+
+	tocbotinit();
+	highlightCodeSnippets();
+	
+	function tocbotinit() {
 		tocbot.init({
 			// Where to render the table of contents.
 			tocSelector: '.js-toc',
@@ -18,5 +22,11 @@ document.addEventListener("DOMContentLoaded", function() {
 			// fixedSidebarOffset can be any number but by default is set to auto which sets the fixedSidebarOffset to the sidebar element's offsetTop from the top of the document on init.
 			fixedSidebarOffset: '150',
 		});
+	}
+
+	function highlightCodeSnippets() {
+		for(var i = 0; i < codeSnippets.length; i++) {
+		  hljs.highlightBlock(codeSnippets[i]);
+		}
 	}
 });
