@@ -472,7 +472,53 @@ The `app.UseOpenIDConnect` method call adds an authentication middleware that ha
 
 >TIP: This code is commonly refactored into a separate class (for example `Startup.Auth.cs`), particularly when there is additional configuration on the OWIN pipeline.
 
-### 1.3.5 Securing Endpoints
+### 1.3.5 Redirecting to OAuth Server
+
+To redirect the user to the OAuth server for authentication, invoke `IAuthenticationManager.Challenge`, specifying a redirect uri (for the user to land on after authentication) and `PivotalSSO` as the authentication type.
+
+```csharp
+public void AuthorizeSSO(string returnUrl)
+{
+    var properties = new AuthenticationProperties { RedirectUri = returnUrl ?? Url.Action("Secure", "Home") };
+    HttpContext.GetOwinContext().Authentication.Challenge(properties, "PivotalSSO");
+}
+```
+
+>NOTE: `PivotalSSO` _must_ be used for the authentication type; this is the piece that hands the flow over to Steeltoe. This value is not configureable at this time.
+
+If you wish to allow your controller action to return `ActionResult` instead of void, refactor the call to `Challenge` into a class that inherits `HttpUnauthorizedResult` such as this
+
+```csharp
+internal class ChallengeResult : HttpUnauthorizedResult
+{
+    public ChallengeResult(string authType, string redirectUri)
+    {
+        AuthenticationType = authType;
+        RedirectUri = redirectUri;
+    }
+
+    public string AuthenticationType { get; set; }
+
+    public string RedirectUri { get; set; }
+
+    public override void ExecuteResult(ControllerContext context)
+    {
+        var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
+        context.HttpContext.GetOwinContext().Authentication.Challenge(properties, AuthenticationType);
+    }
+}
+```
+
+The updated controller code would then look like this:
+
+```csharp
+public ActionResult AuthorizeSSO(string returnUrl)
+{
+    return new ChallengeResult("PivotalSSO", returnUrl ?? Url.Action("Secure", "Home"));
+}
+```
+
+### 1.3.6 Securing Endpoints
 
 Once the `Startup` class is in place and the middleware is configured, you can use the standard ASP.NET `Authorize` attribute to require authentication, as shown in the following example:
 

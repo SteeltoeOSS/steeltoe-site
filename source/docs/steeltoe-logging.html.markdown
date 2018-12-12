@@ -15,6 +15,8 @@ This logging provider is a wrapper around the [Microsoft Console Logging](https:
 
 For more information on how to use [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html) on Cloud Foundry for viewing and modifying logging levels, see the [Using Actuators with Apps Manager section](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html) of the Pivotal Cloud Foundry documentation.
 
+> NOTE: The Pivotal Apps Manager integration involves sending the fully-qualified logger name over HTTP. Avoid using colons in the name of a logger to prevent invalid HTTP Requests.
+
 The source code for the Logging provider can be found [here](https://github.com/SteeltoeOSS/Logging).
 
 ## 1.1 Usage
