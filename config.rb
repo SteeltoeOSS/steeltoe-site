@@ -56,10 +56,17 @@ helpers do
     current_page.url == path ? "active" : ""
   end
 
+  def is_docs()
+    current_page.url.include? "docs/" 
+  end
+
+  def is_docs_but_not_overview()
+    is_docs() and !current_page.url.end_with? "docs/"
+  end
+
   def docs_nav_active()
-    is_docs = current_page.url.include? "docs"
     is_lib = current_page.url.include? "library"
-    (is_docs || is_lib) ? "active" : ""
+    (is_docs() || is_lib) ? "active" : ""
   end
 
   def table_of_contents(page)

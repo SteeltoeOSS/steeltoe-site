@@ -19,6 +19,8 @@ In addition to Authentication and Authorization providers, Steeltoe Security off
 * A security provider for [using Redis on Cloud Foundry with ASP.NET Core Data Protection Key Ring storage](#3-0-redis-key-storage-provider).
 * A [CredHub API Client for .NET applications](#4-0-credhub-api-client) to perform credential storage, retrieval and generation.
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, you can use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download with your browser from GitHub. The following git command clones the repository:
@@ -470,7 +472,53 @@ The `app.UseOpenIDConnect` method call adds an authentication middleware that ha
 
 >TIP: This code is commonly refactored into a separate class (for example `Startup.Auth.cs`), particularly when there is additional configuration on the OWIN pipeline.
 
-### 1.3.5 Securing Endpoints
+### 1.3.5 Redirecting to OAuth Server
+
+To redirect the user to the OAuth server for authentication, invoke `IAuthenticationManager.Challenge`, specifying a redirect uri (for the user to land on after authentication) and `PivotalSSO` as the authentication type.
+
+```csharp
+public void AuthorizeSSO(string returnUrl)
+{
+    var properties = new AuthenticationProperties { RedirectUri = returnUrl ?? Url.Action("Secure", "Home") };
+    HttpContext.GetOwinContext().Authentication.Challenge(properties, "PivotalSSO");
+}
+```
+
+>NOTE: `PivotalSSO` _must_ be used for the authentication type; this is the piece that hands the flow over to Steeltoe. This value is not configureable at this time.
+
+If you wish to allow your controller action to return `ActionResult` instead of void, refactor the call to `Challenge` into a class that inherits `HttpUnauthorizedResult` such as this
+
+```csharp
+internal class ChallengeResult : HttpUnauthorizedResult
+{
+    public ChallengeResult(string authType, string redirectUri)
+    {
+        AuthenticationType = authType;
+        RedirectUri = redirectUri;
+    }
+
+    public string AuthenticationType { get; set; }
+
+    public string RedirectUri { get; set; }
+
+    public override void ExecuteResult(ControllerContext context)
+    {
+        var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
+        context.HttpContext.GetOwinContext().Authentication.Challenge(properties, AuthenticationType);
+    }
+}
+```
+
+The updated controller code would then look like this:
+
+```csharp
+public ActionResult AuthorizeSSO(string returnUrl)
+{
+    return new ChallengeResult("PivotalSSO", returnUrl ?? Url.Action("Secure", "Home"));
+}
+```
+
+### 1.3.6 Securing Endpoints
 
 Once the `Startup` class is in place and the middleware is configured, you can use the standard ASP.NET `Authorize` attribute to require authentication, as shown in the following example:
 

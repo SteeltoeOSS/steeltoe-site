@@ -25,6 +25,8 @@ Steeltoe adds two additional configuration providers to the preceding list:
 
 The following sections provide more more detail on each of these new providers.
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. The following git command shows how to clone the repository from the command line:

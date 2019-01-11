@@ -11,6 +11,8 @@ The way the endpoints are exposed and used depends on the type of technology you
 
 When you expose the endpoints over HTTP, you can also integrate the endpoints with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html). The [quick start](#1-1-quick-start), explores this integration in more depth. You should read the [Using Actuators with Apps Manager section](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html) of the Pivotal Cloud Foundry documentation for more details.
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe Samples](https://github.com/SteeltoeOSS/Samples) repository or download with your browser from GitHub. The following command shows how to use Git to get the samples:
@@ -126,6 +128,8 @@ You can access the management endpoints exposed by Steeltoe by using the [Pivota
 The Steeltoe Management framework exposes Spring Boot Actuator compatible endpoints that can be used within the Pivotal Apps Manager. By using the Apps Manager, you can view the Apps Health, Build Information (such as Git info and other details), and recent Request/Response Traces. You can also manage the applications logging levels. On a Windows cell, you can also get thread snapshots and generate and download mini-dumps of the application.
 
 Check out the Pivotal Apps Manager documentation section, [Using Spring Boot Actuators](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html), for more information on how to use the Apps Manager.
+
+>NOTE: In order too access the endpoints from Apps Manager, you must have the `Space Developer` permission in the space where your application is deployed.
 
 ### 1.1.7 Understand Sample
 
@@ -680,6 +684,20 @@ public static class LoggingConfig
 }
 ```
 
+#### 1.2.5.3 Interacting with the Loggers Actuator
+
+To retrieve the loggers that can be configured and the log levels that are allowed, send an HTTP GET request to `/{LoggersActuatorPath}`.
+
+Log levels can be changed at namespace or class levels with an HTTP POST request to `/{LoggersActuatorPath}/{NamespaceOrClassName}` and a JSON request body that defines the minimum level you wish to log:
+
+```json
+{
+  "configuredLevel":"INFO"
+}
+```
+
+> NOTE: The Pivotal Apps Manager integration involves sending the fully-qualified logger name over HTTP. Avoid using colons in the name of a logger to prevent invalid HTTP Requests.
+
 ### 1.2.6 Tracing
 
 The Steeltoe Tracing endpoint provides the ability to view the last several requests made of your application.
@@ -1126,7 +1144,7 @@ The following table describes the settings that you can apply to the exporter:
 |timeoutSeconds|timeout used in seconds for each POST request|3|
 |applicationId|cloud foundry application ID the POST applies to|null|
 |instanceId|cloud foundry application instance ID the POST applies to|null|
-|instanceIndex|cloud foundry application instance index the POSt applies to|null|
+|instanceIndex|cloud foundry application instance index the POST applies to|null|
 |micrometerMetricWriter|emit metrics using Spring Boot 2.x format |false|
 
 **Note**: **The `endpoint`, `accessToken`,`applicationId`, `instanceId` and `instanceIndex` settings above will be automatically picked up from the Metrics Forwarder service binding found for your application.**
@@ -1456,15 +1474,15 @@ The following table describes the available packages:
 
 |App Type|Package|Description|
 |---|---|---|
-|All|`Steeltoe.Management.ExporterBase`|Base functionality, no dependency injection|
-|ASP.NET Core|`Steeltoe.Management.ExporterCore`|Includes `ExporterBase`, adds ASP.NET Core DI|
+|All|`Steeltoe.Management.TracingBase`|Base functionality, no dependency injection|
+|ASP.NET Core|`Steeltoe.Management.TracingCore`|Includes `TracingBase`, adds ASP.NET Core DI|
 
 To add this type of NuGet to your project, add a `PackageReference` resembling the following:
 
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Management.ExporterCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Management.TracingCore" Version= "2.1.0"/>
 ...
 </ItemGroup>
 ```
@@ -1472,7 +1490,7 @@ To add this type of NuGet to your project, add a `PackageReference` resembling t
 or
 
 ```powershell
-PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.1.0
+PM>Install-Package  Steeltoe.Management.TracingCore -Version 2.1.0
 ```
 
 ### 2.2.2 Configure Settings
@@ -1569,7 +1587,7 @@ To use an exporter in a ASP.NET Core application, then add the following `Packag
 or
 
 ```powershell
-PM>Install-Package  Steeltoe.Management.TracingCore -Version 2.1.0
+PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.1.0
 ```
 
 ### 2.3.2 Zipkin Server
@@ -1776,9 +1794,12 @@ To expose any of the management endpoints over HTTP in an ASP.NET 4.x applicatio
 1. Configure endpoint settings, as needed (for example, `appsettings.json`).
 1. `Use` the middleware to provide HTTP access (for example, `UseInfoActuator()`).
 1. If using Metrics, start/stop Diagnostics and MetricsExporting (for example, `DiagnosticsManager.Instance.Start()`)
-1. If not self-hosting, add/update web.config entries to allow requests to reach the actuators
+1. If not self-hosting, add/update web.config entries to ensure OWIN startup and allow requests to reach the actuators
 
 ```xml
+    <appSettings>
+        <add key="owin:AutomaticAppStartup" value="true" />
+    </appSettings>
     <system.webServer>
         <handlers>
             <!-- Allow GET, POST and OPTIONS requests to go past IIS to actuators -->

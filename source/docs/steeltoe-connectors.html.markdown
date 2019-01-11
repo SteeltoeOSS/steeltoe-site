@@ -14,6 +14,8 @@ All connectors use configuration information from Cloud Foundry's `VCAP_SERVICES
 
 For more information on `VCAP_SERVICES`, see the Cloud Foundry [documentation](https://docs.cloudfoundry.org/).
 
+>NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
+
 # 0.0 Initialize Dev Environment
 
 All of the Steeltoe sample applications are in the same repository. If you have not already done so, use git to clone the [Steeltoe samples](https://github.com/SteeltoeOSS/Samples) repository or download it with your browser from GitHub. You can run the following git command to clone the repository from the command line:
@@ -177,6 +179,7 @@ The following table describes the available settings for the connector. These se
 |treatTinyAsBoolean|Whether to return tinyint(1) as a boolean. Set to `false` to return tinyint(1) as sbyte/byte.|not set|
 |useAffectedRows|Set to `false` to report found rows instead of changed (affected) rows.|not set|
 |useCompression|If `true` (and server-supported), packets sent between client and server are compressed|not set|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of the settings described in the preceding table should be prefixed with `mysql:client:`.
 
@@ -198,6 +201,8 @@ cf restage myApp
 ```
 
 >NOTE: The preceding commands assume you use [MySQL for PCF](https://network.pivotal.io/products/p-mysql), provided by Pivotal on Cloud Foundry. If you use a different service, you must adjust the `create-service` command to fit your environment.
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `mysql:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 Once the service is bound to your application, the connector's settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
@@ -260,11 +265,11 @@ public class HomeController : Controller
 
 ### 1.2.6 Add DbContext
 
-To use Entity Framework, inject and use a `DbContext` in your application (instead of a `MySqlConnection`) by using the `AddDbContext<>()` method, as shown in the following example:
+#### 1.2.6.1 Entity Framework 6
+
+To use the MySQL connector with Entity Framework 6, inject a `DbContext` into your application using the `AddDbContext<>()` method (provided by Steeltoe) that takes an `IConfiguration` as a parameter, as shown in the following example:
 
 ```csharp
-using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
-// OR
 using Steeltoe.CloudFoundry.Connector.MySql.EF6;
 
 public class Startup {
@@ -276,27 +281,18 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // If using EF6
+        ...
         services.AddDbContext<TestContext>(Configuration);
-
-        // If using EFCore
-        services.AddDbContext<TestContext>(options => options.UseMySql(Configuration));
-
-        // Add framework services.
-        services.AddMvc();
         ...
     }
     ...
 ```
 
-The `AddDbContext<TestContext>(..)` method call configures `TestContext` by using the configuration built earlier and then adds the DbContext (called `TestContext`) to the service container.
+The `AddDbContext<TestContext>(..)` method call configures `TestContext` using the configuration built earlier and then adds the DbContext (called `TestContext`) to the service container.
 
-You can define your `DbContext` differently, depending on whether you use Entity Framework 6 or Entity Framework Core.
-
-The following example uses Entity Framework 6:
+Your `DbContext` does not need to be modified from a standard EF6 `DbContext` to work with Steeltoe:
 
 ```csharp
-// ------- EF6 DbContext ---------
 using MySql.Data.Entity;
 using System.Data.Entity;
 ...
@@ -311,10 +307,32 @@ public class TestContext : DbContext
 }
 ```
 
-The following example uses Entity Framework Core:
+#### 1.2.6.2 Entity Framework Core
+
+To use the MySQL connector with Entity Framework Core, inject a `DbContext` into your application with the standard `AddDbContext<>()` method, substituting Steeltoe's `UseMySql` method that takes an `IConfiguration` as a parameter in the options configuration for the standard `UseMySql` method. This example demonstrates the basic usage:
 
 ```csharp
-// ------- EFCore DbContext ------
+using Steeltoe.CloudFoundry.Connector.MySql.EFCore;
+
+public class Startup {
+    ...
+    public IConfiguration Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+        services.AddDbContext<TestContext>(options => options.UseMySql(Configuration));
+        ...
+    }
+    ...
+```
+
+Your `DbContext` does not need to be modified from a standard `DbContext` to work with Steeltoe:
+
+```csharp
 using Microsoft.EntityFrameworkCore;
 ...
 
@@ -327,6 +345,23 @@ public class TestContext : DbContext
     public DbSet<TestData> TestData { get; set; }
 }
 
+```
+
+If you need to set additional properties for the `DbContext` like `MigrationsAssembly` or connection retry settings, create an `Action<MySqlDbContextOptionsBuilder>` like this:
+
+```csharp
+Action<MySqlDbContextOptionsBuilder> mySqlOptionsAction = (o) =>
+{
+  o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+};
+```
+
+Pass your new options action into the AddDbContext method:
+
+```csharp
+services.AddDbContext<TestContext>(options => options.UseMySql(Configuration, mySqlOptionsAction));
 ```
 
 ### 1.2.7 Use DbContext
@@ -471,6 +506,7 @@ The following table describes all of the possible settings for the connector:
 |password|Password for authentication|not set|
 |database|Schema to which to connect|not set|
 |connectionString|Full connection string|built from settings
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of these settings should be prefixed with `postgres:client:`.
 
@@ -492,6 +528,8 @@ cf restage myApp
 ```
 
 >NOTE: The preceding commands work for the PostgreSQL service provided by EDB on Cloud Foundry. For another service, adjust the `create-service` command to fit your environment.
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `postgres:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 Once the service is bound to your application, the connector's settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
@@ -594,6 +632,23 @@ public class TestContext : DbContext
 }
 ```
 
+If you need to set additional properties for the `DbContext` like `MigrationsAssembly` or connection retry settings, create an `Action<NpgsqlDbContextOptionsBuilder>` like this:
+
+```csharp
+Action<NpgsqlDbContextOptionsBuilder> npgsqlOptionsAction = (o) =>
+{
+  o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+};
+```
+
+Pass your new options action into the AddDbContext method:
+
+```csharp
+services.AddDbContext<TestContext>(options => options.UseNpgsql(Configuration, npgsqlOptionsAction));
+```
+
 ### 2.2.7 Use DbContext
 
 Once you have configured and added the context to the service container, you can inject and use it in a controller or a view, as shown in the following example:
@@ -654,6 +709,8 @@ An alternative to the broker is to use a user-provided service to explicitly pro
 ```bash
 cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
 ```
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `sqlServer:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 ### 3.1.3 Publish and Push Sample
 
@@ -747,6 +804,7 @@ The following table shows the available settings for the connector:
 |database|Schema to which to connect|not set|
 |connectionString|Full connection string|built from settings|
 |integratedSecurity|Enable Windows Authentication (For local use only)|not set|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of the settings shown in the preceding table should be prefixed with `sqlserver:credentials:`.
 
@@ -765,6 +823,8 @@ An alternative to the broker is to use a user-provided service to explicitly pro
 ```bash
 cf cups mySqlServerService -p '{"pw": "|password|","uid": "|user id|","uri": "jdbc:sqlserver://|host|:|port|;databaseName=|database name|"}'
 ```
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `sqlServer:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 If you are creating a service for an application that has already been deployed, you need to bind the service and restart or restage the application with the following commands:
 
@@ -843,12 +903,12 @@ public class HomeController : Controller
 
 ### 3.2.6 Add DbContext
 
-To use Entity Framework, inject and use a `DbContext` in your application (instead of a `SqlConnection`) by using the `AddDbContext<>()` method, as shown in the following example:
+#### 3.2.6.1 Entity Framework 6
+
+To use the Microsoft SQL connector with Entity Framework 6, inject a DbContext into your application using the AddDbContext<>() method (provided by Steeltoe) that takes an IConfiguration as a parameter, as shown in the following example:
 
 ```csharp
-using Steeltoe.CloudFoundry.Connector.Sql.EFCore
-// OR
-using Steeltoe.CloudFoundry.Connector.Sql.EF6;
+using Steeltoe.CloudFoundry.Connector.SqlServer.EF6;
 
 public class Startup {
     ...
@@ -859,14 +919,8 @@ public class Startup {
     }
     public void ConfigureServices(IServiceCollection services)
     {
-        // If using EF6
+        ...
         services.AddDbContext<TestContext>(Configuration);
-
-        // If using EFCore
-        services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration));
-
-        // Add framework services.
-        services.AddMvc();
         ...
     }
     ...
@@ -874,12 +928,9 @@ public class Startup {
 
 The `AddDbContext<TestContext>(..)` method call configures `TestContext` by using the configuration built earlier and then adds the `DbContext` (`TestContext`) to the service container.
 
-You can define your `DbContext` differently, depending on whether you use Entity Framework 6 or Entity Framework Core.
-
-The following example uses Entity Framework 6:
+Your `DbContext` does not need to be modified from a standard EF6 `DbContext` to work with Steeltoe:
 
 ```csharp
-// ------- EF6 DbContext ---------
 using System.Data.Entity;
 ...
 
@@ -892,10 +943,32 @@ public class TestContext : DbContext
 }
 ```
 
-The following example uses Entity Framework Core:
+#### 3.2.6.2 Entity Framework Core
+
+To use the Microsoft SQL Server connector with Entity Framework Core, inject a `DbContext` into your application with the standard `AddDbContext<>()` method, substituting Steeltoe’s `UseSqlServer` method that takes an `IConfiguration` as a parameter in the options configuration for the standard `UseSqlServer` method. This example demonstrates the basic usage:
 
 ```csharp
-// ------- EFCore DbContext ------
+using Steeltoe.CloudFoundry.Connector.SqlServer.EFCore;
+
+public class Startup {
+    ...
+    public IConfiguration Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+        services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration));
+        ...
+    }
+    ...
+```
+
+Your `DbContext` does not need to be modified from a standard `DbContext` to work with Steeltoe:
+
+```csharp
 using Microsoft.EntityFrameworkCore;
 ...
 
@@ -908,6 +981,23 @@ public class TestContext : DbContext
     public DbSet<TestData> TestData { get; set; }
 }
 
+```
+
+If you need to set additional properties for the `DbContext` like `MigrationsAssembly` or connection retry settings, create an `Action<SqlServerDbContextOptionsBuilder>` like this:
+
+```csharp
+Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = (o) =>
+{
+  o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+};
+```
+
+Pass your new options action into the AddDbContext method:
+
+```csharp
+services.AddDbContext<TestContext>(options => options.UseSqlServer(Configuration, sqlServerOptionsAction));
 ```
 
 ### 3.2.7 Use DbContext
@@ -1043,6 +1133,7 @@ The following table describes all the possible settings for the connector:
 |sslEnabled|Should SSL be enabled|false|
 |sslPort|SSL Port number of server|5671|
 |uri|Full connection string|built from settings|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of these settings should be prefixed with `rabbitmq:client:`.
 
@@ -1256,6 +1347,7 @@ The following table table describes all possible settings for the connector
 |writeBuffer|Size of the output buffer.|4096|
 |connectionString|Connection string to use instead of values shown earlier.|not set|
 |instanceId|Cache ID. Used only with `IDistributedCache`.|not set|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of these settings should be prefixed with `redis:client:`.
 
@@ -1277,6 +1369,8 @@ cf restage myApp
 ```
 
 >NOTE: The preceding commands assume you use the Redis service provided by Pivotal on Cloud Foundry. If you use a different service, you have to adjust the `create-service` command to fit your environment.
+
+Version 2.1.1+ of this connector works with the [Azure Open Service Broker for PCF](https://docs.pivotal.io/partners/azure-open-service-broker-pcf/index.html). Be sure to set `redis:client:urlEncodedCredentials` to `true` as this broker may provide credentials that have been URL Encoded.
 
 Once the service is bound to your application, the connector's settings are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values).
 
