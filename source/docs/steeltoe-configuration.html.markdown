@@ -293,10 +293,10 @@ public class HomeController : Controller
         ViewData["AppId"] = AppOptions.ApplicationId;
         ViewData["URI-0"] = AppOptions.ApplicationUris[0];
 
-        ViewData[ServiceOptions.Services[0].Label] = ServiceOptions.Services[0].Name;
-        ViewData["client_id"]= ServiceOptions.Services[0].Credentials["client_id"].Value;
-        ViewData["client_secret"]= ServiceOptions.Services[0].Credentials["client_secret"].Value;
-        ViewData["uri"]= ServiceOptions.Services[0].Credentials["uri"].Value;
+        ViewData[ServiceOptions.ServicesList[0].Label] = ServiceOptions.ServicesList[0].Name;
+        ViewData["client_id"]= ServiceOptions.ServicesList[0].Credentials["client_id"].Value;
+        ViewData["client_secret"]= ServiceOptions.ServicesList[0].Credentials["client_secret"].Value;
+        ViewData["uri"]= ServiceOptions.ServicesList[0].Credentials["uri"].Value;
         return View();
     }
 }
