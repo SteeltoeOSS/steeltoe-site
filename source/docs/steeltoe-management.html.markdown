@@ -1510,7 +1510,7 @@ All settings should be placed under the prefix with the key `management:tracing:
 |maxNumberOfLinks|max links attachable to OpenCensus span|128|
 |alwaysSample|enable the OpenCensus AlwaysSampler|OpenCensus ProbabilitySampler|
 |neverSample|enable the OpenCensus NeverSampler|OpenCensus ProbabilitySampler|
-|useShortTraceIds|truncate the ids for usage with PCF Metrics log correlation|false|
+|useShortTraceIds|truncate the ids to 8 bytes instead of 16, use for backwards compatibility with Spring Sleuth, PCF Metrics, etc.|true|
 
 ### 2.2.3 Enabling Log Correlation
 
@@ -1606,7 +1606,7 @@ The following table describes the settings that you can apply to the exporter:
 |validateCertificates|validate SSL certificates received from exporter service|true|
 |timeoutSeconds|timeout used in seconds for each POST request|3|
 |serviceName|app name used in log messages|null|
-|useShortTraceIds|truncate the ids for usage with PCF Metrics log correlation|false|
+|useShortTraceIds|truncate the ids to 8 bytes instead of 16, use for backwards compatibility with Spring Sleuth, PCF Metrics, etc.|true|
 
 #### 2.3.2.2 Add and Use Zipkin Exporter
 
