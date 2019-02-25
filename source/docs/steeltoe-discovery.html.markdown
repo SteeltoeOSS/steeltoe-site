@@ -584,7 +584,7 @@ This section describes tasks that are common to many of the processes described 
 
 ### ASP.NET Core
 
-Use the `dotnet` CLI to build and locally publish the application with your preferred framework and runtime:
+Use the `dotnet` CLI to [build and locally publish](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish) the application for the framework and runtime you will deploy the application to:
 
 * Linux with .NET Core: `dotnet publish -f netcoreapp2.1 -r ubuntu.14.04-x64`
 * Windows with .NET Core: `dotnet publish -f netcoreapp2.1 -r win10-x64`
