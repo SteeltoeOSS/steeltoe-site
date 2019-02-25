@@ -432,6 +432,8 @@ public class ArbitraryInfoContributor : IInfoContributor
 }
 ```
 
+>NOTE: Custom `IInfoContributor` implementations must be retrievable from the DI container by interface in order for Steeltoe to find them.
+
 #### 1.2.4.2 Configure Settings
 
 The following table describes the settings that you can apply to the endpoint.
@@ -451,6 +453,8 @@ The default path to the Info endpoint is computed by combining the global `path`
 
 The coding steps you take to enable HTTP access to the Info endpoint together with how to use custom Info contributors differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
+>NOTE: If you are using dependency injection, all `IInfoContributor` implementations that are retrievable from the DI container by interface will be returned in the Info response.
+
 ##### 1.2.4.3.1 ASP.NET Core App
 
 Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
@@ -467,7 +471,7 @@ public class Startup
     ...
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add custom info contributor
+        // Add custom info contributor, specifying the interface type
         services.AddSingleton<IInfoContributor, ArbitraryInfoContributor>();
 
         // Add Info actuator
