@@ -40,6 +40,14 @@ activate :blog do |blog|
   blog.layout = "documentation"
 end
 
+activate :blog do |blog|
+  blog.name = "reference"
+  blog.prefix = "reference"
+  blog.sources = "{title}.html"
+  blog.permalink = "{title}.html"
+  blog.layout = "documentation"
+end
+
 activate :directory_indexes
 
 ###
@@ -51,7 +59,7 @@ helpers do
   def sorted_docs(doc_prefix)
     blog(doc_prefix).articles.sort {|a,b| a.data.order <=> b.data.order }
   end
-
+  
   def nav_active(path)
     current_page.url == path ? "active" : ""
   end
