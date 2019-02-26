@@ -21,7 +21,7 @@ The new features in Steeltoe 2.2.0
 * Management
   * Enhanced compatibility with Spring Boot 2.0 Actuator Endpoints
   * Show Details based on configuration for endpoints (i.e. 'always', 'never', and 'when-authorized')
-  * Santizing of sensitive information from `/env` actuator endpoint
+  * Sanitizing of sensitive information from `/env` actuator endpoint
 * Discovery 
   * Multiple addresses for Eureka servers
   * Hashicorp Consul now supported
