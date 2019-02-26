@@ -20,14 +20,14 @@ The new features in Steeltoe 2.2.0
      * Enabled HttpClient injection 
 * Management
   * Enhanced compatibility with Spring Boot 2.0 Actuator Endpoints
-  * Show Details based on configuration for endpoints (i.e. 'always', 'never', and 'when-authorized')
+  * Show Details based on configuration for endpoints (_always_, _never_, and _when-authorized_)
   * Sanitizing of sensitive information from `/env` actuator endpoint
 * Discovery 
   * Multiple addresses for Eureka servers
-  * Hashicorp Consul now supported
+  * Hashicorp Consul supported added
 * Configuration
   * Property placeholders are now supported throughout Steeltoe
-  * Random value package added for random:int, random:long, random:uuid, random:string, random:int[\<lower-range-int\>,\<upper-range-int\>]
+  * Random value package added for `random:int`, `random:long`, `random:uuid`, `random:string`, `random:int[\<lower-range-int\>,\<upper-range-int\>]`
 * Health Contributors
   * Config Server health contributor
   * Discovery Client health contributor
