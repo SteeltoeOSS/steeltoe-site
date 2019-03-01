@@ -5,7 +5,7 @@ date: 2019/1/22
 tags: release-notes
 ---
 
-# Releases
+# Release Candidates
 
 ---
 
@@ -13,7 +13,7 @@ tags: release-notes
 The new features in Steeltoe 2.2.0 release candidate
 
 ### Connectors
-  * New MongoDB Connectors
+  * New MongoDB Connector
 
   
 ### Security
@@ -52,6 +52,7 @@ The new features in Steeltoe 2.2.0 release candidate
   * Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
   * Released NuGet packages are now signed
 
+# GA Releases
 ## 2.1.0
 
 The new features in Steeltoe 2.1.0
