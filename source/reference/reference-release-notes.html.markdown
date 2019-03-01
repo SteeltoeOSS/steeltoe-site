@@ -26,7 +26,7 @@ The new features in Steeltoe 2.2.0 release candidate
   * Enhanced support for Spring Boot 2.0 Actuator Endpoints
      * Actuators in Cloud Foundry can be accessed outside cloudfoundry, while also maintaining AppsManager integration
      * Actuators now have default path /actuator when no path is specified
-     * Control of the exposure level of actuator endpoints
+     * Control the exposure level of actuator endpoints
      * Show Details configuration options for the health endpoint (_always_, _never_, and _when-authorized_)
      * Sanitizing of sensitive information from `/env` actuator endpoint
 
