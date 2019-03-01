@@ -33,9 +33,383 @@ Alternatively, you can use the following command:
 cf target -o <YourOrg> -s <YourSpace>
 ```
 
-The Service Discovery sample requires a Eureka server. If you intend to run the samples locally, install the Java 8 JDK and Maven 3.x now.
+The Service Discovery sample requires a Eureka server. If you intend to run the samples locally using Netflix Eureka, install the Java 8 JDK and Maven 3.x now.
 
-# 1.0 Netflix Eureka
+# 1.0 Steeltoe Discovery
+
+Steeltoe provides a set of generalized interfaces for interacting with multiple service discovery back ends. This section will cover the general components first. If you are looking for something specific to the registry server you are using, feel free to skip ahead to the section for [Netflix Eureka](#2-0-netflix-eureka) or [HashiCorp Consul](#3-0-hashicorp-consul).
+
+In order to use any Steeltoe Discovery client, you need to do the following:
+
+* Add appropriate NuGet package reference to your project.
+* Configure the settings the Discovery client will use to register services in the service registry.
+* Configure the settings the Discovery client will use to discover services in the service registry.
+* Add and Use the Discovery client service in the application.
+* Use an injected `IDiscoveryClient` to lookup services.
+
+>NOTE: The Steeltoe Discovery implementation (for example: the decision between Eureka and Consul) is automatically setup within the application based on the application configuration provided.
+
+## 1.1 Add NuGet References
+
+<!-- TODO: review this section, its not completely correct -->
+The simplest way to get started with Steeltoe Discovery is to add a reference to a package built for either Microsoft's dependency injection or Autofac. Either package will also include all relevant dependencies. If you are using another DI tool, please file an issue to let us know, and in the mean time use the relevant base package:
+
+|App Type|Package|Description|
+|---|---|---|
+|ASP.NET Core|`Steeltoe.Discovery.ClientCore`|Includes base. Adds ASP.NET Core dependency injection.|
+|ASP.NET 4.x with Autofac|`Steeltoe.Discovery.ClientAutofac`|Includes base. Adds Autofac dependency injection.|
+|Console/ASP.NET 4.x|`Steeltoe.Discovery.EurekaBase`|Base Eureka functionality. No dependency injection.|
+|Console/ASP.NET 4.x|`Steeltoe.Discovery.ConsulBase`|Base Consul functionality. No dependency injection.|
+
+To add this type of NuGet to your project, add an element resembling the following `PackageReference`:
+
+```xml
+<ItemGroup>
+...
+    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.1.0"/>
+...
+</ItemGroup>
+```
+
+## 1.2 Initialize Discovery Client
+
+### 1.2.1 ASP.NET Core
+
+<!-- TODO: rewrite this section to account for Pivotal packages going away, mention Autofac -->
+The next step is to add the Steeltoe Discovery client to the service container and use it to cause the client to start communicating with the server.
+
+You do these two things in the `ConfigureServices()` and `Configure()` methods of the `Startup` class, as shown in the following example:
+
+```csharp
+using Pivotal.Discovery.Client;
+// or
+using Steeltoe.Discovery.Client;
+
+public class Startup {
+    ...
+    public IConfiguration Configuration { get; private set; }
+    public Startup(...)
+    {
+      ...
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Add Steeltoe Discovery Client service
+        services.AddDiscoveryClient(Configuration);
+
+        // Add framework services.
+        services.AddMvc();
+        ...
+    }
+    public void Configure(IApplicationBuilder app, ...)
+    {
+        ...
+        app.UseStaticFiles();
+        app.UseMvc();
+
+        // Use the Steeltoe Discovery Client service
+        app.UseDiscoveryClient();
+    }
+    ...
+```
+
+>NOTE: If you use the `Pivotal.Discovery.ClientCore` package, you need to add a `using Pivotal.Discovery.Client;`.  If you use the `Steeltoe.Discovery.ClientCore`, you need to add a `Steeltoe.Discovery.Client;`. Doing so is required to gain access to the extension methods described later.
+
+### 1.2.2 ASP.NET
+
+<!-- TODO -->
+
+### 1.2.3 Registering Services
+
+If you configured the clients settings to register services, the service is automatically registered when the `UseDiscoveryClient()` method is called in the `Configure()` method. You do not need to do anything else to cause service registration.
+
+See the [Eureka Client Settings](#2-2-2-eureka-client-settings) or [Consul Client Settings](#3-0-hashicorp-consul)
+
+## 1.3 Discovering Services
+
+Once the app has started, the Discovery client begins to operate in the background, both registering services and periodically fetching the service registry from the server.
+
+### 1.3.1 DiscoveryHttpClientHandler
+
+A simple way to use the registry to lookup services is to use the Steeltoe `DiscoveryHttpClientHandler` with `HttpClient`.
+
+This `FortuneService` class retrieves fortunes from the Fortune microservice, which is registered under a name of `fortuneService`:
+
+```csharp
+using Pivotal.Discovery.Client;
+// or
+// using Steeltoe.Discovery.Client;
+
+...
+public class FortuneService : IFortuneService
+{
+    DiscoveryHttpClientHandler _handler;
+    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+    public FortuneService(IDiscoveryClient client)
+    {
+        _handler = new DiscoveryHttpClientHandler(client);
+    }
+    public async Task<string> RandomFortuneAsync()
+    {
+        var client = GetClient();
+        return await client.GetStringAsync(RANDOM_FORTUNE_URL);
+    }
+    private HttpClient GetClient()
+    {
+        // WARNING: do NOT create a new HttpClient for every request in your code
+        // -- you may experience socket exhaustion if you do!
+        var client = new HttpClient(_handler, false);
+        return client;
+    }
+}
+```
+
+First, notice that the `FortuneService` constructor takes an `IDiscoveryClient` as a parameter. This is Steeltoe's interface for finding services in the service registry. The `IDiscoveryClient` implementation is registered with the service container for use in any controller, view, or service [during initialization](#1-2-initialize-discovery-client). The constructor code for this class uses the client to create an instance of Steeltoe's `DiscoveryHttpClientHandler`.
+
+Next, notice that when the `RandomFortuneAsync()` method is called, the `HttpClient` is created with the Steeltoe handler. The handler's role is to intercept any requests made with the `HttpClient` and to evaluate the URL to see if the host portion of the URL can be resolved from the service registry. In this example, the `fortuneService` name should be resolved into an actual `host:port` before letting the request continue.
+
+If the name cannot be resolved, the handler ignores the request URL and lets the request continue unchanged.
+
+>NOTE: `DiscoveryHttpClientHandler` performs random load balancing by default. That is, if there are multiple instances registered under a particular service name, the handler randomly selects one of those instances each time the handler is invoked. For more information, see the section on [load balancing](#1-4-load-balancing)
+
+### 1.3.2 Using HttpClientFactory
+
+In addition to the `DiscoveryHttpClientHandler` mentioned above, you also have the option to use the new [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests) together with the Steeltoe provided `DiscoveryHttpMessageHandler` for service lookup.
+
+`DiscoveryHttpMessageHandler` is a `DelegatingHandler` that be used, much like the `DiscoveryHttpClientHandler`, to intercept requests and to evaluate the URL to see if the host portion of the URL can be resolved from the current service registry.  The handler will do this for any `HttpClient` created by the factory.
+
+After [initializing the discovery client](#1-2-initialize-discovery-client), you can easily configure `HttpClient`:
+
+```csharp
+public class Startup
+{
+    ...
+    public void ConfigureServices(IServiceCollection services)
+    {
+      ...
+      // Add Steeltoe handler to container (this line can be omitted when using Steeltoe versions >= 2.2.0)
+      services.AddTransient<DiscoveryHttpMessageHandler>();
+
+      // Configure HttpClient
+      services.AddHttpClient("fortunes", c =>
+      {
+        c.BaseAddress = new Uri("http://fortuneService/api/fortunes/");
+      })
+      .AddHttpMessageHandler<DiscoveryHttpMessageHandler>()
+      .AddTypedClient<IFortuneService, FortuneService>();
+      ...
+    }
+    ...
+}
+```
+
+The updated version of `FortuneService` is a bit simpler:
+
+```csharp
+public class FortuneService : IFortuneService
+{
+    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+    private HttpClient _client;
+    public FortuneService(HttpClient client)
+    {
+        _client = client;
+    }
+    public async Task<string> RandomFortuneAsync()
+    {
+        return await _client.GetStringAsync(RANDOM_FORTUNE_URL);
+    }
+}
+```
+
+Check out the Microsoft documentation on [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests) to see all the various ways you can make use of message handlers.
+
+>NOTE: `DiscoveryHttpMessageHandler` has an optional `ILoadBalancer` parameter. If no `ILoadBalancer` is provided via dependency injection, a `RandomLoadBalancer` is used. To change this behavior, add an `ILoadBalancer` to the DI container or use a load-balancer first configuration as described within section 1.4 on this page.
+
+### 1.3.3 Using IDiscoveryClient
+
+In the event the handler options don't serve your needs, you can always make lookup requests directly on the `IDiscoveryClient` interface.
+
+These methods available on an `IDiscoveryClient` provide access to services and service instances available in the registry:
+
+```csharp
+/// <summary>
+/// Gets all known service Ids
+/// </summary>
+IList<string> Services { get; }
+
+/// <summary>
+/// Get all ServiceInstances associated with a particular serviceId
+/// </summary>
+/// <param name="serviceId">the serviceId to lookup</param>
+/// <returns>List of service instances</returns>
+IList<IServiceInstance> GetInstances(string serviceId);
+```
+
+## 1.4 Load Balancing
+
+Any time a client needs to select a service instance to send a request to, some mechanism is required for selecting the instance to call. In all mechanisms provided for service discovery in Steeltoe versions before 2.2.0, service instances were selected randomly. `Steeltoe.Common` 2.2.0 added a new abstraction named `ILoadBalancer`, which provides configurable load balancing.
+
+### 1.4.1 ILoadBalancer
+
+The `ILoadBalancer` interface defines two methods:
+
+```csharp
+  public interface ILoadBalancer
+  {
+      /// <summary>
+      /// Evaluates a Uri for a host name that can be resolved into a service instance
+      /// </summary>
+      /// <param name="request">A Uri containing a service name that can be resolved into one or more service instances</param>
+      /// <returns>The original Uri, with serviceName replaced by the host:port of a service instance</returns>
+      Task<Uri> ResolveServiceInstanceAsync(Uri request);
+
+      /// <summary>
+      /// A mechanism for tracking statistics for service instances
+      /// </summary>
+      /// <param name="originalUri">The original request Uri</param>
+      /// <param name="resolvedUri">The Uri resolved by the load balancer</param>
+      /// <param name="responseTime">The amount of time taken for a remote call to complete</param>
+      /// <param name="exception">Any exception called during calls to a resolved service instance</param>
+      /// <returns>A task</returns>
+      Task UpdateStatsAsync(Uri originalUri, Uri resolvedUri, TimeSpan responseTime, Exception exception);
+  }
+```
+
+Any implementation of `ILoadBalancer` is expected to know how to interact with some form of service discovery mechanism. The included load balancers expect an `IServiceInstanceProvider` to be available in the DI service container, so they still require configuration of Eureka, Consul or some other mechanism for providing service instances.
+
+### 1.4.2 Random Load Balancer
+
+The `RandomLoadBalancer`, as the name implies, randomly selects a service instance from all instances that are resolved from a given service name. The `ILoadBalancer` implementation adds the (optional) ability to cache service instance data, which is useful for `IServiceInstanceProvider` or `IDiscoveryClient` implementations that do not provide their own caching (such as the Consul provider). Service instance data caching happens automatically if an `IDistributedCache` instance is provided via constructor injection.
+
+>NOTE: `RandomLoadBalancer` does not track stats or exceptions. `UpdateStatsAsync` simply returns `Task.CompletedTask`
+
+#### 1.4.2.1 Using HttpClientFactory
+
+To add a service registry-backed random load balancer to an `HttpClient` constructed using `HttpClientFactory`, you may use the `AddRandomLoadBalancer()` extension:
+
+```csharp
+  services.AddHttpClient("fortunes")
+      .AddRandomLoadBalancer()
+```
+
+>NOTE: This is functionally equivalent to using the default behavior of the `DiscoveryHttpMessageHandler`, as described [above](#1-3-2-using-httpclientfactory)
+
+#### 1.4.2.2 Using an HttpClientHandler
+
+The random load balancer can be used with the included `HttpClientHandler` that works with any `ILoadBalancer`:
+
+```csharp
+  private HttpClient _httpClient;
+  public FortuneService(IDiscoveryClient discoveryClient)
+  {
+      var loadBalancer = new RandomLoadBalancer(discoveryClient);
+      var handler = new LoadBalancerHttpClientHandler(loadBalancer);
+      _httpClient = new HttpClient(handler);
+  }
+```
+
+### 1.4.3 Round Robin Load Balancer
+
+The provided round robin load balancer sends traffic to service instances in sequential order, as they are provided by the `IServiceInstanceProvider`. Like the `RandomLoadBalancer`, the `RoundRobinLoadBalancer` also includes the (optional) ability to cache service instances if an `IDistributedCache` instance is provided via constructor injection. Additionally, when a provided `IDistributedCache` instance is shared amongst clients (for example: using a shared Redis cache for multiple front-end application instances) the round robin sequence tracking will be shared across clients, ensuring an even load distribution.
+
+>NOTE: `RoundRobinLoadBalancer` does not track stats or exceptions. `UpdateStatsAsync` simply returns `Task.CompletedTask`
+
+#### 1.4.3.1 Using with HttpClientFactory
+
+To add a service registry-backed round robin load balancer to an `HttpClient`, you may use the `AddRoundRobinLoadBalancer()` extension. This example also adds a Redis cache so that regardless of which client service instance makes the call, backend service instances will be called in round robin order:
+
+```csharp
+  services.AddDistributedRedisCache(Configuration);
+  services.AddHttpClient("fortunes")
+      .AddRoundRobinLoadBalancer()
+```
+
+#### 1.4.3.2 Using an HttpClientHandler
+
+The round robin load balancer can be used with the included `HttpClientHandler` that works with any `ILoadBalancer`:
+
+```csharp
+  private HttpClient _httpClient;
+  public FortuneService(IDiscoveryClient discoveryClient)
+  {
+      var loadBalancer = new RoundRobinLoadBalancer(discoveryClient);
+      var handler = new LoadBalancerHttpClientHandler(loadBalancer);
+      _httpClient = new HttpClient(handler);
+  }
+```
+
+### 1.4.4 Custom ILoadBalancer
+
+If the provided load balancer implementations don't suit your needs, you are free to create your own implementation of `ILoadBalancer`.
+
+This example shows a load balancer that would always return the first listed instance, no matter what:
+
+```csharp
+  private readonly IServiceInstanceProvider _serviceInstanceProvider;
+
+  public FirstInstanceLoadBalancer(IServiceInstanceProvider serviceInstanceProvider)
+  {
+      _serviceInstanceProvider = serviceInstanceProvider;
+  }
+
+  public Task<Uri> ResolveServiceInstanceAsync(Uri request)
+  {
+      var availableServiceInstances = _serviceInstanceProvider.GetInstances(request.Host);
+      return Task.FromResult(new Uri(availableServiceInstances[0].Uri, request.PathAndQuery));
+  }
+
+  public Task UpdateStatsAsync(Uri originalUri, Uri resolvedUri, TimeSpan responseTime, Exception exception)
+  {
+      return Task.CompletedTask;
+  }
+```
+
+#### 1.4.4.1 Usage with HttpClientFactory
+
+Custom load balancers can be added to the HttpClient pipeline with an included generic extension:
+
+```csharp
+    services.AddHttpClient("fortunes")
+        .AddLoadBalancer<RandomLoadBalancer>()
+```
+
+With this model, a `LoadBalancerDelegatingHandler` will expect an `ILoadBalancer` to be provided via dependency injection, so be sure to add yours to the DI container.
+
+#### 1.4.4.2 Using an HttpClientHandler
+
+Additionally, your custom load balancer can also be used with the included `HttpClientHandler`. Create an instance of your load balancer, pass it to a `LoadBalancerHttpClientHandler` and create an `HttpClient` that uses that handler:
+
+```csharp
+  private HttpClient _httpClient;
+  public FortuneService(IDiscoveryClient discoveryClient)
+  {
+      var loadBalancer = new FirstInstanceLoadBalancer(discoveryClient);
+      var handler = new LoadBalancerHttpClientHandler(loadBalancer);
+      _httpClient = new HttpClient(handler);
+  }
+```
+
+## 1.5 Enable Logging
+
+Sometimes, it is desirable to turn on debug logging in the Discovery client. To do so, you can modify the `appsettings.json` file and turn on Debug level logging for the Steeltoe/Pivotal components, as shown in the following example:
+
+Here is an example `appsettings.json` file:
+
+```json
+{
+  "Logging": {
+    "IncludeScopes": false,
+    "LogLevel": {
+      "Default": "Warning",
+      "Pivotal": "Debug",
+      "Steeltoe": "Debug"
+    }
+  },
+  ...
+}
+```
+
+# 2.0 Netflix Eureka
 
 Steeltoe's Eureka client implementation lets applications register services with a Eureka server and discover services registered by other applications. This Steeltoe client is an implementation of the 1.0 version of the Netflix Eureka client.
 
@@ -45,7 +419,7 @@ Steeltoe's Eureka client implementation supports the following .NET application 
 * ASP.NET Core
 * Console apps (.NET Framework and .NET Core)
 
- In addition to the [quick start](#1-1-quick-start), you can choose from several other Steeltoe sample applications when looking for help in understanding how to use this client:
+ In addition to the [quick start](#2-1-quick-start), you can choose from several other Steeltoe sample applications when looking for help in understanding how to use this client:
 
 * [AspDotNet4/Fortune-Teller-Service4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-Service4): Same as the Quick Start next but built for ASP.NET 4.x and using the Autofac IOC container.
 * [AspDotNet4/Fortune-Teller-UI4](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery/src/AspDotNet4/Fortune-Teller-UI4): Same as the Quick Start next but built for ASP.NET 4.x and using the Autofac IOC container
@@ -54,23 +428,23 @@ Steeltoe's Eureka client implementation supports the following .NET application 
 
 The source code for discovery can be found [here](https://github.com/SteeltoeOSS/Discovery).
 
-## 1.1 Quick Start
+## 2.1 Quick Start
 
 This quick start uses multiple ASP.NET Core applications to show how to use the Steeltoe Discovery client to register and fetch services from a Eureka Server running locally on your development machine. It also shows how to take that same set of applications and push them to Cloud Foundry and use a Eureka Server operating there.
 
 The application consists of two components: a Fortune-Teller-Service that registers a FortuneService, and a Fortune-Teller-UI that discovers the service and fetches fortunes from it.
 
-### 1.1.1 Running Locally
+### 2.1.1 Running Locally
 
 To run the fortune teller service and the fortune teller UI on your local machine and observe the results, work through the following sections:
 
-* [Start Eureka Server](#1-1-1-1-start-eureka-server)
-* [Locate Sample](#1-1-1-2-locate-sample)
-* [Run Fortune Teller](#1-1-1-3-run-fortune-teller)
-* [Observe Logs](#1-1-1-4-observe-logs)
-* [View Fortunes](#1-1-1-5-view-fortunes)
+* [Start Eureka Server](#2-1-1-1-start-eureka-server)
+* [Locate Sample](#2-1-1-2-locate-sample)
+* [Run Fortune Teller](#2-1-1-3-run-fortune-teller)
+* [Observe Logs](#2-1-1-4-observe-logs)
+* [View Fortunes](#2-1-1-5-view-fortunes)
 
-#### 1.1.1.1 Start Eureka Server
+#### 2.1.1.1 Start Eureka Server
 
 In this step, we fetch a GitHub repository from which we can start up a Netflix Eureka Server locally on the desktop. This server has been pre-configured to listen for service registrations and discovery requests at <http://localhost:8761/eureka>. The following script shows how to get the sample from GitHub and start the service:
 
@@ -80,7 +454,7 @@ cd eureka
 mvnw spring-boot:run
 ```
 
-#### 1.1.1.2 Locate Sample
+#### 2.1.1.2 Locate Sample
 
 Now that you have the service running, you need to change directory to where the sample is:
 
@@ -88,7 +462,7 @@ Now that you have the service running, you need to change directory to where the
 cd Samples/Discovery/src/AspDotNetCore
 ```
 
-#### 1.1.1.3 Run Fortune Teller
+#### 2.1.1.3 Run Fortune Teller
 
 We recommend running this application with the dotnet CLI. Scripts are provided to start both the service and the UI with a single command, as follows:
 
@@ -109,7 +483,7 @@ cd Samples/Discovery/src/AspDotNetCore/Fortune-Teller-UI
 dotnet run -f netcoreapp2.1 --force
 ```
 
-#### 1.1.1.4 Observe Logs
+#### 2.1.1.4 Observe Logs
 
 The `dotnet run` command should produce output similar to the following:
 
@@ -123,21 +497,21 @@ Application started. Press Ctrl+C to shut down.
 
 Once you see `Application started...` for both applications, the Fortune Teller sample is ready for use.
 
-#### 1.1.1.5 View Fortunes
+#### 2.1.1.5 View Fortunes
 
 Start a browser and visit <http://localhost:5555>. You should see your fortune displayed. Refresh the browser to see a new fortune.
 
-### 1.1.2 Running on Cloud Foundry
+### 2.1.2 Running on Cloud Foundry
 
 To run the fortune teller service and the fortune teller UI on Cloud Foundry and observe the results, work through the following sections:
 
-* [Start Eureka Server](#1-1-2-1-start-eureka-server)
-* [Publish Both Applications](#1-1-2-2-publish-both-applications)
-* [Push Both Applications](#1-1-2-3-push-both-applications)
-* [Observe Logs](#1-1-2-4-observe-logs)
-* [View Fortunes](#1-1-2-5-view-fortunes)
+* [Start Eureka Server](#2-1-2-1-start-eureka-server)
+* [Publish Both Applications](#2-1-2-2-publish-both-applications)
+* [Push Both Applications](#2-1-2-3-push-both-applications)
+* [Observe Logs](#2-1-2-4-observe-logs)
+* [View Fortunes](#2-1-2-5-view-fortunes)
 
-#### 1.1.2.1 Start Eureka Server
+#### 2.1.2.1 Start Eureka Server
 
 Use the Cloud Foundry CLI to create a service instance of the Spring Cloud Eureka Server on Cloud Foundry, as follows:
 
@@ -149,19 +523,19 @@ cf create-service p-service-registry standard myDiscoveryService
 cf services
 ```
 
-#### 1.1.2.2 Publish Both Applications
+#### 2.1.2.2 Publish Both Applications
 
 .NET Applications should be published before pushing to Cloud Foundry. You need to publish both Fortune-Teller-Service and Fortune-Teller-UI.
 
 See [Publish Sample](#publish-sample) for instructions on how to publish this sample for either Linux or Windows.
 
-#### 1.1.2.3 Push Both Applications
+#### 2.1.2.3 Push Both Applications
 
 For the Fortune Teller to work on Cloud Foundry, you need to push both Fortune-Teller-Service and Fortune-Teller-UI.
 
 See [Push Sample](#push-sample) for instructions on how to push this sample to either Linux or Windows on Cloud Foundry.
 
-#### 1.1.2.4 Observe Logs
+#### 2.1.2.4 Observe Logs
 
 To see the logs as you startup the application, use `cf logs fortuneService` or `cf logs fortuneui`.
 
@@ -180,13 +554,13 @@ On a Linux cell, you should see output resembling the following during startup.
 
 On Windows cells, you should see something slightly different but with the same information.
 
-#### 1.1.2.5 View Fortunes
+#### 2.1.2.5 View Fortunes
 
 Start a browser and visit <http://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
 
 You should see your fortune. Refresh the browser to see a new fortune.
 
-### 1.1.3 Understanding the Sample
+### 2.1.3 Understanding the Sample
 
 Fortune-Teller-Service was created with the .NET Core tooling `webapi` template (`dotnet new webapi`), and then modifications were made to add the Steeltoe frameworks.
 
@@ -209,7 +583,7 @@ To understand the Steeltoe related changes to the generated template code, exami
 * `Startup.cs`: Code was added to the `ConfigureServices()` method to add the discovery client as a singleton to the service container. Additionally, code was added to the `Configure()` method to cause the discovery client to start communicating with the Eureka Server.
 * `FortuneService.cs`: Contains code used to fetch the fortune from the FortuneService. Uses an injected `IDiscoveryClient`, together with the `DiscoveryHttpClientHandler`, to do the service lookup and to issue the HTTP GET request to the Fortune-Teller-Service.
 
-## 1.2 Usage
+## 2.2 Usage
 
 You should know how the new .NET [Configuration service](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) works before starting to use the client. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary in order to configure the client.
 
@@ -227,47 +601,7 @@ In order to use the Steeltoe Discovery client, you need to do the following:
 
 >NOTE: Most of the example code in the following sections is based on using Discovery in a ASP.NET Core application. If you are developing a ASP.NET 4.x application or a console-based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/Discovery) for example code you can use.
 
-### 1.2.1 Add NuGet References
-
-You can choose from two Eureka Server client NuGets, depending on your needs.
-
-If you plan on connecting only to the open source version of [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/), you should use one of the packages described in the following table, depending on your application type and needs:
-
-|App Type|Package|Description|
-|---|---|---|
-|Console/ASP.NET 4.x|`Steeltoe.Discovery.EurekaBase`|Base functionality. No dependency injection.|
-|ASP.NET Core|`Steeltoe.Discovery.ClientCore`|Includes base. Adds ASP.NET Core dependency injection.|
-|ASP.NET 4.x with Autofac|`Steeltoe.Discovery.ClientAutofac`|Includes base. Adds Autofac dependency injection.|
-
-To add this type of NuGet to your project, add an element resembling the following `PackageReference`:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Steeltoe.Discovery.ClientCore" Version= "2.1.0"/>
-...
-</ItemGroup>
-```
-
-If you plan to connect to the open source version of [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/) AND you plan to push your application to Cloud Foundry to use [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you should use one of the packages described in the following table, depending on your application type and needs:
-
-|App Type|Package|Description|
-|---|---|---|
-|Console/ASP.NET 4.x|`Pivotal.Discovery.EurekaBase`|Base functionality. No dependency injection.|
-|ASP.NET Core|`Pivotal.Discovery.ClientCore`|Includes base. Adds ASP.NET Core dependency injection.|
-|ASP.NET 4.x with Autofac|`Pivotal.Discovery.ClientAutofac`|Includes base. Adds Autofac dependency injection.|
-
-To add this type of NuGet to your project add an element resembling the following `PackageReference`:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Pivotal.Discovery.ClientCore" Version= "2.1.0"/>
-...
-</ItemGroup>
-```
-
-### 1.2.2 Eureka Client Settings
+### 2.2.2 Eureka Client Settings
 
 To get the Steeltoe Discovery client to properly communicate with the Eureka server, you need to provide a few configuration settings to the client.
 
@@ -339,7 +673,7 @@ You should register by using the `direct` setting mentioned earlier when you wan
 
 For a complete understanding of the effects of many of these settings, we recommend that you review the documentation on the [Netflix Eureka Wiki](https://github.com/Netflix/eureka/wiki). In most cases, unless you are confident you understand the effects of changing the values from their defaults, we recommend that you use the defaults.
 
-#### 1.2.2.1 Settings to Discover
+#### 2.2.2.1 Settings to Discover
 
 The following example shows the clients settings in JSON that are necessary to cause the client to fetch the service registry from the server at an address of `http://localhost:8761/eureka/`:
 
@@ -364,7 +698,7 @@ The `eureka:client:shouldRegisterWithEureka` instructs the client to NOT registe
 
 >NOTE: If you use self-signed certificates on Cloud Foundry, you might run into SSL certificate validation issues when pushing apps. A quick way to work around this is to disable certificate validation until a proper solution can be put in place.
 
-#### 1.2.2.2 Configure Settings
+#### 2.2.2.2 Configure Settings
 
 The following example shows the clients settings in JSON that are necessary to cause the client to register a service named `fortuneService` with a Eureka Server at an address of `http://localhost:8761/eureka/`:
 
@@ -392,7 +726,7 @@ The `eureka:instance:port` setting is the port on which the service is registere
 
 The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values) for more information about reading configuration values.
 
-### 1.2.3 Cloud Foundry
+### 2.2.3 Cloud Foundry
 
 When you want to use a Eureka Server on Cloud Foundry and you have installed [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you can create and bind a instance of the server to the application by using the Cloud Foundry CLI, as follows:
 
@@ -414,167 +748,7 @@ For more information on using the Eureka Server on Cloud Foundry, see the [Sprin
 
 Once the service is bound to your application, the connection properties are available in `VCAP_SERVICES`. See [Reading Configuration Values](#reading-configuration-values) for more information on reading `VCAP_SERVICES`.
 
-### 1.2.4 Add and Use Discovery Client
-
-The next step is to add the Steeltoe Eureka client to the service container and use it to cause the client to start communicating with the server.
-
-You do these two things in the `ConfigureServices()` and `Configure()` methods of the `Startup` class, as shown in the following example:
-
-```csharp
-using Pivotal.Discovery.Client;
-// or
-using Steeltoe.Discovery.Client;
-
-public class Startup {
-    ...
-    public IConfiguration Configuration { get; private set; }
-    public Startup(...)
-    {
-      ...
-    }
-    public void ConfigureServices(IServiceCollection services)
-    {
-        // Add Steeltoe Discovery Client service
-        services.AddDiscoveryClient(Configuration);
-
-        // Add framework services.
-        services.AddMvc();
-        ...
-    }
-    public void Configure(IApplicationBuilder app, ...)
-    {
-        ...
-        app.UseStaticFiles();
-        app.UseMvc();
-
-        // Use the Steeltoe Discovery Client service
-        app.UseDiscoveryClient();
-    }
-    ...
-```
-
->NOTE: If you use the `Pivotal.Discovery.ClientCore` package, you need to add a `using Pivotal.Discovery.Client;`.  If you use the `Steeltoe.Discovery.ClientCore`, you need to add a `Steeltoe.Discovery.Client;`. Doing so is required to gain access to the extension methods described later.
-
-### 1.2.5 Registering Services
-
-If you configured the clients settings to register services, the service is automatically registered when the `UseDiscoveryClient()` method is called in the `Configure()` method. You do not need to do anything else to cause service registration.
-
-### 1.2.6 Discovering Services
-
-Once the app has started, the Discovery client begins to operate in the background, both registering services and periodically fetching the service registry from the server.
-
-The simplest way to use the registry to lookup services is to use the Steeltoe `DiscoveryHttpClientHandler` together with a `HttpClient`. See the sample code later in this section. The `FortuneService` class retrieves Fortunes from the Fortune micro-service. The micro-service is registered under a name of `fortuneService`.
-
-First, notice that the `FortuneService` constructor takes an `IDiscoveryClient` as a parameter. This is the Steeltoe Discovery Client interface that you can use to lookup services in the service registry.
-
-Upon application startup, the Discovery client interface is registered with the service container by using the `AddDiscoveryClient()` method call so that it can be easily used in any controller, view, or service. Notice that the constructor code for the controller uses the client by creating an instance of the Steeltoe provided `DiscoveryHttpClientHandler`, giving it a reference to the injected `IDiscoveryClient`.
-
-Next, notice that when the `RandomFortuneAsync()` method is called, you see that the `HttpClient` is created with the Steeltoe handler. The handler's role is to intercept any requests made by using the `HttpClient` and to evaluate the URL to see if the host portion of the URL can be resolved from the current service registry. In the upcoming example, it attempts to resolve the `fortuneService` name into an actual `host:port` before letting the request continue.
-
-If the name cannot be resolved, the handler ignores the request URL and lets the request continue unchanged. However, in the case where the lookup succeeds, the handler replaces the service name with the resolved host and port and then lets the request continue processing.
-
-Of course,  you need not use the handler. Instead, if you need to, you can make lookup requests directly on the `IDiscoveryClient` interface.
-
->NOTE: When you use the Steeltoe handler for discovering services, you automatically get random load balancer client functionality. That is, if there are multiple instances registered under a particular service name, the handler randomly selects one of those instances each time the handler is invoked.
-
-The following example shows a discovery client that use the Pivotal discovery client library:
-
-```csharp
-using Pivotal.Discovery.Client;
-// or
-// using Steeltoe.Discovery.Client;
-
-...
-public class FortuneService : IFortuneService
-{
-    DiscoveryHttpClientHandler _handler;
-    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
-    public FortuneService(IDiscoveryClient client)
-    {
-        _handler = new DiscoveryHttpClientHandler(client);
-    }
-    public async Task<string> RandomFortuneAsync()
-    {
-        var client = GetClient();
-        return await client.GetStringAsync(RANDOM_FORTUNE_URL);
-    }
-    private HttpClient GetClient()
-    {
-        var client = new HttpClient(_handler, false);
-        return client;
-    }
-}
-```
-
-#### 1.2.6.1 Using HttpClientFactory
-
-In addition to the `DiscoveryHttpClientHandler` mentioned above, you also have the option to use the .NET provided `HttpClientFactory` together with the Steeltoe provided `DiscoveryHttpMessageHandler` to do service lookup.
-
-`DiscoveryHttpMessageHandler` is a `DelegatingHandler` that be used, much like the `DiscoveryHttpClientHandler`, to intercept requests and to evaluate the URL to see if the host portion of the URL can be resolved from the current service registry.  The handler will do this for any `HttpClient`s created by the factory.
-
-Here is just one example of how you can make use of it in your application:
-
-```csharp
-public class Startup
-{
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
-    public IConfiguration Configuration { get; set; }
-
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddDiscoveryClient(Configuration);
-
-      // Add Steeltoe handler to container
-      services.AddTransient<DiscoveryHttpMessageHandler>();
-
-      // Configure a HttpClient
-      services.AddHttpClient("fortunes", c =>
-      {
-              c.BaseAddress = new Uri("http://fortuneService/api/fortunes/");
-      })
-      .AddHttpMessageHandler<DiscoveryHttpMessageHandler>()
-      .AddTypedClient<IFortuneService, FortuneService>();
-
-      // Add framework services.
-      services.AddMvc();
-    }
-
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-    {
-      ....
-
-      // Start discovery background thread
-      app.UseDiscoveryClient();
-    }
-}
-```
-
-Check out the Microsoft documentation on [HttpClientFactory](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-2.1) to see all the various ways you can make use of the Steeltoe message handler.
-
-### 1.2.7 Enable Logging
-
-Sometimes, it is desirable to turn on debug logging in the Discovery client. To do so, you can modify the `appsettings.json` file and turn on Debug level logging for the Steeltoe/Pivotal components, as shown in the following example:
-
-Here is an example `appsettings.json` file:
-
-```json
-{
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Warning",
-      "Pivotal": "Debug",
-      "Steeltoe": "Debug"
-    }
-  },
-  ...
-}
-```
+# 3.0 HashiCorp Consul
 
 # Common Steps
 
