@@ -65,7 +65,7 @@ helpers do
   end
 
   def is_docs()
-    current_page.url.include? "docs/" 
+    current_page.url.include? "docs/" or current_page.url.include? "reference/" 
   end
 
   def is_docs_but_not_overview()

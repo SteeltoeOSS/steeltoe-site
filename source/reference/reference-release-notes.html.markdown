@@ -6,6 +6,7 @@ tags: release-notes
 ---
 
 # Releases
+
 ---
 
 ## 2.2.0 RC1
@@ -15,9 +16,9 @@ The new features in Steeltoe 2.2.0 release candidate
   * New MongoDB Connectors
 * Security
   * OpenIDConnect support added
-  * Refactor of .NET Framework Security 
-     * Separated common components into Base library 
-     * Enabled HttpClient injection 
+  * Refactor of .NET Framework Security
+    * Separated common components into Base library
+    * Enabled HttpClient injection
 * Management
   * Enhanced support for Spring Boot 2.0 Actuator Endpoints
      * Actuators in Cloud Foundry can be accessed outside cloudfoundry, while also maintaining AppsManager integration
@@ -25,7 +26,7 @@ The new features in Steeltoe 2.2.0 release candidate
      * Added functionality to enable and disable exposure for actuator endpoints
      * Show Details based on configuration for endpoints (_always_, _never_, and _when-authorized_)
      * Sanitizing of sensitive information from `/env` actuator endpoint
-* Discovery 
+* Discovery
   * Multiple addresses for Eureka servers
   * Hashicorp Consul supported added
 * Configuration
@@ -42,7 +43,6 @@ The new features in Steeltoe 2.2.0 release candidate
 * Other Features
   * Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
   * Released NuGet packages are now signed
- 
 
 ## 2.1.0
 
@@ -52,7 +52,7 @@ The new features in Steeltoe 2.1.0
 * ASP.NET 4.x
 * .NET Core & ASP.NET Core 2.1
 
-#### Management
+### Management
 
 So what’s new in 2.1 Management?
 
@@ -61,7 +61,7 @@ So what’s new in 2.1 Management?
 * Application metrics
 * Distributed tracing
 
-##### Additional Spring Boot-compatible Actuator Endpoints
+#### Additional Spring Boot-compatible Actuator Endpoints
 
 In addition to the existing endpoints in 2.0, we’ve added several new ones.  Each one is available as additional REST endpoints you can expose in your applications:
 
@@ -70,7 +70,7 @@ In addition to the existing endpoints in 2.0, we’ve added several new ones.  E
 * /refresh - causes the apps configuration to be reloaded and returned.
 * /metrics - returns current metrics for the app (more on metrics below.)
 
-##### Out-of-box Health Contributors
+#### Out-of-box Health Contributors
 
 One of the key Spring Boot-compatible Management endpoints provided in Steeltoe 2.0 was ‘/health’. But, in 2.0 we provided a limited number of out-of-the-box contributors to run health checks. While it was fairly easy to write your own, you still had to do the coding yourself.
 
@@ -84,7 +84,7 @@ So in 2.1 we now include several new contributors which you can easily reference
 
 Each of these new contributors has been added to the Steeltoe Connectors package. This allows you to easily make use of the corresponding health contributor when using a connector.
 
-##### Application Metrics
+#### Application Metrics
 
 Support for collecting application metrics is completely new this release.  Here's the functionality implemented so far:
 
@@ -96,7 +96,7 @@ Support for collecting application metrics is completely new this release.  Here
 * Expose metrics via the Spring Boot compatible REST endpoint  ‘/metrics’ (mentioned earlier.)
 * For Cloud Foundry users, you can export collected metrics to the Loggregator Firehose using Metrics Forwarder. Just as with Java Spring apps, developers can send their .NET apps metrics to any one of several backend services for collection and reporting, for example, PCF Metrics.
 
-##### Distributed Tracing
+#### Distributed Tracing
 
 Also completely new in 2.1 is distributed tracing support. Here's what we're delivering in 2.1:
 
@@ -127,37 +127,37 @@ One new feature added in Steeltoe 2.1 is dependent on Core 2.1: support for the 
 
 A large focus of Steeltoe version 2.0 is compatibility with .NET Standard 2.0. As part of this initiative, virtually all packages have been reorganized and renamed to minimize hard dependencies on other libraries and also help differentiate between packages with full-framework support and those for .NET Core. Most Steeltoe libraries now include a package ending with "Base" that provides the majority of the functionality. Packages ending with "Core" provide extra methods for working with Microsoft's Dependency Injection Framework, with the naming intended to coincide with .NET Core development. Full-framework support to date has been focused on Autofac. The relevant Steeltoe packages have names ending in "Autofac".
 
-#### CircuitBreaker
+### CircuitBreaker
 
 As described earlier in the general [release notes](#2-0-release-notes), Steeltoe Circuit breaker packages now have the following names: `Steeltoe.CircuitBreaker.HystrixBase`, `Steeltoe.CircuitBreaker.HystrixCore`, `Steeltoe.CircuitBreaker.HystrixAutofac`, `Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore`, and `Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore`.
 
-#### Common
+### Common
 
 New for Steeltoe 2.0 is a set of libraries with code shared between our libraries. You can use this code as well, but these libraries are not likely to receive much attention in this documentation.
 
-#### Configuration
+### Configuration
 
 In Steeltoe version 1.x, there are 3 packages for Configuration. As of 2.0.0, each of those packages now has a &ast;Base, a &ast;Core, and an &ast;Autofac (for example: `Steeltoe.Extensions.Configuration.ConfigServerBase`, `Steeltoe.Extensions.Configuration.ConfigServerCore`, and so on) for a total of 9 packages. If you deploy your application to Pivotal Cloud Foundry, be sure to use the `Pivotal.&ast;` packages.
 
-##### Config Server Settings
+#### Config Server Settings
 
 Starting with version 1.1.0 of Steeltoe, you can now configure the timeout value the Steeltoe client uses when making Http requests to the Config Server.
 
-##### Config Server Vault support
+#### Config Server Vault support
 
 Starting with version 1.1.0 of Steeltoe, the Config Server client is compatible with Spring Cloud and Spring Cloud Services Config Server deployments that support using Hashicorp Vault as back-ends.
 
-##### Known Issues
+#### Known Issues
 
-###### Unstructured data files
+##### Unstructured data files
 
 Unlike the Java version of the Config Server client, the Steeltoe client currently supports only property and yaml files, not plain text.
 
-###### Client decryption option
+##### Client decryption option
 
 Unless SSL/TLS is being used between the client and server, the Steeltoe client supports only clear text communication with the configuration server. Client decryption is not currently supported.
 
-###### Server initiated reload
+##### Server initiated reload
 
 Currently, the client must initiate reloads. Steeltoe has not implemented handlers to listen for server change events.
 
@@ -239,5 +239,3 @@ As of version 2.0.0, all of the individual management endpoints have been rolled
 #### Security
 
 New features for Steeltoe Security 2.0.0 include a client for [CredHub](https://github.com/cloudfoundry-incubator/credhub), support for using Cloud Foundry as an authentication provider in .NET Framework 4.x applications, and a JWT Provider for WCF applications.
-[//]: # (this is a hack to prevent the TOC from drifting down into the footer)
-<div style="height:500px"></div>
