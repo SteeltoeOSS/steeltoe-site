@@ -8,8 +8,8 @@ tags: release-notes
 # Releases
 ---
 
-## 2.2.0
-The new features in Steeltoe 2.2.0
+## 2.2.0 RC1
+The new features in Steeltoe 2.2.0 release candidate
 
 * Connectors
   * New MongoDB Connectors
@@ -27,15 +27,17 @@ The new features in Steeltoe 2.2.0
   * Hashicorp Consul now supported
 * Configuration
   * Property placeholders are now supported throughout Steeltoe
-  * Random value package added for random:int, random:long, random:uuid, random:string, random:int[\<lower-range-int\>,\<upper-range-int\>]
+  * Random value package added for `random:int`, `random:long`, `random:uuid`, and `random:string`
 * Health Contributors
   * Config Server health contributor
   * Discovery Client health contributor
+* Load Balancer 
+  * Client-side load balancer 
+  * Support for random and round-robin load balancer implementations out-of-the-box
+  * API for custom load balancer implementations
+  * Integration with Eureka
 * Other Features
-  * Reference Application `eShopOnContainers` using Steeltoe components
-  * Steeltoe Load Balancer 
-     * Supports random and round-robin implementation out-of-the-box
-     * Allows pluggable custom load balancer implementations
+  * Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
   * Released NuGet packages are now signed
  
 
