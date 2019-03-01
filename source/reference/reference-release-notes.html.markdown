@@ -19,12 +19,15 @@ The new features in Steeltoe 2.2.0 release candidate
      * Separated common components into Base library 
      * Enabled HttpClient injection 
 * Management
-  * Enhanced compatibility with Spring Boot 2.0 Actuator Endpoints
-  * Show Details based on configuration for endpoints (i.e. 'always', 'never', and 'when-authorized')
-  * Santizing of sensitive information from `/env` actuator endpoint
+  * Enhanced support for Spring Boot 2.0 Actuator Endpoints
+     * Actuators in Cloud Foundry can be accessed outside cloudfoundry, while also maintaining AppsManager integration
+     * Actuators now have default path /actuator when no path is specified
+     * Added functionality to enable and disable exposure for actuator endpoints
+     * Show Details based on configuration for endpoints (_always_, _never_, and _when-authorized_)
+     * Sanitizing of sensitive information from `/env` actuator endpoint
 * Discovery 
   * Multiple addresses for Eureka servers
-  * Hashicorp Consul now supported
+  * Hashicorp Consul supported added
 * Configuration
   * Property placeholders are now supported throughout Steeltoe
   * Random value package added for `random:int`, `random:long`, `random:uuid`, and `random:string`
