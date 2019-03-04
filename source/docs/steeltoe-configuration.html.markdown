@@ -829,4 +829,5 @@ cf push -f manifest-windows.yml -p bin/Debug/net461/win10-x64/publish
 
 >NOTE: Manifest file names may vary. Some samples use a different manifest for .NET 4 vs .NET Core.
 
+<!-- -->
 >NOTE: All sample manifests have been defined to bind their application to their service(s).

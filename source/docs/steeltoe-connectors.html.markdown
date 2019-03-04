@@ -355,7 +355,7 @@ If you need to set additional properties for the `DbContext` like `MigrationsAss
 Action<MySqlDbContextOptionsBuilder> mySqlOptionsAction = (o) =>
 {
   o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency
   o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
 };
 ```
@@ -642,7 +642,7 @@ If you need to set additional properties for the `DbContext` like `MigrationsAss
 Action<NpgsqlDbContextOptionsBuilder> npgsqlOptionsAction = (o) =>
 {
   o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency
   o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
 };
 ```
@@ -995,7 +995,7 @@ If you need to set additional properties for the `DbContext` like `MigrationsAss
 Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = (o) =>
 {
   o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency
   o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
 };
 ```
@@ -1314,6 +1314,7 @@ To use the Redis connector, you need to add a reference to the appropriate [Stee
 
 >NOTE: The requirement to add a direct Redis package reference is new as of version 2.0.0.
 
+<!-- -->
 >NOTE: Because `Microsoft.Extensions.Caching.Redis` depends on `StackExchange.Redis.StrongName`, adding a reference to the Microsoft library also enables access to the StackExchange classes, as seen in the sample application.
 
 ### 5.2.2 Configure Settings

@@ -1217,6 +1217,7 @@ Once the Redis Key Store has been set up, the keys used by the `DataProtection` 
 
 >NOTE: If you choose to change the values for `UAA_CLIENT_ID` or `UAA_CLIENT_SECRET`, be sure to update the credentials in appsettings.json
 
+<!--  -->
 >WARNING: As of this writing, CredHub is not approved for general use in all applications. We encourage you to check whether your use case is currently supported by CredHub before getting too involved.
 
 ## 4.1 Quick Start
