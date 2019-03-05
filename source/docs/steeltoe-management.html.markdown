@@ -40,14 +40,15 @@ The following table describes all of the currently available Steeltoe management
 |**health**|Customizable endpoint that reports application health information|
 |**info**|Customizable endpoint that reports arbitrary application information (such as Git Build info and other details)|
 |**loggers**|Allows remote access and modification of logging levels in a .NET application|
-|**trace**|Reports a configurable set of trace information (such as the last 100 HTTP requests)|
+|**httptrace**|Reports a configurable set of trace information (such as the last 100 HTTP requests)|
 |**refresh**|Triggers the application configuration to be reloaded|
 |**env**|Reports the keys and values from the applications configuration|
 |**mappings**|Reports the configured ASP.NET routes and route templates|
 |**metrics**|Reports the collected metrics for the application|
-|**dump**|Generates and reports a snapshot of the applications threads (Windows only)|
+|**threaddump**|Generates and reports a snapshot of the applications threads (Windows only)|
 |**heapdump**|Generates and downloads a mini-dump of the application (Windows only)|
-|**cloudfoundry**|Enables management endpoint integration with Pivotal Cloud Foundry|
+|**cloudfoundry**|Hypermedia page with links to endpoints that enables integration with Pivotal Cloud Foundry|
+|**actuator**|Hypermedia page with links to endpoints for clients outside Pivotal Cloud Foundry |
 
 More detail on each endpoint is provided in upcoming sections.
 
@@ -129,7 +130,7 @@ The Steeltoe Management framework exposes Spring Boot Actuator compatible endpoi
 
 Check out the Pivotal Apps Manager documentation section, [Using Spring Boot Actuators](https://docs.pivotal.io/pivotalcf/2-0/console/using-actuators.html), for more information on how to use the Apps Manager.
 
->NOTE: In order too access the endpoints from Apps Manager, you must have the `Space Developer` permission in the space where your application is deployed.
+>NOTE: In order to access the endpoints from Apps Manager, you must have the `Space Developer` permission in the space where your application is deployed.
 
 ### 1.1.7 Understand Sample
 
@@ -171,18 +172,17 @@ The following table describes the available Steeltoe management endpoints that c
 |**health**|Customizable endpoint that gathers application health information|
 |**info**|Customizable endpoint that gathers arbitrary application information (such as Git Build info)|
 |**loggers**|Gathers existing loggers and allows modification of logging levels|
-|**trace**|Gathers a configurable set of trace information (such as the last 100 HTTP requests)|
+|**httptrace**|Gathers a configurable set of trace information (such as the last 100 HTTP requests)|
 |**refresh**|Triggers the application configuration to be reloaded|
 |**env**|Reports the keys and values from the applications configuration|
 |**mappings**|Reports the configured ASP.NET routes and route templates|
 |**metrics**|Reports the collected metrics for the application|
-|**dump**|Generates and reports a snapshot of the application's threads (Windows only)|
+|**threaddump**|Generates and reports a snapshot of the application's threads (Windows only)|
 |**heapdump**|Generates and downloads a mini-dump of the application (Windows only)|
-|**cloudfoundry**|Enables management endpoint integration with Cloud Foundry|
+|**cloudfoundry**|Hypermedia page with links to endpoints that enables integration with Pivotal Cloud Foundry|
+|**actuator**|Hypermedia page with links to endpoints for clients outside Pivotal Cloud Foundry |
 
 Each endpoint has an associated ID. When you want to expose that endpoint over HTTP, that ID is used in the mapped URL that exposes the endpoint. For example, the `health` endpoint below is mapped to `/health`.
-
->NOTE: When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you need to configure the global management path prefix, as described in the [Endpoint Settings](#1-2-2-settings) section, to be `/cloudfoundryapplication`. To do so, add `management:endpoints:path=/cloudfoundryapplication` to your configuration.
 
 ### 1.2.1 Add NuGet References
 
@@ -228,16 +228,37 @@ The following table describes the settings that you can apply globally:
 |Key|Description|Default|
 |---|---|---|
 |enabled|Whether to enable all management endpoints|true|
-|path|The path prefix applied to all endpoints when exposed over HTTP|`/`|
-|sensitive|Currently not used|false|
+|path|The path prefix applied to all endpoints when exposed over HTTP|`/actuator`|
 
-When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you need to configure the global management path prefix to be `/cloudfoundryapplication`.
+Actuators can integrate with [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html). Actuators are available at a default route of /actuator. The Cloud Foundry integration with Pivotal Apps Manager happens through an alternative secured route of /cloudfoundryapplication.
 
 The upcoming sections show the settings that you can apply to specific endpoints.
 
 ### 1.2.3 Health
 
-The Steeltoe Health management endpoint can be used to check and return the status of your running application. It can often be used by monitoring software to alert someone if a production system goes down.
+The Steeltoe Health management endpoint can be used to check and return the status of your running application. It can often be used by monitoring software to alert someone if a production system goes down. The information exposed by the ```health``` endpoint depends on the ```management:endpoints:health:showdetails``` property which can be configured with one of the following values:
+
+|Name|Description|
+|---|---|
+|```never```|Details are never shown.|
+|```whenauthorized```|Details are only shown to authorized users. Authorized roles can be configured using ```management:endpoints:health:claim or management:endpoints:health:role``` respectively.|  
+|```always```|Details are always shown.|
+
+The default value is ```always```. A user is considered to be authorized when they are in the given role or have the specified claim. For example: 
+
+```json
+"management": {
+    "endpoints": {
+        "health": {
+            "showdetails": "whenauthorized",
+            "claim": {
+                "type": "health_actuator",
+                "value": "see_details"
+            }
+        }
+    }
+}
+```
 
 Health information is collected from all [IHealthContributor](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/IHealthContributor.cs) implementations provided to the [HealthEndpoint](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointBase/Health/HealthEndpoint.cs). Steeltoe includes several `IHealthContributor` implementations out of the box that you can use, and, more importantly, you can write your own.
 
@@ -286,7 +307,6 @@ The following table describes the settings that you can apply to the endpoint.
 |---|---|---|
 |id|The ID of the health endpoint|`health`|
 |enabled|Whether to enable the health management endpoint|true|
-|sensitive|Currently not used|false|
 |requiredPermissions|The user permissions required on Cloud Foundry to access endpoint|RESTRICTED|
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:health`**.
@@ -442,7 +462,6 @@ The following table describes the settings that you can apply to the endpoint.
 |---|---|---|
 |id|The ID of the info endpoint|`info`|
 |enabled|Whether to enable info management endpoint|true|
-|sensitive|Currently not used|false|
 |requiredPermissions|User permissions required on Cloud Foundry to access endpoint|RESTRICTED|
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:info`**.
@@ -557,7 +576,6 @@ The following table describes the settings that you can apply to the endpoint.
 |---|---|---|
 |id|The ID of the loggers endpoint|`loggers`|
 |enabled|Enable or disable loggers management endpoint|true|
-|sensitive|Currently not used|false|
 |requiredPermissions|User permissions required on Cloud Foundry to access endpoint|RESTRICTED|
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:loggers`**.
@@ -716,7 +734,6 @@ The following table describes the settings that you can apply to the endpoint:
 |---|---|---|
 |id|The ID of the trace endpoint|`trace`|
 |enabled|Enable or disable trace management endpoint|true|
-|sensitive|Currently not used|false|
 |requiredPermissions|User permissions required on Cloud Foundry to access endpoint|RESTRICTED|
 |capacity|Size of the circular buffer of traces|100|
 |addRequestHeaders|Add request headers|true|
@@ -772,7 +789,6 @@ The following table describes the settings that you can apply to the endpoint:
 |---|---|---|
 |id|The ID of the thread dump endpoint|`dump`|
 |enabled|Whether to enable the thread dump management endpoint|true|
-|sensitive|Currently not used|false|
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:dump`**.
 
@@ -816,7 +832,6 @@ The following table describes the settings that you can apply to the endpoint:
 |---|---|---|
 |id|The ID of the heap dump endpoint|`heapdump`|
 |enabled|Whether to enable the heap dump management endpoint|true|
-|sensitive|Currently not used|false|
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:heapdump`**.
 
@@ -846,67 +861,11 @@ Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below
 
 To add the Heap Dump actuator middleware to the ASP.NET OWIN pipeline, use the `UseHeapDumpActuator()` extension method from [HeapDumpEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/HeapDump/HeapDumpEndpointAppBuilderExtensions.cs).
 
-### 1.2.9 Cloud Foundry
-
-The primary purpose of this endpoint is to enable integration with the Pivotal Apps Manager. When used, the Steeltoe Cloud Foundry management endpoint enables the following additional functionality on Cloud Foundry:
-
-* Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
-* Adds Cloud Foundry security middleware to the request pipeline, to secure access to the management endpoints by using security tokens acquired from the UAA.
-* Adds extension methods that simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
-
-When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permissions to access the management endpoint.
-
->NOTE: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (for example, running locally on your desktop).
-
-#### 1.2.9.1 Configure Settings
-
-Typically, you need not do any additional configuration. However, the following table describes the additional settings that you could apply to the Cloud Foundry endpoint:
-
-|Key|Description|Default|
-|---|---|---|
-|id|The ID of the Cloud Foundry endpoint|""|
-|enabled|Whether to enable Cloud Foundry management endpoint|true|
-|sensitive|Currently not used|false|
-|validateCertificates|Whether to validate server certificates|true|
-|applicationId|The ID of the application used in permissions check|VCAP settings|
-|cloudFoundryApi|The URL of the Cloud Foundry API|VCAP settings|
-
-**Note**: **Each setting above must be prefixed with `management:endpoints:cloudfoundry`**.
-
->NOTE: When you want to integrate with the [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/index.html), you need to configure the global management path prefix, as described in the [Endpoint Settings](#1-2-2-settings) section, to be `/cloudfoundryapplication`. To do so, add the following to your configuration: `management:endpoints:path=/cloudfoundryapplication`
-
-#### 1.2.9.2 Enable HTTP Access
-
-The default path to the Cloud Foundry endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/`.
-
-The coding steps you take to enable HTTP access to the Heap Dump endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
-
-##### 1.2.9.2.1 ASP.NET Core App
-
-Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
-
-To add the Cloud Foundry actuator to the service container, you can use the `AddCloudFoundryActuator()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointServiceCollectionExtensions.cs).
-
-To add the Cloud Foundry actuator and security middleware to the ASP.NET Core pipeline, use the `UseCloudFoundryActuator()` and `UseCloudFoundrySecurity()` extension methods from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointApplicationBuilderExtensions.cs).
-
-##### 1.2.9.2.2 ASP.NET 4.x App
-
-Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
-
-To add the Cloud Foundry actuator endpoint, use the `UseCloudFoundrySecurity()` and `UseCloudFoundryActuator()` methods from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs).
-
-##### 1.2.9.2.3 ASP.NET OWIN App
-
-Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
-
-To add the Cloud Foundry actuator and security middleware to the ASP.NET OWIN pipeline, use the `UseCloudFoundryActuator()` from [CloudFoundryEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/CloudFoundry/CloudFoundryEndpointAppBuilderExtensions.cs).
-and `UseCloudFoundrySecurityMiddleware()` from [CloudFoundrySecurityAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/CloudFoundry/CloudFoundrySecurityAppBuilderExtensions.cs).
-
-### 1.2.10 Env
+### 1.2.9 Env
 
 The Steeltoe Env endpoint can be used to query and return the configuration values and keys currently in use in your application. The endpoint returns the keys and values from the applications `IConfiguration`.
 
-#### 1.2.10.1 Configure Settings
+#### 1.2.9.1 Configure Settings
 
 The following table describes the settings that you can apply to the endpoint:
 
@@ -914,17 +873,17 @@ The following table describes the settings that you can apply to the endpoint:
 |---|---|---|
 |id|The ID of the env endpoint|`env`|
 |enabled|Whether to enable the env management endpoint|true|
-|sensitive|Currently not used|false|
+|keystosanitize|Keys that should be sanitized. Keys can be simple strings that the property ends with or regex expressions|["password", "secret", "key", "token", ".*credentials.*", "vcap_services"]|
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:env`**.
 
-#### 1.2.10.2 Enable HTTP Access
+#### 1.2.9.2 Enable HTTP Access
 
 The default path to the Env endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/env`.
 
 The coding steps you take to enable HTTP access to the Env endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
-##### 1.2.10.2.1 ASP.NET Core App
+##### 1.2.9.2.1 ASP.NET Core App
 
 Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
 
@@ -932,23 +891,23 @@ To add the Env actuator to the service container, use the `AddEnvActuator()` ext
 
 To add the Env actuator middleware to the ASP.NET Core pipeline, use the `UseEnvActuator()` extension method from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Env/EndpointApplicationBuilderExtensions.cs).
 
-##### 1.2.10.2.2 ASP.NET 4.x App
+##### 1.2.9.2.2 ASP.NET 4.x App
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
 
 To add the Env actuator endpoint, use the `UseEnvActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs).
 
-##### 1.2.10.2.3 ASP.NET OWIN App
+##### 1.2.9.2.3 ASP.NET OWIN App
 
 Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
 
 To add the Env actuator middleware to the ASP.NET OWIN pipeline, use the `UseEnvActuator()` extension method from [EnvEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/Env/EnvEndpointAppBuilderExtensions.cs).
 
-### 1.2.11 Refresh
+### 1.2.10 Refresh
 
 The Steeltoe Refresh endpoint can be used to cause the applications configuration to be reloaded and return the new values and keys currently in use in your application. The endpoint reloads the configuration using the applications `IConfigurationRoot`.
 
-#### 1.2.11.1 Configure Settings
+#### 1.2.10.1 Configure Settings
 
 The following table describes the settings that you can apply to the endpoint:
 
@@ -960,13 +919,13 @@ The following table describes the settings that you can apply to the endpoint:
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:refresh`**.
 
-#### 1.2.11.2 Enable HTTP Access
+#### 1.2.10.2 Enable HTTP Access
 
 The default path to the Refresh endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/refresh`.
 
 The coding steps you take to enable HTTP access to the Refresh endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
-##### 1.2.11.2.1 ASP.NET Core App
+##### 1.2.10.2.1 ASP.NET Core App
 
 Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
 
@@ -974,23 +933,23 @@ To add the Refresh actuator to the service container, use the `AddRefreshActuato
 
 To add the Refresh actuator middleware to the ASP.NET Core pipeline, use the `UseRefreshActuator()` extension method from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Refresh/EndpointApplicationBuilderExtensions.cs).
 
-##### 1.2.11.2.2 ASP.NET 4.x App
+##### 1.2.10.2.2 ASP.NET 4.x App
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
 
 To add the Refresh actuator endpoint, use the `UseRefreshActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs).
 
-##### 1.2.11.2.3 ASP.NET OWIN App
+##### 1.2.10.2.3 ASP.NET OWIN App
 
 Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
 
 To add the Refresh actuator middleware to the ASP.NET OWIN pipeline, use the `UseRefreshActuator()` extension method from [RefreshEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/Refresh/RefreshEndpointAppBuilderExtensions.cs).
 
-### 1.2.12 Mappings
+### 1.2.11 Mappings
 
 The Steeltoe Mappings endpoint can be used to return the MVC and WebAPI Routes and Route templates used by the application.
 
-#### 1.2.12.1 Configure Settings
+#### 1.2.11.1 Configure Settings
 
 The following table describes the settings that you can apply to the endpoint:
 
@@ -1002,13 +961,13 @@ The following table describes the settings that you can apply to the endpoint:
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:mappings`**.
 
-#### 1.2.12.2 Enable HTTP Access
+#### 1.2.11.2 Enable HTTP Access
 
 The default path to the Mappings endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/mappings`.
 
 The coding steps you take to enable HTTP access to the Mappings endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
-##### 1.2.12.2.1 ASP.NET Core App
+##### 1.2.11.2.1 ASP.NET Core App
 
 Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
 
@@ -1016,7 +975,7 @@ To add the Mappings actuator to the service container, use the `AddMappingsActua
 
 To add the Mappings actuator middleware to the ASP.NET Core pipeline, use the `UseMappingsActuator()` extension method from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Mappings/EndpointApplicationBuilderExtensions.cs).
 
-##### 1.2.12.2.2 ASP.NET 4.x App
+##### 1.2.11.2.2 ASP.NET 4.x App
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
 
@@ -1024,7 +983,7 @@ To add the Mappings actuator endpoint, use the `UseMappingsActuator()` method fr
 
 By default, the endpoint will return the Routes and Route templates from the apps global `RouteTable`.  If you wish to expose WebAPI routes, in addition to those from the `RouteTable`, provide a reference to the `IApiExplorer` obtained from `GlobalConfiguration.Configuration.Services.GetApiExplorer()`.
 
-##### 1.2.12.2.3 ASP.NET OWIN App
+##### 1.2.11.2.3 ASP.NET OWIN App
 
 Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
 
@@ -1032,7 +991,7 @@ To add the Mappings actuator middleware to the ASP.NET OWIN pipeline, use the `U
 
 You must provide a reference to the `IApiExplorer` obtained from `GlobalConfiguration.Configuration.Services.GetApiExplorer()` when using this endpoint in a OWIN based app.
 
-### 1.2.13 Metrics
+### 1.2.12 Metrics
 
 The Steeltoe Metrics endpoint configures application metrics collection using the open source [OpenCensus](https://opencensus.io/) project. It automatically configures built-in instrumentation of various aspects of the application and exposes the collected metrics via the endpoint.
 
@@ -1049,7 +1008,7 @@ All of the above metrics are tagged with values specific to the requests being p
 
 >NOTE: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the metrics collection functionality will move to using it, instead of the Steeltoe version.
 
-#### 1.2.13.1 Configure Settings
+#### 1.2.12.1 Configure Settings
 
 The following table describes the settings that you can apply to the endpoint:
 
@@ -1063,13 +1022,13 @@ The following table describes the settings that you can apply to the endpoint:
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:metrics`**.
 
-#### 1.2.13.2 Enable HTTP Access
+#### 1.2.12.2 Enable HTTP Access
 
 The default path to the Metrics endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/metrics`.
 
 The coding steps you take to enable HTTP access to the Metrics endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
-##### 1.2.13.2.1 ASP.NET Core App
+##### 1.2.12.2.1 ASP.NET Core App
 
 Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
 
@@ -1077,25 +1036,25 @@ To add the Metrics actuator to the service container, use the `AddMetricsActuato
 
 To add the Mappings actuator middleware to the ASP.NET Core pipeline, use the `UseMetricsActuator()` extension method from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Metrics/EndpointApplicationBuilderExtensions.cs).
 
-##### 1.2.13.2.2 ASP.NET 4.x App
+##### 1.2.12.2.2 ASP.NET 4.x App
 
 Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
 
 To add the Metrics actuator endpoint, use the `UseMetricsActuator()` method from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs).
 
-##### 1.2.13.2.3 ASP.NET OWIN App
+##### 1.2.12.2.3 ASP.NET OWIN App
 
 Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
 
 To add the Metrics actuator middleware to the ASP.NET OWIN pipeline, use the `UseMetricsActuator()` extension method from [MetricsEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/Metrics/MappingsEndpointAppBuilderExtensions.cs).
 
-#### 1.2.13.3 Exporting
+#### 1.2.12.3 Exporting
 
 By default when you enable metrics collection in your application you do *NOT* automatically enable exporting of those metrics to a backend system.
 
 The coding steps you take to enable metrics exporting differs depending on what backend system you are targeting and the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the backend systems and supported application types.
 
-##### 1.2.13.3.1 Add NuGet References
+##### 1.2.12.3.1 Add NuGet References
 
 To use the metrics exporters, you need to add a reference to the appropriate Steeltoe NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any.
 
@@ -1122,7 +1081,7 @@ or
 PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.1.0
 ```
 
-##### 1.2.13.3.2 Cloud Foundry Forwarder
+##### 1.2.12.3.2 Cloud Foundry Forwarder
 
 The [Metrics Forwarder for Pivotal Cloud Foundry (PCF)](http://docs.pivotal.io/metrics-forwarder/) is a service that allows apps to emit metrics to the [Loggregator](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html) system and consume those metrics from the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html#firehose).
 
@@ -1135,7 +1094,7 @@ You can interact with the service through the Cloud Foundry Command Line Interfa
 
 There are many third-party products you can choose from, including [PCF Metrics](https://docs.pivotal.io/pcf-metrics/1-4/).
 
-##### 1.2.13.3.2.1 Configure Settings
+##### 1.2.12.3.2.1 Configure Settings
 
 The following table describes the settings that you can apply to the exporter:
 
@@ -1153,7 +1112,7 @@ The following table describes the settings that you can apply to the exporter:
 
 **Note**: **The `endpoint`, `accessToken`,`applicationId`, `instanceId` and `instanceIndex` settings above will be automatically picked up from the Metrics Forwarder service binding found for your application.**
 
-##### 1.2.13.3.2.2 ASP.NET Core App
+##### 1.2.12.3.2.2 ASP.NET Core App
 
 There are three steps needed to use the Metrics Forwarder for Pivotal Cloud Foundry (PCF) service:
 
@@ -1192,7 +1151,7 @@ public class Startup
 }
 ```
 
-##### 1.2.13.3.2.3 ASP.NET 4.x App
+##### 1.2.12.3.2.3 ASP.NET 4.x App
 
 There are two steps needed to use the Metrics Forwarder for Pivotal Cloud Foundry (PCF) service:
 
@@ -1230,6 +1189,121 @@ public class ManagementConfig
     }
 }
 ```
+
+### 1.2.13 Hypermedia
+
+The purpose of this endpoint is to provide hypermedia for all the management endpoints configured in your application. 
+It also creates a base context path from which the endpoints can be accessed. The hypermedia actuator enables  the following functionality:  
+  
+* Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
+* Adds extension methods that simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
+
+>NOTE: Adding Cloud Foundry and Hypermedia endpoint together will allow Pivotal Apps Manager integration along with the ability to access these endpoints on another route (by default /actuator). Using Cloud Foundry endpoint without Hypermedia endpoint allows Apps Manager integration, however  external clients cannot access the endpoints.  When Apps Manager integration is not needed the Hypermedia endpoint can be used by itself.
+
+### 1.2.13.1 Exposing Endpoints
+
+Since endpoints may contain sensitive information, by default only Health and Info are exposed. To change which endpoints are exposed, use the `include` and `exclude` properties:
+
+|Property|Default|
+|---|---|
+|management:endpoints:actuator:exposure:include | [`info`, `health`]|
+|management:endpoints:actuator:exposure:exclude | |
+
+`*`  can be used to select all endpoints. For example, to expose everything except `env` and `refresh`, use the following property:
+
+```json
+"management": {
+    "endpoints": {
+        "actuator":{
+            "exposure": {
+                "include": [ "*" ],
+                "exclude": [ "env", "mappings"]
+            }
+        }
+    }
+}
+```  
+>NOTE: The exposure settings do not apply to endpoint routes mapped to the /cloudfoundryapplication context. 
+
+#### 1.2.13.2 Enable HTTP Access
+
+The default path to the Cloud Foundry endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/actuator`. 
+
+The coding steps you take to enable HTTP access to the endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
+
+##### 1.2.13.2.1 ASP.NET Core App
+
+Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
+
+To add the Cloud Foundry actuator to the service container, you can use the `AddHypermediaActuator()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Hypermedia/EndpointServiceCollectionExtensions.cs).
+
+To add the Cloud Foundry actuator and security middleware to the ASP.NET Core pipeline, use the `UseHypermediaActuator()`  extension methods from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/Hypermedia/EndpointApplicationBuilderExtensions.cs).
+
+##### 1.2.13.2.2 ASP.NET 4.x App
+
+Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
+
+To add the Cloud Foundry actuator endpoint, use the `UseHypermediaActuator()` methods from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs).
+
+##### 1.2.13.2.3 ASP.NET OWIN App
+
+Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
+
+To add the Cloud Foundry actuator and security middleware to the ASP.NET OWIN pipeline, use the `UseHypermediaActuator()` from [HypermediaEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/Hypermedia/HypermediaEndpointAppBuilderExtensions.cs).
+
+### 1.2.14 Cloud Foundry
+
+The primary purpose of this endpoint is to enable integration with the Pivotal Apps Manager. When used, the Steeltoe Cloud Foundry management endpoint enables the following additional functionality on Cloud Foundry:
+
+* Provides an alternate secure route to all the endpoints configured in your application
+* Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
+* Adds Cloud Foundry security middleware to the request pipeline, to secure access to the management endpoints by using security tokens acquired from the UAA.
+* Adds extension methods that simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
+
+When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permissions to access the management endpoint.
+
+>NOTE: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (for example, running locally on your desktop). 
+
+#### 1.2.14.1 Configure Settings
+
+Typically, you need not do any additional configuration. However, the following table describes the additional settings that you could apply to the Cloud Foundry endpoint:
+
+|Key|Description|Default|
+|---|---|---|
+|id|The ID of the Cloud Foundry endpoint|""|
+|enabled|Whether to enable Cloud Foundry management endpoint|true|
+|validateCertificates|Whether to validate server certificates|true|
+|applicationId|The ID of the application used in permissions check|VCAP settings|
+|cloudFoundryApi|The URL of the Cloud Foundry API|VCAP settings|
+
+**Note**: **Each setting above must be prefixed with `management:endpoints:cloudfoundry`**.
+
+#### 1.2.14.2 Enable HTTP Access
+
+The default path to the Cloud Foundry endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/cloudfoundryapplication`. 
+
+The coding steps you take to enable HTTP access to the endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
+
+##### 1.2.14.2.1 ASP.NET Core App
+
+Refer to the [HTTP Access ASP.NET Core](#http-access-asp-net-core) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET Core application.
+
+To add the Cloud Foundry actuator to the service container, you can use the `AddCloudFoundryActuator()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointServiceCollectionExtensions.cs).
+
+To add the Cloud Foundry actuator and security middleware to the ASP.NET Core pipeline, use the `UseCloudFoundryActuator()` and `UseCloudFoundrySecurity()` extension methods from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/EndpointApplicationBuilderExtensions.cs).
+
+##### 1.2.14.2.2 ASP.NET 4.x App
+
+Refer to the [HTTP Access ASP.NET 4.x](#http-access-asp-net-4-x) section below to see the overall steps required to enable HTTP access to endpoints in a 4.x application.
+
+To add the Cloud Foundry actuator endpoint, use the `UseCloudFoundrySecurity()` and `UseCloudFoundryActuator()` methods from [ActuatorConfigurator](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointWeb/ActuatorConfigurator.cs).
+
+##### 1.2.14.2.3 ASP.NET OWIN App
+
+Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
+
+To add the Cloud Foundry actuator and security middleware to the ASP.NET OWIN pipeline, use the `UseCloudFoundryActuator()` from [CloudFoundryEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/CloudFoundry/CloudFoundryEndpointAppBuilderExtensions.cs).
+and `UseCloudFoundrySecurityMiddleware()` from [CloudFoundrySecurityAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/CloudFoundry/CloudFoundrySecurityAppBuilderExtensions.cs).
 
 # 2.0 Distributed Tracing
 
@@ -1843,7 +1917,7 @@ public class Startup
     private void Start()
     {
         DiagnosticsManager.Instance.Start();
-        if (MetricsExporter != null)
+w        if (MetricsExporter != null)
         {
             MetricsExporter.Start();
         }
