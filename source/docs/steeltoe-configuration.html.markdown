@@ -18,10 +18,12 @@ Each value contained in the configuration is tied to a string-typed key or name.
 
 To better understand .NET configuration services, you should read the [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) documentation. Note that, while the documentation link suggests this service is tied to ASP.NET Core, it is not. It can be used in many different application types, including Console, ASP.NET 4.x., UWP, and others.
 
-Steeltoe adds two additional configuration providers to the preceding list:
+Steeltoe adds four additional configuration providers to the preceding list:
 
 * Cloud Foundry
 * Spring Cloud Config Server
+* Placeholder resolvers
+* RandomValue generator
 
 The following sections provide more more detail on each of these new providers.
 
@@ -766,7 +768,448 @@ using Steeltoe.Extensions.Configuration;
 ...
 ```
 
-# 3.0 Hosting Extensions
+# 3.0 Placeholder Resolver
+
+The Placeholder resolver enables usage of `${....}` placeholders in your configuration. The provider enables you to define configuration values as placeholders in your configuration and have them resolved to `real` values at runtime during configuration access.
+
+A placeholders takes the form of `${key:subkey1:subkey2?default_value}` where `key:subkey1:subkey2` represents another key in the configuration. At runtime when you access the key associated with the placeholder the resolver is called to resolve the placeholder key to a value that exists in the configuration.  If a value for the placeholder key is not found, the key will be returned unresolved. If a `default_value` is specified in the placeholder, then the `default_value` will returned instead.
+
+Note that placeholder defaults (i.e. `default_value`) can be defined to be placeholders as well and those will be resolved as well.
+
+The Placeholder resolver provider supports the following .NET application types:
+
+* ASP.NET (MVC, WebForms, WebAPI, WCF)
+* ASP.NET Core
+* Console apps (.NET Framework and .NET Core)
+
+ The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Configuration).
+
+## 3.1 Quick Start
+
+This quick start shows how to use the Placeholder configuration provider in an ASP.NET Core MVC application.
+
+### 3.1.1 Locate Sample
+
+First, you must navigate to the correct directory, as follows:
+
+```bash
+cd Samples/Configuration/src/AspDotNetCore/Placeholder
+```
+
+#### 3.1.2 Run Sample
+
+To run the application on .NET Core on Windows, Linux or OSX, use the following command:
+
+```bash
+dotnet run -f netcoreapp2.2
+```
+
+#### 3.1.3 Observe Logs
+
+The `dotnet run` command should produce output similar to the following:
+
+```bash
+Hosting environment: Production
+Now listening on: http://localhost:5000
+Application started. Press Ctrl+C to shut down.
+```
+
+### 3.1.4 What to Expect
+
+Access the main page of the application at `http://localhost:5000/` and you should see three values from the apps configuration that have been tied to placeholders
+
+* `ResolvedPlaceholderFromEnvVariables` - placeholder that references `PATH` environment variable
+* `UnresolvedPlaceholder` - placeholder that can't be resolved
+* `ResolvedPlaceholderFromJson` - placeholder that is resolved from the two `appsettings.json` files.
+
+### 3.1.5 Understand Sample
+
+The `Placeholder` quick start sample was created by using the .NET Core tooling `mvc` template (`dotnet new mvc`) and then modified to include the Steeltoe framework.
+
+To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
+
+* `Placeholder.csproj`: Contains the `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.PlaceholderCore`
+* `Program.cs`:  Code was added to the `IWebHostBuilder` to add the Placeholder resolver to the apps configuration.
+* `Startup.cs`: Code was added to configure `SampleOptions`.
+* `HomeController.cs`: Code was added for Options injection into the Controller. Code was also added to display the resolved configuration data.
+
+## 3.2 Usage
+
+The following sections describe how to use the Placeholder resolver configuration provider:
+
+* [Add NuGet Reference](#3-2-1-add-nuget-reference)
+* [Add Configuration Provider](#3-2-2-add-configuration-provider)
+* [Access Configuration Data](#3-2-3-access-configuration-data)
+* [Access Configuration Data as Options](#3-2-4-access-configuration-data-as-options)
+
+You should have a good understanding of how the .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) work before starting to use this provider.
+
+In order to use the Steeltoe Placeholder resolver provider you need to do the following:
+
+1. Add a NuGet package reference to your project.
+1. Add the provider to the Configuration Builder.
+1. Optionally, configure Options classes by binding configuration data to the classes.
+1. Inject and use the Options classes or access configuration data directly.
+
+>NOTE: Most of the example code in the following sections is based on using Steeltoe in an ASP.NET Core application. If you are developing an ASP.NET 4.x application or a Console based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/Configuration) for example code you can use.
+
+### 3.2.1 Add NuGet Reference
+
+To use the provider, you need to add a reference to the appropriate Steeltoe NuGet based on the type of the application you are building and what Dependency Injector you have chosen, if any. The following table describes the available packages:
+
+|App Type|Package|Description|
+|---|---|---|
+|Console/ASP.NET 4.x|`Steeltoe.Extensions.Configuration.PlaceholderBase`|Base functionality. No dependency injection.|
+|ASP.NET Core|`Steeltoe.Extensions.Configuration.PlaceholderCore`|Includes base. Adds ASP.NET Core dependency injection.|
+
+To add this type of NuGet to your project, add a `PackageReference` resembling the following:
+
+```xml
+<ItemGroup>
+...
+    <PackageReference Include="Steeltoe.Extensions.Configuration.PlaceholderCore" Version= "2.2.0"/>
+...
+</ItemGroup>
+```
+
+### 3.2.2 Add Configuration Provider
+
+In order to have placeholders resolved when accessing your configuration data, you need to add the Placeholder resolver provider to the `ConfigurationBuilder`.  
+
+There are four different ways in which you can do this.
+
+1. Add the resolver using `ConfigurationBuilder` extension method `AddPlaceholderResolver()`.
+1. Add the resolver to an already built configuration using `IConfiguration` extension method `AddPlaceholderResolver()`.
+1. Add the resolver using `IWebHostBuilder` extension method `AddPlaceholderResolver()`.
+1. Use the `ConfigurePlaceholderResolver()` in `ConfigureServices()` to add the resolver to the already built `IConfiguration` and to replace it in the container.
+
+The following example shows how to add to the `ConfigurationBuilder`:
+
+```csharp
+using Steeltoe.Extensions.Configuration.Placeholder;
+...
+
+var builder = new ConfigurationBuilder()
+    .SetBasePath(env.ContentRootPath)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+
+    // Add Placeholder resolver
+    .AddPlaceholderResolver();
+Configuration = builder.Build();
+...
+
+```
+
+The following example shows how to add to the `IWebHostBuilder`:
+
+```csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        BuildWebHost(args).Run();
+    }
+    public static IWebHost BuildWebHost(string[] args) =>
+        WebHost.CreateDefaultBuilder(args)
+            .UseCloudFoundryHosting()
+
+            .AddPlaceholderResolver()
+            .UseStartup<Startup>()
+            .Build();
+}
+```
+
+>NOTE: It is important to understand that the Placeholder resolver works by wrapping and replacing the existing configuration providers already added to the `ConfigurationBuilder`. As a result you typically will want to add it as the last provider.
+
+### 3.2.3 Access Configuration Data
+
+Once the configuration has been built, the Placeholder resolver will be used to resolve any placeholders as you access your configuration data.  Simply access the configuration data as your normally would and the resolver will attempt to resolve and placeholder before returning the value for the key requested.
+
+Consider the following `appsettings.json` file:
+
+```json
+{
+    "spring": {
+        "bar": {
+            "name": "myName"
+    },
+      "cloud": {
+        "config": {
+            "name" : "${spring:bar:name?no_name}",
+        }
+      }
+    }
+  ...
+}
+```
+
+When using the normal `IConfiguration` indexer to access the configuration you will see the Placeholder resolver do its thing:
+
+```csharp
+var config = builder.Build();
+
+Assert.Equal("myName", config["spring:cloud:config:name"]);
+...
+```
+
+### 3.2.4 Access Configuration Data as Options
+
+Alternatively, instead of accessing the configuration data directly from the configuration, you can also use the .NET [Options](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) framework together with placeholders.
+
+First, consider the following `appsettings.json` and `appsettings.Development.json` files:
+
+```json
+// appsettings.json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ResolvedPlaceholderFromEnvVariables": "${PATH?NotFound}",
+  "UnresolvedPlaceholder": "${SomKeyNotFound?NotFound}",
+  "ResolvedPlaceholderFromJson": "${Logging:LogLevel:System?${Logging:LogLevel:Default?NotFound}}"
+}
+// appsettings.Development.json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "System": "Information",
+      "Microsoft": "Information"
+    }
+  }
+}
+```
+
+Notice `ResolvedPlaceholderFromEnvVariables` uses a placeholder that references the `PATH` environment variable which is added to the configuration by the default Web host builder.
+Also notice `ResolvedPlaceholderFromJson` uses a placeholder that references keys that come from the `.json` configuration files.
+
+Next, add the Placeholder resolver to the `IWebHostBuilder` in `Program.cs` or in any of the other ways described above:
+
+```csharp
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Steeltoe.Extensions.Configuration.PlaceholderCore;
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        CreateWebHostBuilder(args).Build().Run();
+    }
+
+    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        WebHost.CreateDefaultBuilder(args)
+
+            // Add Steeltoe Placeholder resolver to apps configuration providers
+            .AddPlaceholderResolver()
+            .UseStartup<Startup>();
+}
+```
+
+Then to use the configuration and the added Placeholder resolver together with your Options classes simply configure the Options as you normally would.
+
+```csharp
+
+// Options class
+public class SampleOptions
+{
+        public string ResolvedPlaceholderFromEnvVariables { get; set; }
+        public string UnresolvedPlaceholder { get; set; }
+        public string ResolvedPlaceholderFromJson { get; set; }
+}
+
+// Startup.cs
+public class Startup
+{
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Setup Options framework with DI
+        services.AddOptions();
+
+        // Configure the SampleOptions class with configuration data
+        services.Configure<SampleOptions>(Configuration);
+    }
+    ....
+}
+```
+
+# 4.0 Random Value Generator
+
+Sometimes you might find the need to generate random values as part of your applications configuration values.  
+
+The Steeltoe RandomValue generator is a configuration provider which you can use to do just that. It can produce integers, longs, uuids or strings as shown in the following examples:
+
+```csharp
+var my_secret = config["random:value"];
+var my_number = config["random:int"];
+var my_big_number = config["random:long"];
+var my_uuid = config["random:uuid"];
+var my_number_less_than_ten = config["random:int(10)"];
+var my_number_in_range = config["random:int[1024,65536]"];
+
+```
+
+You can also use the generator together with property placeholders. For example, consider the following `appsettings.json`
+
+```json
+{
+    "my" : {
+        "secret" = "${random:value}",
+        "number" = "${random:int}",
+        "big_number" = "${random:long}",
+        "uuid" = "${random:uuid}",
+        "number_less_than_ten" = "${random:int(10)}",
+        "number_in_range" = "${random:int[1024,65536]}"
+    }
+}
+```
+
+The RandomValue provider supports the following .NET application types:
+
+* ASP.NET (MVC, WebForms, WebAPI, WCF)
+* ASP.NET Core
+* Console apps (.NET Framework and .NET Core)
+
+ The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Configuration).
+
+## 4.1 Quick Start
+
+This quick start shows how to use the RandomValue configuration provider in an ASP.NET Core MVC application.
+
+### 4.1.1 Locate Sample
+
+First, you must navigate to the correct directory, as follows:
+
+```bash
+cd Samples/Configuration/src/AspDotNetCore/RandomValue
+```
+
+#### 4.1.2 Run Sample
+
+To run the application on .NET Core on Windows, Linux or OSX, use the following command:
+
+```bash
+dotnet run -f netcoreapp2.2
+```
+
+#### 4.1.3 Observe Logs
+
+The `dotnet run` command should produce output similar to the following:
+
+```bash
+Hosting environment: Production
+Now listening on: http://localhost:5000
+Application started. Press Ctrl+C to shut down.
+```
+
+### 4.1.4 What to Expect
+
+Access the main page of the application at `http://localhost:5000/` and you should see multiple random values generated from an `IConfiguration`.
+
+### 4.1.5 Understand Sample
+
+The `RandomValue` quick start sample was created by using the .NET Core tooling `mvc` template (`dotnet new mvc`) and then modified to include the Steeltoe framework.
+
+To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
+
+* `RandomValue.csproj`: Contains the `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.RandomValueBase`
+* `Program.cs`:  Code was added to the `IWebHostBuilder` to add the RandomValue generator to the apps configuration.
+* `HomeController.cs`: Code was added for `IConfiguration` injection into the Controller. Code was also added to display the random values.
+
+## 4.2 Usage
+
+The following sections describe how to use the Placeholder resolver configuration provider:
+
+* [Add NuGet Reference](#4-2-1-add-nuget-reference)
+* [Add Configuration Provider](#4-2-2-add-configuration-provider)
+* [Access Random Value Data](#4-2-3-access-configuration-data)
+
+You should have a good understanding of how the .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) work before starting to use this provider.
+
+In order to use the Steeltoe RandomValue provider you need to do the following:
+
+1. Add a NuGet package reference to your project.
+1. Add the provider to the Configuration Builder.
+1. Access random values from the `IConfiguration`.
+
+>NOTE: Most of the example code in the following sections is based on using Steeltoe in an ASP.NET Core application. If you are developing an ASP.NET 4.x application or a Console based app, see the [other samples](https://github.com/SteeltoeOSS/Samples/tree/master/Configuration) for example code you can use.
+
+### 4.2.1 Add NuGet Reference
+
+To use the provider, you need to add a reference to the appropriate Steeltoe NuGet.
+
+To do this add a `PackageReference` resembling the following:
+
+```xml
+<ItemGroup>
+...
+    <PackageReference Include="Steeltoe.Extensions.Configuration.RandomValueBase" Version= "2.2.0"/>
+...
+</ItemGroup>
+```
+
+### 4.2.2 Add Configuration Provider
+
+In order to have the ability to generate random values from the configuration, you need to add the RandomValue generatore provider to the `ConfigurationBuilder`.  
+
+The following example shows how to add to this:
+
+```csharp
+using Steeltoe.Extensions.Configuration.RandomValue;
+...
+
+var builder = new ConfigurationBuilder()
+    .SetBasePath(env.ContentRootPath)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+
+    // Add RandomValue generator
+    .AddRandomValueSource();
+Configuration = builder.Build();
+...
+
+```
+
+>NOTE: It if you wish to generate random values as part of using placeholders, then it's important to add the RandomValue provider to the builder before you add the Placeholder resolver.
+
+### 4.2.3 Access Random Value Data
+
+Once the configuration has been built, the RandomValue generator can be used to generate values.  Simply access the configuration data using the appropriate `random` keys.
+
+Consider the following `HomeController`:
+
+```csharp
+public class HomeController : Controller
+{
+    private IConfiguration _config;
+    public HomeController(IConfiguration config)
+    {
+        _config = config;
+    }
+    public IActionResult Index()
+    {
+        ViewData["random:int"] = _config["random:int"];
+        ViewData["random:long"] = _config["random:long"];
+        ViewData["random:int(10)"] = _config["random:int(10)"];
+        ViewData["random:long(100)"] = _config["random:long(100)"];
+        ViewData["random:int(10,20)"] = _config["random:int(10,20)"];
+        ViewData["random:long(100,200)"] = _config["random:long(100,200)"];
+        ViewData["random:uuid"] = _config["random:uuid"];
+        ViewData["random:string"] = _config["random:string"];
+        return View();
+    }
+    ...
+}
+```
+
+# 5.0 Hosting Extensions
 
 Many cloud hosting providers, including Pivotal Cloud Foundry, dynamically provide port numbers at runtime. For ASP.NET Core applications, Steeltoe provides an extension method for `IWebHostBuilder` named `UseCloudFoundryHosting` that will automatically use the environment variable `PORT` (when present) to set the address the application is listening on. This sample illustrates basic usage:
 
