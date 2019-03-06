@@ -1253,16 +1253,16 @@ To add the Hypermedia actuator endpoint, use the `UseHypermediaActuator()` metho
 
 Refer to the [HTTP Access ASP.NET OWIN](#http-access-asp-net-owin) section below to see the overall steps required to enable HTTP access to endpoints in an ASP.NET 4.x OWIN application.
 
-To add the Cloud Foundry actuator and security middleware to the ASP.NET OWIN pipeline, use the `UseHypermediaActuator()` from [HypermediaEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/Hypermedia/HypermediaEndpointAppBuilderExtensions.cs).
+To add the Hypermedia actuator to the ASP.NET OWIN pipeline, use the `UseHypermediaActuator()` from [HypermediaEndpointAppBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointOwin/Hypermedia/HypermediaEndpointAppBuilderExtensions.cs).
 
 ### 1.2.14 Cloud Foundry
 
-The primary purpose of this endpoint is to enable integration with the Pivotal Apps Manager. When used, the Steeltoe Cloud Foundry management endpoint enables the following additional functionality on Cloud Foundry:
+The primary purpose of this endpoint is to enable integration with the Pivotal Apps Manager. This endpoint is similar to Hypermedia Actuator but is preconfigured for Apps Manager integration. When used, the Steeltoe Cloud Foundry management endpoint enables the following additional functionality on Cloud Foundry:
 
-* Provides an alternate, secured route to all the endpoints configured in your application
-* Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
+* Provides an alternate, secured route to the endpoints expected by Apps Manager and configured in your application
+* Exposes an endpoint that can be queried to return the IDs of and links to the enabled management endpoints in the application.
 * Adds Cloud Foundry security middleware to the request pipeline, to secure access to the management endpoints by using security tokens acquired from the UAA.
-* Adds extension methods that simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
+* Adds extension methods that simplify adding the Steeltoe management endpoints necessary for Apps Manager integration with HTTP access to the application.
 
 When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permissions to access the management endpoint.
 
