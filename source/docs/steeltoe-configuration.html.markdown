@@ -306,11 +306,15 @@ public class HomeController : Controller
 }
 ```
 
-#### 1.2.4.2 ConfigureCloudFoundryService()
+#### 1.2.4.2 ConfigureCloudFoundryService(s)
 
-As an alternative to using `CloudFoundryServicesOptions` to access Cloud Foundry service data you can use `ConfigureCloudFoundryService()`.  To use it you must supply your own Option POCO which represents a Cloud Foundry service binding and then use the `ConfigureCloudFoundryService<TOption>()` to bind the data from `VCAP_SERVICES` to it. There are multiple ways to use `ConfigureCloudFoundryService()`:
+As an alternative to using `CloudFoundryServicesOptions` to access Cloud Foundry service data you can also use `ConfigureCloudFoundryService<TOption>()` or `ConfigureCloudFoundryServices<TOption>()` to easily gain access to service data.  
 
-First you need to define a Options class that derives from `AbstractServiceOptions`.  The example below illustrates how to do this for a MySql service binding.
+These methods allow you to define an Option class which represents a particular type of Cloud Foundry service binding and then use either method to select that data from `VCAP_SERVICES` and bind the data to it.
+
+To do this, you first need to create a Options class that derives from `AbstractServiceOptions`. That class must match the data provided in `VCAP_SERVICES`.  
+
+Here is an example that illustrates how to do this for a MySql service binding on PCF:
 
 ```csharp
 using Steeltoe.Extensions.Configuration.CloudFoundry;
@@ -333,9 +337,9 @@ public class MySqlCredentials
 }
 ```
 
-Then in your `Startup` class you can use the `ConfigureCloudFoundryService<TOption>()` extension method to bind the MySql service data from `VCAP_SERVICES` to your `TOption`.  The `ConfigureCloudFoundryService<TOption>()` method can be used to select a single Cloud Foundry binding instance by specifying a service name or you can bind to all services of a particular type using a Cloud Foundry service label.  
+Next in your `Startup` class you can use either `ConfigureCloudFoundryService<TOption>()` or `ConfigureCloudFoundryServices<TOption>()` to bind the service data from `VCAP_SERVICES` to your `TOption`.  There are multiple ways to do this depending on your needs.
 
-`ConfigureCloudFoundryService<TOption>()` is built using the Microsoft provided Options framework.  As a result we are able to leverage the `named` Options feature and configure each `TOption` with a name equal to the Cloud Foundry service name.
+You can use `ConfigureCloudFoundryService<TOption>()` method to select a specific Cloud Foundry service binding from `VCAP_SERVICES` by specifying a service name. Or you can use `ConfigureCloudFoundryServices<TOption>()` to bind to all services of a particular type by specifying a Cloud Foundry service label.  
 
 Here are some examples:
 
@@ -351,11 +355,15 @@ public void ConfigureServices(IServiceCollection services)
     services.ConfigureCloudFoundryService<MySqlServiceOption>(Configuration, "mySql2");
 
     // Bind VCAP_SERVICES data for all p-mysql service instances to MySqlServiceOption
-    services.ConfigureCloudFoundryService<MySqlServiceOption>(Configuration, "p-mysql");
+    services.ConfigureCloudFoundryServices<MySqlServiceOption>(Configuration, "p-mysql");
 }
 ```
 
-And then in a controller you can inject the `IOptionsSnapshot<MySqlServiceOption>` or `IOptionsMonitor<MySqlServiceOption>` as you normally would and access a named option (i.e. specific Cloud Foundry service binding instance).
+As you can see all of this is built using the Microsoft provided Options framework.  As a result we are able to leverage the `named` Options feature Microsoft has implemented in options binding, and configure each `TOption` with a name equal to the Cloud Foundry service name found in `VCAP_SERVICES`.
+
+What this means is within a controller you can inject the `IOptionsSnapshot<MySqlServiceOption>` or `IOptionsMonitor<MySqlServiceOption>` as you normally would and then access the Option by name. (i.e. specific Cloud Foundry service binding instance). 
+
+Here is an example:
 
 ```csharp
     public class HomeController : Controller
@@ -1260,7 +1268,7 @@ The following sections describe how to use the Placeholder resolver configuratio
 
 * [Add NuGet Reference](#4-2-1-add-nuget-reference)
 * [Add Configuration Provider](#4-2-2-add-configuration-provider)
-* [Access Random Value Data](#4-2-3-access-configuration-data)
+* [Access Random Value Data](#4-2-3-access-random-value-data)
 
 You should have a good understanding of how the .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) work before starting to use this provider.
 
