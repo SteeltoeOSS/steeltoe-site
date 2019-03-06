@@ -244,7 +244,7 @@ The Steeltoe Health management endpoint can be used to check and return the stat
 |`whenauthorized`|Details are only shown to authorized users. |  
 |`always`|Details are always shown.|
 
-The default value is `always`. Authorized roles can be configured using ```management:endpoints:health:claim or management:endpoints:health:role```. A user is considered to be authorized when they are in the given role or have the specified claim. For example: 
+The default value is `always`. Authorized roles can be configured using `management:endpoints:health:claim or management:endpoints:health:role`. A user is considered to be authorized when they are in the given role or have the specified claim. For example: 
 
 ```json
 "management": {
