@@ -1259,7 +1259,7 @@ To add the Cloud Foundry actuator and security middleware to the ASP.NET OWIN pi
 
 The primary purpose of this endpoint is to enable integration with the Pivotal Apps Manager. When used, the Steeltoe Cloud Foundry management endpoint enables the following additional functionality on Cloud Foundry:
 
-* Provides an alternate secure route to all the endpoints configured in your application
+* Provides an alternate, secured route to all the endpoints configured in your application
 * Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
 * Adds Cloud Foundry security middleware to the request pipeline, to secure access to the management endpoints by using security tokens acquired from the UAA.
 * Adds extension methods that simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
