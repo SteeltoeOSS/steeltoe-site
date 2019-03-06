@@ -1205,7 +1205,7 @@ It also creates a base context path from which the endpoints can be accessed. Th
 
 #### 1.2.13.1 Exposing Endpoints
 
-Since endpoints may contain sensitive information, by default only Health and Info are exposed. To change which endpoints are exposed, use the `include` and `exclude` properties:
+Since endpoints may contain sensitive information, only Health and Info are exposed by default. To change which endpoints are exposed, use the `include` and `exclude` properties:
 
 |Property|Default|
 |---|---|
