@@ -236,7 +236,7 @@ The upcoming sections show the settings that you can apply to specific endpoints
 
 ### 1.2.3 Health
 
-The Steeltoe Health management endpoint can be used to check and return the status of your running application. It can often be used by monitoring software to alert someone if a production system goes down. The information exposed by the ```health``` endpoint depends on the ```management:endpoints:health:showdetails``` property which can be configured with one of the following values:
+The Steeltoe Health management endpoint can be used to check and return the status of your running application. It can often be used by monitoring software to alert someone if a production system goes down. The information exposed by the `health` endpoint depends on the `management:endpoints:health:showdetails` property which can be configured with one of the following values:
 
 |Name|Description|
 |---|---|
