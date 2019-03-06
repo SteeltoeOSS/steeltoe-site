@@ -10,49 +10,67 @@ tags: release-notes
 ---
 
 ## 2.2.0 RC1
+
 The new features in Steeltoe 2.2.0 release candidate
 
 ### Connectors
-  * New MongoDB Connector
 
-  
+* New MongoDB Connector
+
 ### Security
-  * OpenIDConnect support added
-  * Refactor of .NET Framework Security
-    * Separated common components into Base library
-    * Enabled HttpClient injection
+
+* OpenIDConnect support added
+* Refactor of .NET Framework Security
+  * Separated common components into Base library
+  * Enabled HttpClient injection
 
 ### Management
-  * Enhanced support for Spring Boot 2.0 Actuator Endpoints
-     * Actuators in Cloud Foundry can be accessed outside cloudfoundry, while also maintaining AppsManager integration
-     * Actuators now have default path /actuator when no path is specified
-     * Control the exposure level of actuator endpoints
-     * Show Details configuration options for the health endpoint (_always_, _never_, and _when-authorized_)
-     * Sanitizing of sensitive information from `/env` actuator endpoint
+
+* Enhanced support for Spring Boot 2.0 Actuator Endpoints
+  * Actuators in Cloud Foundry can be accessed outside cloudfoundry, while also maintaining AppsManager integration
+  * Actuators now have default path /actuator when no path is specified
+  * Control the exposure level of actuator endpoints
+  * Show Details configuration options for the health endpoint (_always_, _never_, and _when-authorized_)
+  * Sanitizing of sensitive information from `/env` actuator endpoint
 
 ### Discovery
-  * Multiple addresses for Eureka servers
-  * Hashicorp Consul supported added
+
+* Multiple addresses for Eureka servers
+* Hashicorp Consul supported added
 
 ### Configuration
-  * Property placeholders are now supported throughout Steeltoe
-  * Random value package added for `random:int`, `random:long`, `random:uuid`, and `random:string`
+
+>Important: The `Pivotal.Extensions.Configuration.ConfigServer*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
+
+* New `Placeholder` configuration provider supporting placeholder resolution
+  * Use placeholders like `${key:key1:key2?default_value}` as configuration values
+* New `RandomValue` configuration provider supporting random value generation
+  * Use keys like `random:int`, `random:long`, `random:uuid`, `random:string`, etc. to access random values
+* New `ConfigureCloudFoundryServices<TOption>()` Cloud Foundry extension method for binding `VCAP_SERVICES` configuration data to user defined `C#` objects
+* Configuration placeholders can be used when configuring Steeltoe components
+* Config Server client supports `Discovery First` configuration
+* Config Server client supports HA by allowing multiple config servers URLs to be configured
+* New Config Server health check contributor
 
 ### Health Contributors
-  * Config Server health contributor
-  * Discovery Client health contributor
 
-### Load Balancer 
-  * Client-side load balancer 
-  * Support for random and round-robin load balancer implementations out-of-the-box
-  * API for custom load balancer implementations
-  * Integration with Eureka
+* Config Server health contributor
+* Discovery Client health contributor
+
+### Load Balancer
+
+* Client-side load balancer
+* Support for random and round-robin load balancer implementations out-of-the-box
+* API for custom load balancer implementations
+* Integration with Eureka
 
 ### Other Features
-  * Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
-  * Released NuGet packages are now signed
+
+* Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
+* Released NuGet packages are now signed
 
 # GA Releases
+
 ## 2.1.0
 
 The new features in Steeltoe 2.1.0
