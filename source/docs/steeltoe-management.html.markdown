@@ -879,7 +879,7 @@ The following table describes the settings that you can apply to the endpoint:
 |---|---|---|
 |id|The ID of the env endpoint|`env`|
 |enabled|Whether to enable the env management endpoint|true|
-|keystosanitize|Keys that should be sanitized. Keys can be simple strings that the property ends with or regex expressions|```["password", "secret", "key", "token", ".*credentials.*", "vcap_services"]```|
+|keysToSanitize|Keys that should be sanitized. Keys can be simple strings that the property ends with or regex expressions|```["password", "secret", "key", "token", ".*credentials.*", "vcap_services"]```|
 
 **Note**: **Each setting above must be prefixed with `management:endpoints:env`**.
 
