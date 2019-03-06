@@ -1231,7 +1231,7 @@ Since endpoints may contain sensitive information, by default only Health and In
 
 #### 1.2.13.2 Enable HTTP Access
 
-The default path to the Cloud Foundry endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/actuator`. 
+The default path to the Hypermedia endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/actuator`. 
 
 The coding steps you take to enable HTTP access to the endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
