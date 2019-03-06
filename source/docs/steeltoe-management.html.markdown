@@ -1196,7 +1196,7 @@ public class ManagementConfig
 ### 1.2.13 Hypermedia
 
 The purpose of this endpoint is to provide hypermedia for all the management endpoints configured in your application. 
-It also creates a base context path from which the endpoints can be accessed. The hypermedia actuator enables  the following functionality:  
+It also creates a base context path from which the endpoints can be accessed. The hypermedia actuator enables the following functionality:  
   
 * Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
 * Adds extension methods that simplify adding all of the Steeltoe management endpoints with HTTP access to the application.
