@@ -306,7 +306,7 @@ public class HomeController : Controller
 }
 ```
 
-#### 1.2.4.2 ConfigureCloudFoundryService(s)
+#### 1.2.4.2 ConfigureCloudFoundryService
 
 As an alternative to using `CloudFoundryServicesOptions` to access Cloud Foundry service data you can also use `ConfigureCloudFoundryService<TOption>()` or `ConfigureCloudFoundryServices<TOption>()` to easily gain access to service data.  
 
@@ -408,7 +408,7 @@ In addition to the Quick Start below, there are several other Steeltoe sample ap
 
 The source code for this provider can be found [here](https://github.com/SteeltoeOSS/Configuration).
 
->Important: The `Pivotal.Extensions.Configuration.ConfigServer*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
+>IMPORTANT: The `Pivotal.Extensions.Configuration.ConfigServer*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
 
 ## 2.1 Quick Start
 
@@ -572,7 +572,7 @@ The following sections describe how to use the config server configuration provi
 * [Access Configuration Data](#2-2-5-access-configuration-data)
 * [Enable Logging](#2-2-6-enable-logging)
 * [Configuring Discovery First](#2-2-7-configuring-discovery-first)
-* [Configuring Health Checks](#2-2-8-configuring-health-checks)
+* [Configuring Health Contributor](#2-2-8-configuring-health-contributor)
 * [Configuring Fail Fast](#2-2-9-configuring-fail-fast)
 * [Configuring Retry](#2-2-10-configuring-retry)
 * [Configuring Multiple Urls](#2-2-11-configuring-multiple-urls)
@@ -629,7 +629,7 @@ To add this type of NuGet to your project add a `PackageReference` similar to th
 </ItemGroup>
 ```
 
->Important: The `Pivotal.Extensions.Configuration.ConfigServer*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
+>IMPORTANT: The `Pivotal.Extensions.Configuration.ConfigServer*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
 
 ### 2.2.2 Configure Settings
 
@@ -877,9 +877,9 @@ However, with the default `Config First` mode of the Steeltoe client you are not
 
 Note that the price for using this mode of operation is an extra network round trip on startup to locate the Config Server service registration. The benefit is, as long as the Discovery Service is at fixed point, the Config Server can change its address and no changes are need to applications.
 
-### 2.2.8 Configuring Health Checks
+### 2.2.8 Configuring Health Contributor
 
-The Config Server client supplies a Steeltoe Management Health contributor that attempts to load configuration from the Config Server and contributes health information to the results of the Health endpoint.
+The Config Server package provides a Steeltoe Management Health contributor that attempts to load configuration from the Config Server and contributes health information to the results of the Health endpoint.
 
 If you use the `AddConfigServer()` extension method of the `IWebHostBuilder` the contributor is automatically added to the container and will automatically picked up an used. Otherwise you can manually add the contributor to the container using the `AddConfigServerHealthContributor()` extension method.
 
