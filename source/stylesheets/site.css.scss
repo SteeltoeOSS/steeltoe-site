@@ -306,6 +306,9 @@ body.docs {
       margin: .35em;
     }
   }
+  ul li ul {
+    margin:0;
+  }
 }
 
 .repo-link {

@@ -750,7 +750,7 @@ cf create-service p-config-server standard myConfigServer
 cf services
 
 # Bind the service to `myApp`
-cf bind-service myApp myMySqlService
+cf bind-service myApp myConfigServer
 
 # Restage the app to pick up change
 cf restage myApp
