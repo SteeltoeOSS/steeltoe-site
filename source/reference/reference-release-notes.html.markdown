@@ -38,9 +38,9 @@ The new features in Steeltoe 2.2.0 release candidate
 >IMPORTANT: The `Pivotal.Discovery.*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Discovery.*` packages.
 
 * Eureka client supports additional HA features
-  * Allow multiple Eureka servers URLs to be configured
+  * Allow multiple Eureka server URLs to be configured
   * Added configurable retry logic when communicating with Eureka servers
-  * Added retry/recovery logic when registration or renewing registrations fail with Eureka server
+  * Added retry/recovery logic during registration or renew failures
 * Eureka client supports configuring Proxy settings (host, port, username, password)
 * Eureka client supports configuring GZip settings
 * New Eureka based management health check contributors
@@ -49,6 +49,7 @@ The new features in Steeltoe 2.2.0 release candidate
 * New Eureka health check handler which computes health of the app based on management health contributor health check
   * Added dynamic updating of the apps health (e.g. UP, DOWN, etc.) in the registry as it changes
 * Hashicorp Consul supported added
+  * Supports common Steeltoe `IDiscoveryClient` abstraction
 
 ### Configuration
 
@@ -56,10 +57,10 @@ The new features in Steeltoe 2.2.0 release candidate
 
 * New `Placeholder` configuration provider supporting placeholder resolution
   * Use placeholders like `${key:key1:key2?default_value}` as configuration values
+  * Configuration placeholders can be used when configuring Steeltoe components
 * New `RandomValue` configuration provider supporting random value generation
   * Use keys like `random:int`, `random:long`, `random:uuid`, `random:string`, etc. to access random values
 * New `ConfigureCloudFoundryServices<TOption>()` Cloud Foundry extension method for binding `VCAP_SERVICES` configuration data to user defined `C#` objects
-* Configuration placeholders can be used when configuring Steeltoe components
 * Config Server client supports `Discovery First` configuration
   * Supports basic auth user/pass metadata values used by Spring Cloud Config Server (java)
 * Config Server client supports HA by allowing multiple config servers URLs to be configured
