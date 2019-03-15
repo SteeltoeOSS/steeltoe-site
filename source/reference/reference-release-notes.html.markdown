@@ -11,7 +11,7 @@ tags: release-notes
 
 ## 2.2.0
 
-The new features in Steeltoe 2.2.0:
+The new features in Steeltoe 2.2.0
 
 ### Connectors
 
