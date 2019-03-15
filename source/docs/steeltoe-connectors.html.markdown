@@ -110,7 +110,7 @@ Each of the samples were created by using the .NET Core tooling `mvc` template (
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `*.csproj` files: Contain the `PackageReference` for the Steeltoe NuGet Connector and the Configuration packages. Also, a `PackageReference` for Oracle's MySQL provider, `MySql.Data`, has been added. If Entity Framework has been used, you see references to those packages as well.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs`: Code added for injection of a `MySqlConnection` or `DbContext` into the Controller. These are used to obtain data from the database and then to display the data.
 * `MySqlData.cshtml`: The view used to display the MySQL data values.
@@ -454,7 +454,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 * `PostgreSql.csproj`: Contains a `PackageReference` for the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`.
 * `PostgreEFCore.csproj`: Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.Connector.EFCore`.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs`: Code added to inject a `NpgsqlConnection` or `DbContext`, depending on the application, into the Controller and obtain data from the database for the view.
 * `PostgresData.cshtml`: The view used to display the PostgreSQL data values.
@@ -744,7 +744,7 @@ This sample was created from the .NET Core tooling mvc template (`dotnet new mvc
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `*.csproj`: Contains the `PackageReference` for the Steeltoe NuGet Connector and the Entity Framework.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `DbContext` to the service container.
 * `HomeController.cs`: Code added for injection of a `TestContext` into the Controller to obtain data from the database and then to display the data.
 * `Index.cshtml`: The view used to display the data values from SQL Server.
@@ -1084,7 +1084,7 @@ The sample was created with the .NET Core tooling `mvc` template (`dotnet new mv
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
 * `RabbitMQ.csproj`: Contains the `PackageReference` for the `RabbitMQ.Client` and the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a RabbitMQ `ConnectionFactory` to the service container
 * `RabbitMQController.cs`: Code added for injection of a RabbitMQ `ConnectionFactory` into the Controller. The `ConnectionFactory` is used in the `Send` and `Receive` action methods.
 * `Receive.cshtml`: The view used to display the received message data values.
@@ -1286,7 +1286,7 @@ The sample was created from the .NET Core tooling `mvc` template (`dotnet new mv
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `Redis.csproj`: Contains the `PackageReference` for the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add an `IDistributedCache` and an `IConnectionMultiplexer` to the service container.
 * `HomeController.cs`: Code added for injection of a `IDistributedCache` or `IConnectionMultiplexer` into the Controller. These are used to obtain data from the cache and then to display it.
 * `CacheData.cshtml`: The view used to display the Redis data values obtained using `IDistributedCache`.
@@ -1550,7 +1550,7 @@ The sample was created using the .NET Core tooling `mvc` template (`dotnet new m
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
 * `OAuth.csproj`: Contains the `PackageReference` for the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `OAuthServiceOptions` to the service container.
 * `HomeController.cs`: Code added for injection of a `OAuthServiceOptions` into the Controller. The `OAuthServiceOptions` contains the binding information from Cloud Foundry.
 * `OAuthOptions.cshtml`: The view used to display the OAuth data.

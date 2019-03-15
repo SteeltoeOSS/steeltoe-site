@@ -281,7 +281,7 @@ using Steeltoe.Extensions.Configuration.CloudFoundry;
 public class HomeController : Controller
 {
     public HomeController(IOptions<CloudFoundryApplicationOptions> appOptions,
-                            IOptions<CloudFoundryServicesOptions> serviceOptions )
+                            IOptions<CloudFoundryServicesOptions> serviceOptions)
     {
         AppOptions = appOptions.Value;
         ServiceOptions = serviceOptions.Value;
@@ -361,7 +361,7 @@ public void ConfigureServices(IServiceCollection services)
 
 As you can see all of this is built using the Microsoft provided Options framework.  As a result we are able to leverage the `named` Options feature Microsoft has implemented in options binding, and configure each `TOption` with a name equal to the Cloud Foundry service name found in `VCAP_SERVICES`.
 
-What this means is within a controller you can inject the `IOptionsSnapshot<MySqlServiceOption>` or `IOptionsMonitor<MySqlServiceOption>` as you normally would and then access the Option by name. (i.e. specific Cloud Foundry service binding instance). 
+What this means is within a controller you can inject the `IOptionsSnapshot<MySqlServiceOption>` or `IOptionsMonitor<MySqlServiceOption>` as you normally would and then access the Option by name. (for example: specific Cloud Foundry service binding instance).
 
 Here is an example:
 
@@ -545,11 +545,11 @@ Use the menu provided by the app to see various output related to Cloud Foundry 
 * `Config Server Data`: This is the configuration data returned from the Config Server's configured GitHub repository. It includes some of the data from `foo.properties`, `foo-development.properties` and `application.yml` found in the GitHub repository: (<https://github.com/spring-cloud-samples/config-repo>).
 * `Reload`: Triggers a reload of the configuration data from the Config Server.
 
-Change the Hosting environment setting to `production` (by using `export ASPNETCORE_ENVIRONMENT=production` or  `SET ASPNETCORE_ENVIRONMENT=production` ) and then re-push the application. You should see different configuration data returned for that profile/hosting environment.
+Change the Hosting environment setting to `production` (by using `export ASPNETCORE_ENVIRONMENT=production` or  `SET ASPNETCORE_ENVIRONMENT=production`) and then re-push the application. You should see different configuration data returned for that profile/hosting environment.
 
 ### 2.1.3 Understand Sample
 
-The `SimpleCloudFoundry` sample was created from the .NET Core tooling `mvc` template ( i.e. `dotnet new mvc` ) and then modified to add the Steeltoe framework.
+The `SimpleCloudFoundry` sample was created from the .NET Core tooling `mvc` template (for example, `dotnet new mvc`) and then modified to add the Steeltoe framework.
 
 To gain an understanding of the Steeltoe related changes to generated template code, examine the following files:
 
@@ -903,7 +903,7 @@ The default behavior is to retry six times with an initial backoff interval of 1
 
 To ensure high availability when you have multiple instances of Config Server deployed and expect one or more instances to be unavailable from time to time, you can either specify multiple URLs as a comma-separated list for `spring:cloud:config:uri` or have all your instances register in a Service Registry like Eureka if using `Discovery First` mode.
 
-Note that doing so ensures high availability only when the Config Server is not running or responding (i.e. when the server has exited or when a connection timeout has occurred). For example, if the Config Server returns a 500 (Internal Server Error) response or the Steeltoe client receives a 401 from the Config Server (due to bad credentials or other causes), the client does not try to fetch properties from other URLs. An error of that kind indicates a user issue rather than an availability problem.
+Note that doing so ensures high availability only when the Config Server is not running or responding (for example, when the server has exited or when a connection timeout has occurred). For example, if the Config Server returns a 500 (Internal Server Error) response or the Steeltoe client receives a 401 from the Config Server (due to bad credentials or other causes), the client does not try to fetch properties from other URLs. An error of that kind indicates a user issue rather than an availability problem.
 
 If you use HTTP basic auth security on your Config Server, it is currently only possible to support per-Config Server auth credentials if you embed the credentials in each URL you specify for the `spring:cloud:config:uri` setting. If you use any other kind of security mechanism, you cannot currently support per-Config Server authentication and authorization.
 
@@ -913,7 +913,7 @@ The Placeholder resolver enables usage of `${....}` placeholders in your configu
 
 A placeholders takes the form of `${key:subkey1:subkey2?default_value}` where `key:subkey1:subkey2` represents another key in the configuration. At runtime when you access the key associated with the placeholder the resolver is called to resolve the placeholder key to a value that exists in the configuration.  If a value for the placeholder key is not found, the key will be returned unresolved. If a `default_value` is specified in the placeholder, then the `default_value` will returned instead.
 
-Note that placeholder defaults (i.e. `default_value`) can be defined to be placeholders as well and those will be resolved as well.
+Note that placeholder defaults (for example, `default_value`) can be defined to be placeholders as well and those will be resolved as well.
 
 The Placeholder resolver provider supports the following .NET application types:
 

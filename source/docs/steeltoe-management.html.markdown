@@ -102,7 +102,7 @@ See [Push Sample](#push-sample) for instructions on how to push this sample to e
 
 ### 1.1.5 Observe Logs
 
-To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (i.e. `cf logs actuator`)
+To see the logs as you startup the application use the `cf` CLI to tail the apps logs. (for example, `cf logs actuator`)
 
 On a Linux cell, you should see something resembling the following during startup:
 
@@ -244,7 +244,7 @@ The Steeltoe Health management endpoint can be used to check and return the stat
 |`whenauthorized`|Details are only shown to authorized users. |  
 |`always`|Details are always shown.|
 
-The default value is `always`. Authorized roles can be configured using `management:endpoints:health:claim or management:endpoints:health:role`. A user is considered to be authorized when they are in the given role or have the specified claim. For example: 
+The default value is `always`. Authorized roles can be configured using `management:endpoints:health:claim or management:endpoints:health:role`. A user is considered to be authorized when they are in the given role or have the specified claim. For example:
 
 ```json
 "management": {
@@ -1010,7 +1010,7 @@ The following instrumentation is automatically configured:
 
 All of the above metrics are tagged with values specific to the requests being processed; thereby giving multi-dimensional views of the collected metrics.
 
->NOTE: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the metrics collection functionality will move to using it, instead of the Steeltoe version.
+>NOTE: The OpenCensus implementation used in Steeltoe (for example, `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the metrics collection functionality will move to using it, instead of the Steeltoe version.
 
 #### 1.2.12.1 Configure Settings
 
@@ -1195,7 +1195,7 @@ public class ManagementConfig
 
 ### 1.2.13 Hypermedia
 
-The purpose of this endpoint is to provide hypermedia for all the management endpoints configured in your application. 
+The purpose of this endpoint is to provide hypermedia for all the management endpoints configured in your application.
 It also creates a base context path from which the endpoints can be accessed. The hypermedia actuator enables the following functionality:  
   
 * Exposes an endpoint that can be queried to return the IDs of and links to all of the enabled management endpoints in the application.
@@ -1212,7 +1212,7 @@ Since endpoints may contain sensitive information, only Health and Info are expo
 |exposure:include | [`info`, `health`]|
 |exposure:exclude | |
 
-**Note**: **Each setting above must be prefixed with `management:endpoints:actuator`**. To select all endpoints, 
+**Note**: **Each setting above must be prefixed with `management:endpoints:actuator`**. To select all endpoints,
 `*`  can be used. For example, to expose everything except `env` and `refresh`, use the following property:
 
 ```json
@@ -1226,12 +1226,13 @@ Since endpoints may contain sensitive information, only Health and Info are expo
         }
     }
 }
-```  
->NOTE: The exposure settings do not apply to endpoint routes mapped to the /cloudfoundryapplication context. 
+```
+
+>NOTE: The exposure settings do not apply to endpoint routes mapped to the /cloudfoundryapplication context.
 
 #### 1.2.13.2 Enable HTTP Access
 
-The default path to the Hypermedia endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/actuator`. 
+The default path to the Hypermedia endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/actuator`.
 
 The coding steps you take to enable HTTP access to the endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
@@ -1266,7 +1267,7 @@ The primary purpose of this endpoint is to enable integration with the Pivotal A
 
 When adding this management endpoint to your application, the [Cloud Foundry security middleware](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.EndpointCore/CloudFoundry/CloudFoundrySecurityMiddleware.cs) is added to the request processing pipeline of your application to enforce that when a request is made of any of the management endpoints, a valid UAA access token is provided as part of that request. Additionally, the security middleware uses the token to determine whether the authenticated user has permissions to access the management endpoint.
 
->NOTE: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (for example, running locally on your desktop). 
+>NOTE: The Cloud Foundry security middleware is automatically disabled when your application is not running on Cloud Foundry (for example, running locally on your desktop).
 
 #### 1.2.14.1 Configure Settings
 
@@ -1284,7 +1285,7 @@ Typically, you need not do any additional configuration. However, the following 
 
 #### 1.2.14.2 Enable HTTP Access
 
-The default path to the Cloud Foundry endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/cloudfoundryapplication`. 
+The default path to the Cloud Foundry endpoint is computed by combining the global `path` prefix setting together with the `id` setting from above. The default path is `/cloudfoundryapplication`.
 
 The coding steps you take to enable HTTP access to the endpoint differs depending on the type of .NET application your are developing.  The sections which follow describe the steps needed for each of the supported application types.
 
@@ -1313,7 +1314,7 @@ and `UseCloudFoundrySecurityMiddleware()` from [CloudFoundrySecurityAppBuilderEx
 
 Steeltoe distributed tracing implements a solution for .NET applications based on the open source [OpenCensus](https://opencensus.io/) project. For most users implementing and using distributed tracing should be invisible, and many of the interactions with external systems should be instrumented automatically. You can capture trace data in logs, or by sending it to a remote collector service.
 
->NOTE: The OpenCensus implementation used in Steeltoe (i.e. `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the distributed tracing functionality will move to using it, instead of the Steeltoe version.
+>NOTE: The OpenCensus implementation used in Steeltoe (for example, `Steeltoe.Management.OpenCensus`) has been contributed to the OpenCensus community. At some point in the near future the distributed tracing functionality will move to using it, instead of the Steeltoe version.
 
 A Span is the basic unit of work. For example, sending an RPC is a new span, as is sending a response to an RPC. Span’s are identified by a unique 64-bit ID for the span and another 64-bit ID for the trace the span is a part of. Spans also have other data, such as descriptions, key-value annotations, the ID of the span that caused them, and process ID’s (normally IP address). Spans are started and stopped, and they keep track of their timing information. Once you create a span, you must stop it at some point in the future. A set of spans forming a tree-like structure called a Trace. For example, if you are running a distributed big-data store, a trace might be formed by a put request.
 
@@ -1461,7 +1462,7 @@ Use the Cloud Foundry CLI to start an instance of the Zipkin server on Cloud Fou
 cf push zipkin-server -p ./zipkin-server-2.8.4-exec.jar
 ```
 
-Verify the server is up and running by opening a browser to the Zipkin server UI: (for example, <http://zipkin-server.cfapps.io/> ).
+Verify the server is up and running by opening a browser to the Zipkin server UI: (for example, <http://zipkin-server.cfapps.io/>).
 
 #### 2.1.2.3 Configure Settings
 
@@ -1606,7 +1607,7 @@ Once that is done, then whenever your application issues any log statements, the
 
 ### 2.2.4 Propagating Trace Context
 
-When working with distributed tracing systems you will find that a trace context (i.e. trace state information) must get propagated to all child processes to ensure that child spans originating from a root trace get collected and correlated into a single trace in the end.  The current trace and span IDs are just one piece of the required information that must get propagated.
+When working with distributed tracing systems you will find that a trace context (for example, trace state information) must get propagated to all child processes to ensure that child spans originating from a root trace get collected and correlated into a single trace in the end.  The current trace and span IDs are just one piece of the required information that must get propagated.
 
 Steeltoe distributed tracing handles this for you by default when using the .NET HttpClient. When a downstream HTTP call is made, the current trace context is encoded as request headers and sent along with the request automatically.  Currently, Steeltoe encodes the context using [Zipkin B3 Propagation](https://github.com/openzipkin/b3-propagation) encodings. As a result, you will find that Steeltoe tracing is interoperable with several other instrumentation libraries such as [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-sleuth/2.0.x/single/spring-cloud-sleuth.html).
 

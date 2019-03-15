@@ -5,11 +5,11 @@ date: 2019/1/22
 tags: release-notes
 ---
 
-# Release Candidates
+# GA Releases
 
 ---
 
-## 2.2.0 RC1
+## 2.2.0
 
 The new features in Steeltoe 2.2.0 release candidate
 
@@ -82,8 +82,7 @@ The new features in Steeltoe 2.2.0 release candidate
 
 * Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
 * Released NuGet packages are now signed
-
-# GA Releases
+* All packages include [Source Link](https://github.com/dotnet/sourcelink), with symbols published to the [NuGet.org symbol server](https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg#nugetorg-symbol-server)
 
 ## 2.1.0
 
@@ -131,9 +130,9 @@ Support for collecting application metrics is completely new this release.  Here
 
 * We’ve implemented the OpenCensus Stats APIs for instrumentation. You can also use those APIs in your code to collect your own custom metrics.
 * We’ve implemented the OpenCensus Tags APIs for tagging metrics and adding multi-dimensionality to the metrics collected.
-* Collect .NET runtime metrics automatically, i.e., heap, thread, and GC usage. Stay tuned for more enhancements in this area, as we build upon the work Microsoft is doing in this area.
+* Collect .NET runtime metrics automatically, for example,, heap, thread, and GC usage. Stay tuned for more enhancements in this area, as we build upon the work Microsoft is doing in this area.
 * Automatically collect ASP.NET metrics, like request counts,  response times, and others. There’s more to come here as well.
-* Automatically collect HttpClient metrics, i.e., request counts, response times, etc.
+* Automatically collect HttpClient metrics, for example,, request counts, response times, etc.
 * Expose metrics via the Spring Boot compatible REST endpoint  ‘/metrics’ (mentioned earlier.)
 * For Cloud Foundry users, you can export collected metrics to the Loggregator Firehose using Metrics Forwarder. Just as with Java Spring apps, developers can send their .NET apps metrics to any one of several backend services for collection and reporting, for example, PCF Metrics.
 

@@ -859,7 +859,7 @@ Alternatively, you can use the `ToObservable()` method to return a `cold` observ
 ```csharp
 var command = new FortuneServiceCommand(...);
 IObservable<Fortune> cold = command.ToObservable();
-IDisposable subscription = cold.Subscribe( (result) => { Console.WriteLine(result); });
+IDisposable subscription = cold.Subscribe((result) => { Console.WriteLine(result); });
 ```
 
 ### 1.2.9 Add Collapsers
@@ -1053,7 +1053,7 @@ Alternatively, you can use the `ToObservable()` method to return a `cold` observ
 ```csharp
 var collapser = new FortuneServiceCollapser(...);
 IObservable<Fortune> cold = collapser.ToObservable();
-IDisposable subscription = cold.Subscribe( (result) => { Console.WriteLine(result); });
+IDisposable subscription = cold.Subscribe((result) => { Console.WriteLine(result); });
 ```
 
 ### 1.2.11 Use Metrics
