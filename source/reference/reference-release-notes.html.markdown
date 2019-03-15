@@ -5,54 +5,85 @@ date: 2019/1/22
 tags: release-notes
 ---
 
-# Release Candidates
+# GA Releases
 
 ---
 
-## 2.2.0 RC1
+## 2.2.0
+
 The new features in Steeltoe 2.2.0 release candidate
 
 ### Connectors
-  * New MongoDB Connector
 
-  
+* New MongoDB Connector
+
 ### Security
-  * OpenIDConnect support added
-  * Refactor of .NET Framework Security
-    * Separated common components into Base library
-    * Enabled HttpClient injection
+
+* OpenIDConnect support added
+* Refactor of .NET Framework Security
+  * Separated common components into Base library
+  * Enabled HttpClient injection
 
 ### Management
-  * Enhanced support for Spring Boot 2.0 Actuator Endpoints
-     * Actuators in Cloud Foundry can be accessed outside cloudfoundry, while also maintaining AppsManager integration
-     * Actuators now have default path /actuator when no path is specified
-     * Control the exposure level of actuator endpoints
-     * Show Details configuration options for the health endpoint (_always_, _never_, and _when-authorized_)
-     * Sanitizing of sensitive information from `/env` actuator endpoint
+
+* Enhanced support for Spring Boot 2.0 Actuator Endpoints
+  * Actuators in Cloud Foundry can be accessed outside cloudfoundry, while also maintaining AppsManager integration
+  * Actuators now have default path /actuator when no path is specified
+  * Control the exposure level of actuator endpoints
+  * Show Details configuration options for the health endpoint (_always_, _never_, and _when-authorized_)
+  * Sanitizing of sensitive information from `/env` actuator endpoint
 
 ### Discovery
-  * Multiple addresses for Eureka servers
-  * Hashicorp Consul supported added
+
+>IMPORTANT: The `Pivotal.Discovery.*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Discovery.*` packages.
+
+* Eureka client supports additional HA features
+  * Allow multiple Eureka server URLs to be configured
+  * Added configurable retry logic when communicating with Eureka servers
+  * Added retry/recovery logic during registration or renew failures
+* Eureka client supports configuring Proxy settings (host, port, username, password)
+* Eureka client supports configuring GZip settings
+* New Eureka based management health check contributors
+  * EurekaServerHealthContributor - contributes health of Eureka server connection
+  * EurekaApplicationsHealthContributor - contributes health of a configurable list of applications
+* New Eureka health check handler which computes health of the app based on management health contributor health check
+  * Added dynamic updating of the apps health (e.g. UP, DOWN, etc.) in the registry as it changes
+* Hashicorp Consul supported added
+  * Supports common Steeltoe `IDiscoveryClient` abstraction
 
 ### Configuration
-  * Property placeholders are now supported throughout Steeltoe
-  * Random value package added for `random:int`, `random:long`, `random:uuid`, and `random:string`
+
+>IMPORTANT: The `Pivotal.Extensions.Configuration.ConfigServer*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
+
+* New `Placeholder` configuration provider supporting placeholder resolution
+  * Use placeholders like `${key:key1:key2?default_value}` as configuration values
+  * Configuration placeholders can be used when configuring Steeltoe components
+* New `RandomValue` configuration provider supporting random value generation
+  * Use keys like `random:int`, `random:long`, `random:uuid`, `random:string`, etc. to access random values
+* New `ConfigureCloudFoundryServices<TOption>()` Cloud Foundry extension method for binding `VCAP_SERVICES` configuration data to user defined `C#` objects
+* Config Server client supports `Discovery First` configuration
+  * Supports basic auth user/pass metadata values used by Spring Cloud Config Server (java)
+* Config Server client supports HA by allowing multiple config servers URLs to be configured
+* New Config Server management health check contributor
 
 ### Health Contributors
-  * Config Server health contributor
-  * Discovery Client health contributor
 
-### Load Balancer 
-  * Client-side load balancer 
-  * Support for random and round-robin load balancer implementations out-of-the-box
-  * API for custom load balancer implementations
-  * Integration with Eureka
+* Config Server health contributor
+* Discovery Client health contributor
+
+### Load Balancer
+
+* Client-side load balancer
+* Support for random and round-robin load balancer implementations out-of-the-box
+* API for custom load balancer implementations
+* Integration with Eureka
 
 ### Other Features
-  * Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
-  * Released NuGet packages are now signed
 
-# GA Releases
+* Reference Application [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers) using Steeltoe components
+* Released NuGet packages are now signed
+* All packages include [Source Link](https://github.com/dotnet/sourcelink), with symbols published to the [NuGet.org symbol server](https://docs.microsoft.com/en-us/nuget/create-packages/symbol-packages-snupkg#nugetorg-symbol-server)
+
 ## 2.1.0
 
 The new features in Steeltoe 2.1.0
@@ -99,9 +130,9 @@ Support for collecting application metrics is completely new this release.  Here
 
 * We’ve implemented the OpenCensus Stats APIs for instrumentation. You can also use those APIs in your code to collect your own custom metrics.
 * We’ve implemented the OpenCensus Tags APIs for tagging metrics and adding multi-dimensionality to the metrics collected.
-* Collect .NET runtime metrics automatically, i.e., heap, thread, and GC usage. Stay tuned for more enhancements in this area, as we build upon the work Microsoft is doing in this area.
+* Collect .NET runtime metrics automatically, for example,, heap, thread, and GC usage. Stay tuned for more enhancements in this area, as we build upon the work Microsoft is doing in this area.
 * Automatically collect ASP.NET metrics, like request counts,  response times, and others. There’s more to come here as well.
-* Automatically collect HttpClient metrics, i.e., request counts, response times, etc.
+* Automatically collect HttpClient metrics, for example,, request counts, response times, etc.
 * Expose metrics via the Spring Boot compatible REST endpoint  ‘/metrics’ (mentioned earlier.)
 * For Cloud Foundry users, you can export collected metrics to the Loggregator Firehose using Metrics Forwarder. Just as with Java Spring apps, developers can send their .NET apps metrics to any one of several backend services for collection and reporting, for example, PCF Metrics.
 

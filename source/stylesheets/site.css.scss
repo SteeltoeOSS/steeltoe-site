@@ -301,10 +301,13 @@ body.docs {
     border:1px solid #a0a0a0;
     font-size:1em;
     font-style:normal;
-    margin:0;
+    margin:.3em 0;
     p {
       margin: .35em;
     }
+  }
+  ul li ul {
+    margin:0;
   }
 }
 

@@ -110,7 +110,7 @@ Each of the samples were created by using the .NET Core tooling `mvc` template (
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `*.csproj` files: Contain the `PackageReference` for the Steeltoe NuGet Connector and the Configuration packages. Also, a `PackageReference` for Oracle's MySQL provider, `MySql.Data`, has been added. If Entity Framework has been used, you see references to those packages as well.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `MySqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs`: Code added for injection of a `MySqlConnection` or `DbContext` into the Controller. These are used to obtain data from the database and then to display the data.
 * `MySqlData.cshtml`: The view used to display the MySQL data values.
@@ -156,34 +156,36 @@ The following table describes the available settings for the connector. These se
 
 |Key|Description|Steeltoe Default|
 |---|---|:---:|
-|server|Hostname or IP Address of the server.|localhost|
-|port|Port number of server.|3306|
-|username|Username for authentication.|not set|
-|password|Password for authentication.|not set|
-|database|Schema to which to connect.|not set|
-|connectionString|Full connection string.|built from settings|
-|sslMode|SSL usage option. One of `None`, `Preferred`, or `Required`.|`None`|
-|allowPublicKeyRetrieval|Whether RSA public keys should be retrieved from the server.|not set|
-|allowUserVariables|Whether the provider expects user variables in the SQL.|not set|
-|connectionTimeout|Seconds to wait for a connection before throwing an error.|not set|
-|connectionLifeTime|The maximum length of time a connection to the server can be open.|not set|
-|connectionReset|Whether the connection state is reset when it is retrieved from the pool.|not set|
-|convertZeroDateTime|Whether to have MySqlDataReader.GetValue() and MySqlDataReader.GetDateTime() return DateTime.MinValue for date or datetime columns that have disallowed values.|not set|
-|defaultCommandTimeout|Seconds each command can execute before timing out. Use 0 to disable timeouts.|not set|
-|keepalive|TCP keep-alive idle time.|not set|
-|maximumPoolsize|Maximum number of connections allowed in the pool.|not set|
-|minimumPoolsize|Minimum number of connections to leave in the pool if ConnectionIdleTimeout is reached.|not set|
-|oldGuids|Whether to use a GUID of data type BINARY(16).|not set|
-|persistSecurityInfo|Whether to allow the application to access to security-sensitive information, such as the password. **_(Not recommended)_**.|not set|
-|pooling|Enables connection pooling.|not set|
-|treatTinyAsBoolean|Whether to return tinyint(1) as a boolean. Set to `false` to return tinyint(1) as sbyte/byte.|not set|
-|useAffectedRows|Set to `false` to report found rows instead of changed (affected) rows.|not set|
+|server|Hostname or IP Address of the server|localhost|
+|port|Port number of server|3306|
+|username|Username for authentication|not set|
+|password|Password for authentication|not set|
+|database|Schema to which to connect|not set|
+|connectionString|Full connection string|built from settings|
+|sslMode|SSL usage option. One of `None`, `Preferred`, or `Required`|`None`|
+|allowPublicKeyRetrieval|Whether RSA public keys should be retrieved from the server|not set|
+|allowUserVariables|Whether the provider expects user variables in the SQL|not set|
+|connectionTimeout|Seconds to wait for a connection before throwing an error|not set|
+|connectionLifeTime|The maximum length of time a connection to the server can be open|not set|
+|connectionReset|Whether the connection state is reset when it is retrieved from the pool|not set|
+|convertZeroDateTime|Whether to have MySqlDataReader.GetValue() and MySqlDataReader.GetDateTime() return DateTime.MinValue for date or datetime columns that have disallowed values|not set|
+|defaultCommandTimeout|Seconds each command can execute before timing out. Use 0 to disable timeouts|not set|
+|keepalive|TCP keep-alive idle time|not set|
+|maximumPoolsize|Maximum number of connections allowed in the pool|not set|
+|minimumPoolsize|Minimum number of connections to leave in the pool if ConnectionIdleTimeout is reached|not set|
+|oldGuids|Whether to use a GUID of data type BINARY(16)|not set|
+|persistSecurityInfo|Whether to allow the application to access to security-sensitive information, such as the password. **_(Not recommended)_**|not set|
+|pooling|Enables connection pooling|not set|
+|treatTinyAsBoolean|Whether to return tinyint(1) as a boolean. Set to `false` to return tinyint(1) as sbyte/byte|not set|
+|useAffectedRows|Set to `false` to report found rows instead of changed (affected) rows|not set|
 |useCompression|If `true` (and server-supported), packets sent between client and server are compressed|not set|
 |urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of the settings described in the preceding table should be prefixed with `mysql:client:`.
 
 The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values).
+
+>NOTE: If a ConnectionString is provided and VCAP_SERVICES are not detected (a typical scenario for local app development), the ConnectionString will be used exactly as provided.
 
 ### 1.2.3 Cloud Foundry
 
@@ -353,7 +355,7 @@ If you need to set additional properties for the `DbContext` like `MigrationsAss
 Action<MySqlDbContextOptionsBuilder> mySqlOptionsAction = (o) =>
 {
   o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency
   o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
 };
 ```
@@ -452,7 +454,7 @@ To gain an understanding of the Steeltoe related changes to the generated templa
 
 * `PostgreSql.csproj`: Contains a `PackageReference` for the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`.
 * `PostgreEFCore.csproj`: Contains a `PackageReference` for Steeltoe NuGet `Steeltoe.CloudFoundry.Connector.EFCore`.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `NpgsqlConnection` or a `DbContext`, depending on the application, to the service container.
 * `HomeController.cs`: Code added to inject a `NpgsqlConnection` or `DbContext`, depending on the application, into the Controller and obtain data from the database for the view.
 * `PostgresData.cshtml`: The view used to display the PostgreSQL data values.
@@ -511,6 +513,8 @@ The following table describes all of the possible settings for the connector:
 >IMPORTANT: All of these settings should be prefixed with `postgres:client:`.
 
 The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values).
+
+>NOTE: If a ConnectionString is provided and VCAP_SERVICES are not detected (a typical scenario for local app development), the ConnectionString will be used exactly as provided.
 
 ### 2.2.3 Cloud Foundry
 
@@ -638,7 +642,7 @@ If you need to set additional properties for the `DbContext` like `MigrationsAss
 Action<NpgsqlDbContextOptionsBuilder> npgsqlOptionsAction = (o) =>
 {
   o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency
   o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
 };
 ```
@@ -740,7 +744,7 @@ This sample was created from the .NET Core tooling mvc template (`dotnet new mvc
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `*.csproj`: Contains the `PackageReference` for the Steeltoe NuGet Connector and the Entity Framework.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `DbContext` to the service container.
 * `HomeController.cs`: Code added for injection of a `TestContext` into the Controller to obtain data from the database and then to display the data.
 * `Index.cshtml`: The view used to display the data values from SQL Server.
@@ -809,6 +813,8 @@ The following table shows the available settings for the connector:
 >IMPORTANT: All of the settings shown in the preceding table should be prefixed with `sqlserver:credentials:`.
 
 The samples and most templates are already set up to read from `appsettings.json`. See [Reading Configuration Values](#reading-configuration-values).
+
+>NOTE: If a ConnectionString is provided and VCAP_SERVICES are not detected (a typical scenario for local app development), the ConnectionString will be used exactly as provided.
 
 ### 3.2.3 Cloud Foundry
 
@@ -989,7 +995,7 @@ If you need to set additional properties for the `DbContext` like `MigrationsAss
 Action<SqlServerDbContextOptionsBuilder> sqlServerOptionsAction = (o) =>
 {
   o.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+  // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency
   o.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
 };
 ```
@@ -1078,7 +1084,7 @@ The sample was created with the .NET Core tooling `mvc` template (`dotnet new mv
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
 * `RabbitMQ.csproj`: Contains the `PackageReference` for the `RabbitMQ.Client` and the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a RabbitMQ `ConnectionFactory` to the service container
 * `RabbitMQController.cs`: Code added for injection of a RabbitMQ `ConnectionFactory` into the Controller. The `ConnectionFactory` is used in the `Send` and `Receive` action methods.
 * `Receive.cshtml`: The view used to display the received message data values.
@@ -1280,7 +1286,7 @@ The sample was created from the .NET Core tooling `mvc` template (`dotnet new mv
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
 * `Redis.csproj`: Contains the `PackageReference` for the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`.
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add an `IDistributedCache` and an `IConnectionMultiplexer` to the service container.
 * `HomeController.cs`: Code added for injection of a `IDistributedCache` or `IConnectionMultiplexer` into the Controller. These are used to obtain data from the cache and then to display it.
 * `CacheData.cshtml`: The view used to display the Redis data values obtained using `IDistributedCache`.
@@ -1308,6 +1314,7 @@ To use the Redis connector, you need to add a reference to the appropriate [Stee
 
 >NOTE: The requirement to add a direct Redis package reference is new as of version 2.0.0.
 
+<!-- -->
 >NOTE: Because `Microsoft.Extensions.Caching.Redis` depends on `StackExchange.Redis.StrongName`, adding a reference to the Microsoft library also enables access to the StackExchange classes, as seen in the sample application.
 
 ### 5.2.2 Configure Settings
@@ -1333,25 +1340,27 @@ The following table table describes all possible settings for the connector
 
 |Key|Description|Default|
 |---|---|---|
-|host|Hostname or IP Address of the server.|localhost|
-|port|Port number of the server.|6379|
-|endPoints|Comma-separated list of host:port pairs.|not set|
-|clientName|Identification for the connection within redis.|not set|
-|connectRetry|Times to repeat initial connect attempts.|3|
-|connectTimeout|Timeout (ms) for connect operations.|5000|
-|abortOnConnectFail|Will not create a connection while no servers are available.|true|
-|keepAlive|Time (seconds) at which to send a message to help keep sockets alive.|-1|
-|resolveDns|Whether DNS resolution should be explicit and eager, rather than implicit.|false|
-|ssl|Whether SSL encryption should be used.|false|
-|sslHost|Enforces a particular SSL host identity on the server's certificate.|not set|
-|writeBuffer|Size of the output buffer.|4096|
-|connectionString|Connection string to use instead of values shown earlier.|not set|
-|instanceId|Cache ID. Used only with `IDistributedCache`.|not set|
+|host|Hostname or IP Address of the server|localhost|
+|port|Port number of the server|6379|
+|endPoints|Comma-separated list of host:port pairs|not set|
+|clientName|Identification for the connection within redis|not set|
+|connectRetry|Times to repeat initial connect attempts|3|
+|connectTimeout|Timeout (ms) for connect operations|5000|
+|abortOnConnectFail|Will not create a connection while no servers are available|true|
+|keepAlive|Time (seconds) at which to send a message to help keep sockets alive|-1|
+|resolveDns|Whether DNS resolution should be explicit and eager, rather than implicit|false|
+|ssl|Whether SSL encryption should be used|false|
+|sslHost|Enforces a particular SSL host identity on the server's certificate|not set|
+|writeBuffer|Size of the output buffer|4096|
+|connectionString|Full connection string|built from settings|
+|instanceId|Cache ID. Used only with `IDistributedCache`|not set|
 |urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
 
 >IMPORTANT: All of these settings should be prefixed with `redis:client:`.
 
 The samples and most templates are already set up to read from `appsettings.json`See [Reading Configuration Values](#reading-configuration-values).
+
+>NOTE: If a ConnectionString is provided and VCAP_SERVICES are not detected (a typical scenario for local app development), the ConnectionString will be used exactly as provided.
 
 ### 5.2.3 Cloud Foundry
 
@@ -1541,7 +1550,7 @@ The sample was created using the .NET Core tooling `mvc` template (`dotnet new m
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
 * `OAuth.csproj`: Contains the `PackageReference` for the Steeltoe NuGet `Steeltoe.CloudFoundry.ConnectorCore`
-* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.ConfigureAppConfiguration( -> .AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
+* `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry.
 * `Startup.cs`: Code added to the `ConfigureServices()` method to add a `OAuthServiceOptions` to the service container.
 * `HomeController.cs`: Code added for injection of a `OAuthServiceOptions` into the Controller. The `OAuthServiceOptions` contains the binding information from Cloud Foundry.
 * `OAuthOptions.cshtml`: The view used to display the OAuth data.
@@ -1657,6 +1666,125 @@ Finally, you can inject and use the configured `OAuthServiceOptions` into a cont
  }
  ```
 
+# 7.0 MongoDB
+
+This connector simplifies using MongoDB in an application running on Cloud Foundry with the [.NET MongoDB Driver](https://docs.mongodb.com/ecosystem/drivers/csharp/).
+
+>NOTE: There are currently no dedicated samples for the MongoDB connector. You can see it in action in the Steeltoe fork of [eShopOnContainers](https://github.com/SteeltoeOSS/eShopOnContainers), in the Locations API and the Marketing API.
+
+## 7.1 Usage
+
+To use this connector:
+
+1. Create a MongoDB service instance and bind it to your application.
+1. Optionally, configure any MongoDB client settings.
+1. Add the Steeltoe Cloud Foundry config provider to you `ConfigurationBuilder`.
+1. Add MongoDB classes to your DI container.
+
+### 7.1.1 Add NuGet Reference
+
+To use the MongoDB connector, add the official [MongoDB.Driver NuGet package](https://www.nuget.org/packages/MongoDB.Driver/) as you would if you weren't using Steeltoe. Then, add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references)
+
+### 7.1.2 Configure Settings
+
+The MongoDB connector supports several settings for creating
+
+```json
+{
+  "mongodb": {
+    "client": {
+      "server": "localhost",
+      "port": 27017,
+      "options": {
+        "replicaSet": "rs0"
+      }
+    }
+  }
+}
+```
+
+The following table table describes all possible settings for the connector
+
+|Key|Description|Default|
+|---|---|---|
+|server|Hostname or IP Address of the server|localhost|
+|port|Port number of the server|27017|
+|username|Username for authentication|not set|
+|password|Password for authentication|not set|
+|database|Name of the database to use|not set|
+|options|any additional [options](https://mongodb.github.io/mongo-csharp-driver/2.7/apidocs/html/T_MongoDB_Driver_MongoClientSettings.htm), passed through as provided|not set|
+|connectionString|Full connection string|built from settings|
+|urlEncodedCredentials|Set to `true` if your service broker provides URL-encoded credentials|false|
+
+>IMPORTANT: All of these settings should be prefixed with `mongodb:client:`.
+
+The samples and most templates are already set up to read from `appsettings.json`See [Reading Configuration Values](#reading-configuration-values).
+
+>NOTE: If a ConnectionString is provided and VCAP_SERVICES are not detected (a typical scenario for local app development), the ConnectionString will be used exactly as provided.
+
+### 7.1.3 Cloud Foundry
+
+To use MongoDB on Cloud Foundry, create and bind an instance to your application by using the Cloud Foundry CLI, as shown in the following example:
+
+```bash
+# Create MongoDB service
+cf create-service mongodb-odb standalone_small myMongoDb
+
+# Bind service to `myApp`
+cf bind-service myApp myMongoDb
+
+# Restage the app to pick up change
+cf restage myApp
+```
+
+>NOTE: The preceding commands assume you use the MongoDB Enterprise Service for PCF. If you use a different service, you may have to adjust the `create-service` command to fit your environment.
+
+### 7.1.4 Add Mongo Client
+
+To use `MongoClient` and `MongoUrl` in your application, use the extension provided for Microsoft DI:
+
+```csharp
+using Steeltoe.CloudFoundry.Connector.MongoDb;
+public class Startup
+{
+  ...
+  public IServiceProvider ConfigureServices(IServiceCollection services)
+  {
+      services.AddMongoClient(Configuration);
+  }
+  ...
+}
+```
+
+Or the extension provided for Autofac:
+
+```csharp
+using Steeltoe.CloudFoundry.ConnectorAutofac;
+...
+  ContainerBuilder container = new ContainerBuilder();
+  var regBuilder = container.RegisterMongoDbConnection(configuration);
+...
+```
+
+### 7.1.4 Use Mongo Client
+
+The following example shows how to inject and use an `IMongoClient` and `MongoUrl` in order to get an `IMongoDatabase` to interact with:
+
+```csharp
+public class SomeClass
+{
+  private readonly IMongoDatabase _database = null;
+  public SomeClass(IMongoClient mongoClient, MongoUrl mongoUrl)
+  {
+    _database = mongoClient.GetDatabase(mongoUrl.DatabaseName);
+  }
+  public IMongoCollection<SomeObject> MyObjects
+  {
+      get { return _database.GetCollection<SomeObject>("MyObjects"); }
+  }
+}
+```
+
 # Common Steps
 
 ## Publish Sample
@@ -1757,10 +1885,10 @@ To use Steeltoe Connectors, you need to add a reference to the appropriate NuGet
 
 |App Type|Package|Description|
 |---|---|---|
-|Console/ASP.NET 4.x|`Steeltoe.CloudFoundry.ConnectorBase`|Base functionality. No dependency injection.|
-|ASP.NET 4.x with Autofac|`Steeltoe.CloudFoundry.ConnectorAutofac`|Includes base. Adds Autofac dependency injection.|
-|ASP.NET Core|`Steeltoe.CloudFoundry.ConnectorCore`|Includes base. Adds Microsoft Dependency Injection.|
-|ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EF6Core`|Includes base. Adds Entity Framework 6 with Microsoft Dependency Injection.|
+|Console/ASP.NET 4.x|`Steeltoe.CloudFoundry.ConnectorBase`|Base functionality. No dependency injection|
+|ASP.NET 4.x with Autofac|`Steeltoe.CloudFoundry.ConnectorAutofac`|Includes base. Adds Autofac dependency injection|
+|ASP.NET Core|`Steeltoe.CloudFoundry.ConnectorCore`|Includes base. Adds Microsoft Dependency Injection|
+|ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EF6Core`|Includes base. Adds Entity Framework 6 with Microsoft Dependency Injection|
 |ASP.NET Core|`Steeltoe.CloudFoundry.Connector.EFCore`|Includes base. Adds Entity Framework Core with Microsoft Dependency Injection|
 
 To add any NuGet package, use the package manager tools or (with .NET Core applications only) directly add the appropriate package to your project by using the a `PackageReference`, as shown in the following listing:
