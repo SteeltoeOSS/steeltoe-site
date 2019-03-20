@@ -61,7 +61,7 @@ The Cloud Foundry provider enables the standard Cloud Foundry environment variab
 
 Cloud Foundry creates and uses these environment variables to communicate an application's environment and configuration to the application code running inside a container. More specifically, the values found in `VCAP_APPLICATION` provide information about the application's resource limits, routes (URIs), and version number, among other things. The `VCAP_SERVICES` environment variable provides information about the external services (Databases, Caches, and so on) to which the application is bound, along with details on how to contact those services.
 
-You can read more information on the Cloud Foundry environment variables at the [Cloud Foundry docs](http://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html) website.
+You can read more information on the Cloud Foundry environment variables at the [Cloud Foundry docs](https://docs.cloudfoundry.org/devguide/deploy-apps/environment-variable.html) website.
 
 The Steeltoe Cloud Foundry provider supports the following .NET application types:
 
@@ -119,7 +119,7 @@ Use the menu at the top of the sample application to see the various outputs pro
 
 Because you have not bound any Cloud Foundry services to the app, there is no `VCAP_SERVICES` information.
 
-To see service binding information, bind any service to the application and then restart it. To do so, follow the instructions on the [Cloud Foundry documentation](http://docs.cloudfoundry.org/devguide/services/application-binding.html) site.
+To see service binding information, bind any service to the application and then restart it. To do so, follow the instructions on the [Cloud Foundry documentation](https://docs.cloudfoundry.org/devguide/services/application-binding.html) site.
 
 ### 1.1.6 Understand Sample
 
@@ -229,7 +229,7 @@ var instanceId = config["vcap:application:instance_id"]
 ...
 ```
 
-A list of all `VCAP_APPLICATION` keys is available in the [VCAP_APPLICATION](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-APPLICATION) topic of the Cloud Foundry documentation.
+A list of all `VCAP_APPLICATION` keys is available in the [VCAP_APPLICATION](https://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-APPLICATION) topic of the Cloud Foundry documentation.
 
 You can also directly access the values from the `VCAP_SERVICES` environment variable. For example, to access the information about the first instance of a bound Cloud Foundry service with a name of `service-name`, you could code the following:
 
@@ -240,7 +240,7 @@ var uri = config["vcap:services:service-name:0:credentials:uri"]
 ...
 ```
 
-A list of all `VCAP_SERVICES` keys is available in the [VCAP_SERVICES](http://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES) topic of the Cloud Foundry documentation.
+A list of all `VCAP_SERVICES` keys is available in the [VCAP_SERVICES](https://docs.CloudFoundry.org/devguide/deploy-apps/environment-variable.html#VCAP-SERVICES) topic of the Cloud Foundry documentation.
 
 >NOTE: This provider uses the built-in .NET [JSON Configuration Parser](https://github.com/aspnet/Configuration/tree/dev/src/Microsoft.Extensions.Configuration.Json) when parsing the JSON provided in the `VCAP_*` environment variables. As a result, you can expect the exact same key names and behavior as you see when parsing JSON configuration files (such as `appsettings.json`) in your application.
 
@@ -389,7 +389,7 @@ This provider enables the Spring Cloud Config Server to be used as a source of c
 
 The Spring Cloud Config Server is an application configuration service that gives you a central place to manage an application's configuration values externally across all environments. As an application moves through the deployment pipeline from development to test and into production, you can use the config server to manage the configuration between environments and be certain that the application has everything it needs to run when you migrate it. The config server easily supports labelled versions of environment-specific configurations and is accessible to a wide range of tooling for managing its content.
 
-To gain a better understanding of the Spring Cloud Config Server, you should read the [Spring Cloud](http://projects.spring.io/spring-cloud/) documentation.
+To gain a better understanding of the Spring Cloud Config Server, you should read the [Spring Cloud](https://projects.spring.io/spring-cloud/) documentation.
 
 The Steeltoe Config Server provider supports the following .NET application types:
 
@@ -536,7 +536,7 @@ On Windows cells, you should see something slightly different but with the same 
 
 #### 2.1.2.5 View Results
 
-The `cf push` command creates an application by the name of `foo` and binds the `myConfigServer` service instance to the application. You can see the application at `http://sample.x.y.z/`.
+The `cf push` command creates an application by the name of `foo` and binds the `myConfigServer` service instance to the application. You can see the application at `https://sample.x.y.z/`.
 
 Use the menu provided by the app to see various output related to Cloud Foundry and the config server:
 
@@ -579,7 +579,7 @@ The following sections describe how to use the config server configuration provi
 
 You should know how the new .NET [Configuration services](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) work before starting to use this provider. A basic understanding of the `ConfigurationBuilder` and how to add providers to the builder is necessary.
 
-You should also have a good understanding of the [Spring Cloud Config Server](http://cloud.spring.io/spring-cloud-config/).
+You should also have a good understanding of the [Spring Cloud Config Server](https://cloud.spring.io/spring-cloud-config/).
 
 To use the Steeltoe provider, you need to do the following:
 
@@ -593,7 +593,7 @@ To use the Steeltoe provider, you need to do the following:
 
 You can choose from two Config Server client NuGets, depending on your needs.
 
-If you plan on only connecting to the open source version of [Spring Cloud Config Server](http://projects.spring.io/spring-cloud/), then you should use one of the packages described by the following table, depending on your application type and needs:
+If you plan on only connecting to the open source version of [Spring Cloud Config Server](https://projects.spring.io/spring-cloud/), then you should use one of the packages described by the following table, depending on your application type and needs:
 
 |App Type|Package|Description|
 |---|---|---|
@@ -611,7 +611,7 @@ To add this type of NuGet to your project, add a `PackageReference` that resembl
 </ItemGroup>
 ```
 
-If you plan to connect to the open source version of [Spring Cloud Config Server](http://projects.spring.io/spring-cloud/) and you plan to push your application to Cloud Foundry to use [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you should use one of the packages described in the following table, depending on your application type and needs:
+If you plan to connect to the open source version of [Spring Cloud Config Server](https://projects.spring.io/spring-cloud/) and you plan to push your application to Cloud Foundry to use [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you should use one of the packages described in the following table, depending on your application type and needs:
 
 |App Type|Package|Description|
 |---|---|---|
@@ -778,7 +778,7 @@ var property2 = config["myconfiguration:property2"]
 ...
 ```
 
-Alternatively, you can create a class to hold your configuration data and then use the [Options](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) framework together with [Dependency Injection](http://docs.asp.net/en/latest/fundamentals/dependency-injection.html) to inject an instance of the class into your controllers and view.
+Alternatively, you can create a class to hold your configuration data and then use the [Options](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration) framework together with [Dependency Injection](https://docs.asp.net/en/latest/fundamentals/dependency-injection.html) to inject an instance of the class into your controllers and view.
 
 To do so, first create a class representing the configuration data you expect to retrieve from the server, as shown in the following example:
 
