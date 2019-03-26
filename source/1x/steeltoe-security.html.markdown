@@ -206,11 +206,11 @@ To gain an understanding of the Steeltoe related changes to generated template c
 
 This package is built on the OAuth 2 authentication flow and the services provided by ASP.NET Core Security. You should take some time to understand both, before proceeding to use this provider.
 
-Many resources are available for understanding OAuth 2; for example, see [Introduction to OAuth 2](https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2) or [Understanding OAuth 2](http://www.bubblecode.net/en/2016/01/22/understanding-oauth2/).
+Many resources are available for understanding OAuth 2; for example, see [Introduction to OAuth 2](https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2) or [Understanding OAuth 2](https://www.bubblecode.net/en/2016/01/22/understanding-oauth2/).
 
 To get a good understanding of ASP.NET Core Security, review the [documentation](https://docs.microsoft.com/en-us/aspnet/core/) provided by Microsoft.
 
-Additionally, you should have a good understanding of how the .NET [Configuration service](http://docs.asp.net/en/latest/fundamentals/configuration.html) works and a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder.
+Additionally, you should have a good understanding of how the .NET [Configuration service](https://docs.asp.net/en/latest/fundamentals/configuration.html) works and a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder.
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and the middleware used in the app. Pay particular attention to the usage of the `Configure()` and `ConfigureService())` methods.
 
@@ -530,7 +530,7 @@ Many resources are available for understanding JWT; for example, see [JWT IO](ht
 
 To get a good understanding of ASP.NET Core Security, review the [documentation](https://docs.microsoft.com/en-us/aspnet/core/) provided by Microsoft.
 
-Additionally, you should have a good understanding of how the .NET [Configuration services](http://docs.asp.net/en/latest/fundamentals/configuration.html) works and a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder.
+Additionally, you should have a good understanding of how the .NET [Configuration services](https://docs.asp.net/en/latest/fundamentals/configuration.html) works and a basic understanding of the `ConfigurationBuilder` and how to add providers to the builder.
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.asp.net/en/latest/fundamentals/startup.html) class is used in configuring the application services and the middleware used by the app. Pay particular attention to the usage of the `Configure()` and `ConfigureServices()` methods.
 

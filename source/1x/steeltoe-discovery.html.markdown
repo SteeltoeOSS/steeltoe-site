@@ -7,7 +7,7 @@ tags:
 
 A service registry provides a database that applications can use in implementing the Service Discovery pattern; one of the key tenets of a micro-services based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, applications can use a service registry to dynamically discover and call registered services.
 
-There are several options to choose from when implementing the Service Discovery pattern. Steeltoe has initially chosen to support one based on Eureka; using Netflix's Service Discovery server and client. For more information about Eureka see the [Netflix/Eureka Wiki](https://github.com/Netflix/eureka/wiki) and the [Spring Cloud Netflix](http://projects.spring.io/spring-cloud/) documentation.
+There are several options to choose from when implementing the Service Discovery pattern. Steeltoe has initially chosen to support one based on Eureka; using Netflix's Service Discovery server and client. For more information about Eureka see the [Netflix/Eureka Wiki](https://github.com/Netflix/eureka/wiki) and the [Spring Cloud Netflix](https://projects.spring.io/spring-cloud/) documentation.
 
 In the future you can expect to see more Service Discovery options as part of the Steeltoe framework.
 
@@ -226,7 +226,7 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 1.1.14 What to expect
 
-Fire up a browser and hit <http://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
+Fire up a browser and hit <https://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
 
 You should see your fortune displayed. Refresh the browser to see a new fortune.
 
@@ -257,7 +257,7 @@ You should have a good understanding of how the new .NET [Configuration service]
 
 You should also have a good understanding of how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services and the middleware used in the app. Specifically pay particular attention to the usage of the `Configure()` and `ConfigureServices()` methods.
 
-You should also have a good understanding of the [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/).
+You should also have a good understanding of the [Spring Cloud Eureka Server](https://projects.spring.io/spring-cloud/).
 
 In order to use the Steeltoe Discovery client you need to do the following:
 
@@ -271,7 +271,7 @@ In order to use the Steeltoe Discovery client you need to do the following:
 
 There are two Eureka Server client NuGets that you can choose from depending on your needs.
 
-If you plan on only connecting to the open source version of [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/), then you should use the `Steeltoe.Discovery.Client` package.
+If you plan on only connecting to the open source version of [Spring Cloud Eureka Server](https://projects.spring.io/spring-cloud/), then you should use the `Steeltoe.Discovery.Client` package.
 
 In this case add the client to your project using the following `PackageReference`:
 
@@ -283,7 +283,7 @@ In this case add the client to your project using the following `PackageReferenc
 </ItemGroup>
 ```
 
-If you plan on connecting to the open source version of [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/), AND you plan on pushing your application to Cloud Foundry to make use of [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-4/common/index.html), then you should use the `Pivotal.Discovery.Client` package.
+If you plan on connecting to the open source version of [Spring Cloud Eureka Server](https://projects.spring.io/spring-cloud/), AND you plan on pushing your application to Cloud Foundry to make use of [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-4/common/index.html), then you should use the `Pivotal.Discovery.Client` package.
 
 In this case add the client to your project using the following `PackageReference`:
 

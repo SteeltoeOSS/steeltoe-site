@@ -71,7 +71,7 @@
 /// @return {Number}
 /// @link https://github.com/at-import/Sassy-math/blob/master/sass/math.scss#L259-L266 SassyMath
 @function sqrt($number) {
-  $guess: 4; // Guaranteed to be random: http://xkcd.com/221/
+  $guess: 4; // Guaranteed to be random: https://xkcd.com/221/
   $root: $guess;
 
   @for $i from 1 through 50 {
@@ -84,7 +84,7 @@
 /// Computes the height of the tilted pseudo-element based on the given angle
 /// using Pythagoras Theorem.
 // sin(..), pow(..) and sqrt(..)  functions come from this pen:
-// http://codepen.io/HugoGiraudel/pen/rLpPGo
+// https://codepen.io/HugoGiraudel/pen/rLpPGo
 /// @access public
 /// @author Hugo Giraudel
 /// @param {Angle} $angle - the tilt angle

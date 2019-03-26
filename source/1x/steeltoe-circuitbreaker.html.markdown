@@ -11,7 +11,7 @@ The Steeltoe Circuit Breaker framework provide applications with an implementati
 
 When applied to a service, a circuit breaker watches for failing calls to the service.  If failures reach a certain threshold, it “opens” the circuit and automatically redirects calls to the specified fallback mechanism. This gives the failing service time to recover.
 
-There are several options to choose from when implementing the Circuit Breaker pattern. Steeltoe has initially chosen to support one based on Hystrix; Netflix's Latency and Fault Tolerance library for distributed systems. For more information about Hystrix see the [Netflix/Hystrix Wiki](https://github.com/Netflix/Hystrix/wiki) and the [Spring Cloud Netflix](http://projects.spring.io/spring-cloud/) documentation.
+There are several options to choose from when implementing the Circuit Breaker pattern. Steeltoe has initially chosen to support one based on Hystrix; Netflix's Latency and Fault Tolerance library for distributed systems. For more information about Hystrix see the [Netflix/Hystrix Wiki](https://github.com/Netflix/Hystrix/wiki) and the [Spring Cloud Netflix](https://projects.spring.io/spring-cloud/) documentation.
 
 In the future you can expect to see more Circuit Breaker options as part of Steeltoe.
 
@@ -294,17 +294,17 @@ On a Linux cell, you should see something like this during startup. On Windows c
 
 ### 1.1.17 What to expect
 
-Fire up a browser and hit <http://fortuneui.x.y.z> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
+Fire up a browser and hit <https://fortuneui.x.y.z> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
 
 You should see your fortune displayed. Refresh the browser to see a new fortune.
 
-In addition to hitting <http://fortuneui.x.y.z>, you can also hit: <http://fortuneui.x.y.z/#/multiple> to cause the UI to make use of a Hystrix Collapser to obtain multiple fortunes.
+In addition to hitting <https://fortuneui.x.y.z>, you can also hit: <https://fortuneui.x.y.z/#/multiple> to cause the UI to make use of a Hystrix Collapser to obtain multiple fortunes.
 
 ### 1.1.18 Using the Hystrix Dashboard
 
 Open a browser and connect to the Pivotal Apps Manager. You will have to use a link that is specific to your Cloud Foundry setup. (e.g. <https://apps.system.testcloud.com/>)
 
-Follow [these instructions](http://docs.pivotal.io/spring-cloud-services/1-4/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix dashboard on Cloud Foundry.
+Follow [these instructions](https://docs.pivotal.io/spring-cloud-services/1-4/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix dashboard on Cloud Foundry.
 
 Go back to the Fortune-Teller-UI application and obtain several fortunes.  Observe the values changing in the Hystrix dashboard.  Click the refresh button on the UI app quickly to see the dashboard update.
 
@@ -379,7 +379,7 @@ To do this include the following `PackageReference` in your application:
 </ItemGroup>
 ```
 
-Alternatively, if you will be pushing your application to Cloud Foundry and you want to use the [Spring Cloud Services Hystrix Dashboard](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/), then you should include the `Steeltoe.CircuitBreaker.Hystrix.MetricsStream` package instead of the one above.
+Alternatively, if you will be pushing your application to Cloud Foundry and you want to use the [Spring Cloud Services Hystrix Dashboard](https://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/), then you should include the `Steeltoe.CircuitBreaker.Hystrix.MetricsStream` package instead of the one above.
 
 To do this include the following `PackageReference` in your application:
 
@@ -1073,7 +1073,7 @@ With Steeltoe, there are currently two dashboards you can choose from.
 
 The first is the [Netflix Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard). This dashboard is appropriate when you are not running your application on Cloud Foundry.  For example, when you are developing and testing your application locally on your desktop.
 
-The second is the [Spring Cloud Services Hystrix Dashboard](http://docs.pivotal.io/spring-cloud-services/1-4/common/circuit-breaker/).  This dashboard is part of the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-3/common/) offering and is made available to applications via the normal service instance binding mechanisms on Cloud Foundry.
+The second is the [Spring Cloud Services Hystrix Dashboard](https://docs.pivotal.io/spring-cloud-services/1-4/common/circuit-breaker/).  This dashboard is part of the [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-3/common/) offering and is made available to applications via the normal service instance binding mechanisms on Cloud Foundry.
 
 Note, as described in the *Add NuGet References* section above, depending on which dashboard you are targeting, you will need to make sure you include the correct Steeltoe NuGet in your project.
 
@@ -1178,7 +1178,7 @@ When you want to use a Hystrix Dashboard on Cloud Foundry you must have previous
 > cf services
 ```
 
-For more information on using the Hystrix Dashboard on Cloud Foundry, see the [Spring Cloud Services](http://docs.pivotal.io/spring-cloud-services/1-4/common/) documentation.
+For more information on using the Hystrix Dashboard on Cloud Foundry, see the [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-4/common/) documentation.
 
 Once you have bound the service to your application, the Hystrix Dashboard settings will become available and be setup in `VCAP_SERVICES`.
 
@@ -1219,5 +1219,5 @@ Note:  If you are using the Spring Cloud Config Server for centralized configura
 Once you have performed the steps described above, and you have made the changes described in *Use Metrics* section above, you can make use of the Spring Cloud Services dashboard by following the instructions below:
 
 1. Open a browser and connect to the Pivotal Apps Manager.
-1. Follow [these instructions](http://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix Dashboard service.
+1. Follow [these instructions](https://docs.pivotal.io/spring-cloud-services/1-3/common/circuit-breaker/using-the-dashboard.html) to open the Hystrix Dashboard service.
 1. Use your application and see the metrics begin to flow in.

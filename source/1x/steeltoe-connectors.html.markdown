@@ -484,7 +484,7 @@ This connector simplifies using PostgreSQL ADO.NET providers in an application r
 
 Currently the connector supports the following providers:
 
-* [Npgsql](http://www.npgsql.org/)
+* [Npgsql](https://www.npgsql.org/)
 
 The source code for this connector can be found [here](https://github.com/SteeltoeOSS/Connectors).
 
@@ -1388,14 +1388,14 @@ Add the connector to your project using the following `PackageReference`:
 
 Optionally you can configure the settings the connector will use when setting up the RedisCache. This can be useful when you are developing and testing an application locally on your desktop and you need to have the connector configure the connection to an instance of a RabbitMQ server running elsewhere.
 
-Here is an example of the connectors configuration in JSON that shows how to setup a connection to a Redis server at `http://foo.bar:1111`
+Here is an example of the connectors configuration in JSON that shows how to setup a connection to a Redis server at `https://foo.bar:1111`
 
 ```json
 {
 ...
   "redis": {
     "client": {
-      "host": "http://foo.bar",
+      "host": "https://foo.bar",
       "port": 1111
     }
   }
