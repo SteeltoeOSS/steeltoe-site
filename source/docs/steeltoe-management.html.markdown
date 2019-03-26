@@ -1086,11 +1086,11 @@ PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.1.0
 
 ##### 1.2.12.3.2 Cloud Foundry Forwarder
 
-The [Metrics Forwarder for Pivotal Cloud Foundry (PCF)](http://docs.pivotal.io/metrics-forwarder/) is a service that allows apps to emit metrics to the [Loggregator](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html) system and consume those metrics from the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html#firehose).
+The [Metrics Forwarder for Pivotal Cloud Foundry (PCF)](https://docs.pivotal.io/metrics-forwarder/) is a service that allows apps to emit metrics to the [Loggregator](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html) system and consume those metrics from the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html#firehose).
 
-You can interact with the service through the Cloud Foundry Command Line Interface (cf CLI), [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/manage-apps.html), and an [HTTP API](http://docs.pivotal.io/metrics-forwarder/api/). See the [documentation](http://docs.pivotal.io/metrics-forwarder/using.html) for details on how to use the service in your application.
+You can interact with the service through the Cloud Foundry Command Line Interface (cf CLI), [Pivotal Apps Manager](https://docs.pivotal.io/pivotalcf/2-0/console/manage-apps.html), and an [HTTP API](https://docs.pivotal.io/metrics-forwarder/api/). See the [documentation](https://docs.pivotal.io/metrics-forwarder/using.html) for details on how to use the service in your application.
 
-[Metrics Forwarder for Pivotal Cloud Foundry (PCF)](http://docs.pivotal.io/metrics-forwarder/)  enables users to do the following:
+[Metrics Forwarder for Pivotal Cloud Foundry (PCF)](https://docs.pivotal.io/metrics-forwarder/)  enables users to do the following:
 
 * Configure apps to emit custom metrics to [Loggregator](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html) system.
 * Read custom metrics from the [Loggregator Firehose](https://docs.pivotal.io/pivotalcf/2-2/loggregator/architecture.html#firehose) using a Firehose consumer of their choice, including [community](https://github.com/cloudfoundry/loggregator-release/blob/develop/docs/community-nozzles.md) and third-party nozzles.
@@ -1119,7 +1119,7 @@ The following table describes the settings that you can apply to the exporter:
 
 There are three steps needed to use the Metrics Forwarder for Pivotal Cloud Foundry (PCF) service:
 
-1. Create and bind a forwarder service to your application. Follow the steps in the Metrics Forwarder for PCF [documentation](http://docs.pivotal.io/metrics-forwarder/using.html).
+1. Create and bind a forwarder service to your application. Follow the steps in the Metrics Forwarder for PCF [documentation](https://docs.pivotal.io/metrics-forwarder/using.html).
 1. Add the exporter to the service container. Use the `AddMetricsForwarderExporter()` extension method from [EndpointServiceCollectionExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.ExporterCore/Metrics/CloudFoundryForwarder/EndpointServiceCollectionExtensions.cs).
 1. Start the exporter background thread. Use the `UseMetricsExporter()` extension method from [EndpointApplicationBuilderExtensions](https://github.com/SteeltoeOSS/Management/blob/master/src/Steeltoe.Management.ExporterCore/Metrics/CloudFoundryForwarder/EndpointApplicationBuilderExtensions.cs).
 
@@ -1158,7 +1158,7 @@ public class Startup
 
 There are two steps needed to use the Metrics Forwarder for Pivotal Cloud Foundry (PCF) service:
 
-1. Create and bind a forwarder service to your application. Follow the steps in the Metrics Forwarder for PCF [documentation](http://docs.pivotal.io/metrics-forwarder/using.html).
+1. Create and bind a forwarder service to your application. Follow the steps in the Metrics Forwarder for PCF [documentation](https://docs.pivotal.io/metrics-forwarder/using.html).
 1. Configure and start the exporter background thread.
 
 ```csharp
@@ -1462,11 +1462,11 @@ Use the Cloud Foundry CLI to start an instance of the Zipkin server on Cloud Fou
 cf push zipkin-server -p ./zipkin-server-2.8.4-exec.jar
 ```
 
-Verify the server is up and running by opening a browser to the Zipkin server UI: (for example, <http://zipkin-server.cfapps.io/>).
+Verify the server is up and running by opening a browser to the Zipkin server UI: (for example, <https://zipkin-server.cfapps.io/>).
 
 #### 2.1.2.3 Configure Settings
 
-Open `appsettings.json` and modify the `management:tracing:exporter:zipkin:endpoint` configuration setting to match the endpoint of the Zipkin server deployed to Cloud Foundry above. (for example, <http://zipkin-server.cfapps.io/api/v2/spans>).
+Open `appsettings.json` and modify the `management:tracing:exporter:zipkin:endpoint` configuration setting to match the endpoint of the Zipkin server deployed to Cloud Foundry above. (for example, <https://zipkin-server.cfapps.io/api/v2/spans>).
 
 You need to make this modification in both Fortune-Teller-Service and Fortune-Teller-UI.
 
@@ -1503,7 +1503,7 @@ On Windows cells, you should see something slightly different but with the same 
 
 #### 2.1.2.7 View Traces
 
-Start a browser and visit <http://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
+Start a browser and visit <https://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
 
 You should see your fortune. Refresh the browser to see a new fortune.
 
@@ -1599,7 +1599,7 @@ All settings should be placed under the prefix with the key `management:tracing:
 
 If you want to use distributed tracing together with log correlation, then you must utilize the [Steeltoe Logging provider](https://github.com/SteeltoeOSS/Logging) in your application.
 
-Follow these [instructions](http://steeltoe.io/docs/steeltoe-logging/#1-0-dynamic-logging-provider) for how to enable the provider in your application.
+Follow these [instructions](https://steeltoe.io/docs/steeltoe-logging/#1-0-dynamic-logging-provider) for how to enable the provider in your application.
 
 Once that is done, then whenever your application issues any log statements, the Steeltoe logger will add additional trace information to each log message if there is an active trace context. The format of that information is of the form:
 
@@ -1609,7 +1609,7 @@ Once that is done, then whenever your application issues any log statements, the
 
 When working with distributed tracing systems you will find that a trace context (for example, trace state information) must get propagated to all child processes to ensure that child spans originating from a root trace get collected and correlated into a single trace in the end.  The current trace and span IDs are just one piece of the required information that must get propagated.
 
-Steeltoe distributed tracing handles this for you by default when using the .NET HttpClient. When a downstream HTTP call is made, the current trace context is encoded as request headers and sent along with the request automatically.  Currently, Steeltoe encodes the context using [Zipkin B3 Propagation](https://github.com/openzipkin/b3-propagation) encodings. As a result, you will find that Steeltoe tracing is interoperable with several other instrumentation libraries such as [Spring Cloud Sleuth](http://cloud.spring.io/spring-cloud-sleuth/2.0.x/single/spring-cloud-sleuth.html).
+Steeltoe distributed tracing handles this for you by default when using the .NET HttpClient. When a downstream HTTP call is made, the current trace context is encoded as request headers and sent along with the request automatically.  Currently, Steeltoe encodes the context using [Zipkin B3 Propagation](https://github.com/openzipkin/b3-propagation) encodings. As a result, you will find that Steeltoe tracing is interoperable with several other instrumentation libraries such as [Spring Cloud Sleuth](https://cloud.spring.io/spring-cloud-sleuth/2.0.x/single/spring-cloud-sleuth.html).
 
 ### 2.2.5 Add Distributed Tracing
 
