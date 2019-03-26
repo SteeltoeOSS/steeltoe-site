@@ -5,7 +5,7 @@ weight = 2
 +++
 
 image:img/netflixoss.png[Netflix OSS,150,role="left"]
-Netflix is well known as the "`poster child`" of microservices architectures. Not only have they addressed the challenges of building distributed systems at scale, they've implemented solutions them based on well-characterized patterns, battle-tested them while accounting for 37% of North America's Internet traffic footnote:[http://appleinsider.com/articles/16/01/20/netflix-boasts-37-share-of-internet-traffic-in-north-america-compared-with-3-for-apples-itunes], and then provided those solutions to the world as Apache Software License v2.0 open source.
+Netflix is well known as the "`poster child`" of microservices architectures. Not only have they addressed the challenges of building distributed systems at scale, they've implemented solutions them based on well-characterized patterns, battle-tested them while accounting for 37% of North America's Internet traffic footnote:[https://appleinsider.com/articles/16/01/20/netflix-boasts-37-share-of-internet-traffic-in-north-america-compared-with-3-for-apples-itunes], and then provided those solutions to the world as Apache Software License v2.0 open source.
 
 Among the most popular of Netflix's OSS solutions are its common runtime services and libraries, including:
 

@@ -1,12 +1,12 @@
-baseurl = "http://swiftline.github.io"
+baseurl = "https://swiftline.github.io"
 languageCode = "en-us"
 title = "Swiftline"
 
 [params]
     description = "Amazing project."
     author_url = "http://nsomar.com"
-    project_url = "http://github.com/swiftline/swiftline"
-    project_documentation = "http://swiftline.github.io/docs"
+    project_url = "https://github.com/swiftline/swiftline"
+    project_documentation = "https://swiftline.github.io/docs"
     github_project_name = "swiftline"
     github_user_name = "swiftline"
 

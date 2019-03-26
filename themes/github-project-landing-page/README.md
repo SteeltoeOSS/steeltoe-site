@@ -1,9 +1,9 @@
 # Github project landing page
 
-Github landing page is a theme for [Hugo](http://gohugo.io) to create landing pages for github projects. This theme is based on [landing-page-hugo](https://github.com/crakjie/landing-page-hugo)
+Github landing page is a theme for [Hugo](https://gohugo.io) to create landing pages for github projects. This theme is based on [landing-page-hugo](https://github.com/crakjie/landing-page-hugo)
 
 # Demo
-A demo can be find here [Swiftline](http://swiftline.github.io)
+A demo can be find here [Swiftline](https://swiftline.github.io)
 
 # Screenshot
 ![screenshot](https://raw.githubusercontent.com/oarrabi/github-project-landing-page/master/images/screenshot.png)
@@ -23,8 +23,8 @@ Project description appears after project name
 
 ```
     author_url = "http://nsomar.com"
-    project_url = "http://github.com/swiftline/swiftline"
-    project_documentation = "http://swiftline.github.io/docs"
+    project_url = "https://github.com/swiftline/swiftline"
+    project_documentation = "https://swiftline.github.io/docs"
 
 ```
 

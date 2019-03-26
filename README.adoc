@@ -1,11 +1,11 @@
 = How to Even Work on this Website
 
-Welcome to authoring content for the Steel Toe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework. Also, we author content using the http://asciidoctor.org/[Asciidoctor] markup format.
+Welcome to authoring content for the Steel Toe website! When deployed, this website consists of static content generated using the https://gohugo.io[Hugo] framework. Also, we author content using the https://asciidoctor.org/[Asciidoctor] markup format.
 
 == Prerequisites
 
 1. https://gohugo.io/overview/installing/[Install] Hugo.
-2. http://asciidoctor.org/docs/install-toolchain/[Install] Asciidoctor.
+2. https://asciidoctor.org/docs/install-toolchain/[Install] Asciidoctor.
 2. Clone this repo.
 3. Get invited as a space developer to the following orgs/spaces on PWS:
 +
@@ -38,8 +38,8 @@ If you have some changes that you want to deploy to PWS:
 
 3. A Concourse pipeline will run and blue/green deploy your changes to Staging. The pipeline is located at https://ci.steeltoe.io/pipelines/steeltoe-site. You'll login with your GitHub credentials, and you must be a member of the `steel-toe-contributors` team in the `SteelToeOSS` GitHub org.
 
-4. In a few moments, view your changes at http://steeltoe-stage.cfapps.io.
+4. In a few moments, view your changes at https://steeltoe-stage.cfapps.io.
 
 5. If you're happy with how things look on staging, and you're ready to go to production, you manually trigger the blue/green deployment to production by clicking the plus icon on the `generate-prod-site` job in the Concourse pipeline.
 
-6. In a few moments, your content will be live at http://steeltoe.io.
+6. In a few moments, your content will be live at https://steeltoe.io.
