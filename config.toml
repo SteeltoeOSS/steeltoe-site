@@ -1,11 +1,11 @@
-baseurl = "http://steeltoe-stage.cfapps.io"
+baseurl = "https://steeltoe-stage.cfapps.io"
 languageCode = "en-us"
 title = "Steel Toe"
 
 [params]
     description = "Cloud Native .NET Applications - Harnessing the Power of Spring Cloud and Cloud Foundry"
-    author_url = "http://pivotal.io"
-    project_url = "http://github.com/SteelToeOSS"
+    author_url = "https://pivotal.io"
+    project_url = "https://github.com/SteelToeOSS"
     project_documentation = "/docs"
     github_project_name = "Samples"
     github_user_name = "SteelToeOSS"
