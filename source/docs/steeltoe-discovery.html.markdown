@@ -7,7 +7,7 @@ tags:
 
 A service registry provides a database that applications can use to implement the Service Discovery pattern, one of the key tenets of a microservices-based architecture. Trying to hand-configure each client of a service or adopt some form of access convention can be difficult and prove to be brittle in production. Instead, applications can use a service registry to dynamically discover and call registered services.
 
-There are several options to choose from when implementing the Service Discovery pattern. Steeltoe has initially chosen to support one based on Eureka and using Netflix's Service Discovery server and client. For more information about Eureka, see the [Netflix/Eureka Wiki](https://github.com/Netflix/eureka/wiki) and the [Spring Cloud Netflix](http://projects.spring.io/spring-cloud/) documentation.
+There are several options to choose from when implementing the Service Discovery pattern. Steeltoe has initially chosen to support one based on Eureka and using Netflix's Service Discovery server and client. For more information about Eureka, see the [Netflix/Eureka Wiki](https://github.com/Netflix/eureka/wiki) and the [Spring Cloud Netflix](https://projects.spring.io/spring-cloud/) documentation.
 
 >NOTE: Depending on your hosting environment, service instances you create for the purpose of exploring the Quick Starts on this page may have a cost associated.
 
@@ -150,7 +150,7 @@ using Pivotal.Discovery.Client;
 public class FortuneService : IFortuneService
 {
     DiscoveryHttpClientHandler _handler;
-    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+    private const string RANDOM_FORTUNE_URL = "https://fortuneService/api/fortunes/random";
     public FortuneService(IDiscoveryClient client)
     {
         _handler = new DiscoveryHttpClientHandler(client);
@@ -199,7 +199,7 @@ public class Startup
       // Configure HttpClient
       services.AddHttpClient("fortunes", c =>
       {
-        c.BaseAddress = new Uri("http://fortuneService/api/fortunes/");
+        c.BaseAddress = new Uri("https://fortuneService/api/fortunes/");
       })
       .AddHttpMessageHandler<DiscoveryHttpMessageHandler>()
       .AddTypedClient<IFortuneService, FortuneService>();
@@ -214,7 +214,7 @@ The updated version of `FortuneService` is a bit simpler:
 ```csharp
 public class FortuneService : IFortuneService
 {
-    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+    private const string RANDOM_FORTUNE_URL = "https://fortuneService/api/fortunes/random";
     private HttpClient _client;
     public FortuneService(HttpClient client)
     {
@@ -562,7 +562,7 @@ On Windows cells, you should see something slightly different but with the same 
 
 #### 2.1.2.5 View Fortunes
 
-Start a browser and visit <http://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
+Start a browser and visit <https://fortuneui.x.y.z/> where `x.y.z` corresponds to the Cloud Foundry application domain that you are operating under.
 
 You should see your fortune. Refresh the browser to see a new fortune.
 
@@ -605,7 +605,7 @@ You should know how the new .NET [Configuration service](https://docs.microsoft.
 
 You should also know how the ASP.NET Core [Startup](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/startup) class is used in configuring the application services and the middleware used in the app. Pay particular attention to the usage of the `Configure()` and `ConfigureServices()` methods.
 
-You should also have a good understanding of the [Spring Cloud Eureka Server](http://projects.spring.io/spring-cloud/).
+You should also have a good understanding of the [Spring Cloud Eureka Server](https://projects.spring.io/spring-cloud/).
 
 In order to use the Steeltoe Discovery client, you need to do the following:
 
