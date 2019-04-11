@@ -127,7 +127,7 @@ The `CloudFoundry` quick start sample was created by using the .NET Core tooling
 
 To gain an understanding of the Steeltoe related changes to the generated template code, examine the following files:
 
-* `CloudFoundry.csproj`: Contains the `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundry`
+* `CloudFoundry.csproj`: Contains the `PackageReference` for Steeltoe NuGet `Steeltoe.Extensions.Configuration.CloudFoundryCore`
 * `Program.cs`:  Code was added to the `ConfigurationBuilder` to pick up Cloud Foundry configuration values when pushed to Cloud Foundry and to use Cloud Foundry hosting.
 * `Startup.cs`: Code was added to the `ConfigureCloudFoundryOptions`.
 * `HomeController.cs`: Code was added for Options injection into the Controller. Code was also added to display the Cloud Foundry configuration data.

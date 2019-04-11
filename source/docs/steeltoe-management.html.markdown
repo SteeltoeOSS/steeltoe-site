@@ -1525,7 +1525,7 @@ Fortune-Teller-Service was created with the .NET Core tooling `webapi` template 
 
 To understand the Steeltoe related changes to the generated template code, examine the following files.
 
-* `Fortune-Teller-Service.csproj`: Contains the `PackageReference` for the Steeltoe NuGet `Pivotal.Discovery.Client`.
+* `Fortune-Teller-Service.csproj`: Contains `PackageReference`s for OpenCensus and Steeltoe NuGet packages.
 * `Program.cs`: Code was added to the `WebHostBuilder` to pick up Cloud Foundry configuration values when pushed to Cloud Foundry, to use Cloud Foundry hosting and to use the Steeltoe Dynamic Logger.
 * `appsettings.json`: Contains the configuration data needed to cause the Steeltoe Discovery client to register the FortuneService with the Eureka server and to NOT fetch service information from the Eureka server. It also contains changes for configuring the tracing features.
 * `Startup.cs`: Code was added to the `ConfigureServices()` method to add the Discovery Client as a singleton, to add the Distributed Tracing service and the Zipkin exporter to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server and to startup the Tracing exporter.
@@ -1536,7 +1536,7 @@ Fortune-Teller-UI was created with the .NET Core tooling `mvc` template (`dotnet
 
 To understand the Steeltoe related changes to the generated template code, examine the following files:
 
-* `Fortune-Teller-UI.csproj`: Contains the `PackageReference` for the Steeltoe NuGet `Pivotal.Discovery.Client`.
+* `Fortune-Teller-UI.csproj`: Contains `PackageReference`s for OpenCensus and Steeltoe NuGet packages.
 * `Program.cs`: Code was added to the `WebHostBuilder` to pick up Cloud Foundry configuration values when pushed to Cloud Foundry, to use Cloud Foundry hosting and to use the Steeltoe Dynamic Logger.
 * `appsettings.json`: Contains the configuration data needed to cause the Steeltoe Discovery client to NOT register as a service, yet it still fetches service information from the Eureka server. It also contains changes for configuring the tracing features.
 * `Startup.cs`: Code was added to the `ConfigureServices()` method to add the Discovery Client as a singleton, to add the Distributed Tracing service and the Zipkin exporter to the service container. Additionally, code was added to the `Configure()` method to cause the Discovery Client to start communicating with the Eureka Server and to startup the Tracing exporter.
