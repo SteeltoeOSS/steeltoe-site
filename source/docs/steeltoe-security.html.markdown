@@ -1076,7 +1076,7 @@ The `RedisDataProtectionKeyStore` sample was created by using the .NET Core tool
 
 To understand the Steeltoe related changes to generated template code, examine the following files:
 
-* `RedisDataProtectionKeyStore.csproj`: Contains the `PackageReference`s for the Steeltoe NuGet `Steeltoe.Security.DataProtection.Redis`, `Steeltoe.CloudFoundry.Connector.Redis`, and `Steeltoe.Extensions.Configuration.CloudFoundry`.
+* `RedisDataProtectionKeyStore.csproj`: Contains the `PackageReference`s for the Steeltoe NuGet `Steeltoe.Security.DataProtection.RedisCore`, `Steeltoe.CloudFoundry.ConnectorCore`, and `Steeltoe.Extensions.Configuration.CloudFoundryCore`.
 * `Program.cs`: Added `.UseCloudFoundryHosting()` for dynamic port binding and added `.AddCloudFoundry()` to read `VCAP_SERVICES` when pushed to Cloud Foundry
 * `HomeController.cs`: Added `Protected` action to encrypt some data by using the Data Protection service and to add the data to the Session.
 * `Protected.cshtml`: The view used to display the data returned from the Session.
