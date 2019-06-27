@@ -1007,7 +1007,7 @@ The second set of settings you may need to specify pertain to service registrati
 |port|Port number to register|none|
 |preferIpAddress|Register IP address instead of hostname|false|
 |instanceId|The instance id registered for service|computed|
-|tags|The tags used when registering a service|none|
+|tags|The list of tags used when registering a service|none|
 |defaultQueryTag|Tag to query for in service list if one is not listed in serverListQueryTags|none|
 |queryPassing|Enable or disable whether to add the 'passing' parameter to health requests. This pushes health check passing to the server.|false|
 |registerHealthCheck|Enable or disable health check registration|true|
@@ -1060,11 +1060,33 @@ The health check for a Consul service instance defaults to `/actuator/health`, w
 
 ### 3.2.5 Configuring Metadata
 
-Consul does not yet support including metadata with service instance registrations. Yet the Steeltoe `IServiceInstance` has an `IDictionary<string, string> Metadata` property that is used to obtain and instances metadata settings.
+Consul does not yet support including metadata with service instance registrations, but the Steeltoe `IServiceInstance` has an `IDictionary<string, string> Metadata` property that is used to obtain metadata settings for an instance.
 
 The Steeltoe Consul client uses the Consul tags feature to approximate metadata registration until Consul officially supports associating metadata with instances.
 
-Tags with the form `key=value` will be split and used as `IDictionary` keys and values respectively. Tags without the equal sign will be used as both the key and value. You can configure the metadata you would like to use as comma delimited values using the `consul:discovery:tags` configuration setting.
+Tags with the form `key=value` will be split and used as `IDictionary` keys and values respectively. Tags without the equal sign will be used as both the key and value. You can add metadata with the `consul:discovery:tags` string array:
+
+```json
+{
+  "consul": {
+    "discovery": {
+      "tags": [
+        "somekey=somevalue",
+        "someothervalue"
+      ]
+    }
+  }
+}
+```
+
+The above tag list results in metadata that looks like this:
+
+```json
+{
+  "somekey": "somevalue",
+  "someothervalue": "someothervalue"
+}
+```
 
 ### 3.2.6 Configuring InstanceId
 
