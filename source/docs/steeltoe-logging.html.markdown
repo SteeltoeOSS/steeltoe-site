@@ -129,15 +129,14 @@ As mentioned earlier, the Serilog Dynamic Logger provider extends Serilog. Conse
  "Serilog": {
     "IncludeScopes": false,
         "MinimumLevel": {
-    "LogLevel": {
-            "Default": "Debug",
-      "Default": "Warning",
-            "Override": {
-      "Pivotal": "Information",
-                "Microsoft": "Warning",
-      "Steeltoe": "Information"
-                "CloudFoundry.Controllers": "Verbose"
-            }
+            "LogLevel": {
+                "Default": "Warning",
+                "Override": {
+                    "Pivotal": "Information",
+                    "Microsoft": "Warning",
+                    "Steeltoe": "Information",
+                    "CloudFoundry.Controllers": "Verbose"
+                }
         },
         "WriteTo": [
             {
