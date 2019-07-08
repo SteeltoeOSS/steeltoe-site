@@ -1945,3 +1945,57 @@ public class ManagementConfig
         return healthContributors;
     }
 ```
+
+## Using Microsoft Community HealthChecks for ASP.NET Core
+ASP.NET Core also offers [Middleware and libraries](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.
+) and abstractions for reporting health. There is wide community support for these abstractions from libraries such as [AspNetCore.Diagnostics.HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks). It is now possible to use these community provided health checks and make them available via the [Steeltoe management health endpoint](/docs/steeltoe-management/#1-2-5-health)(for integration with PCF or any other infrastructure that depends on this format). In addition Steeltoe connectors now exposes functionality to easily get connection information which is needed to setup these Microsoft Health Checks. 
+
+For example, to use the Steeltoe MySql connector but use Microsoft Health Checks make these changes to Startup.cs:
+
+```csharp
+  public void ConfigureServices(IServiceCollection services)
+  {
+      // Get connection information from Steeltoe helper
+      var cm = new ConnectionStringManager(Configuration);
+      var connectionString = cm.Get<MySqlConnectionInfo>().ConnectionString;
+
+      // Add microsoft community health checks from xabaril
+      services.AddHealthChecks().AddMySql(connectionString);  
+
+      // Add in a MySql connection (this method also adds an IHealthContributor for it)
+      services.AddMySqlConnection(Configuration); // will now use microsoft health check instead of Steeltoe health check 
+
+      // Add  Steeltoe Management endpoint services
+      services.AddCloudFoundryActuators(Configuration);
+
+      services.AddHealthChecksUI(); // Optionally use the health checks UI 
+
+      // Add framework services.
+      services.AddMvc();
+  } 
+  ```
+  >NOTE: AddMySqlConnection will default to the Microsoft health check if found in the service container. This behavior can be toggled off by passing AddMySqlConnection(Configuration, addSteeltoeHealthChecks: true) which will add both health checks. Be warned that this will make the Health check endpoint slower by calling multiple health checks for the same service. 
+  
+  ```csharp
+  public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+  {
+      ...
+
+      // Optionally use Microsoft health middleware for Microsoft Health Checks at /Health
+      app.UseHealthChecks("/Health", new HealthCheckOptions()
+      {
+          Predicate = _ => true,
+          ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+      });
+
+      // Optionally use health checks ui at /healthchecks-ui
+      app.UseHealthChecksUI();
+
+      // Add management endpoints into pipeline
+      // Steeltoe health check shows up at /cloudfoundryapplication/health
+      app.UseCloudFoundryActuators();
+
+...
+```
+A complete example is available [here](https://github.com/SteeltoeOSS/Samples/tree/2.x/Management/src/AspDotNetCore/MicrosoftHealthChecks).
+
