@@ -1758,7 +1758,7 @@ Add the following `PackageReference` to your `.csproj` file.
 or
 
 ```powershell
-PM>Install-Package  Steeltoe.Management.ExporterCore -Version 2.3.0-rc1
+PM>Install-Package  Steeltoe.Management.TaskCore -Version 2.3.0-rc1
 ```
 
 ### 3.1.2 Implement IApplicationTask

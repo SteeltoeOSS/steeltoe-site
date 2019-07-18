@@ -1785,6 +1785,102 @@ public class SomeClass
 }
 ```
 
+# 8.0 GemFire
+
+[Pivotal Cloud Cache](https://pivotal.io/pivotal-cloud-cache) is the Cloud Foundry service offering for [Pivotal GemFire](https://pivotal.io/pivotal-gemfire). Pivotal GemFire is Pivotal's distribution of [Apache Geode](https://geode.apache.org/). This connector was built for using Pivotal Cloud Cache in an application using the [GemFire Native Client](https://gemfire-native.docs.pivotal.io/100/gemfire-native-client/about-client-users-guide.html) on Cloud Foundry. It has not been extensively tested under other deployment configurations, but will be best-effort supported for other situations as well.
+
+>WARNING: The GemFire Native Client currently only supports 64 bit applications running on Windows. See [GemFire Native Client System Requirements](https://gemfire-native.docs.pivotal.io/100/gemfire-native-client/system_requirements.html) for more.
+
+## 8.1 Usage
+
+To use this connector:
+
+1. Create a Pivotal CloudCache service instance and bind it to your application.
+1. Optionally, configure GemFire client settings.
+1. Add the Steeltoe Cloud Foundry config provider to you `ConfigurationBuilder`.
+1. Add GemFire classes to your DI container.
+
+### 8.1.0 Get GemFire Driver
+
+Follow the instructions in the [Pivotal GemFire Native Client documentation](https://gemfire-native.docs.pivotal.io/100/gemfire-native-client/install-upgrade-native.html) for instructions on downloading the driver and getting started with general driver usage.
+
+>TIP: Should you wish to avoid committing the driver to source, you are free to copy the [script](https://github.com/SteeltoeOSS/steeltoe/blob/2.x/src/Connectors/EnableGemFire.ps1) that Steeltoe's CI process uses in your own pipelines. You will need a [legacy API token](https://network.pivotal.io/docs/api#how-to-authenticate) for the script to complete.
+
+### 8.1.1 Add NuGet Reference
+
+Add a reference to the appropriate [Steeltoe Connector NuGet package](#add-nuget-references).
+
+### 8.1.2 Configure Settings
+
+The GemFire client is highly configurable, beyond the scope of this documentation.
+Steeltoe does not interact with `geode.properties` or `cache.xml` files, but any settings found under `gemfire:client:properties` in your application's configuration are applied to the `CacheFactory`.
+Steeltoe attempts to map the properties node in your configuration to a `Dictionary<string, string>` and then applies each entry to GemFire via the `Set` method on the CacheFactory.
+
+For example, if you want to set the log-level and connection timeout, use the following in your `application.json` file:
+
+```json
+{
+  "gemfire": {
+    "client": {
+      "properties": {
+        "log-level": "fine",
+        "connect-timeout": "100ms"
+      }
+    }
+  }
+}
+```
+
+Refer to the [GemFire documentation](https://gemfire-native.docs.pivotal.io/100/geode-native-client/configuring/sysprops.html) for a more complete list of settings to configure.
+
+### 8.1.3 Cloud Foundry
+
+To use Pivotal Cloud Cache on Cloud Foundry:
+
+1. Create a service instance
+1. Bind the instance to your application via either a manifest file or the CLI (shown below)
+1. Create region (If the application is unable to do so automatically)
+
+```bash
+# Create CloudCache service instance
+cf create-service p-cloudcache dev-plan myPCCService
+
+# Bind service to `myApp`
+cf bind-service myApp myPCCService
+
+# Restage the app to pick up change
+cf restage myApp
+```
+
+If your application fails to [programmatically create regions](https://gemfire-native.docs.pivotal.io/100/geode-native-client/regions/regions.html#programmatic-region-creation), use the [gfsh CLI](https://gemfire.docs.pivotal.io/98/gemfire/tools_modules/gfsh/chapter_overview.html) to create it. You will need the gfsh url and the cluster operator credentials provided in the service binding:
+
+```json
+"p-cloudcache": [{
+    ...
+      "urls": {
+        "gfsh": "https://cloudcache-serviceguid.run.pcfone.io/gemfire/v1",
+        ...
+      },
+      "users": [{
+          "password": "********",
+          "roles": [ "cluster_operator" ],
+          "username": "********"
+        ...
+```
+
+Use gfsh to connect to the cluster and create the region:
+
+```bash
+gfsh>connect --url=https://cloudcache-someguid.run.pcfone.io/gemfire/v1 --user=cluster_operator_****** --password=******
+
+Successfully connected to: GemFire Manager HTTP service @ https://cloudcache-someguid.run.pcfone.io/gemfire/v1
+
+Cluster-0 gfsh>create region --name=SteeltoeDemo --type=PARTITION
+                     Member                      | Status
+------------------------------------------------ | ------------------------------------------------------------------------------------
+cacheserver-71461c75-ba87-4207-8d6d-c84be814a601 | Region "/SteeltoeDemo" created on "cacheserver-71461c75-ba87-4207-8d6d-c84be814a601"
+```
+
 # Common Steps
 
 ## Publish Sample
@@ -1947,55 +2043,56 @@ public class ManagementConfig
 ```
 
 ## Using Microsoft Community HealthChecks for ASP.NET Core
+
 ASP.NET Core also offers [Middleware and libraries](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.
-) and abstractions for reporting health. There is wide community support for these abstractions from libraries such as [AspNetCore.Diagnostics.HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks). It is now possible to use these community provided health checks and make them available via the [Steeltoe management health endpoint](/docs/steeltoe-management/#1-2-5-health)(for integration with PCF or any other infrastructure that depends on this format). In addition Steeltoe connectors now exposes functionality to easily get connection information which is needed to setup these Microsoft Health Checks. 
+) and abstractions for reporting health. There is wide community support for these abstractions from libraries such as [AspNetCore.Diagnostics.HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks). It is now possible to use these community provided health checks and make them available via the [Steeltoe management health endpoint](/docs/steeltoe-management/#1-2-5-health)(for integration with PCF or any other infrastructure that depends on this format). In addition Steeltoe connectors now exposes functionality to easily get connection information which is needed to setup these Microsoft Health Checks.
 
 For example, to use the Steeltoe MySql connector but use Microsoft Health Checks make these changes to Startup.cs:
 
 ```csharp
-  public void ConfigureServices(IServiceCollection services)
-  {
-      // Get connection information from Steeltoe helper
-      var cm = new ConnectionStringManager(Configuration);
-      var connectionString = cm.Get<MySqlConnectionInfo>().ConnectionString;
+public void ConfigureServices(IServiceCollection services)
+{
+    // Get connection information from Steeltoe helper
+    var cm = new ConnectionStringManager(Configuration);
+    var connectionString = cm.Get<MySqlConnectionInfo>().ConnectionString;
 
-      // Add microsoft community health checks from xabaril
-      services.AddHealthChecks().AddMySql(connectionString);  
+    // Add microsoft community health checks from xabaril
+    services.AddHealthChecks().AddMySql(connectionString);  
 
-      // Add in a MySql connection (this method also adds an IHealthContributor for it)
-      services.AddMySqlConnection(Configuration); // will now use microsoft health check instead of Steeltoe health check 
+    // Add in a MySql connection (this method also adds an IHealthContributor for it)
+    services.AddMySqlConnection(Configuration); // will now use microsoft health check instead of Steeltoe health check
 
-      // Add  Steeltoe Management endpoint services
-      services.AddCloudFoundryActuators(Configuration);
+    // Add  Steeltoe Management endpoint services
+    services.AddCloudFoundryActuators(Configuration);
 
-      services.AddHealthChecksUI(); // Optionally use the health checks UI 
+    services.AddHealthChecksUI(); // Optionally use the health checks UI
 
-      // Add framework services.
-      services.AddMvc();
-  } 
-  ```
-  >NOTE: AddMySqlConnection will default to the Microsoft health check if found in the service container. This behavior can be toggled off by passing AddMySqlConnection(Configuration, addSteeltoeHealthChecks: true) which will add both health checks. Be warned that this will make the Health check endpoint slower by calling multiple health checks for the same service. 
+    // Add framework services.
+    services.AddMvc();
+}
+```
+
+>NOTE: AddMySqlConnection will default to the Microsoft health check if found in the service container. This behavior can be toggled off by passing AddMySqlConnection(Configuration, addSteeltoeHealthChecks: true) which will add both health checks. Be warned that this will make the Health check endpoint slower by calling multiple health checks for the same service.
   
   ```csharp
-  public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+{
+  ...
+
+  // Optionally use Microsoft health middleware for Microsoft Health Checks at /Health
+  app.UseHealthChecks("/Health", new HealthCheckOptions()
   {
-      ...
+      Predicate = _ => true,
+      ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+  });
 
-      // Optionally use Microsoft health middleware for Microsoft Health Checks at /Health
-      app.UseHealthChecks("/Health", new HealthCheckOptions()
-      {
-          Predicate = _ => true,
-          ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-      });
+  // Optionally use health checks ui at /healthchecks-ui
+  app.UseHealthChecksUI();
 
-      // Optionally use health checks ui at /healthchecks-ui
-      app.UseHealthChecksUI();
-
-      // Add management endpoints into pipeline
-      // Steeltoe health check shows up at /cloudfoundryapplication/health
-      app.UseCloudFoundryActuators();
-
-...
+  // Add management endpoints into pipeline
+  // Steeltoe health check shows up at /cloudfoundryapplication/health
+  app.UseCloudFoundryActuators();
+  ...
 ```
-A complete example is available [here](https://github.com/SteeltoeOSS/Samples/tree/2.x/Management/src/AspDotNetCore/MicrosoftHealthChecks).
 
+A complete example is available [here](https://github.com/SteeltoeOSS/Samples/tree/2.x/Management/src/AspDotNetCore/MicrosoftHealthChecks).
