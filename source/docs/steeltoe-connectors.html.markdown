@@ -1785,7 +1785,7 @@ public class SomeClass
 }
 ```
 
-# 8.0 GemFire
+# 8.0 GemFire (Coming Soon in 2.3.0 GA)
 
 [Pivotal Cloud Cache](https://pivotal.io/pivotal-cloud-cache) is the Cloud Foundry service offering for [Pivotal GemFire](https://pivotal.io/pivotal-gemfire). Pivotal GemFire is Pivotal's distribution of [Apache Geode](https://geode.apache.org/). This connector was built for using Pivotal Cloud Cache in an application using the [GemFire Native Client](https://gemfire-native.docs.pivotal.io/100/gemfire-native-client/about-client-users-guide.html) on Cloud Foundry. It has not been extensively tested under other deployment configurations, but will be best-effort supported for other situations as well.
 
