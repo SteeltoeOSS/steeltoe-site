@@ -380,7 +380,7 @@ table td {
 }
 
 #s1p-promo {
-  background: #00d5c1;
+  background: lighten($ms-blue, 2%);
   text-decoration: none;
   box-sizing: border-box;
   padding: 0;
@@ -395,7 +395,7 @@ table td {
   -ms-transition: all .2s;
   
   &:hover {
-    background: #00e0ca;
+    background: lighten($ms-blue, 20%);
   }
   .container {
     height: 100%;
@@ -414,7 +414,7 @@ table td {
     fill: #13397e;
   }
   p {
-    color: #13397e;
+    color: darken(#13397e, 20%);
     font-weight: 600;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
