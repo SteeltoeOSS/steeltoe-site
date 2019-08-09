@@ -17,7 +17,7 @@ tags: release-notes
 Notable features:
 
 * Serilog is now supported
-* Added support for [ASP.NET Core Community Health Checks](https://steeltoe.io/docs/steeltoe-connectors/#using-asp-net-core-health-checks)
+* Added support for [ASP.NET Core Community Health Checks](/docs/steeltoe-connectors/#using-asp-net-core-health-checks)
 * Added ability to disable vault renewal for config server
 * Support for launching CloudFoundry tasks bundles with applications
 * Added ability to apply EF migrations using `cf task`
@@ -28,15 +28,12 @@ Notable features:
 
 Notable features:
 
-* [Apache Geode/GemFire/Pivotal Cloud Cache] (http://steeltoe.io/docs/steeltoe-connectors/#8-0-apache-geode-gemfire-pivotal-cloud-cache) connector support
-* Oracle Database connector support
+* New [Apache Geode/GemFire/Pivotal Cloud Cache] (/docs/steeltoe-connectors/#8-0-apache-geode-gemfire-pivotal-cloud-cache) connector
+* New Oracle Database connector 
 
 # GA Releases
 
 ---
-
-## 2.3.0
-Expected GA Release Date: August 2019
 
 ## 2.2.0
 
