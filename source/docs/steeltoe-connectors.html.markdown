@@ -1785,7 +1785,7 @@ public class SomeClass
 }
 ```
 
-# 8.0 GemFire 
+# 8.0 Geode/GemFire/Pivotal Cloud Cache 
 
 >Note: This feature is coming soon in 2.3.0 GA
 
