@@ -150,7 +150,7 @@ using Pivotal.Discovery.Client;
 public class FortuneService : IFortuneService
 {
     DiscoveryHttpClientHandler _handler;
-    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+    private const string RANDOM_FORTUNE_URL = "https://fortuneService/api/fortunes/random";
     public FortuneService(IDiscoveryClient client)
     {
         _handler = new DiscoveryHttpClientHandler(client);
@@ -199,7 +199,7 @@ public class Startup
       // Configure HttpClient
       services.AddHttpClient("fortunes", c =>
       {
-        c.BaseAddress = new Uri("http://fortuneService/api/fortunes/");
+        c.BaseAddress = new Uri("https://fortuneService/api/fortunes/");
       })
       .AddHttpMessageHandler<DiscoveryHttpMessageHandler>()
       .AddTypedClient<IFortuneService, FortuneService>();
@@ -214,7 +214,7 @@ The updated version of `FortuneService` is a bit simpler:
 ```csharp
 public class FortuneService : IFortuneService
 {
-    private const string RANDOM_FORTUNE_URL = "http://fortuneService/api/fortunes/random";
+    private const string RANDOM_FORTUNE_URL = "https://fortuneService/api/fortunes/random";
     private HttpClient _client;
     public FortuneService(HttpClient client)
     {

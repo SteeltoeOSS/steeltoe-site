@@ -405,7 +405,7 @@ This full list of settings can also be configured, though `AuthDomain`, `ClientI
 |Name|Description|Default|
 |---|---|---|
 |additionalScopes|Scopes to request for tokens in addition to `openid`|`string.Empty`|
-|authDomain|Location of the OAuth2 server|`http://Default_OAuthServiceUrl`|
+|authDomain|Location of the OAuth2 server|`https://Default_OAuthServiceUrl`|
 |authenticationType|Corresponds to the IIdentity AuthenticationType|`CloudFoundry`|
 |callbackPath|Path the user is redirected back to after authentication|`/signin-cloudfoundry`|
 |clientId|App credentials with auth server|`Default_ClientId`|
@@ -1701,7 +1701,7 @@ Next, add the quick start application as a new client for the UAA server to enab
 uaac client add myTestApp --scope cloud_controller.read,cloud_controller_service_permissions.read,openid,testgroup \
         --authorized_grant_types authorization_code,refresh_token \
         --authorities uaa.resource \
-        --redirect_uri http://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/signin-cloudfoundry,https://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/signin-cloudfoundry \
+        --redirect_uri https://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/signin-cloudfoundry,https://single-signon.`YOUR-CLOUDFOUNDRY-APP-DOMAIN`/signin-cloudfoundry \
         --autoapprove cloud_controller.read,cloud_controller_service_permissions.read,openid,testgroup \
         --secret myTestApp
 ```
