@@ -1785,7 +1785,7 @@ public class SomeClass
 }
 ```
 
-# 8.0 GemFire 
+# 8.0 Apache Geode/GemFire/Pivotal Cloud Cache 
 
 >Note: This feature is coming soon in 2.3.0 GA
 
@@ -2044,12 +2044,12 @@ public class ManagementConfig
     }
 ```
 
-## Using Microsoft Community HealthChecks for ASP.NET Core
+## Using ASP.NET Core Health Checks
 
 ASP.NET Core also offers [Middleware and libraries](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.
-) and abstractions for reporting health. There is wide community support for these abstractions from libraries such as [AspNetCore.Diagnostics.HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks). It is now possible to use these community provided health checks and make them available via the [Steeltoe management health endpoint](/docs/steeltoe-management/#1-2-5-health)(for integration with PCF or any other infrastructure that depends on this format). In addition Steeltoe connectors now exposes functionality to easily get connection information which is needed to setup these Microsoft Health Checks.
+) and abstractions for reporting health. There is wide community support for these abstractions from libraries such as [AspNetCore.Diagnostics.HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks). It is now possible to use these community provided health checks and make them available via the [Steeltoe management health endpoint](/docs/steeltoe-management/#1-2-5-health)(for integration with PCF or any other infrastructure that depends on this format). In addition, Steeltoe connectors now exposes functionality to easily get connection information which is needed to setup these community health checks.
 
-For example, to use the Steeltoe MySql connector but use Microsoft Health Checks make these changes to Startup.cs:
+For example, to use the Steeltoe MySql connector but instead use ASP.NET Core community health checks, make these changes to Startup.cs:
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -2062,7 +2062,7 @@ public void ConfigureServices(IServiceCollection services)
     services.AddHealthChecks().AddMySql(connectionString);  
 
     // Add in a MySql connection (this method also adds an IHealthContributor for it)
-    services.AddMySqlConnection(Configuration); // will now use microsoft health check instead of Steeltoe health check
+    services.AddMySqlConnection(Configuration); // will now use community health check instead of Steeltoe health check
 
     // Add  Steeltoe Management endpoint services
     services.AddCloudFoundryActuators(Configuration);
@@ -2074,14 +2074,14 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
->NOTE: AddMySqlConnection will default to the Microsoft health check if found in the service container. This behavior can be toggled off by passing AddMySqlConnection(Configuration, addSteeltoeHealthChecks: true) which will add both health checks. Be warned that this will make the Health check endpoint slower by calling multiple health checks for the same service.
+>NOTE: AddMySqlConnection will default to the ASP.NET Core health check if found in the service container. This behavior can be toggled off by passing AddMySqlConnection(Configuration, addSteeltoeHealthChecks: true) which will add both health checks. Be warned that this will make the Health check endpoint slower by calling multiple health checks for the same service.
   
   ```csharp
 public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 {
   ...
 
-  // Optionally use Microsoft health middleware for Microsoft Health Checks at /Health
+  // Optionally use ASP.NET Core health middleware for community health checks at /Health
   app.UseHealthChecks("/Health", new HealthCheckOptions()
   {
       Predicate = _ => true,
