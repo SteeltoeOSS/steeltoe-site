@@ -11,6 +11,7 @@ $steel-body: darken(#90A1B8, 5%);
 $steel-heading: #364962;
 $ms-blue: #0074D9;
 $faint-blue: #f3f4f9;
+$s1promo-heading: #00d5c1;
 
 html {
   font-size: 17px;
@@ -380,7 +381,7 @@ table td {
 }
 
 #s1p-promo {
-  background: $ms-blue;
+  background: darken($s1promo-heading, 10%);
   text-decoration: none;
   box-sizing: border-box;
   padding: 0;
@@ -395,7 +396,7 @@ table td {
   -ms-transition: all .2s;
   
   &:hover {
-    background: lighten($ms-blue, 20%);
+    background: #00e0ca;
   }
   .container {
     height: 100%;
@@ -414,7 +415,7 @@ table td {
     fill: #13397e;
   }
   p {
-    color: darken(#13397e, 20%);
+    color: lighten(#13397e, 10%);
     font-weight: 600;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
