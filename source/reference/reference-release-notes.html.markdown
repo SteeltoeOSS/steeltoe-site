@@ -1,39 +1,54 @@
 ---
 title: Release Notes
 order: 10
-date: 2019/1/22
+date: 2019/8/21
 tags: release-notes
 ---
-
-# Release Candidates
-
----
-
-## 2.3.0
-
-### RC1
-[Complete list of issues resolved](https://github.com/SteeltoeOSS/steeltoe/milestone/1?closed=1)
-
-Notable features:
-
-* Serilog is now supported
-* Added support for [ASP.NET Core Community Health Checks](/docs/steeltoe-connectors/#using-asp-net-core-health-checks)
-* Added ability to disable vault renewal for config server
-* Support for launching CloudFoundry tasks bundles with applications
-* Added ability to apply EF migrations using `cf task`
-* Additional property support for Microsoft SQL Server connection strings
-
-### RC2
-[Complete list of issues resolved](https://github.com/SteeltoeOSS/steeltoe/milestone/3?closed=1)
-
-Notable features:
-
-* New [Apache Geode/GemFire/Pivotal Cloud Cache] (/docs/steeltoe-connectors/#8-0-apache-geode-gemfire-pivotal-cloud-cache) connector
-* New Oracle Database connector 
 
 # GA Releases
 
 ---
+
+## 2.3.0
+##### RC1 - [Closed issues in RC1](https://github.com/SteeltoeOSS/steeltoe/milestone/1?closed=1)
+##### RC2 - [Closed issues in RC2](https://github.com/SteeltoeOSS/steeltoe/milestone/3?closed=1)
+##### GA - [Closed issues in GA release](https://github.com/SteeltoeOSS/steeltoe/milestone/4?closed=1) 
+
+Notable additions in 2.3.0:
+
+### Infrastructure
+* Restructure of Github repositories into a single repository: [Steeltoe Mono Repository](https://github.com/SteeltoeOSS/steeltoe) 
+* Moved all CI/CD to Azure DevOps: [Steeltoe on Azure DevOps](https://dev.azure.com/SteeltoeOSS/Steeltoe)
+  * Added test coverage monitoring
+  * Added code coverage monitoring
+* Created the [Steeltoe Incubator](http://github.com/SteeltoeOSS-incubator)
+  * Allows community members to introduce new features, enhancements, and projects to be considered for inclusion in the SteeltoeOSS framework. 
+
+### Connectors
+* New [Apache Geode/GemFire/Pivotal Cloud Cache] (/docs/steeltoe-connectors/#8-0-apache-geode-gemfire-pivotal-cloud-cache) connector
+* New Oracle Database connector 
+* Support for launching CloudFoundry tasks bundles with applications
+
+### Logging
+* Serilog is now supported
+
+### Management
+* Added support for [ASP.NET Core Community Health Checks](/docs/steeltoe-connectors/#using-asp-net-core-health-checks)
+* Added ability to apply EF migrations using `cf task`
+
+### Configuration
+* Added ability to disable vault renewal for config server
+* Additional property support for Microsoft SQL Server connection strings
+ 
+
+Thank you to our list of community contributors to 2.3.0:
+* [Pivotal Steeltoe team](https://dotnetfoundation.org/projects?searchquery=Steeltoe&type=project)
+* [Andrew Stakov](https://github.com/macsux)
+* [@kishoreallwynraj](https://github.com/kishoreallwynraj)
+* [Kendall Adkins](https://github.com/kadkins-pivotal)
+* [@pengweiqhca](https://github.com/pengweiqhca)
+* Everyone that found the time to test and report any issues.  
+
 
 ## 2.2.0
 
