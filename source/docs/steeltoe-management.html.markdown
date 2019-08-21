@@ -1750,7 +1750,7 @@ Add the following `PackageReference` to your `.csproj` file.
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Management.TaskCore" Version= "2.3.0-rc1"/>
+    <PackageReference Include="Steeltoe.Management.TaskCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
