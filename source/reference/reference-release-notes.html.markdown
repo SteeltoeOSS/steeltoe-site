@@ -28,6 +28,7 @@ tags: release-notes
 * New [Apache Geode/GemFire/Pivotal Cloud Cache] (/docs/steeltoe-connectors/#8-0-apache-geode-gemfire-pivotal-cloud-cache) connector
 * New Oracle Database connector 
 * Support for launching CloudFoundry tasks bundles with applications
+* Additional property support for Microsoft SQL Server connection strings
 
 ### Logging
 * Serilog is now supported
@@ -38,7 +39,6 @@ tags: release-notes
 
 ### Configuration
 * Added ability to disable vault renewal for config server
-* Additional property support for Microsoft SQL Server connection strings
  
 
 ### Contributions
