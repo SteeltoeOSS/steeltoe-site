@@ -47,9 +47,7 @@ tags: release-notes
 * [@kishoreallwynraj](https://github.com/kishoreallwynraj)
 * [Kendall Adkins](https://github.com/kadkins-pivotal)
 * [@pengweiqhca](https://github.com/pengweiqhca)
-* Everyone that found the time to test and report any issues.  
-
-Thank you to all our list of community contributors to 2.3.0. 
+* Everyone that found the time to test and report any issues.   
 
 ## 2.2.0
 
