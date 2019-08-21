@@ -14,7 +14,7 @@ tags: release-notes
 ##### RC2 - [Closed issues in RC2](https://github.com/SteeltoeOSS/steeltoe/milestone/3?closed=1)
 ##### GA - [Closed issues in GA release](https://github.com/SteeltoeOSS/steeltoe/milestone/4?closed=1) 
 
-Notable additions in 2.3.0:
+**Notable additions in 2.3.0:**
 
 ### Infrastructure
 * Restructure of Github repositories into a single repository: [Steeltoe Mono Repository](https://github.com/SteeltoeOSS/steeltoe) 
@@ -41,7 +41,7 @@ Notable additions in 2.3.0:
 * Additional property support for Microsoft SQL Server connection strings
  
 
-Thank you to our list of community contributors to 2.3.0:
+### Contributions
 * [Pivotal Steeltoe team](https://dotnetfoundation.org/projects?searchquery=Steeltoe&type=project)
 * [Andrew Stakov](https://github.com/macsux)
 * [@kishoreallwynraj](https://github.com/kishoreallwynraj)
@@ -49,10 +49,11 @@ Thank you to our list of community contributors to 2.3.0:
 * [@pengweiqhca](https://github.com/pengweiqhca)
 * Everyone that found the time to test and report any issues.  
 
+Thank you to all our list of community contributors to 2.3.0. 
 
 ## 2.2.0
 
-The new features in Steeltoe 2.2.0
+**The new features in Steeltoe 2.2.0**
 
 ### Connectors
 
@@ -127,7 +128,7 @@ The new features in Steeltoe 2.2.0
 
 ## 2.1.0
 
-The new features in Steeltoe 2.1.0
+**The new features in Steeltoe 2.1.0**
 
 * Management and Monitoring (M&M’s)
 * ASP.NET 4.x
