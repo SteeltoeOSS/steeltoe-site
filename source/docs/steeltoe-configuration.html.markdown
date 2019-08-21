@@ -169,7 +169,7 @@ To add this type of NuGet to your project, add a `PackageReference` resembling t
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundryCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundryCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
@@ -606,30 +606,20 @@ To add this type of NuGet to your project, add a `PackageReference` that resembl
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
 
-If you plan to connect to the open source version of [Spring Cloud Config Server](https://projects.spring.io/spring-cloud/) and you plan to push your application to Cloud Foundry to use [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you should use one of the packages described in the following table, depending on your application type and needs:
+>IMPORTANT: The `Pivotal.Extensions.Configuration.ConfigServer*` packages were deprecated in Steeltoe 2.2 and are not included newer releases.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
+
+If you are using still using versions of Steeltoe less than 2.2.0 and push your application to Cloud Foundry to use [Spring Cloud Services](https://docs.pivotal.io/spring-cloud-services/1-5/common/index.html), you should use one of the packages described in the following table, depending on your application type and needs:
 
 |App Type|Package|Description|
 |---|---|---|
 |Console/ASP.NET 4.x|`Pivotal.Extensions.Configuration.ConfigServerBase`|Base functionality. No dependency injection.|
 |ASP.NET Core|`Pivotal.Extensions.Configuration.ConfigServerCore`|Includes base. Adds ASP.NET Core dependency injection.|
 |ASP.NET 4.x with Autofac|`Pivotal.Extensions.Configuration.ConfigServerAutofac`|Includes base. Adds Autofac dependency injection.|
-
-To add this type of NuGet to your project add a `PackageReference` similar to the following:
-
-```xml
-<ItemGroup>
-...
-    <PackageReference Include="Pivotal.Extensions.Configuration.ConfigServerCore" Version= "2.1.0"/>
-...
-</ItemGroup>
-```
-
->IMPORTANT: The `Pivotal.Extensions.Configuration.ConfigServer*` packages have been deprecated in Steeltoe 2.2 and will be removed in a future release.  All functionality provided in those packages has been pushed into the corresponding `Steeltoe.Extensions.Configuration.ConfigServer*` packages.
 
 ### 2.2.2 Configure Settings
 

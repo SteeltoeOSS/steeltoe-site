@@ -1994,7 +1994,7 @@ To add any NuGet package, use the package manager tools or (with .NET Core appli
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorBase" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```

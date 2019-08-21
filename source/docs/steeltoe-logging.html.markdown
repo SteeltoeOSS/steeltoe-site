@@ -40,7 +40,7 @@ You can add the provider to your project by using the following `PackageReferenc
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Extensions.Logging.DynamicLogger" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
@@ -114,7 +114,7 @@ You can add the provider to your project by using the following `PackageReferenc
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Extensions.Logging.SerilogDynamicLogger" Version= "2.3.0-rc1"/>
+    <PackageReference Include="Steeltoe.Extensions.Logging.SerilogDynamicLogger" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```

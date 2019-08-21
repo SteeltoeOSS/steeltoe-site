@@ -137,7 +137,7 @@ You can add the provider to your project by using the following `PackageReferenc
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
@@ -661,7 +661,7 @@ To use the provider, add a reference to the Steeltoe Cloud Foundry Security NuGe
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Security.Authentication.CloudFoundryCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
@@ -1105,7 +1105,7 @@ You can add the provider to your project by using the following `PackageReferenc
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.Security.DataProtection.RedisCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
@@ -1117,7 +1117,7 @@ You can use the NuGet Package Manager tools or directly add the following packag
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.1.0"/>
+    <PackageReference Include="Steeltoe.CloudFoundry.ConnectorCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
@@ -1298,7 +1298,7 @@ Use the NuGet package manager tools or directly add the appropriate package to y
 ```xml
 <ItemGroup>
 ...
-    <PackageReference Include="Steeltoe.Security.DataProtection.CredHubCore" Version= "2.1.0-rc1"/>
+    <PackageReference Include="Steeltoe.Security.DataProtection.CredHubCore" Version= "2.3.0"/>
 ...
 </ItemGroup>
 ```
