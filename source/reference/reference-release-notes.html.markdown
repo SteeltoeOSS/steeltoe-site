@@ -10,9 +10,9 @@ tags: release-notes
 ---
 
 ## 2.3.0
-##### RC1 - [Closed issues in RC1](https://github.com/SteeltoeOSS/steeltoe/milestone/1?closed=1)
-##### RC2 - [Closed issues in RC2](https://github.com/SteeltoeOSS/steeltoe/milestone/3?closed=1)
-##### GA - [Closed issues in GA release](https://github.com/SteeltoeOSS/steeltoe/milestone/4?closed=1) 
+* RC1 - [Closed issues in RC1](https://github.com/SteeltoeOSS/steeltoe/milestone/1?closed=1)
+* RC2 - [Closed issues in RC2](https://github.com/SteeltoeOSS/steeltoe/milestone/3?closed=1)
+* GA - [Closed issues in GA release](https://github.com/SteeltoeOSS/steeltoe/milestone/4?closed=1) 
 
 **Notable additions in 2.3.0:**
 
