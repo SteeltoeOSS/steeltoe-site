@@ -91,7 +91,7 @@ public class Program
 
 This logging provider extends the [Dynamic Logging Provider](#1-0-dynamic-logging-provider) with [Serilog](https://serilog.net/). This allows logger levels configured via Serilog to be queried and modified at runtime via the [Loggers Endpoint](/docs/steeltoe-management/#1-2-7-loggers)
 
-The source code for the Serilog Dynamic Logger can be found [here](https://github.com/SteeltoeOSS/steeltoe/tree/master/src/Logging/src/SerilogDynamicLogger).
+The source code for the Serilog Dynamic Logger can be found [here](https://github.com/SteeltoeOSS/steeltoe/tree/master/src/Logging/src/SerilogDynamicLoggerCore).
 
 A sample working project can be found [here](https://github.com/SteeltoeOSS/Samples/tree/master/Management/src/AspDotNetCore/CloudFoundry).
 
