@@ -125,29 +125,24 @@ As mentioned earlier, the Serilog Dynamic Logger provider extends Serilog. Conse
 
 ```json
 ...
-
- "Serilog": {
+"Serilog": {
     "IncludeScopes": false,
-        "MinimumLevel": {
-            "LogLevel": {
-                "Default": "Warning",
-                "Override": {
-                    "Pivotal": "Information",
-                    "Microsoft": "Warning",
-                    "Steeltoe": "Information",
-                    "CloudFoundry.Controllers": "Verbose"
-                }
-        },
-        "WriteTo": [
-            {
-                "Name": "Console",
-                "Args": {
-                    "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Properties} {NewLine} {EventId} {Message:lj}{NewLine}{Exception}"
-                }
-            }
-        ],
-        "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ]
+    "MinimumLevel": {
+        "Default": "Warning",
+        "Override": {
+            "Pivotal": "Information",
+            "Microsoft": "Warning",
+            "Steeltoe": "Information",
+            "CloudFoundry.Controllers": "Verbose"
+        }
     },
+    "WriteTo": [{
+        "Name": "Console",
+        "Args": {
+            "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Properties} {NewLine} {EventId} {Message:lj}{NewLine}{Exception}"
+        }
+    }],
+    "Enrich": ["FromLogContext", "WithMachineName", "WithThreadId"]
 },
 ...
 ```
