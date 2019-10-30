@@ -1,4 +1,6 @@
-# Steeltoe Main Site
+# This contained the old website code and docs.  We have moved to https://github.com/SteeltoeOSS/MainSite for the site and https://github.com/SteeltoeOSS/Documentation for the documentation. 
+
+# Steeltoe Old Site
 
 It is built using [Middleman](https://middlemanapp.com/)
 
